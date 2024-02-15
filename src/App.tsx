@@ -17,11 +17,11 @@ function App() {
       ...stores
     } }>
 
-      <div>
+      <div className="mx-5">
         <ol>
 
           { stores.StpContext.table.map(stp =>
-            <li
+            <li className="bg-red-500"
               key={ stp.name }>{ stp.name } { "=>" } { stp.cams } камера</li>
           ) }
         </ol>
