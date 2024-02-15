@@ -1,13 +1,18 @@
 import { createContext } from "react"
 
 import { useContext } from "react"
+import { StpItem } from "../Components/StpTable/TableObjects"
+import { StpContext } from "../Context/StpContext"
 
 
 
-export const StoresContext = createContext({})
+export type AContext = {
+    StpContext: StpContext
+}
+export const AppContext = createContext<AContext | null>(null)
 
-export const useStoresContext = () => {
-    const stores = useContext(StoresContext)
+export const useAppContext = () => {
+    const stores = useContext(AppContext)
     if (!stores) {
         throw new Error("Хук используется вне провайдера контекста!")
     }

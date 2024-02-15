@@ -1,4 +1,3 @@
-import { NumericStpPropFields } from "./Enums"
 
 export type IGlassPropsFields =
     | "multi"
@@ -14,13 +13,4 @@ export type IFormulaProps = {
 }
 export type StpTypeProps = Partial<Record<IGlassPropsFields, boolean>>
 
-
-
-
-export type STP = {
-    id: number
-    name: string
-    numericProps?: Record<keyof typeof NumericStpPropFields, number>
-    stp_type?: StpTypeProps
-}
 

@@ -1,7 +1,7 @@
-import { STP, StpTypeProps } from "../../Interfaces/Types";
+import { StpTypeProps } from "../../Interfaces/Types";
 
 
-export type NumbPropObject = {
+export type StpItem = {
     cams: number
     depth: number
     Ro: number
@@ -20,7 +20,7 @@ export type NumbPropObject = {
     name: string
     _type: StpTypeProps
 }
-export const StpNumericTable: NumbPropObject[] = [
+export const StpItems: StpItem[] = [
     {
         cams: 1, depth: 24, Ro: 1.00, Rw: 36, Lt: 65, Lr: 17, Ra: 94, Det: 30, Er: 41, Ea: 29, Sf: 36, Sc: 0.41, S: 1.81, weight: 37, secure: "P2A", name: "3.3.1-14Ar-4Эл", _type: { hitproof: true, soundproof: true, multi: true },
     },
