@@ -1,7 +1,7 @@
 {
   "name": "stp_client",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
@@ -13,6 +13,8 @@
     "@types/react-dom": "^18.2.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.0.1",
+    "react-router-dom": "^6.22.0",
     "react-scripts": "^5.0.1",
     "web-vitals": "^3.5.2"
   },
