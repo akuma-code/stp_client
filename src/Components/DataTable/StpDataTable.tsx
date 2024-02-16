@@ -25,11 +25,6 @@ import { useAppContext } from '../../Hooks/useStoresContext';
 export type StpData = (Omit<StpItem, '_type'> & { id: number })
 
 
-function createStpData(items: StpItem[]): (StpItem & { id: number })[] {
-    return items.map((i, index) => ({ ...i, id: index + 1 }))
-}
-
-
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -71,7 +66,7 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
     return stabilizedThis.map((el) => el[0]);
 }
 
-const stp_rows = createStpData(StpItems)
+
 interface EnhancedTableToolbarProps {
     numSelected: number;
 }
@@ -146,7 +141,7 @@ export function StpDataTable() {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelected = stp_rows.map((n) => n.id);
+            const newSelected = StpContext.table.map((n) => n.id);
             setSelected(newSelected);
             return;
         }
@@ -189,7 +184,7 @@ export function StpDataTable() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - stp_rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - StpContext.table.length) : 0;
 
     const visibleRows = React.useMemo(
         () =>
@@ -217,7 +212,7 @@ export function StpDataTable() {
                             orderBy={ orderBy }
                             onSelectAllClick={ handleSelectAllClick }
                             onRequestSort={ handleRequestSort }
-                            rowCount={ stp_rows.length }
+                            rowCount={ StpContext.table.length }
                         />
                         <TableBody>
                             { visibleRows.map((row, index) => {
@@ -294,7 +289,7 @@ export function StpDataTable() {
                     <TablePagination
                         rowsPerPageOptions={ [5, 10, 15, 20, { value: -1, label: 'All' }] }
                         component="div"
-                        count={ stp_rows.length }
+                        count={ StpContext.table.length }
                         rowsPerPage={ rowsPerPage }
                         page={ page }
                         onPageChange={ handleChangePage }
