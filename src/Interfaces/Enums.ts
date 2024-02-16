@@ -5,8 +5,8 @@ export const enum StpPropFields {
 
 }
 
-export const enum NumericStpPropFields {
-    camCount = "Кол-во камер",
+export const enum _EnFieldsStp {
+    cams = "Кол-во камер",
     depth = "Толщина",
     Ro = "Коэффециент сопротивления теплопередачи, Ro",
     Ug = "Коэффециент теплопередачи стеклопакета, Ug",
@@ -21,6 +21,8 @@ export const enum NumericStpPropFields {
     SC = "Коэффициент затемнения,SC",
     S = "Соотношение многофункциональности стеклопакета(селективность), S",
     Weight = "Вес",
+    id = "id",
+    formula = "Формула",
 }
 
 export const enum Stp_TypeFields {

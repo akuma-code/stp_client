@@ -8,7 +8,9 @@
         "sourceType": "module"
     },
     "rules": {
-        "no-unused-vars": "warn",
-        "quotes": "warn"
+        "typescript-eslint/no-explicit-any": "off"
+        // "no-unused-vars": "warn",
+        // "quotes": "warn",
+        // "typescript-eslint/ban-types": "off"
     }
 }

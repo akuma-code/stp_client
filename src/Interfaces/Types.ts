@@ -14,3 +14,4 @@ export type IFormulaProps = {
 export type StpTypeProps = Partial<Record<IGlassPropsFields, boolean>>
 
 
+export type AnyObj = { [key: string]: any }
