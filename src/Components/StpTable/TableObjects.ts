@@ -2,6 +2,7 @@ import { StpTypeProps } from "../../Interfaces/Types";
 
 
 export type StpItem = {
+
     cams: number
     depth: number
     Ro: number
@@ -18,7 +19,7 @@ export type StpItem = {
     weight: number
     secure: "P2A" | "none"
     name: string
-    _type: StpTypeProps
+    _type?: StpTypeProps
 }
 export const StpItems: StpItem[] = [
     {
