@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,19 +6,16 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-import { StpItem, StpItems } from '../StpTable/TableObjects';
+import { StpItem } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 import { Stack } from '@mui/material';
 import { useAppContext } from '../../Hooks/useStoresContext';
+import { StpTableToolbar } from './StpTableToolbar';
 
 //__ Data Create*/
 export type StpData = (Omit<StpItem, '_type'> & { id: number })
@@ -67,60 +63,6 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 }
 
 
-interface EnhancedTableToolbarProps {
-    numSelected: number;
-}
-
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected } = props;
-
-    return (
-        <Toolbar
-            sx={ {
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: (theme) =>
-                        alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                }),
-            } }
-        >
-            { numSelected > 0 ? (
-                <Typography
-                    sx={ { flex: '1 1 100%' } }
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                    id="tableTitle"
-                >
-                    { numSelected } выбрано
-                </Typography>
-            ) : (
-                <Typography
-                    sx={ { flex: '1 1 100%' } }
-                    variant="h6"
-                    id="tableTitle"
-                    component="div"
-                >
-                    Стеклопакеты
-                </Typography>
-            ) }
-            { numSelected > 0 ? (
-                <Tooltip title="Добавить к сравнению">
-                    <IconButton>
-                        Сравнить
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        Filter
-                    </IconButton>
-                </Tooltip>
-            ) }
-        </Toolbar>
-    );
-}
 export function StpDataTable() {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof StpData>('cams');
@@ -198,7 +140,8 @@ export function StpDataTable() {
     return (
         <Box sx={ { width: '100%' } }>
             <Paper sx={ { width: '100%', mb: 2 } }>
-                <EnhancedTableToolbar numSelected={ selected.length } />
+                <StpTableToolbar numSelected={ selected.length } />
+
                 <TableContainer sx={ { overflowY: 'auto', maxHeight: '77vh' } }>
                     <Table
                         sx={ { minWidth: 750 } }
@@ -214,6 +157,8 @@ export function StpDataTable() {
                             onRequestSort={ handleRequestSort }
                             rowCount={ StpContext.table.length }
                         />
+
+
                         <TableBody>
                             { visibleRows.map((row, index) => {
                                 const isItemSelected = isSelected(+row.id);
