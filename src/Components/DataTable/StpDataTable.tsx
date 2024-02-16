@@ -142,7 +142,7 @@ export function StpDataTable() {
             <Paper sx={ { width: '100%', mb: 2 } }>
                 <StpTableToolbar numSelected={ selected.length } />
 
-                <TableContainer sx={ { overflowY: 'auto', maxHeight: '77vh' } }>
+                <TableContainer sx={ { overflowY: 'auto', maxHeight: '72vh' } }>
                     <Table
                         sx={ { minWidth: 750 } }
                         aria-labelledby="tableTitle"
