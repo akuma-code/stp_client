@@ -155,7 +155,7 @@ export function StpDataTable() {
                                             selected={ isItemSelected }
                                             sx={ {
                                                 cursor: 'pointer',
-                                                // bgcolor: isTagged ? '#34a7f3' : '#ffffffDE'
+                                                bgcolor: isTagged ? '#d1e8f8' : '#ffffffDE'
                                             } }
                                         >
                                             <TableCell padding="checkbox">
