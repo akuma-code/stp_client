@@ -2,12 +2,17 @@ import { createContext } from "react"
 
 import { useContext } from "react"
 import { StpItem } from "../Components/StpTable/TableObjects"
-import { StpContext } from "../Context/StpContext"
+import { StpStore } from "../Context/StpStore"
+import { StpTypeProps } from "../Interfaces/Types"
 
 
 
 export type AContext = {
-    StpContext: StpContext
+    StpStore: StpStore
+    selectedItems: number[]
+    select: React.Dispatch<React.SetStateAction<number[]>>
+    _type: StpTypeProps,
+    setType: React.Dispatch<React.SetStateAction<StpTypeProps>>
 }
 export const AppContext = createContext<AContext | null>(null)
 

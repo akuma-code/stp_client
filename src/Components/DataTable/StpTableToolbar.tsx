@@ -1,26 +1,23 @@
-import * as React from 'react';
-import { alpha } from '@mui/material/styles';
+import { Stack } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import { alpha } from '@mui/material/styles';
+import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 import { useToggle } from '../../Hooks/useToggle';
-import { StpTypeFormGroup } from './StpTypeFormGroup';
-import { GiConfirmed } from "react-icons/gi";
-import { Box, Stack } from '@mui/material';
-import { FaBarsProgress } from "react-icons/fa6";
-interface EnhancedTableToolbarProps {
+import { StpTypeFormGroup } from './StpTagsGroup';
+interface TableToolbarProps {
     numSelected: number;
 }
-export function StpTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected } = props;
-    const [group, make] = useToggle(true)
+export function StpTableToolbar({ numSelected }: TableToolbarProps) {
+
+    const [group, make] = useToggle(false)
     return (
         <Toolbar
             sx={ {
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-around',
+                justifyContent: 'space-evenly',
                 height: 100,
                 pl: { sm: 2 },
                 pr: { xs: 1, sm: 1 },
@@ -49,18 +46,27 @@ export function StpTableToolbar(props: EnhancedTableToolbarProps) {
                         id="tableTitle"
                         component="div"
                     >
-                        Стеклопакеты
+                        Выбрать стеклопакет
                     </Typography>
                 ) }
             </Stack>
             <Stack sx={ { flexDirection: 'row', alignItems: 'center' } }>
-
                 <StpTypeFormGroup open={ group } />
-                { !group &&
-                    <span className='mx-3 text-2xl'>Отфильтровать по типу</span>
-                }
-                <IconButton onClick={ make.toggle } sx={ { bgcolor: '#a0d9f3' } }>
-                    <FaBarsProgress />
+
+                <IconButton onClick={ make.toggle } sx={ {
+                    // bgcolor: 'inherit',
+                    borderRadius: 5,
+                    bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity + .5)
+                } }>
+                    {
+                        !group && <div className='mx-3 text-xl '>Показать тэги</div>
+                    }
+
+                    {
+                        group
+                            ? <FaAnglesRight />
+                            : <FaAnglesLeft />
+                    }
                 </IconButton>
             </Stack>
 

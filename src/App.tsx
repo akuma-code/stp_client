@@ -1,23 +1,35 @@
-import React from "react";
-import { AppContext } from "./Hooks/useStoresContext";
-import { StpContext } from "./Context/StpContext";
-import { StpItems } from "./Components/StpTable/TableObjects";
+import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
+import { StpItems } from "./Components/StpTable/TableObjects";
+import { StpStore } from "./Context/StpStore";
+import { AppContext } from "./Hooks/useStoresContext";
 import { router } from "./Routes/AppRouter";
-import { AppHeaderBreadcrump } from "./Routes/Pages/AppBar";
+import { StpTypeProps } from "./Interfaces/Types";
 
-
-const stores = { StpContext: new StpContext(StpItems) }
+type CheckboxGroup = StpTypeProps
+const stores = { StpStore: new StpStore(StpItems) }
 
 
 function App() {
-
-
+  const [selected, setSelected] = useState<number[]>([])
+  const [selectedType, selectType] = useState<CheckboxGroup>({
+    energy: false,
+    hitproof: false,
+    multi: false,
+    simple: false,
+    solarproof: false,
+    soundproof: false
+  })
 
 
   return (
     <AppContext.Provider value={ {
-      ...stores
+      ...stores,
+      selectedItems: selected,
+      select: setSelected,
+      _type: selectedType,
+      setType: selectType
+
     } }>
 
       <RouterProvider router={ router }
