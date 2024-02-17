@@ -49,23 +49,23 @@ const hasTags = (item: StpData, tags: StpTags[]) => tags.length > 0
     : false
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useCompare<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, tags: StpTags[]) {
+export function useCompare<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any) {
     const sorted = useMemo(() => stableSort(array, getComparator(order, sort_field)), [order, sort_field])
 
     return sorted
 }
 export function useSort<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, tags: StpTags[]) {
 
-    const sorted = useCompare(array, order, sort_field, tags)
-    const [sortedWithTags, setSortedWithTags] = useState(sorted)
-    const [len, setLen] = useState(tags.length)
+    const sorted = useCompare(array, order, sort_field)
 
-    useEffect(() => {
+    const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(s => hasTags(s as unknown as StpData, tags)) : sorted, [array, order, sort_field, tags])
 
-        const tagged = [...sorted].filter(s => hasTags(s as unknown as StpData, tags))
-        const nonTagged = [...sorted].filter(s => !hasTags(s as unknown as StpData, tags))
-        const gr = [...tagged, ...nonTagged]
-        setSortedWithTags(prev => gr)
-    }, [len, order, sort_field])
-    return sortedWithTags
+    // useEffect(() => {
+
+    //     const tagged = [...sorted].filter(s => hasTags(s as unknown as StpData, tags))
+    //     const nonTagged = [...sorted].filter(s => !hasTags(s as unknown as StpData, tags))
+    //     const gr = [...tagged, ...nonTagged]
+    //     // setSortedWithTags(tagged)
+    // }, [tags, order, sort_field])
+    return tagged
 }

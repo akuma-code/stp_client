@@ -19,10 +19,10 @@ export type StpItem = {
     weight: number
     secure: "P2A" | "none"
     name: string
-    _type?: StpTypeProps
+    // _type?: StpTypeProps
     tags: StpTags[]
 }
-export const StpItems: StpItem[] = [
+export const StpItems: readonly StpItem[] = [
     {
         cams: 1, depth: 24, Ro: 1.00, Rw: 36, Lt: 65, Lr: 17, Ra: 94, Det: 30, Er: 41, Ea: 29, Sf: 36, Sc: 0.41, S: 1.81, weight: 37, secure: "P2A", name: "3.3.1-14Ar-4Эл", tags: ['hitproof', 'soundproof', 'multi'] as const,
     },
@@ -159,7 +159,7 @@ export const StpItems: StpItem[] = [
         cams: 2, depth: 40, Ro: 0.37, Rw: 30, Lt: 82, Lr: 15, Ra: 99, Det: 76, Er: 14, Ea: 10, Sf: 80, Sc: 0.92, S: 1.03, weight: 20, secure: "none", name: "4-14-4-14-4", tags: ['simple'] as const,
     },
 
-]
+] as const
 
 
 export const depths = [

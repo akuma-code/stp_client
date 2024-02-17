@@ -5,13 +5,28 @@ import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 import { useToggle } from '../../Hooks/useToggle';
-import { StpTypeFormGroup } from './StpTagsGroup';
+import { StpTagsForm } from './StpTagsGroup';
+import { useAppContext } from '../../Hooks/useStoresContext';
 interface TableToolbarProps {
     numSelected: number;
 }
 export function StpTableToolbar({ numSelected }: TableToolbarProps) {
-
+    const { setType, filteredItemsCount } = useAppContext()
     const [group, make] = useToggle(false)
+    const handleTagsClick = () => {
+        if (group === false) return make.on()
+        else {
+            setType({
+                energy: false,
+                hitproof: false,
+                multi: false,
+                simple: false,
+                solarproof: false,
+                soundproof: false
+            })
+            return make.off()
+        }
+    }
     return (
         <Toolbar
             sx={ {
@@ -51,15 +66,16 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                 ) }
             </Stack>
             <Stack sx={ { flexDirection: 'row', alignItems: 'center' } }>
-                <StpTypeFormGroup open={ group } />
 
-                <IconButton onClick={ make.toggle } sx={ {
+                <StpTagsForm open={ group } />
+
+                <IconButton onClick={ handleTagsClick } sx={ {
                     // bgcolor: 'inherit',
                     borderRadius: 5,
                     bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity + .5)
                 } }>
                     {
-                        !group && <div className='mx-3 text-xl '>Показать тэги</div>
+                        !group && <div className='mx-3 text-xl '>Включить фильтр</div>
                     }
 
                     {

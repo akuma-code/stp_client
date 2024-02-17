@@ -11,6 +11,8 @@ export type AContext = {
     StpStore: StpStore
     selectedItems: number[]
     select: React.Dispatch<React.SetStateAction<number[]>>
+    filteredItemsCount: number
+    setFcount: React.Dispatch<React.SetStateAction<number>>
     _type: StpTypeProps,
     setType: React.Dispatch<React.SetStateAction<StpTypeProps>>
 }

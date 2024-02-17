@@ -3,9 +3,9 @@ import { StpItem } from "../Components/StpTable/TableObjects";
 import { _isArr } from "../Helpers/helpersFns";
 
 export class StpStore {
-    private stp_table: StpData[] = []
+    private stp_table: readonly StpData[] = []
     public selected: number[] = []
-    constructor(table_preset?: StpItem[]) {
+    constructor(table_preset?: readonly StpItem[]) {
         this.stp_table = table_preset ? this.init(table_preset) : []
         console.log("table size: ", this.table.length)
         console.count("rendered times: ")
@@ -14,8 +14,10 @@ export class StpStore {
     get table() {
         return [...this.stp_table]
     }
-
-    private init(preset: StpItem[]): StpData[] {
+    get size() {
+        return this.stp_table.length
+    }
+    private init(preset: readonly StpItem[]): StpData[] {
         return preset.map((p, i) => ({ ...p, id: i + 1 }))
     }
 

@@ -38,7 +38,7 @@ export function StpDataTable() {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
     const [rowsPerPage, setRowsPerPage] = React.useState(20);
-    const { StpStore, select, selectedItems, _type } = useAppContext()
+    const { StpStore, select, selectedItems, _type, setFcount } = useAppContext()
     const selectedTags = useTags(_type)
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -110,9 +110,11 @@ export function StpDataTable() {
                 page * rowsPerPage + rowsPerPage)
             return sliced
         },
-        [order, orderBy, page, rowsPerPage, selectedTags.length],
+        [order, orderBy, page, rowsPerPage, selectedTags],
     );
-
+    React.useEffect(() => {
+        setFcount(sorted.length)
+    }, [sorted])
     return (
         <Box sx={ { width: '100%' } }>
             <Paper sx={ { width: '100%', mb: 2 } }>
@@ -151,7 +153,10 @@ export function StpDataTable() {
                                             tabIndex={ -1 }
                                             key={ row.id }
                                             selected={ isItemSelected }
-                                            sx={ { cursor: 'pointer', bgcolor: isTagged ? '#34a7f3' : '#ffffffDE' } }
+                                            sx={ {
+                                                cursor: 'pointer',
+                                                // bgcolor: isTagged ? '#34a7f3' : '#ffffffDE'
+                                            } }
                                         >
                                             <TableCell padding="checkbox">
                                                 <Checkbox

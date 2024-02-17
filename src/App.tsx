@@ -12,6 +12,7 @@ const stores = { StpStore: new StpStore(StpItems) }
 
 function App() {
   const [selected, setSelected] = useState<number[]>([])
+  const [fcount, setFc] = useState<number>(0)
   const [selectedType, selectType] = useState<CheckboxGroup>({
     energy: false,
     hitproof: false,
@@ -28,7 +29,9 @@ function App() {
       selectedItems: selected,
       select: setSelected,
       _type: selectedType,
-      setType: selectType
+      setType: selectType,
+      filteredItemsCount: fcount,
+      setFcount: setFc
 
     } }>
 
