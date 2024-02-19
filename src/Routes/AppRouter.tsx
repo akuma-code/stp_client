@@ -4,6 +4,7 @@ import { Root } from "./Pages/Root";
 import { ErrorPage } from "./Pages/ErrorPage";
 import { StpDataTable } from "../Components/DataTable/StpDataTable";
 import { OverView } from "./Pages/OverView";
+import { ComparePage } from "./Pages/ComparePage";
 
 export const appRoutes: RouteObject[] = [
     {
@@ -15,6 +16,10 @@ export const appRoutes: RouteObject[] = [
             {
                 element: <OverView />,
                 index: true
+            },
+            {
+                path: routePaths.compare,
+                element: <ComparePage />
             }
         ]
     }

@@ -33,7 +33,7 @@ export type Order = 'asc' | 'desc';
 
 export function StpDataTable() {
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof StpData>('cams');
+    const [orderBy, setOrderBy] = React.useState<keyof StpData>('depth');
 
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
@@ -76,6 +76,7 @@ export function StpDataTable() {
                 selectedItems.slice(store_selectedIndex + 1),
             );
         }
+        if (selectedItems.length > 5) newSelected = newSelected.slice(1, 6)
         select(newSelected)
     };
 

@@ -11,7 +11,7 @@ interface TableToolbarProps {
     numSelected: number;
 }
 export function StpTableToolbar({ numSelected }: TableToolbarProps) {
-    const { setType, filteredItemsCount } = useAppContext()
+    const { setType } = useAppContext()
     const [group, make] = useToggle(false)
     const handleTagsClick = () => {
         if (group === false) return make.on()
@@ -61,7 +61,7 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                         id="tableTitle"
                         component="div"
                     >
-                        Выбрать стеклопакет
+                        Выбрать для сравнения (не более 5!)
                     </Typography>
                 ) }
             </Stack>
@@ -75,7 +75,7 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                     bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity + .5)
                 } }>
                     {
-                        !group && <div className='mx-3 text-xl '>Включить фильтр</div>
+                        !group && <div className='mx-3 text-xl '>Выбери основные свойства</div>
                     }
 
                     {

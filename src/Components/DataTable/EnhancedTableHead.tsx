@@ -128,12 +128,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         align: 'center',
         desc: "Класс безопасности"
     },
-    // {
-    //     id: '_type',
-    //     label: 'Формула',
-    //     disablePadding: false,
-    //     numeric: false
-    // },
+
 ];
 interface EnhancedTableProps {
     numSelected: number;
@@ -170,11 +165,15 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                 : 'left' }
                         padding={ headCell.disablePadding ? 'none' : 'normal' }
                         sortDirection={ orderBy === headCell.id ? order : false }
-                        sx={ { borderBottom: '1px solid black', height: 70, bgcolor: '#93d4ff' } }
+                        sx={ {
+                            borderBottom: '1px solid black', height: 70, bgcolor: '#93d4ff',
+
+                        } }
                     >
                         <Tooltip
                             title={ headCell.desc ? headCell.desc : headCell.label }
-                            PopperProps={ { placement: 'top' } }
+                            PopperProps={ { placement: 'top', } }
+                            sx={ { fontSize: 20 } }
 
                         >
                             <TableSortLabel
