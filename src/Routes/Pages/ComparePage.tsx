@@ -27,7 +27,7 @@ export const ComparePage = () => {
                             </div>
                             <div>{ item.depth } мм</div>
                             <div>{ item.cams }</div>
-                            <div>{ item.weight } кг/кв.м</div>
+                            <div>{ item.weight }</div>
                             <div>{ item.Det }</div>
                             <div>{ item.Ea }</div>
                             <div>{ item.Er }</div>
