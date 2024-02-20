@@ -20,9 +20,25 @@ const theme = createTheme({
             main: yellow[900]
         },
     },
+    components: {
+        MuiTooltip: {
+            styleOverrides: {
+                // Name of the slot
+                tooltip: {
+                    textJustify: 'auto',
+                    fontSize: '1rem',
+                },
+            },
+            defaultProps: {
 
+                arrow: true,
 
-});
+            },
+
+        }
+
+    },
+})
 
 
 export const themeOptions: ThemeOptions = {
@@ -35,15 +51,15 @@ export const themeOptions: ThemeOptions = {
             main: '#f50057',
         },
         background: {
-            paper: '#b9b2b2',
+            paper: orange[200],
         },
     },
 
     // props: {
-    //     MuiTooltip: {
-    //         arrow: true,
-    //         fontSize: 20,
-    //     },
+    // MuiTooltip: {
+    //     arrow: true,
+    //     fontSize: 20,
+    // },
     // },
 };
 export default theme;

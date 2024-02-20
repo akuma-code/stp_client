@@ -61,7 +61,7 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                         id="tableTitle"
                         component="div"
                     >
-                        Выбрать для сравнения (не более 5!)
+                        Выбрать стеклопакет для сравнения (не более 6!)
                     </Typography>
                 ) }
             </Stack>
@@ -70,9 +70,11 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                 <StpTagsForm open={ group } />
 
                 <IconButton onClick={ handleTagsClick } sx={ {
-                    // bgcolor: 'inherit',
+                    bgcolor: (theme) => theme.palette.success.main,
                     borderRadius: 5,
-                    bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity + .5)
+                    // bgcolor: (theme) => alpha(theme.palette.success.main, theme.palette.action.activatedOpacity + .5),
+                    color: 'black',
+                    [`& :hover`]: { opacity: .5 }
                 } }>
                     {
                         !group && <div className='mx-3 text-xl '>Выбери основные свойства</div>

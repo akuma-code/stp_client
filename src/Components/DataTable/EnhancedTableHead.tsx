@@ -32,7 +32,8 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: _EnFieldsStp.cams,
         disablePadding: true,
         numeric: false,
-        align: 'center'
+        align: 'center',
+        desc: "1 камера = 2 стекла, 2 камеры = 3 стекла"
     },
     {
         id: 'depth',

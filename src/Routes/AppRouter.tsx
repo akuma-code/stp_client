@@ -1,10 +1,9 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-import { routePaths } from "./routePath";
-import { Root } from "./Pages/Root";
-import { ErrorPage } from "./Pages/ErrorPage";
-import { StpDataTable } from "../Components/DataTable/StpDataTable";
-import { OverView } from "./Pages/OverView";
 import { ComparePage } from "./Pages/ComparePage";
+import { ErrorPage } from "./Pages/ErrorPage";
+import { OverView } from "./Pages/OverView";
+import { Root } from "./Pages/Root";
+import { routePaths } from "./routePath";
 
 export const appRoutes: RouteObject[] = [
     {

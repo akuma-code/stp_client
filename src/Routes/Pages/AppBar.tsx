@@ -6,10 +6,12 @@ import { GrTable } from "react-icons/gr";
 import { MdCompare } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import { routePaths } from '../routePath';
-import { AttikLogo } from '../../Components/UI/AttikLogo';
+
+import { useAppContext } from '../../Hooks/useStoresContext';
 
 
 export function AppHeaderBreadcrump() {
+    const { selectedItems } = useAppContext()
     return (
         <Box sx={ { flexGrow: 1 } }>
             <AppBar position="static" color={ `warning` } >
@@ -17,20 +19,16 @@ export function AppHeaderBreadcrump() {
                     <IconButton
                         edge={ 'start' }
                         sx={ { mx: 2, display: 'flex', gap: 2, color: 'beige' } }
+
                     >
                         <GrTable />
                         <Link to={ routePaths.root }> <strong>Таблица</strong></Link>
                     </IconButton>
-                    {/* <IconButton
+
+                    <IconButton disabled={ selectedItems.length === 0 }
                         edge={ 'start' }
                         sx={ { mx: 2, display: 'flex', gap: 2, color: 'beige' } }
-                    >
-                        <GiBigGear />
-                        <Link to={ routePaths.root }> <strong>Подобрать</strong></Link>
-                    </IconButton> */}
-                    <IconButton
-                        edge={ 'start' }
-                        sx={ { mx: 2, display: 'flex', gap: 2, color: 'beige' } }
+
                     >
                         <MdCompare />
                         <Link to={ routePaths.compare }> <strong>Сравнить</strong></Link>
