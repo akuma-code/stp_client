@@ -24,8 +24,9 @@ const stp_headCells: readonly HeadStpCell[] = [
     {
         id: 'name',
         label: 'Формула',
-        disablePadding: false,
-        numeric: false
+        disablePadding: true,
+        numeric: false,
+        desc: "Формула стеклопакета"
     },
     {
         id: 'cams',

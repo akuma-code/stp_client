@@ -12,9 +12,9 @@ interface TableToolbarProps {
 }
 export function StpTableToolbar({ numSelected }: TableToolbarProps) {
     const { setType } = useAppContext()
-    const [group, make] = useToggle(false)
+    const [showTags, tagControl] = useToggle(false)
     const handleTagsClick = () => {
-        if (group === false) return make.on()
+        if (showTags === false) return tagControl.on()
         else {
             setType({
                 energy: false,
@@ -24,7 +24,7 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                 solarproof: false,
                 soundproof: false
             })
-            return make.off()
+            return tagControl.off()
         }
     }
     return (
@@ -67,21 +67,23 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
             </Stack>
             <Stack sx={ { flexDirection: 'row', alignItems: 'center' } }>
 
-                <StpTagsForm open={ group } />
+                <StpTagsForm open={ showTags } />
 
-                <IconButton onClick={ handleTagsClick } sx={ {
-                    bgcolor: (theme) => theme.palette.success.main,
-                    borderRadius: 5,
-                    // bgcolor: (theme) => alpha(theme.palette.success.main, theme.palette.action.activatedOpacity + .5),
-                    color: 'black',
-                    [`& :hover`]: { opacity: .5 }
-                } }>
+                <IconButton
+                    onClick={ handleTagsClick }
+                    sx={ {
+                        bgcolor: (theme) => theme.palette.success.main,
+                        borderRadius: 5,
+                        // bgcolor: (theme) => alpha(theme.palette.success.main, theme.palette.action.activatedOpacity + .5),
+                        color: 'black',
+                        [`& :hover`]: { opacity: .5 }
+                    } }>
                     {
-                        !group && <div className='mx-3 text-xl '>Выбери основные свойства</div>
+                        !showTags && <div className='mx-3 text-xl '>Выбери основные свойства</div>
                     }
 
                     {
-                        group
+                        showTags
                             ? <FaAnglesRight />
                             : <FaAnglesLeft />
                     }

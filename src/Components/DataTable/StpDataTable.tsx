@@ -37,7 +37,7 @@ export function StpDataTable() {
 
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
-    const [rowsPerPage, setRowsPerPage] = React.useState(20);
+    const [rowsPerPage, setRowsPerPage] = React.useState(-1);
     const { StpStore, select, selectedItems, _type, setFcount } = useAppContext()
     const selectedTags = useTags(_type)
     const handleRequestSort = (

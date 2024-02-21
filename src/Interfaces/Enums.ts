@@ -1,6 +1,6 @@
 export const enum StpPropFields {
     id = "id",
-    formula = "Формула",
+    formula = "Формула стеклопакета",
     stp_type = "Тип стеклопакета",
 
 }

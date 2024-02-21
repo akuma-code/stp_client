@@ -5,9 +5,10 @@ import { StpStore } from "./Context/StpStore";
 import { AppContext } from "./Hooks/useStoresContext";
 import { router } from "./Routes/AppRouter";
 import { StpTypeProps } from "./Interfaces/Types";
+import { table_data_preset } from "./Components/StpTable/FullTable";
 
 type CheckboxGroup = StpTypeProps
-const stores = { StpStore: new StpStore(StpItems) }
+const stores = { StpStore: new StpStore(table_data_preset) }
 
 
 function App() {
