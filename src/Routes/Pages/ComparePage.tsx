@@ -25,7 +25,7 @@ export const ComparePage = () => {
             <Stack direction={ 'column' }>
                 <StpCompareItems
                     items={ filtered }
-                    ref={ printRef }
+
                 />
 
                 <Box >
