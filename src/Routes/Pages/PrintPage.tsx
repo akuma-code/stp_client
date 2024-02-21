@@ -20,6 +20,7 @@ export const PrintPage = (props: PrintPageProps) => {
 
     }
 
+
     return (
 
         <Stack direction={ 'column' }>

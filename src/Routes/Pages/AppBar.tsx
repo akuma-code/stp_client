@@ -13,7 +13,6 @@ import { useAppContext } from '../../Hooks/useStoresContext';
 export function AppHeaderBreadcrump() {
     const { selectedItems } = useAppContext()
     const nav = useMatch(routePaths.export)
-    console.log('nav', nav?.pathname)
     return (nav?.pathname !== '/export' &&
         <Box sx={ { flexGrow: 1 } }>
             <AppBar position="static" color={ `warning` } >
