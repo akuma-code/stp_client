@@ -1,23 +1,23 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Paper from '@mui/material/Paper';
+import Switch from '@mui/material/Switch';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import * as React from 'react';
 
-import { StpItem, StpTags } from '../StpTable/TableObjects';
-import { EnhancedTableHead } from './EnhancedTableHead';
 import { Stack } from '@mui/material';
+import { useSort } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
-import { StpTableToolbar } from './StpTableToolbar';
-import { useCompare, useSort } from '../../Hooks/useCompare';
 import { useTags } from '../../Hooks/useTags';
+import { StpItem } from '../StpTable/TableObjects';
+import { EnhancedTableHead } from './EnhancedTableHead';
+import { StpTableToolbar } from './StpTableToolbar';
 
 //__ Data Create*/
 //TODO: перенести все данные в контекст
