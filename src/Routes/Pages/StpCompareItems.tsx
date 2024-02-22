@@ -8,35 +8,49 @@ type FilteredItemsProps = {
     ref?: React.RefObject<any> | null
 };
 export function StpCompareItems({ items, ref }: FilteredItemsProps) {
-    // const ref = useRef(null)
+
+    const itemFieldLabel = items.map(Object.entries)
+    console.log('itemFieldLabel', itemFieldLabel)
     return <Stack direction={ 'row' } gap={ 1 } m={ 3 } ref={ ref }>
 
-        { items.map(item => <Stack direction={ 'column' } key={ item.id } flexGrow={ 1 } alignItems={ 'stretch' } gap={ 1 } rowGap={ 1 }
-            sx={ { [`& div`]: { borderBottom: '1px solid black', textAlign: 'center', minHeight: 32 } } }
-        >
+        {
+            items.map(item =>
+                <Stack
+                    direction={ 'column' }
+                    key={ item.id }
+                    flexGrow={ 1 }
+                    alignItems={ 'stretch' }
+                    gap={ 1 }
+                    rowGap={ 1 }
+                    sx={ { [`& div`]: { borderBottom: '1px solid black', textAlign: 'end', minHeight: 32 } } }
+                >
 
-            <div className='min-w-fit'>
-                <strong> { item.name } </strong>
-            </div>
-            <div>{ item.depth } мм</div>
-            <div>{ item.cams }</div>
-            <div>{ item.weight }</div>
-            <div>{ item.Det }</div>
-            <div>{ item.Ea }</div>
-            <div>{ item.Er }</div>
-            <div>{ item.Lr }</div>
-            <div>{ item.Lt }</div>
-            <div>{ item.Ra }</div>
-            <div>{ item.Ro }</div>
-            <div>{ item.Rw }</div>
-            <div>{ item.S }</div>
-            <div>{ item.Sc }</div>
-            <div>{ item.Sf }</div>
-        </Stack>
-        ) }
+                    <div className='min-w-fit min-h-max'>
+                        <strong className='text-nowrap'> { item.name } </strong>
+                    </div>
+                    <div>{ item.depth } мм</div>
+                    <div>{ item.cams }</div>
+                    <div>{ item.weight }</div>
+                    <div>{ item.Det }</div>
+                    <div>{ item.Ea }</div>
+                    <div>{ item.Er }</div>
+                    <div>{ item.Lr }</div>
+                    <div>{ item.Lt }</div>
+                    <div>{ item.Ra }</div>
+                    <div>{ item.Ro }</div>
+                    <div>{ item.Rw }</div>
+                    <div>{ item.S }</div>
+                    <div>{ item.Sc }</div>
+                    <div>{ item.Sf }</div>
+                </Stack>
+            )
+        }
         <Divider orientation='vertical' flexItem sx={ { borderWidth: 2 } } />
 
-        <Stack direction={ 'column' } flexGrow={ 0 } gap={ 1 } rowGap={ 1 }
+        <Stack
+            direction={ 'column' }
+            flexGrow={ 5 }
+            gap={ 1 } rowGap={ 1 }
             sx={ { [`& div`]: { textAlign: 'start', minHeight: 32 } } }
         >
             <div>{ _EnFieldsStp.formula }</div>

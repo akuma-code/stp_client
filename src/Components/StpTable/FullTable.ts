@@ -17,7 +17,7 @@ export const table_data_preset: StpItem[] = [
         Sf: 38,
         Sc: 0.44,
         S: 1.87,
-        weight: 37,
+        weight: 27,
         secure: "P2A",
     },
     {

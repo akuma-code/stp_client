@@ -18,6 +18,7 @@ import { useTags } from '../../Hooks/useTags';
 import { StpItem } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 import { StpTableToolbar } from './StpTableToolbar';
+import { MdInfoOutline } from "react-icons/md";
 
 //__ Data Create*/
 //TODO: перенести все данные в контекст
@@ -180,6 +181,7 @@ export function StpDataTable() {
                                             </TableCell>
                                             <TableCell align="center">{ row.cams }</TableCell>
                                             <TableCell align="center">{ row.depth }</TableCell>
+                                            <TableCell align="center">{ row.weight }</TableCell>
                                             <TableCell align="right">{ row.Ro }</TableCell>
                                             <TableCell align="right">{ row.Det }</TableCell>
                                             <TableCell align="right">{ row.Ea }</TableCell>

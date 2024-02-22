@@ -10,6 +10,7 @@ import { _ID } from '../../Helpers/helpersFns';
 import { _EnFieldsStp } from '../../Interfaces/Enums';
 import { Order, StpData } from './StpDataTable';
 import { Tooltip } from '@mui/material';
+import { MdInfoOutline } from "react-icons/md";
 
 interface HeadStpCell {
     label: string;
@@ -31,7 +32,7 @@ const stp_headCells: readonly HeadStpCell[] = [
     {
         id: 'cams',
         label: _EnFieldsStp.cams,
-        disablePadding: true,
+        disablePadding: false,
         numeric: false,
         align: 'center',
         desc: "1 камера = 2 стекла, 2 камеры = 3 стекла"
@@ -43,6 +44,14 @@ const stp_headCells: readonly HeadStpCell[] = [
         numeric: false,
         align: 'center',
         desc: 'Толщина стеклопакета, мм'
+    },
+    {
+        id: 'weight',
+        label: 'Вес',
+        disablePadding: true,
+        numeric: true,
+        align: 'right',
+        desc: _EnFieldsStp.Weight
     },
     {
         id: 'Ro',
@@ -127,7 +136,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Secure',
         disablePadding: false,
         numeric: false,
-        align: 'center',
+        align: 'right',
         desc: "Класс безопасности"
     },
 
@@ -145,7 +154,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     const createSortHandler = (property: keyof StpData) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
-
+    const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'cams' && headCell.id !== 'depth')
     return (
         <TableHead>
             <TableRow>
@@ -161,21 +170,24 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                 { stp_headCells.map((headCell) => (
                     <TableCell
                         key={ _ID() }
-                        align={ headCell.align ? headCell.align
+                        align={ headCell.align
+                            ? headCell.align
                             : headCell.numeric
                                 ? 'right'
                                 : 'left' }
                         padding={ headCell.disablePadding ? 'none' : 'normal' }
                         sortDirection={ orderBy === headCell.id ? order : false }
                         sx={ {
-                            borderBottom: '1px solid black', height: 70, bgcolor: '#93d4ff',
+                            borderBottom: '1px solid black', height: 60, bgcolor: '#93d4ff',
 
                         } }
                     >
                         <Tooltip
-                            title={ headCell.desc ? headCell.desc : headCell.label }
+                            title={ headCell.desc
+                                ? headCell.desc
+                                : headCell.label }
                             PopperProps={ { placement: 'top', } }
-                            sx={ { fontSize: 20 } }
+                            sx={ { fontSize: 18 } }
 
                         >
                             <TableSortLabel
@@ -183,11 +195,14 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                 direction={ orderBy === headCell.id ? order : 'asc' }
                                 onClick={ createSortHandler(headCell.id) }
                             >
+                                <Box display={ 'flex' } gap={ .5 }>
 
-                                { headCell.label }
+                                    { headCell.label }
+                                    { notInfo(headCell) && <MdInfoOutline className='text-blue-600' /> }
+                                </Box>
                                 { orderBy === headCell.id ? (
                                     <Box component="span"
-                                        sx={ visuallyHidden }
+                                        sx={ { ...visuallyHidden } }
                                     >
                                         { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
                                     </Box>
