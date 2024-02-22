@@ -11,18 +11,24 @@ export function StpCompareItems({ items, ref }: FilteredItemsProps) {
 
     const itemFieldLabel = items.map(Object.entries)
     console.log('itemFieldLabel', itemFieldLabel)
-    return <Stack direction={ 'row' } gap={ 1 } m={ 3 } ref={ ref }>
+    return <Stack
+        // divider={ <Divider orientation='vertical' flexItem sx={ { borderWidth: 2 } } /> }
+        direction={ 'row' }
+        gap={ 1 }
+        m={ 3 }
+        ref={ ref }>
 
         {
             items.map(item =>
                 <Stack
+                    divider={ <Divider orientation='horizontal' variant='fullWidth' flexItem sx={ { borderWidth: 1 } } /> }
                     direction={ 'column' }
                     key={ item.id }
                     flexGrow={ 1 }
                     alignItems={ 'stretch' }
                     gap={ 1 }
                     rowGap={ 1 }
-                    sx={ { [`& div`]: { borderBottom: '1px solid black', textAlign: 'end', minHeight: 32 } } }
+                    sx={ { [`& div`]: { textAlign: 'end', minHeight: 24 } } }
                 >
 
                     <div className='min-w-fit min-h-max'>
@@ -45,13 +51,16 @@ export function StpCompareItems({ items, ref }: FilteredItemsProps) {
                 </Stack>
             )
         }
-        <Divider orientation='vertical' flexItem sx={ { borderWidth: 2 } } />
+
 
         <Stack
+            divider={ <Divider orientation='horizontal' variant='inset' flexItem sx={ { borderWidth: 1 } } /> }
             direction={ 'column' }
-            flexGrow={ 5 }
-            gap={ 1 } rowGap={ 1 }
-            sx={ { [`& div`]: { textAlign: 'start', minHeight: 32 } } }
+            // flexGrow={ 1 }
+            flexShrink={ 1 }
+            gap={ 1 }
+            rowGap={ 1 }
+            sx={ { [`& div`]: { textAlign: 'left', minHeight: 24, ml: 8 } } }
         >
             <div>{ _EnFieldsStp.formula }</div>
             <div>{ _EnFieldsStp.depth }</div>

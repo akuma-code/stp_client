@@ -1,4 +1,4 @@
-import { Box, Button, Icon, Modal, Paper, Stack } from '@mui/material'
+import { Box, Button, Divider, Icon, Modal, Paper, Stack } from '@mui/material'
 import { TfiControlBackward } from "react-icons/tfi"
 import { Link, NavLink } from 'react-router-dom'
 import { useAppContext } from '../../Hooks/useStoresContext'
@@ -22,21 +22,21 @@ export const ComparePage = () => {
 
     return (
         filtered.length > 0 ?
-            <Stack direction={ 'column' }>
+            <Stack direction={ 'column' } divider={ <Divider flexItem orientation='horizontal' variant='fullWidth' sx={ { borderWidth: 1 } } /> }>
                 <StpCompareItems
                     items={ filtered }
 
                 />
-
-                <Box >
+                <Box />
+                {/* <Box >
                     <Button variant='contained' color='primary' endIcon={ <MdOutlineLocalPrintshop /> }
-                    // onClick={ () => handlePrint() }
+                    onClick={ () => handlePrint() }
                     >
                         Print
-                        {/* <NavLink to={ routePaths.export } target='_self'>Export</NavLink> */ }
+                        { <NavLink to={ routePaths.export } target='_self'>Export</NavLink>}
                     </Button>
 
-                </Box>
+                </Box> */}
 
             </Stack>
             :

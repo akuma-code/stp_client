@@ -182,33 +182,33 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
 
                         } }
                     >
-                        <Tooltip
-                            title={ headCell.desc
-                                ? headCell.desc
-                                : headCell.label }
-                            PopperProps={ { placement: 'top', } }
-                            sx={ { fontSize: 18 } }
-
+                        <TableSortLabel
+                            active={ orderBy === headCell.id }
+                            direction={ orderBy === headCell.id ? order : 'asc' }
+                            onClick={ createSortHandler(headCell.id) }
                         >
-                            <TableSortLabel
-                                active={ orderBy === headCell.id }
-                                direction={ orderBy === headCell.id ? order : 'asc' }
-                                onClick={ createSortHandler(headCell.id) }
+                            <Tooltip
+                                title={ headCell.desc
+                                    ? headCell.desc
+                                    : headCell.label }
+                                PopperProps={ { placement: 'top', } }
+                                sx={ { fontSize: 18 } }
+
                             >
                                 <Box display={ 'flex' } gap={ .5 }>
 
                                     { headCell.label }
                                     { notInfo(headCell) && <MdInfoOutline className='text-blue-600' /> }
                                 </Box>
-                                { orderBy === headCell.id ? (
-                                    <Box component="span"
-                                        sx={ { ...visuallyHidden } }
-                                    >
-                                        { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
-                                    </Box>
-                                ) : null }
-                            </TableSortLabel>
-                        </Tooltip>
+                            </Tooltip>
+                            { orderBy === headCell.id ? (
+                                <Box component="span"
+                                    sx={ { ...visuallyHidden } }
+                                >
+                                    { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
+                                </Box>
+                            ) : null }
+                        </TableSortLabel>
                     </TableCell>
                 )) }
             </TableRow>
