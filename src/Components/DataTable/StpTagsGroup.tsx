@@ -12,6 +12,8 @@ type CheckboxGroup = Required<StpTypeProps>
 
 export const StpTagsForm = ({ open }: StpTypeFGProps) => {
     const { _type, setType, filteredItemsCount } = useAppContext()
+
+
     const labelText = useCallback(() => {
         const allBlank = Object.values(_type).every(v => v === false)
         if (allBlank) return `Ничего не выбрано!`
@@ -20,6 +22,8 @@ export const StpTagsForm = ({ open }: StpTypeFGProps) => {
         else return `Cовпадений: ${filteredItemsCount}`
 
     }, [filteredItemsCount])
+
+
     const lb = labelText()
     function handleChange(prop: keyof CheckboxGroup) {
         const onchange: ChangeFn = (e, checked) => {
@@ -44,7 +48,7 @@ export const StpTagsForm = ({ open }: StpTypeFGProps) => {
                     control={
                         <Checkbox checked={ _type.energy } onChange={ handleChange('energy') } name="energy" />
                     }
-                    label="Энергосберегающий"
+                    label="Теплый"
                 />
                 <FormControlLabel
                     control={
@@ -68,7 +72,7 @@ export const StpTagsForm = ({ open }: StpTypeFGProps) => {
                     control={
                         <Checkbox checked={ _type.soundproof } onChange={ handleChange('soundproof') } name="soundproof" />
                     }
-                    label="Звуконепроницаемый"
+                    label="Шумоизолирующий"
                 />
 
             </FormGroup>

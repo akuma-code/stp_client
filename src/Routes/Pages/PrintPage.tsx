@@ -59,21 +59,21 @@ export const PrintPage = (props: PrintPageProps) => {
                 <Stack direction={ 'column' } flexGrow={ 0 } gap={ 1 } rowGap={ 1 }
                     sx={ { [`& div`]: { textAlign: 'start', minHeight: 32 } } }
                 >
-                    <div>{ _EnFieldsStp.formula }</div>
+                    <div>{ _EnFieldsStp.name }</div>
                     <div>{ _EnFieldsStp.depth }</div>
                     <div>{ _EnFieldsStp.cams }</div>
-                    <div>{ _EnFieldsStp.Weight }</div>
-                    <div>{ _EnFieldsStp.DET }</div>
-                    <div>{ _EnFieldsStp.EA }</div>
-                    <div>{ _EnFieldsStp.ER }</div>
-                    <div>{ _EnFieldsStp.LR }</div>
-                    <div>{ _EnFieldsStp.LT }</div>
+                    <div>{ _EnFieldsStp.weight }</div>
+                    <div>{ _EnFieldsStp.Det }</div>
+                    <div>{ _EnFieldsStp.Ea }</div>
+                    <div>{ _EnFieldsStp.Er }</div>
+                    <div>{ _EnFieldsStp.Lr }</div>
+                    <div>{ _EnFieldsStp.Lt }</div>
                     <div>{ _EnFieldsStp.Ra }</div>
                     <div>{ _EnFieldsStp.Ro }</div>
                     <div>{ _EnFieldsStp.Rw }</div>
                     <div>{ _EnFieldsStp.S }</div>
-                    <div>{ _EnFieldsStp.SC }</div>
-                    <div>{ _EnFieldsStp.SF }</div>
+                    <div>{ _EnFieldsStp.Sc }</div>
+                    <div>{ _EnFieldsStp.Sf }</div>
                 </Stack>
 
 

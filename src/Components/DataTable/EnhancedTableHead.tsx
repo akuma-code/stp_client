@@ -32,9 +32,9 @@ const stp_headCells: readonly HeadStpCell[] = [
     {
         id: 'cams',
         label: _EnFieldsStp.cams,
-        disablePadding: false,
+        disablePadding: true,
         numeric: false,
-        align: 'center',
+        align: 'right',
         desc: "1 камера = 2 стекла, 2 камеры = 3 стекла"
     },
     {
@@ -51,54 +51,54 @@ const stp_headCells: readonly HeadStpCell[] = [
         disablePadding: true,
         numeric: true,
         align: 'right',
-        desc: _EnFieldsStp.Weight
+        desc: _EnFieldsStp.weight
     },
     {
         id: 'Ro',
         label: 'Ro',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
         desc: _EnFieldsStp.Ro
     },
     {
         id: 'Det',
         label: 'Det',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
-        desc: _EnFieldsStp.DET
+        desc: _EnFieldsStp.Det
     },
     {
         id: 'Ea',
         label: 'Ea',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
-        desc: _EnFieldsStp.EA
+        desc: _EnFieldsStp.Ea
     },
     {
         id: 'Er',
         label: 'Er',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
-        desc: _EnFieldsStp.ER
+        desc: _EnFieldsStp.Er
     },
     {
         id: 'Lr',
         label: 'Lr',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
-        desc: _EnFieldsStp.LR
+        desc: _EnFieldsStp.Lr
     },
     {
         id: 'Lt',
         label: 'Lt',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
-        desc: _EnFieldsStp.LT
+        desc: _EnFieldsStp.Lt
     },
     {
         id: 'Ra',
         label: 'Ra',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
         desc: _EnFieldsStp.Ra
     },
@@ -106,35 +106,35 @@ const stp_headCells: readonly HeadStpCell[] = [
     {
         id: 'Rw',
         label: 'Rw',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
         desc: _EnFieldsStp.Rw
     },
     {
         id: 'S',
         label: 'S',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
         desc: _EnFieldsStp.S
     },
     {
         id: 'Sc',
         label: 'Sc',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
-        desc: _EnFieldsStp.SC
+        desc: _EnFieldsStp.Sc
     },
     {
         id: 'Sf',
         label: 'Sf',
-        disablePadding: false,
+        disablePadding: true,
         numeric: true,
-        desc: _EnFieldsStp.SF
+        desc: _EnFieldsStp.Sf
     },
     {
         id: 'secure',
         label: 'Secure',
-        disablePadding: false,
+        disablePadding: true,
         numeric: false,
         align: 'right',
         desc: "Класс безопасности"
@@ -154,7 +154,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     const createSortHandler = (property: keyof StpData) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
-    const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'cams' && headCell.id !== 'depth')
+    const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth')
     return (
         <TableHead>
             <TableRow>
@@ -167,50 +167,52 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
 
                         id='selected_id' />
                 </TableCell>
-                { stp_headCells.map((headCell) => (
-                    <TableCell
-                        key={ _ID() }
-                        align={ headCell.align
-                            ? headCell.align
-                            : headCell.numeric
-                                ? 'right'
-                                : 'left' }
-                        padding={ headCell.disablePadding ? 'none' : 'normal' }
-                        sortDirection={ orderBy === headCell.id ? order : false }
-                        sx={ {
-                            borderBottom: '1px solid black', height: 60, bgcolor: '#93d4ff',
+                {
+                    stp_headCells.map((headCell) => (
+                        <TableCell
+                            key={ _ID() }
+                            align={ headCell.align
+                                ? headCell.align
+                                : headCell.numeric
+                                    ? 'right'
+                                    : 'left' }
+                            padding={ headCell.disablePadding ? 'none' : 'normal' }
+                            sortDirection={ orderBy === headCell.id ? order : false }
+                            sx={ {
+                                borderBottom: '1px solid black', height: 60, bgcolor: '#93d4ff',
 
-                        } }
-                    >
-                        <TableSortLabel
-                            active={ orderBy === headCell.id }
-                            direction={ orderBy === headCell.id ? order : 'asc' }
-                            onClick={ createSortHandler(headCell.id) }
+                            } }
                         >
-                            <Tooltip
-                                title={ headCell.desc
-                                    ? headCell.desc
-                                    : headCell.label }
-                                PopperProps={ { placement: 'top', } }
-                                sx={ { fontSize: 18 } }
-
+                            <TableSortLabel sx={ { fontSize: 18 } }
+                                active={ orderBy === headCell.id }
+                                direction={ orderBy === headCell.id ? order : 'asc' }
+                                onClick={ createSortHandler(headCell.id) }
                             >
-                                <Box display={ 'flex' } gap={ .5 }>
 
-                                    { headCell.label }
-                                    { notInfo(headCell) && <MdInfoOutline className='text-blue-600' /> }
-                                </Box>
-                            </Tooltip>
-                            { orderBy === headCell.id ? (
-                                <Box component="span"
-                                    sx={ { ...visuallyHidden } }
+                                <Tooltip
+                                    title={ headCell.desc
+                                        ? headCell.desc
+                                        : headCell.label }
+                                    PopperProps={ { placement: 'top', } }
+
+
                                 >
-                                    { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
-                                </Box>
-                            ) : null }
-                        </TableSortLabel>
-                    </TableCell>
-                )) }
+                                    <Box display={ 'flex' } sx={ { mx: .5 } }>
+
+                                        { notInfo(headCell) && <MdInfoOutline className='text-blue-600' /> }
+                                    </Box>
+                                </Tooltip>
+                                { headCell.label }
+                                { orderBy === headCell.id ? (
+                                    <Box component="span"
+                                        sx={ { ...visuallyHidden } }
+                                    >
+                                        { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
+                                    </Box>
+                                ) : null }
+                            </TableSortLabel>
+                        </TableCell>
+                    )) }
             </TableRow>
         </TableHead>
     );

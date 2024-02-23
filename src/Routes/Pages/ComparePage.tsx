@@ -22,22 +22,14 @@ export const ComparePage = () => {
 
     return (
         filtered.length > 0 ?
-            <Stack direction={ 'column' } divider={ <Divider flexItem orientation='horizontal' variant='fullWidth' sx={ { borderWidth: 1 } } /> }>
+            <Stack direction={ 'column' }
+            // divider={ <Divider flexItem orientation='horizontal' variant='fullWidth' sx={ { borderWidth: 1 } } /> }
+            >
                 <StpCompareItems
                     items={ filtered }
 
                 />
-                <Box />
-                {/* <Box >
-                    <Button variant='contained' color='primary' endIcon={ <MdOutlineLocalPrintshop /> }
-                    onClick={ () => handlePrint() }
-                    >
-                        Print
-                        { <NavLink to={ routePaths.export } target='_self'>Export</NavLink>}
-                    </Button>
-
-                </Box> */}
-
+                <Divider flexItem variant='inset' sx={ { borderWidth: 1 } } >Подробное описание</Divider>
             </Stack>
             :
             <NothingToCompare />

@@ -1,85 +1,188 @@
-import { Divider, Stack } from '@mui/material';
-import { _EnFieldsStp } from '../../Interfaces/Enums';
+import { Divider, ExtendList, ExtendListTypeMap, List, ListItem, ListItemIcon, ListItemText, ListTypeMap, Stack } from '@mui/material';
+import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
 import { StpData } from '../../Components/DataTable/StpDataTable';
-import { useRef } from 'react';
+import { forwardRef, useRef } from 'react';
+import {
+    Link as RouterLink,
+    LinkProps as RouterLinkProps,
 
+    useLocation,
+} from 'react-router-dom';
+
+import { FiInfo } from "react-icons/fi";
+import { IconType } from 'react-icons';
 type FilteredItemsProps = {
     items: StpData[]
-    ref?: React.RefObject<any> | null
+
 };
-export function StpCompareItems({ items, ref }: FilteredItemsProps) {
 
-    const itemFieldLabel = items.map(Object.entries)
-    console.log('itemFieldLabel', itemFieldLabel)
+const getKeys = (item: object) => Object.keys(item)
+const listOrder: Stp_Key[] = [
+    'name',
+    'depth',
+    'weight',
+    'cams',
+    'Det',
+    'Ea',
+    'Er',
+    'Lr',
+    'Lt',
+    'Ra',
+    'Ro',
+    'Rw',
+    'S',
+    'Sc',
+    'Sf',
+] as const
+
+export function StpCompareItems({ items }: FilteredItemsProps) {
+
+    const get_items = (stp_item: StpData) => listOrder.map(prop => stp_item[prop])
+    const infos = listOrder.map(s => _EnFieldsStp[s])
     return <Stack
-        // divider={ <Divider orientation='vertical' flexItem sx={ { borderWidth: 2 } } /> }
         direction={ 'row' }
-        gap={ 1 }
-        m={ 3 }
-        ref={ ref }>
-
+        gap={ 0 }
+        my={ 3 }
+    >
         {
-            items.map(item =>
-                <Stack
-                    divider={ <Divider orientation='horizontal' variant='fullWidth' flexItem sx={ { borderWidth: 1 } } /> }
-                    direction={ 'column' }
-                    key={ item.id }
-                    flexGrow={ 1 }
-                    alignItems={ 'stretch' }
-                    gap={ 1 }
-                    rowGap={ 1 }
-                    sx={ { [`& div`]: { textAlign: 'end', minHeight: 24 } } }
-                >
+            items.map(i =>
 
-                    <div className='min-w-fit min-h-max'>
-                        <strong className='text-nowrap'> { item.name } </strong>
-                    </div>
-                    <div>{ item.depth } мм</div>
-                    <div>{ item.cams }</div>
-                    <div>{ item.weight }</div>
-                    <div>{ item.Det }</div>
-                    <div>{ item.Ea }</div>
-                    <div>{ item.Er }</div>
-                    <div>{ item.Lr }</div>
-                    <div>{ item.Lt }</div>
-                    <div>{ item.Ra }</div>
-                    <div>{ item.Ro }</div>
-                    <div>{ item.Rw }</div>
-                    <div>{ item.S }</div>
-                    <div>{ item.Sc }</div>
-                    <div>{ item.Sf }</div>
-                </Stack>
+                <StpItemList
+                    key={ i.name }
+                    stp_values={ get_items(i) }
+                    listSx={ { flexGrow: 1 } }
+                />
             )
         }
-
-
-        <Stack
-            divider={ <Divider orientation='horizontal' variant='inset' flexItem sx={ { borderWidth: 1 } } /> }
-            direction={ 'column' }
-            // flexGrow={ 1 }
-            flexShrink={ 1 }
-            gap={ 1 }
-            rowGap={ 1 }
-            sx={ { [`& div`]: { textAlign: 'left', minHeight: 24, ml: 8 } } }
-        >
-            <div>{ _EnFieldsStp.formula }</div>
-            <div>{ _EnFieldsStp.depth }</div>
-            <div>{ _EnFieldsStp.cams }</div>
-            <div>{ _EnFieldsStp.Weight }</div>
-            <div>{ _EnFieldsStp.DET }</div>
-            <div>{ _EnFieldsStp.EA }</div>
-            <div>{ _EnFieldsStp.ER }</div>
-            <div>{ _EnFieldsStp.LR }</div>
-            <div>{ _EnFieldsStp.LT }</div>
-            <div>{ _EnFieldsStp.Ra }</div>
-            <div>{ _EnFieldsStp.Ro }</div>
-            <div>{ _EnFieldsStp.Rw }</div>
-            <div>{ _EnFieldsStp.S }</div>
-            <div>{ _EnFieldsStp.SC }</div>
-            <div>{ _EnFieldsStp.SF }</div>
-        </Stack>
-
-
-
-    </Stack>;
+        <StpItemList
+            align='start'
+            stp_values={ infos }
+            listSx={ { flexGrow: 1, fontWeight: 'bold' } }
+            itemIcon={ <FiInfo /> }
+        />
+    </Stack >;
 }
+
+type StpItemsListProps = {
+    stp_values: (string | number)[]
+    align?: 'start' | 'center' | 'end'
+    listSx?: { [key: string]: string | number }
+    itemIcon?: JSX.Element
+}
+
+export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, listSx, itemIcon }) => {
+
+    const fields = stp_values.map(v => typeof v === 'number' ? v.toString() : v)
+
+    return (
+        <List
+            sx={ {
+                flexGrow: listSx && listSx.flexGrow ? listSx.flexGrow : 1,
+                ...listSx
+            } }>
+            {
+                fields.map((item, idx) =>
+                    <ListItem alignItems='center' disablePadding divider
+                        sx={ {
+                            // borderBottom: '1px solid #ffa2a2',
+                            textAlign: align ? align : 'center',
+                            bgcolor: idx % 2 === 0 ? '#c5c5c5' : 'whitesmoke',
+                            lineHeight: idx === 0 ? 2 : 'inherit',
+                        } }
+                    >
+                        {
+                            // itemIcon &&
+                            //     <ListItemIcon>{ itemIcon }</ListItemIcon> 
+                        }
+                        <ListItemText disableTypography
+                            sx={ {
+                                fontWeight: idx === 0 ? 'bold' : 'inherit',
+                            } }
+                            primary={ item }
+
+                        />
+                    </ListItem>
+                )
+            }
+        </List >
+    )
+
+
+}
+
+
+
+
+
+
+
+interface ListItemLinkProps {
+    icon?: React.ReactElement;
+    primary: string;
+    to: string;
+}
+
+const Link = forwardRef<HTMLAnchorElement, RouterLinkProps>((itemProps, ref) => <RouterLink ref={ ref } { ...itemProps } />);
+
+function ListItemLink(props: ListItemLinkProps) {
+    const { icon, primary, to } = props;
+
+    return (
+        <li>
+            <ListItem component={ Link } to={ to }>
+                { icon ? <ListItemIcon>{ icon }</ListItemIcon> : null }
+                <ListItemText primary={ primary } />
+            </ListItem>
+        </li>
+    );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// {
+//             items.map(item =>
+//                 <List disablePadding dense sx={ {
+//                     display: 'flex', flexDirection: 'column', flexGrow: 2,
+//                 } }>
+//                     {
+//                         listOrder.map((listkey, idx) =>
+//                             <ListItem key={ listkey }
+//                             >
+//                                 <ListItemText disableTypography
+//                                     sx={ { textWrap: 'nowrap', minHeight: 24, } }
+//                                     primary={ item[listkey as keyof StpData] }
+//                                 />
+//                             </ListItem>
+//                         )
+//                     }
+//                 </List>
+//             )
+//         }
+//         <List disablePadding dense>
+//             { listOrder.map((listkey) =>
+//                 <ListItem
+//                     key={ listkey }
+//                     sx={ { [`& .MuiListItemText-root`]: { fontWeight: 'bolder' } } }
+//                     alignItems='flex-start'
+//                 >
+//                     <ListItemText sx={ { textWrap: 'nowrap', minHeight: 24, alignContent: 'flex-end' } } disableTypography
+//                         primary={ _EnFieldsStp[listkey] }
+//                     />
+//                 </ListItem>
+//             ) }
+//         </List>

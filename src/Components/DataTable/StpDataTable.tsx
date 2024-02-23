@@ -18,7 +18,6 @@ import { useTags } from '../../Hooks/useTags';
 import { StpItem } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 import { StpTableToolbar } from './StpTableToolbar';
-import { MdInfoOutline } from "react-icons/md";
 
 //__ Data Create*/
 //TODO: перенести все данные в контекст
@@ -123,12 +122,13 @@ export function StpDataTable() {
 
                 <StpTableToolbar numSelected={ selectedItems.length } />
 
-                <TableContainer sx={ { overflowY: 'auto', maxHeight: '72vh' } }>
+                <TableContainer sx={ { overflowY: 'auto', maxHeight: '72vh', } } >
                     <Table
                         sx={ { minWidth: 750 } }
                         aria-labelledby="tableTitle"
                         size={ dense ? 'small' : 'medium' }
                         stickyHeader
+                        padding='normal'
                     >
                         <EnhancedTableHead
                             numSelected={ selectedItems.length }
@@ -174,8 +174,8 @@ export function StpDataTable() {
                                                 component="th"
                                                 id={ labelId }
                                                 scope="row"
-                                                padding="none"
-                                                sx={ { minWidth: 'fit-content' } }
+                                                padding="normal"
+                                                sx={ { minWidth: 'fit-content', textWrap: 'nowrap' } }
                                             >
                                                 { row.name }
                                             </TableCell>

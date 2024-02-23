@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
-import { StpItems } from "./Components/StpTable/TableObjects";
+import { table_data_preset } from "./Components/StpTable/FullTable";
 import { StpStore } from "./Context/StpStore";
 import { AppContext } from "./Hooks/useStoresContext";
-import { router } from "./Routes/AppRouter";
 import { StpTypeProps } from "./Interfaces/Types";
-import { table_data_preset } from "./Components/StpTable/FullTable";
+import { router } from "./Routes/AppRouter";
 
 type CheckboxGroup = StpTypeProps
 const stores = { StpStore: new StpStore(table_data_preset) }
