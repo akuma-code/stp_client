@@ -6,33 +6,53 @@ import { useToggle } from '../../Hooks/useToggle'
 import { routePaths } from '../routePath'
 import { MdOutlineLocalPrintshop } from "react-icons/md";
 import { StpCompareItems } from './StpCompareItems'
-import React, { forwardRef, useRef } from 'react'
+import React, { forwardRef, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { StpData } from '../../Components/DataTable/StpDataTable'
-
-
+export type ICompareCtx = {
+    selectedItem: number | string
+    selectItem: React.Dispatch<React.SetStateAction<string | number>>
+}
+export const CompareContext = React.createContext<ICompareCtx | null>(null)
 
 export const ComparePage = () => {
     const { selectedItems, StpStore } = useAppContext()
-    const [showModal, control] = useToggle(false)
+    const [selectedItemDesc, setDesc] = useState<string | number>("")
+    const [showDesc, control] = useToggle(false)
     // const printRef = useRef(null)
     const printRef = useRef<typeof StpCompareItems | null>(null)
 
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
-
+    const selDesc = () => typeof selectedItemDesc === 'number' ? filtered[selectedItemDesc].Ea : selectedItemDesc
     return (
-        filtered.length > 0 ?
-            <Stack direction={ 'column' }
-            // divider={ <Divider flexItem orientation='horizontal' variant='fullWidth' sx={ { borderWidth: 1 } } /> }
-            >
-                <StpCompareItems
-                    items={ filtered }
+        <CompareContext.Provider
+            value={ {
+                selectedItem: selectedItemDesc,
+                selectItem: setDesc
+            } }
+        >
+            {
+                filtered.length > 0 ?
+                    <Stack direction={ 'column' }
+                    // divider={ <Divider flexItem orientation='horizontal' variant='fullWidth' sx={ { borderWidth: 1 } } /> }
+                    >
+                        <StpCompareItems
+                            items={ filtered }
 
-                />
-                <Divider flexItem variant='inset' sx={ { borderWidth: 1 } } >Подробное описание</Divider>
-            </Stack>
-            :
-            <NothingToCompare />
+                        />
+                        <Divider flexItem variant='inset' sx={ { borderWidth: 1 } } >Подробное описание</Divider>
+                        {
+                            showDesc ?
+                                <div>
+                                    each value desc, selected Id:
+                                </div>
+                                : null
+                        }
+
+                    </Stack>
+                    :
+                    <NothingToCompare /> }
+        </CompareContext.Provider>
     )
 }
 

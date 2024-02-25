@@ -1,7 +1,7 @@
-import { Divider, ExtendList, ExtendListTypeMap, List, ListItem, ListItemIcon, ListItemText, ListTypeMap, Stack } from '@mui/material';
+import { Divider, ExtendList, ExtendListTypeMap, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListTypeMap, Stack } from '@mui/material';
 import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
 import { StpData } from '../../Components/DataTable/StpDataTable';
-import { forwardRef, useRef } from 'react';
+import { forwardRef, useContext, useRef } from 'react';
 import {
     Link as RouterLink,
     LinkProps as RouterLinkProps,
@@ -11,12 +11,14 @@ import {
 
 import { FiInfo } from "react-icons/fi";
 import { IconType } from 'react-icons';
+import { _ID } from '../../Helpers/helpersFns';
+import { CompareContext } from './ComparePage';
 type FilteredItemsProps = {
     items: StpData[]
 
 };
 
-const getKeys = (item: object) => Object.keys(item)
+
 const listOrder: Stp_Key[] = [
     'name',
     'depth',
@@ -50,15 +52,16 @@ export function StpCompareItems({ items }: FilteredItemsProps) {
                 <StpItemList
                     key={ i.name }
                     stp_values={ get_items(i) }
-                    listSx={ { flexGrow: 1 } }
+                    listSx={ { flexGrow: 3 } }
                 />
             )
         }
         <StpItemList
             align='start'
             stp_values={ infos }
-            listSx={ { flexGrow: 1, fontWeight: 'bold' } }
+            listSx={ { flexGrow: 1, fontWeight: 'bold', borderLeft: '1px solid black', textIndent: 20 } }
             itemIcon={ <FiInfo /> }
+            isButton
         />
     </Stack >;
 }
@@ -67,40 +70,62 @@ type StpItemsListProps = {
     stp_values: (string | number)[]
     align?: 'start' | 'center' | 'end'
     listSx?: { [key: string]: string | number }
-    itemIcon?: JSX.Element
+    itemIcon?: React.ReactNode
+    isButton?: boolean
 }
 
-export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, listSx, itemIcon }) => {
-
+export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, listSx, itemIcon, isButton = false }) => {
+    const ctx = useContext(CompareContext)
     const fields = stp_values.map(v => typeof v === 'number' ? v.toString() : v)
-
+    const clickHandler = (item: string, idx = (-1)) => (e: React.MouseEvent<HTMLDivElement>) => {
+        ctx && ctx.selectItem(idx)
+        // console.log('clicked', item)
+    }
     return (
         <List
             sx={ {
-                flexGrow: listSx && listSx.flexGrow ? listSx.flexGrow : 1,
+                flexGrow: listSx && listSx.flexGrow ? listSx.flexGrow : 0,
                 ...listSx
             } }>
             {
                 fields.map((item, idx) =>
-                    <ListItem alignItems='center' disablePadding divider
+                    <ListItem alignItems='center' disablePadding divider key={ _ID() }
                         sx={ {
                             // borderBottom: '1px solid #ffa2a2',
                             textAlign: align ? align : 'center',
                             bgcolor: idx % 2 === 0 ? '#c5c5c5' : 'whitesmoke',
                             lineHeight: idx === 0 ? 2 : 'inherit',
+                            alignContent: 'space-between'
                         } }
                     >
-                        {
-                            // itemIcon &&
-                            //     <ListItemIcon>{ itemIcon }</ListItemIcon> 
-                        }
-                        <ListItemText disableTypography
-                            sx={ {
-                                fontWeight: idx === 0 ? 'bold' : 'inherit',
-                            } }
-                            primary={ item }
+                        { isButton ?
+                            <div className='flex justify-around flex-row'>
+                                <ListItemText disableTypography
+                                    sx={ {
+                                        sm: { fontWeight: idx === 0 ? 'thin' : 'inherit', },
+                                        md: { fontWeight: idx === 0 ? 'bold' : 'inherit', }
+                                    } }
+                                    primary={ item }
 
-                        />
+                                />
+                                <ListItemButton dense sx={ { color: 'green', borderRadius: 15 } } disableRipple
+                                    onClick={ clickHandler(item, idx) }
+                                >
+                                    { itemIcon }
+
+                                </ListItemButton>
+                            </div>
+                            :
+                            <ListItemText disableTypography
+                                sx={ {
+                                    sm: { fontWeight: idx === 0 ? 'thin' : 'inherit', },
+                                    md: { fontWeight: idx === 0 ? 'bold' : 'inherit', }
+                                } }
+                                primary={ item }
+
+                            />
+                        }
+
                     </ListItem>
                 )
             }

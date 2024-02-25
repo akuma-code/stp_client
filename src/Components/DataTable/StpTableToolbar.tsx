@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -27,6 +27,8 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
             return tagControl.off()
         }
     }
+
+    const toggledText = showTags ? "" : `Выбери основные свойства`
     return (
         <Toolbar
             sx={ {
@@ -61,7 +63,7 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                         id="tableTitle"
                         component="div"
                     >
-                        Выбрать стеклопакет для сравнения (не более 6!)
+                        Выбрать стеклопакет для сравнения (не более 5!)
                     </Typography>
                 ) }
             </Stack>
@@ -69,25 +71,25 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
 
                 <StpTagsForm open={ showTags } />
 
-                <IconButton
+                <Button variant='contained' color='success'
+                    endIcon={ showTags
+                        ? <FaAnglesRight />
+                        : <FaAnglesLeft />
+                    }
                     onClick={ handleTagsClick }
                     sx={ {
-                        bgcolor: (theme) => theme.palette.success.main,
-                        borderRadius: 5,
+                        // bgcolor: (theme) => theme.palette.success.main,
+                        // borderRadius: 5,
                         // bgcolor: (theme) => alpha(theme.palette.success.main, theme.palette.action.activatedOpacity + .5),
-                        color: 'black',
-                        [`& :hover`]: { opacity: .5 }
+                        color: 'white',
+                        [`& :hover`]: {
+                            opacity: .5,
+                            // bgcolor: 'Background' 
+                        }
                     } }>
-                    {
-                        !showTags && <div className='mx-3 text-xl '>Выбери основные свойства</div>
-                    }
+                    { toggledText }
 
-                    {
-                        showTags
-                            ? <FaAnglesRight />
-                            : <FaAnglesLeft />
-                    }
-                </IconButton>
+                </Button>
             </Stack>
 
         </Toolbar>
