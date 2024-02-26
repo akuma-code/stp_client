@@ -14,8 +14,9 @@ export const appRoutes: RouteObject[] = [
         errorElement: <ErrorPage />,
         children: [
             {
+                index: true,
                 element: <OverView />,
-                index: true
+
             },
             {
                 path: routePaths.compare,

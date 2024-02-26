@@ -23,6 +23,7 @@ export enum _EnFieldsStp {
     weight = "Вес 1 кв.м. стеклопакета",
     id = "id",
     name = "Формула стеклопакета",
+    secure = 'Класс безопасности'
 }
 
 export const enum Stp_TypeFields {
