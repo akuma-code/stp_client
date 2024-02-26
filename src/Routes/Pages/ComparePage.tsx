@@ -1,13 +1,16 @@
-import { Button, Divider, Icon, Stack } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import { Box, Button, Divider, Icon, Stack } from '@mui/material'
+import React, { useRef, useState, forwardRef, createRef } from 'react'
 import { TfiControlBackward } from "react-icons/tfi"
 import { Link } from 'react-router-dom'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { useToggle } from '../../Hooks/useToggle'
 import { routePaths } from '../routePath'
-import { StpCompareItems } from './StpCompareItems'
+import { FilteredItemsProps, StpCompareItems } from './StpCompareItems'
 import { TerminDescription } from '../../Components/StpTable/TerminsDesc'
 import { StpItem } from '../../Components/StpTable/TableObjects'
+import { StpData } from '../../Components/DataTable/StpDataTable'
+import { useReactToPrint } from 'react-to-print'
+import { visuallyHidden } from '@mui/utils';
 export type ICompareCtx = {
     selectedItem: null | string
     selectItem: React.Dispatch<React.SetStateAction<string | null>>
@@ -17,9 +20,12 @@ export const CompareContext = React.createContext<ICompareCtx | null>(null)
 export const ComparePage = () => {
     const { selectedItems, StpStore } = useAppContext()
     const [itemName, setName] = useState<string | null>(null)
-    const [showDesc, control] = useToggle(false)
+    // const [showDesc, control] = useToggle(false)
     // const printRef = useRef(null)
-    const printRef = useRef<typeof StpCompareItems | null>(null)
+    const printRef = useRef(null)
+    const handlePrint = useReactToPrint({
+        content: () => printRef.current
+    })
 
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
 
@@ -40,16 +46,7 @@ export const ComparePage = () => {
                             items={ filtered }
 
                         />
-                        {/* <Divider flexItem variant='inset' sx={ { borderWidth: 1 } } >
-                            { itemName && `Описание терминов` }
-                           
-                        </Divider> */}
 
-                        {/* <div className='text-center text-2xl'>
-                            <p className='p-2'>
-                                { TerminDescription[itemName as keyof StpItem] || "" }
-                            </p>
-                        </div> */}
 
 
                     </Stack>
@@ -58,6 +55,8 @@ export const ComparePage = () => {
         </CompareContext.Provider>
     )
 }
+
+
 
 const NothingToCompare = () => {
     return (
@@ -70,12 +69,12 @@ const NothingToCompare = () => {
                         <TfiControlBackward />
                     </Icon>
                     <span className='mx-4'>
-
-                        обратно к таблице
+                        На главную
                     </span>
                 </Link>
             </div>
         </div>
     )
 }
+
 

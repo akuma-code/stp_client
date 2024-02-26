@@ -1,7 +1,7 @@
-import { Divider, ExtendList, ExtendListTypeMap, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListTypeMap, Stack } from '@mui/material';
+import { Divider, ExtendList, ExtendListTypeMap, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListTypeMap, Stack, StackTypeMap } from '@mui/material';
 import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
 import { StpData } from '../../Components/DataTable/StpDataTable';
-import { forwardRef, useContext, useRef } from 'react';
+import { createRef, forwardRef, useContext, useRef } from 'react';
 import {
     Link as RouterLink,
     LinkProps as RouterLinkProps,
@@ -14,7 +14,8 @@ import { IconType } from 'react-icons';
 import { _ID } from '../../Helpers/helpersFns';
 import { CompareContext } from './ComparePage';
 import { SecondaryDescription, TerminDescription } from '../../Components/StpTable/TerminsDesc';
-type FilteredItemsProps = {
+
+export type FilteredItemsProps = {
     items: StpData[]
 
 };
@@ -39,7 +40,7 @@ const listOrder: Stp_Key[] = [
     'secure',
 ] as const
 
-export function StpCompareItems({ items }: FilteredItemsProps) {
+export const StpCompareItems = ({ items }: FilteredItemsProps) => {
 
     const get_items = (stp_item: StpData) => listOrder.map(prop => stp_item[prop])
 
@@ -51,8 +52,8 @@ export function StpCompareItems({ items }: FilteredItemsProps) {
     }
     return <Stack
         direction={ 'row' }
-        gap={ 0 }
-        my={ 3 }
+        gap={ 0.2 }
+        my={ 2 }
         sx={ {
 
         } }
@@ -68,9 +69,11 @@ export function StpCompareItems({ items }: FilteredItemsProps) {
 
         <List sx={ {
             flexGrow: 0,
+            flexShrink: 1,
             // fontWeight: 'bold',
-            borderLeft: '1px solid black',
+            // borderLeft: '1px solid black',
             textIndent: 20,
+            pl: .5
         } }>
             {
                 listOrder.map((item, idx) =>
@@ -86,18 +89,18 @@ export function StpCompareItems({ items }: FilteredItemsProps) {
                             display: 'flex',
                             textAlign: 'start',
                             bgcolor: idx % 2 === 0 ? '#c5c5c5' : 'whitesmoke',
-                            // lineHeight: idx === 0 ? 2 : 'inherit',
-
                         } }
                     >
                         <ListItemText
+                            primaryTypographyProps={ {
+                                // variant: 'h5',
+                                fontWeight: 'bolder'
+                            } }
                             secondaryTypographyProps={ {
                                 variant: 'caption',
+                                color: '#242424'
                             } }
-                            primaryTypographyProps={ {
-                                fontWeight: 'bold'
-                            } }
-                            sx={ {} }
+
                             primary={ _EnFieldsStp[item] }
                             secondary={ SecondaryDescription[item as keyof typeof TerminDescription] }
                         />
@@ -170,8 +173,7 @@ export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, li
 }
 
 
-
-
+// eslint-disable-next-line @typescript-eslint/ban-types
 
 
 

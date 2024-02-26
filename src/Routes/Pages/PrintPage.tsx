@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, forwardRef, useRef } from 'react'
 import { Box, Button, Divider, Icon, Modal, Paper, Stack } from '@mui/material'
 import { TfiControlBackward } from "react-icons/tfi"
 import { Link, NavLink } from 'react-router-dom'
@@ -6,6 +6,8 @@ import { useAppContext } from '../../Hooks/useStoresContext'
 import { useToggle } from '../../Hooks/useToggle'
 import { _EnFieldsStp } from '../../Interfaces/Enums'
 import { routePaths } from '../routePath'
+import { useReactToPrint } from 'react-to-print'
+import { FilteredItemsProps, StpCompareItems } from './StpCompareItems'
 
 type PrintPageProps = PropsWithChildren
 
@@ -13,87 +15,32 @@ export const PrintPage = (props: PrintPageProps) => {
     const { selectedItems, StpStore } = useAppContext()
     const [showBtn, control] = useToggle(true)
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
-    function handlePrint() {
-
-        control.off()
-        window.print()
-
-    }
+    const printRef = useRef(null)
+    const handlePrint = useReactToPrint({
+        content: () => printRef.current
+    })
 
 
     return (
+        <Stack gap={ 1 } sx={ { bgcolor: '#dadada71', p: 1 } } alignItems={ 'stretch' } justifyContent={ 'flex-start' }>
 
-        <Stack direction={ 'column' }>
+            <Button fullWidth variant='text' color='error'
+                onClick={ handlePrint }
+            >
+                Распечатать
+            </Button>
+            <ItemsToPrint items={ filtered } ref={ printRef } />
 
-            <Stack direction={ 'row' } gap={ 1 } m={ 3 } >
-
-                {
-                    filtered.map(item =>
-                        <Stack direction={ 'column' } key={ item.id } flexGrow={ 1 } alignItems={ 'stretch' } gap={ 1 } rowGap={ 1 }
-                            sx={ { [`& div`]: { borderBottom: '1px solid black', textAlign: 'center', minHeight: 32 } } }
-                        >
-
-                            <div className='min-w-fit'>
-                                <strong> { item.name } </strong>
-                            </div>
-                            <div>{ item.depth } мм</div>
-                            <div>{ item.cams }</div>
-                            <div>{ item.weight }</div>
-                            <div>{ item.Det }</div>
-                            <div>{ item.Ea }</div>
-                            <div>{ item.Er }</div>
-                            <div>{ item.Lr }</div>
-                            <div>{ item.Lt }</div>
-                            <div>{ item.Ra }</div>
-                            <div>{ item.Ro }</div>
-                            <div>{ item.Rw }</div>
-                            <div>{ item.S }</div>
-                            <div>{ item.Sc }</div>
-                            <div>{ item.Sf }</div>
-                        </Stack>
-                    )
-
-                }
-                <Divider orientation='vertical' flexItem sx={ { borderWidth: 2 } } />
-
-                <Stack direction={ 'column' } flexGrow={ 0 } gap={ 1 } rowGap={ 1 }
-                    sx={ { [`& div`]: { textAlign: 'start', minHeight: 32 } } }
-                >
-                    <div>{ _EnFieldsStp.name }</div>
-                    <div>{ _EnFieldsStp.depth }</div>
-                    <div>{ _EnFieldsStp.cams }</div>
-                    <div>{ _EnFieldsStp.weight }</div>
-                    <div>{ _EnFieldsStp.Det }</div>
-                    <div>{ _EnFieldsStp.Ea }</div>
-                    <div>{ _EnFieldsStp.Er }</div>
-                    <div>{ _EnFieldsStp.Lr }</div>
-                    <div>{ _EnFieldsStp.Lt }</div>
-                    <div>{ _EnFieldsStp.Ra }</div>
-                    <div>{ _EnFieldsStp.Ro }</div>
-                    <div>{ _EnFieldsStp.Rw }</div>
-                    <div>{ _EnFieldsStp.S }</div>
-                    <div>{ _EnFieldsStp.Sc }</div>
-                    <div>{ _EnFieldsStp.Sf }</div>
-                </Stack>
-
-
-
-            </Stack>
-            {
-                showBtn &&
-                <Paper elevation={ 1 } >
-                    <Box>
-                        <Button variant='text' color='primary'
-                            onClick={ handlePrint }
-                        >
-                            Print
-                        </Button>
-
-                    </Box>
-
-                </Paper> }
         </Stack>
 
     )
 }
 
+export const ItemsToPrint = forwardRef<HTMLDivElement, FilteredItemsProps>((props, ref) => {
+
+    return (
+        <Box ref={ ref } sx={ { transform: 'scale(.9)' } } >
+            <StpCompareItems items={ props.items } />
+        </Box>
+    )
+})
