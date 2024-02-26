@@ -46,24 +46,24 @@ export const StpCompareItems = ({ items }: FilteredItemsProps) => {
 
 
     const ctx = useContext(CompareContext)
-    const clickHandler = (item: string) => (e: React.MouseEvent<HTMLDivElement>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const clickHandler = (item: string) => (_e: React.MouseEvent<HTMLDivElement>) => {
         ctx && ctx.selectItem(item)
         // console.log('clicked', item)
     }
     return <Stack
         direction={ 'row' }
         gap={ 0.2 }
-        my={ 2 }
-        sx={ {
+        // py={ 1 }
+        height={ '100%' }
 
-        } }
     >
         { items.map(i =>
 
             <StpItemList
                 key={ i.name }
                 stp_values={ get_items(i) }
-                listSx={ { flexGrow: 3 } }
+                listSx={ { flexGrow: 3, } }
             />
         ) }
 
@@ -73,7 +73,11 @@ export const StpCompareItems = ({ items }: FilteredItemsProps) => {
             // fontWeight: 'bold',
             // borderLeft: '1px solid black',
             textIndent: 20,
-            pl: .5
+            // pl: .5,
+            breakAfter: 'avoid',
+            breakInside: 'avoid',
+            breakBefore: 'avoid',
+
         } }>
             {
                 listOrder.map((item, idx) =>
@@ -85,33 +89,35 @@ export const StpCompareItems = ({ items }: FilteredItemsProps) => {
                         key={ _ID() }
                         sx={ {
                             paddingInlineEnd: 1,
-                            height: 50,
-                            display: 'flex',
-                            textAlign: 'start',
+                            height: { sm: 35, md: 45 },
+                            // display: 'flex',
+                            // textAlign: 'start',
                             bgcolor: idx % 2 === 0 ? '#c5c5c5' : 'whitesmoke',
+                            pageBreakAfter: 'avoid',
+                            pageBreakInside: 'avoid',
+                            pageBreakBefore: 'avoid',
+                            flexShrink: 1
                         } }
                     >
                         <ListItemText
                             primaryTypographyProps={ {
                                 // variant: 'h5',
-                                fontWeight: 'bolder'
+                                fontWeight: 'bolder',
+                                fontSize: { sm: 10, md: 15 },
+
                             } }
                             secondaryTypographyProps={ {
                                 variant: 'caption',
-                                color: '#242424'
+                                color: '#242424',
+                                fontSize: { sm: 7, md: 12 },
+                                displayPrint: 'none'
+
                             } }
 
                             primary={ _EnFieldsStp[item] }
                             secondary={ SecondaryDescription[item as keyof typeof TerminDescription] }
                         />
-                        { idx < -1 && <ListItemButton
-                            dense
-                            disableRipple
-                            sx={ { color: 'green', borderRadius: 15, flexGrow: 0 } }
-                            onClick={ clickHandler(item) }
-                        >
-                            <FiInfo />
-                        </ListItemButton> }
+
                     </ListItem>
                 )
             }
@@ -132,13 +138,14 @@ export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, li
     return (
         <List
             sx={ {
+
                 flexGrow: listSx && listSx.flexGrow ? listSx.flexGrow : 0,
                 ...listSx
             } }>
             {
                 fields.map((item, idx) =>
                     <ListItem
-                        alignItems='center'
+                        alignItems='flex-start'
                         disablePadding
                         divider
                         key={ _ID() }
@@ -149,15 +156,23 @@ export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, li
                             bgcolor: idx % 2 === 0 ? '#c5c5c5' : 'whitesmoke',
                             // lineHeight: idx === 0 ? 2 : 'inherit',
                             // alignContent: 'space-between',
-                            height: 50
+                            height: { sm: 35, md: 45 },
+                            // pageBreakAfter: 'avoid',
+                            // pageBreakInside: 'avoid',
+                            // pageBreakBefore: 'avoid',
+
                         } }
+
+
                     >
 
-                        <ListItemText disableTypography
-                            sx={ {
-                                sm: { fontWeight: idx === 0 ? 'thin' : 'inherit', },
-                                md: { fontWeight: idx === 0 ? 'bold' : 'inherit', }
+                        <ListItemText
+                            primaryTypographyProps={ {
+                                fontWeight: idx === 0 ? 'bolder' : 'normal',
+                                textAlign: 'center'
                             } }
+                            secondaryTypographyProps={ { displayPrint: 'none', display: 'none' } }
+                            sx={ { height: 45, } }
                             primary={ item }
 
                         />

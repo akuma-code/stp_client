@@ -1,16 +1,11 @@
-import { Box, Button, Divider, Icon, Stack } from '@mui/material'
-import React, { useRef, useState, forwardRef, createRef } from 'react'
+import { Icon, Stack } from '@mui/material'
+import React, { useRef, useState } from 'react'
 import { TfiControlBackward } from "react-icons/tfi"
 import { Link } from 'react-router-dom'
-import { useAppContext } from '../../Hooks/useStoresContext'
-import { useToggle } from '../../Hooks/useToggle'
-import { routePaths } from '../routePath'
-import { FilteredItemsProps, StpCompareItems } from './StpCompareItems'
-import { TerminDescription } from '../../Components/StpTable/TerminsDesc'
-import { StpItem } from '../../Components/StpTable/TableObjects'
-import { StpData } from '../../Components/DataTable/StpDataTable'
 import { useReactToPrint } from 'react-to-print'
-import { visuallyHidden } from '@mui/utils';
+import { useAppContext } from '../../Hooks/useStoresContext'
+import { routePaths } from '../routePath'
+import { StpCompareItems } from './StpCompareItems'
 export type ICompareCtx = {
     selectedItem: null | string
     selectItem: React.Dispatch<React.SetStateAction<string | null>>

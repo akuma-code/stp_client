@@ -17,14 +17,23 @@ export const PrintPage = (props: PrintPageProps) => {
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
     const printRef = useRef(null)
     const handlePrint = useReactToPrint({
-        content: () => printRef.current
+        content: () => printRef.current,
+
+
     })
 
 
     return (
-        <Stack gap={ 1 } sx={ { bgcolor: '#dadada71', p: 1 } } alignItems={ 'stretch' } justifyContent={ 'flex-start' }>
+        <Stack gap={ 2 } sx={ {
 
-            <Button fullWidth variant='text' color='error'
+
+        } }
+            direction={ 'column' }
+            //  alignItems={ 'stretch' }
+            justifyContent={ 'start' }
+        >
+
+            <Button variant='contained' color='success' sx={ { color: 'black', fontWeight: 'bolder', mx: 'auto', mt: 1 } }
                 onClick={ handlePrint }
             >
                 Распечатать
@@ -39,7 +48,9 @@ export const PrintPage = (props: PrintPageProps) => {
 export const ItemsToPrint = forwardRef<HTMLDivElement, FilteredItemsProps>((props, ref) => {
 
     return (
-        <Box ref={ ref } sx={ { transform: 'scale(.9)' } } >
+        <Box ref={ ref } component={ Paper } elevation={ 2 } displayPrint={ 'block' } bgcolor={ 'beige' }>
+
+
             <StpCompareItems items={ props.items } />
         </Box>
     )
