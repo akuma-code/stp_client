@@ -2,9 +2,10 @@ import { useMemo } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpTags } from "../Components/StpTable/TableObjects";
 import { AnyObj } from "../Interfaces/Types";
+import { useDebounce } from "./useDebounce";
 
 type Order = 'asc' | 'desc';
-
+type TSort = { [key: string]: string | number }
 
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -55,27 +56,28 @@ export function useCompare<T extends AnyObj>(array: readonly T[], order: Order, 
     return sorted
 }
 
-export function useSortAndFilter<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, tags: StpTags[], query: string) {
+export function useSortAndFilter<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, query: string) {
+    const _query = useDebounce(query, 1500)
 
     const sorted = useCompare(array, order, sort_field)
 
     const filtered = useMemo(() => {
 
-        const fil = [...sorted].filter(item => {
+        return [...sorted].filter(item => {
             if ('name' in item) {
-                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : item
+                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(_query.toLowerCase()) : false
             }
-            else return item
+            else return []
         })
-        return fil
-    }, [query, sorted])
+
+    }, [_query, sorted])
 
     return filtered
 }
 
 export function useFilterTags<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, tags: StpTags[], query: string) {
 
-    const sorted = useSortAndFilter(array, order, sort_field, tags, query)
+    const sorted = useSortAndFilter(array, order, sort_field, query)
 
     const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(s => hasTags(s as unknown as StpData, tags)) : [...sorted],
         [array, order, sort_field, tags, query])

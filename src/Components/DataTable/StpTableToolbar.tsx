@@ -44,7 +44,7 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                 }),
             } }
         >
-            <Stack sx={ { flex: '1 1 20%', flexDirection: 'row', alignItems: 'center' } }>
+            <Stack sx={ { flex: '1 1 60%', flexDirection: 'row', alignItems: 'center' } }>
 
                 { numSelected > 0 ? (
                     <Typography
@@ -68,7 +68,7 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                     </Typography>
                 ) }
             </Stack>
-            <Stack sx={ { flexDirection: 'row', alignItems: 'center' } }>
+            <Stack sx={ { flexDirection: 'row', alignItems: 'center', flexGrow: 0 } }>
 
                 <StpTagsForm open={ showTags } />
 
