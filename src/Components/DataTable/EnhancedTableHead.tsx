@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { TextField, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
@@ -6,12 +6,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
+import * as React from 'react';
+import { FaRegQuestionCircle } from "react-icons/fa";
 import { _ID } from '../../Helpers/helpersFns';
 import { _EnFieldsStp } from '../../Interfaces/Enums';
 import { Order, StpData } from './StpDataTable';
-import { Tooltip } from '@mui/material';
-import { MdInfoOutline } from "react-icons/md";
-
 interface HeadStpCell {
     label: string;
     id: keyof StpData;
@@ -21,13 +20,96 @@ interface HeadStpCell {
     desc?: string
 
 }
+
+interface EnhancedTableProps {
+    numSelected: number;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof StpData) => void;
+    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    order: Order;
+    orderBy: string;
+    rowCount: number;
+}
+export function EnhancedTableHead(props: EnhancedTableProps) {
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const createSortHandler = (property: keyof StpData) => (event: React.MouseEvent<unknown>) => {
+        onRequestSort(event, property);
+    };
+    const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth')
+    const isFormula = (headCell: HeadStpCell) => headCell.id === 'name'
+    return (
+        <TableHead>
+            <TableRow>
+                <TableCell padding="checkbox" sx={ { borderBottom: '1px solid black', bgcolor: '#93d4ff' } }>
+                    <Checkbox
+                        color="primary"
+                        indeterminate={ numSelected > 0 && numSelected < rowCount }
+                        checked={ rowCount > 0 && numSelected === rowCount }
+                        onChange={ onSelectAllClick }
+
+                        id='selected_id' />
+                </TableCell>
+                {
+                    stp_headCells.map((headCell) => (
+                        <TableCell
+                            key={ _ID() }
+                            align={ headCell.align
+                                ? headCell.align
+                                : headCell.numeric
+                                    ? 'right'
+                                    : 'left' }
+                            padding={ headCell.disablePadding ? 'none' : 'normal' }
+                            sortDirection={ orderBy === headCell.id ? order : false }
+                            sx={ {
+                                borderBottom: '1px solid black', height: 60, bgcolor: '#93d4ff',
+
+                            } }
+                        >
+                            <TableSortLabel sx={ { fontSize: 18 } }
+                                active={ orderBy === headCell.id }
+                                direction={ orderBy === headCell.id ? order : 'asc' }
+                                onClick={ createSortHandler(headCell.id) }
+                            >
+
+
+                                <Tooltip
+                                    title={ headCell.desc
+                                        ? headCell.desc
+                                        : headCell.label }
+                                    PopperProps={ { placement: 'top', } }
+                                >
+                                    <Box display={ 'flex' } sx={ { mx: .5 } }>
+                                        { notInfo(headCell) && <FaRegQuestionCircle className='text-blue-600' /> }
+                                    </Box>
+                                </Tooltip>
+                                <Box>
+
+                                    { headCell.label }
+                                    { orderBy === headCell.id ? (
+                                        <Box component="span"
+                                            sx={ { ...visuallyHidden } }
+                                        >
+                                            { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
+                                        </Box>
+                                    ) : null }
+                                </Box>
+
+                            </TableSortLabel>
+                        </TableCell>
+                    )) }
+            </TableRow>
+        </TableHead>
+    );
+}
+
+
 const stp_headCells: readonly HeadStpCell[] = [
     {
         id: 'name',
         label: 'Формула',
         disablePadding: true,
         numeric: false,
-        desc: "Формула стеклопакета"
+        desc: "Формула стеклопакета",
+        align: 'left'
     },
     {
         id: 'cams',
@@ -141,79 +223,3 @@ const stp_headCells: readonly HeadStpCell[] = [
     },
 
 ];
-interface EnhancedTableProps {
-    numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof StpData) => void;
-    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    order: Order;
-    orderBy: string;
-    rowCount: number;
-}
-export function EnhancedTableHead(props: EnhancedTableProps) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof StpData) => (event: React.MouseEvent<unknown>) => {
-        onRequestSort(event, property);
-    };
-    const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth')
-    return (
-        <TableHead>
-            <TableRow>
-                <TableCell padding="checkbox" sx={ { borderBottom: '1px solid black', bgcolor: '#93d4ff' } }>
-                    <Checkbox
-                        color="primary"
-                        indeterminate={ numSelected > 0 && numSelected < rowCount }
-                        checked={ rowCount > 0 && numSelected === rowCount }
-                        onChange={ onSelectAllClick }
-
-                        id='selected_id' />
-                </TableCell>
-                {
-                    stp_headCells.map((headCell) => (
-                        <TableCell
-                            key={ _ID() }
-                            align={ headCell.align
-                                ? headCell.align
-                                : headCell.numeric
-                                    ? 'right'
-                                    : 'left' }
-                            padding={ headCell.disablePadding ? 'none' : 'normal' }
-                            sortDirection={ orderBy === headCell.id ? order : false }
-                            sx={ {
-                                borderBottom: '1px solid black', height: 60, bgcolor: '#93d4ff',
-
-                            } }
-                        >
-                            <TableSortLabel sx={ { fontSize: 18 } }
-                                active={ orderBy === headCell.id }
-                                direction={ orderBy === headCell.id ? order : 'asc' }
-                                onClick={ createSortHandler(headCell.id) }
-                            >
-
-                                <Tooltip
-                                    title={ headCell.desc
-                                        ? headCell.desc
-                                        : headCell.label }
-                                    PopperProps={ { placement: 'top', } }
-
-
-                                >
-                                    <Box display={ 'flex' } sx={ { mx: .5 } }>
-
-                                        { notInfo(headCell) && <MdInfoOutline className='text-blue-600' /> }
-                                    </Box>
-                                </Tooltip>
-                                { headCell.label }
-                                { orderBy === headCell.id ? (
-                                    <Box component="span"
-                                        sx={ { ...visuallyHidden } }
-                                    >
-                                        { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
-                                    </Box>
-                                ) : null }
-                            </TableSortLabel>
-                        </TableCell>
-                    )) }
-            </TableRow>
-        </TableHead>
-    );
-}

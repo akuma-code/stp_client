@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
 
 import { Stack, TableFooter } from '@mui/material';
-import { useSort } from '../../Hooks/useCompare';
+import { useFilterTags, useSortAndFilter } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { useTags } from '../../Hooks/useTags';
 import { StpItem } from '../StpTable/TableObjects';
@@ -38,7 +38,7 @@ export function StpDataTable() {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
     const [RPP, setRowsPerPage] = React.useState(-1);
-    const { StpStore, select, selectedItems, _type, setFcount } = useAppContext()
+    const { StpStore, select, selectedItems, _type, setFcount, query } = useAppContext()
     const selectedTags = useTags(_type)
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -50,7 +50,7 @@ export function StpDataTable() {
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (selectedItems.length > 1) {
+        if (selectedItems.length >= 1) {
             select([])
             return
         }
@@ -80,7 +80,7 @@ export function StpDataTable() {
                 selectedItems.slice(store_selectedIndex + 1),
             );
         }
-        if (selectedItems.length > 5) newSelected = newSelected.slice(1, 6)
+        if (selectedItems.length >= 5) newSelected = newSelected.slice(0, 5)
         select(newSelected)
     };
 
@@ -107,26 +107,26 @@ export function StpDataTable() {
         ? Math.max(0, (1 + page) * RPP - StpStore.table.length)
         : 0;
 
-    const sorted = useSort(StpStore.table, order, orderBy, selectedTags)
+    const sorted = useFilterTags(StpStore.table, order, orderBy, selectedTags, query)
     const visibleRows = React.useMemo(
         () => {
-            const sliced = sorted.slice(
+            const sliced = [...sorted].slice(
                 page * RPP,
                 page * RPP + RPP)
             return sliced
         },
-        [order, orderBy, page, RPP, selectedTags],
+        [order, orderBy, page, RPP, selectedTags, query],
     );
     React.useEffect(() => {
         setFcount(sorted.length)
     }, [sorted])
     return (
         <Box sx={ { width: '100%', height: '100%' } }>
-            <Paper sx={ { width: '100%', mb: 2 } } elevation={ 4 }>
+            <Paper sx={ { mb: 2 } } elevation={ 4 }>
 
                 <StpTableToolbar numSelected={ selectedItems.length } />
 
-                <TableContainer sx={ { overflowY: 'auto', maxHeight: '75vh', } } >
+                <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', } } >
                     <Table
                         sx={ { minWidth: 750 } }
                         aria-labelledby="tableTitle"

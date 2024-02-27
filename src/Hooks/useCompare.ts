@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
-import { AnyObj } from "../Interfaces/Types";
-import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
+import { useMemo } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
+import { StpTags } from "../Components/StpTable/TableObjects";
+import { AnyObj } from "../Interfaces/Types";
 
 type Order = 'asc' | 'desc';
 
@@ -54,18 +54,31 @@ export function useCompare<T extends AnyObj>(array: readonly T[], order: Order, 
 
     return sorted
 }
-export function useSort<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, tags: StpTags[]) {
+
+export function useSortAndFilter<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, tags: StpTags[], query: string) {
 
     const sorted = useCompare(array, order, sort_field)
 
-    const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(s => hasTags(s as unknown as StpData, tags)) : sorted, [array, order, sort_field, tags])
+    const filtered = useMemo(() => {
 
-    // useEffect(() => {
+        const fil = [...sorted].filter(item => {
+            if ('name' in item) {
+                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : item
+            }
+            else return item
+        })
+        return fil
+    }, [query, sorted])
 
-    //     const tagged = [...sorted].filter(s => hasTags(s as unknown as StpData, tags))
-    //     const nonTagged = [...sorted].filter(s => !hasTags(s as unknown as StpData, tags))
-    //     const gr = [...tagged, ...nonTagged]
-    //     // setSortedWithTags(tagged)
-    // }, [tags, order, sort_field])
+    return filtered
+}
+
+export function useFilterTags<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, tags: StpTags[], query: string) {
+
+    const sorted = useSortAndFilter(array, order, sort_field, tags, query)
+
+    const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(s => hasTags(s as unknown as StpData, tags)) : [...sorted],
+        [array, order, sort_field, tags, query])
+
     return tagged
 }

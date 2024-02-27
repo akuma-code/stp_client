@@ -1,19 +1,15 @@
-import { Divider, ExtendList, ExtendListTypeMap, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListTypeMap, Stack, StackTypeMap } from '@mui/material';
-import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
-import { StpData } from '../../Components/DataTable/StpDataTable';
-import { createRef, forwardRef, useContext, useRef } from 'react';
+import { List, ListItem, ListItemIcon, ListItemText, Stack } from '@mui/material';
+import { forwardRef, useContext } from 'react';
 import {
     Link as RouterLink,
-    LinkProps as RouterLinkProps,
-
-    useLocation,
+    LinkProps as RouterLinkProps
 } from 'react-router-dom';
+import { StpData } from '../../Components/DataTable/StpDataTable';
+import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
 
-import { FiInfo } from "react-icons/fi";
-import { IconType } from 'react-icons';
+import { SecondaryDescription } from '../../Components/StpTable/TerminsDesc';
 import { _ID } from '../../Helpers/helpersFns';
 import { CompareContext } from './ComparePage';
-import { SecondaryDescription, TerminDescription } from '../../Components/StpTable/TerminsDesc';
 
 export type FilteredItemsProps = {
     items: StpData[]
@@ -92,9 +88,6 @@ export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
                             paddingInlineEnd: 1,
                             height: { sm: 40, lg: 45 },
                             bgcolor: idx % 2 === 0 ? '#c5c5c5' : 'whitesmoke',
-                            pageBreakAfter: 'avoid',
-                            pageBreakInside: 'avoid',
-                            pageBreakBefore: 'avoid',
                             flexShrink: 1
                         } }
                     >
@@ -106,15 +99,14 @@ export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
 
                             } }
                             secondaryTypographyProps={ {
-                                variant: 'caption',
+                                variant: 'body2',
                                 color: '#242424',
                                 fontSize: { sm: 7, md: 12 },
-                                displayPrint: 'none'
-
+                                displayPrint: 'none',
                             } }
 
                             primary={ _EnFieldsStp[item] }
-                            secondary={ SecondaryDescription[item as keyof typeof TerminDescription] }
+                            secondary={ SecondaryDescription[item as keyof typeof SecondaryDescription] }
                         />
 
                     </ListItem>

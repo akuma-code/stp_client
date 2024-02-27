@@ -11,7 +11,7 @@ interface TableToolbarProps {
     numSelected: number;
 }
 export function StpTableToolbar({ numSelected }: TableToolbarProps) {
-    const { setType } = useAppContext()
+    const { setType, setQuery } = useAppContext()
     const [showTags, tagControl] = useToggle(false)
     const handleTagsClick = () => {
         if (showTags === false) return tagControl.on()
@@ -24,6 +24,7 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                 solarproof: false,
                 soundproof: false
             })
+            setQuery(prev => "")
             return tagControl.off()
         }
     }

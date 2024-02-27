@@ -1,8 +1,7 @@
 import { Icon, Stack } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { TfiControlBackward } from "react-icons/tfi"
 import { Link } from 'react-router-dom'
-import { useReactToPrint } from 'react-to-print'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { routePaths } from '../routePath'
 import { StpCompareItems } from './StpCompareItems'
@@ -15,12 +14,8 @@ export const CompareContext = React.createContext<ICompareCtx | null>(null)
 export const ComparePage = () => {
     const { selectedItems, StpStore } = useAppContext()
     const [itemName, setName] = useState<string | null>(null)
-    // const [showDesc, control] = useToggle(false)
-    // const printRef = useRef(null)
-    const printRef = useRef(null)
-    const handlePrint = useReactToPrint({
-        content: () => printRef.current
-    })
+
+
 
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
 

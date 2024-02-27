@@ -1,4 +1,4 @@
-import { Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel } from '@mui/material'
+import { Box, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { StpTypeProps } from '../../Interfaces/Types'
@@ -11,17 +11,21 @@ type ChangeFn = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) =
 type CheckboxGroup = Required<StpTypeProps>
 
 export const StpTagsForm = ({ open }: StpTypeFGProps) => {
-    const { _type, setType, filteredItemsCount } = useAppContext()
+    const { _type, setType, filteredItemsCount, setQuery, query } = useAppContext()
 
 
     const labelText = useCallback(() => {
         const allBlank = Object.values(_type).every(v => v === false)
-        if (allBlank) return `Ничего не выбрано!`
+        if (allBlank && query === "") return `Ничего не выбрано!`
         if (filteredItemsCount === 0) return 'Нет совпадений!'
 
-        else return `Cовпадений: ${filteredItemsCount}`
+        return `Cовпадений: ${filteredItemsCount}`
 
     }, [filteredItemsCount])
+
+
+
+
 
 
     const lb = labelText()
@@ -33,11 +37,26 @@ export const StpTagsForm = ({ open }: StpTypeFGProps) => {
     }
 
     return (open &&
-        <FormControl sx={ { m: .5, } } component="fieldset" variant="outlined">
+        <FormControl sx={ { m: .5, } } component="fieldset" variant="outlined" size='small'>
             <FormLabel component="legend" sx={ { textAlign: 'center', color: 'black' } } >
                 { lb }
             </FormLabel>
             <FormGroup sx={ { display: 'flex', flexDirection: 'row' } }>
+
+
+                <TextField
+                    name='search_query'
+                    helperText='отфильтровать по названию'
+                    placeholder='Формула стеклопакета'
+                    size='small'
+                    variant='standard'
+                    inputMode='text'
+                    margin='normal'
+                    sx={ { maxWidth: 200, mx: 2, textAlign: 'center' } }
+                    onChange={ (e) => setQuery(e.target.value) }
+                    value={ query }
+                />
+
                 <FormControlLabel
                     control={
                         <Checkbox checked={ _type.simple } onChange={ handleChange('simple') } name="simple" />

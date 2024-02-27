@@ -1,19 +1,15 @@
-import React, { PropsWithChildren, forwardRef, useRef } from 'react'
-import { Box, Button, Divider, Icon, Modal, Paper, Stack } from '@mui/material'
-import { TfiControlBackward } from "react-icons/tfi"
-import { Link, NavLink } from 'react-router-dom'
-import { useAppContext } from '../../Hooks/useStoresContext'
-import { useToggle } from '../../Hooks/useToggle'
-import { _EnFieldsStp } from '../../Interfaces/Enums'
-import { routePaths } from '../routePath'
+import { Box, Button, Paper, Stack } from '@mui/material'
+import { PropsWithChildren, forwardRef, useRef } from 'react'
+import { LuPrinter } from 'react-icons/lu'
 import { useReactToPrint } from 'react-to-print'
+import { useAppContext } from '../../Hooks/useStoresContext'
 import { FilteredItemsProps, StpCompareItems } from './StpCompareItems'
 
 type PrintPageProps = PropsWithChildren
 
 export const PrintPage = (props: PrintPageProps) => {
     const { selectedItems, StpStore } = useAppContext()
-    const [showBtn, control] = useToggle(true)
+
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
     const printRef = useRef(null)
     const handlePrint = useReactToPrint({
@@ -32,8 +28,9 @@ export const PrintPage = (props: PrintPageProps) => {
             justifyContent={ 'start' }
         >
 
-            <Button variant='contained' color='success' sx={ { color: 'black', fontWeight: 'bolder', mx: 'auto', mt: 1 } }
+            <Button variant='contained' color='success' sx={ { color: 'whitesmoke', fontWeight: 'bolder', mx: 'auto', mt: 1 } }
                 onClick={ handlePrint }
+                startIcon={ <LuPrinter /> }
             >
                 Распечатать
             </Button>

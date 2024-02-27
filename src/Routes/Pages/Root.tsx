@@ -1,9 +1,6 @@
 import React, { PropsWithChildren } from "react"
-import { AppHeaderBreadcrump } from "./AppBar"
 import { Outlet } from "react-router-dom"
-import { Container, Paper } from "@mui/material"
-import { useLocalStorage, useLs } from "../../Hooks/useLocalStorage"
-import { _log } from "../../Helpers/helpersFns"
+import { AppHeaderBreadcrump } from "./AppBar"
 
 type RootProps = object & PropsWithChildren
 

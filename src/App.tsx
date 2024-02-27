@@ -21,7 +21,7 @@ function App() {
     solarproof: false,
     soundproof: false
   })
-
+  const [querySearch, setQuery] = useState("")
 
   return (
     <AppContext.Provider value={ {
@@ -31,7 +31,9 @@ function App() {
       _type: selectedType,
       setType: selectType,
       filteredItemsCount: fcount,
-      setFcount: setFc
+      setFcount: setFc,
+      query: querySearch,
+      setQuery: setQuery
 
     } }>
 

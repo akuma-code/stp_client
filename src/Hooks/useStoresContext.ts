@@ -13,6 +13,8 @@ export type AContext = {
     select: React.Dispatch<React.SetStateAction<number[]>>
     filteredItemsCount: number
     setFcount: React.Dispatch<React.SetStateAction<number>>
+    query: string
+    setQuery: React.Dispatch<React.SetStateAction<string>>
     _type: StpTypeProps,
     setType: React.Dispatch<React.SetStateAction<StpTypeProps>>
 }
