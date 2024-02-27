@@ -17,6 +17,7 @@ import { SecondaryDescription, TerminDescription } from '../../Components/StpTab
 
 export type FilteredItemsProps = {
     items: StpData[]
+    ref?: React.ForwardedRef<HTMLDivElement>
 
 };
 
@@ -40,7 +41,7 @@ const listOrder: Stp_Key[] = [
     'secure',
 ] as const
 
-export const StpCompareItems = ({ items }: FilteredItemsProps) => {
+export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
 
     const get_items = (stp_item: StpData) => listOrder.map(prop => stp_item[prop])
 
@@ -56,6 +57,9 @@ export const StpCompareItems = ({ items }: FilteredItemsProps) => {
         gap={ 0.2 }
         // py={ 1 }
         height={ '100%' }
+        mt={ 2 }
+        border={ '4px double black' }
+        ref={ ref }
 
     >
         { items.map(i =>
@@ -63,35 +67,30 @@ export const StpCompareItems = ({ items }: FilteredItemsProps) => {
             <StpItemList
                 key={ i.name }
                 stp_values={ get_items(i) }
-                listSx={ { flexGrow: 3, } }
+                listSx={ { flexGrow: 1, } }
             />
         ) }
 
-        <List sx={ {
-            flexGrow: 0,
-            flexShrink: 1,
-            // fontWeight: 'bold',
-            // borderLeft: '1px solid black',
-            textIndent: 20,
-            // pl: .5,
-            breakAfter: 'avoid',
-            breakInside: 'avoid',
-            breakBefore: 'avoid',
+        <List disablePadding
+            sx={ {
+                flexGrow: 0,
+                flexShrink: 1,
+                border: '1px solid #000000',
+                // textIndent: 20,
 
-        } }>
+            } }>
             {
                 listOrder.map((item, idx) =>
                     <ListItem
-                        // alignItems='center' 
+
                         disablePadding
                         dense
                         divider
                         key={ _ID() }
                         sx={ {
+                            paddingInlineStart: 2,
                             paddingInlineEnd: 1,
-                            height: { sm: 35, md: 45 },
-                            // display: 'flex',
-                            // textAlign: 'start',
+                            height: { sm: 40, lg: 45 },
                             bgcolor: idx % 2 === 0 ? '#c5c5c5' : 'whitesmoke',
                             pageBreakAfter: 'avoid',
                             pageBreakInside: 'avoid',
@@ -136,9 +135,9 @@ export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, li
     const fields = stp_values.map(v => typeof v === 'number' ? v.toString() : v)
 
     return (
-        <List
+        <List disablePadding
             sx={ {
-
+                border: '1px solid #000000',
                 flexGrow: listSx && listSx.flexGrow ? listSx.flexGrow : 0,
                 ...listSx
             } }>
@@ -146,20 +145,18 @@ export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, li
                 fields.map((item, idx) =>
                     <ListItem
                         alignItems='flex-start'
-                        disablePadding
+
                         divider
                         key={ _ID() }
                         dense
                         sx={ {
-                            // borderBottom: '1px solid #ffa2a2',
+
                             textAlign: align ? align : 'center',
                             bgcolor: idx % 2 === 0 ? '#c5c5c5' : 'whitesmoke',
                             // lineHeight: idx === 0 ? 2 : 'inherit',
                             // alignContent: 'space-between',
-                            height: { sm: 35, md: 45 },
-                            // pageBreakAfter: 'avoid',
-                            // pageBreakInside: 'avoid',
-                            // pageBreakBefore: 'avoid',
+                            height: { sm: 40, lg: 45 },
+
 
                         } }
 
@@ -169,10 +166,11 @@ export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, li
                         <ListItemText
                             primaryTypographyProps={ {
                                 fontWeight: idx === 0 ? 'bolder' : 'normal',
-                                textAlign: 'center'
+                                textAlign: 'center',
+                                fontSize: { sm: 12, lg: 15 }
                             } }
                             secondaryTypographyProps={ { displayPrint: 'none', display: 'none' } }
-                            sx={ { height: 45, } }
+                            sx={ {} }
                             primary={ item }
 
                         />

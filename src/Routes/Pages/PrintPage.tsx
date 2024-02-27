@@ -25,11 +25,10 @@ export const PrintPage = (props: PrintPageProps) => {
 
     return (
         <Stack gap={ 2 } sx={ {
-
+            bgcolor: 'beige'
 
         } }
             direction={ 'column' }
-            //  alignItems={ 'stretch' }
             justifyContent={ 'start' }
         >
 
@@ -48,7 +47,7 @@ export const PrintPage = (props: PrintPageProps) => {
 export const ItemsToPrint = forwardRef<HTMLDivElement, FilteredItemsProps>((props, ref) => {
 
     return (
-        <Box ref={ ref } component={ Paper } elevation={ 2 } displayPrint={ 'block' } bgcolor={ 'beige' }>
+        <Box ref={ ref } component={ Paper } elevation={ 0 } displayPrint={ 'block' } bgcolor={ 'beige' }>
 
 
             <StpCompareItems items={ props.items } />

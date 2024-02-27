@@ -17,7 +17,7 @@ export function AppHeaderBreadcrump() {
     const [currentPath] = paths.map(p => p.pathname).slice(1)
 
     return (
-        <Box sx={ { flexGrow: 1 } }>
+        <Box sx={ { flexGrow: 1 } } displayPrint={ 'none' }>
             <AppBar position="static" color={ `warning` } >
                 <Toolbar variant='dense'>
                     <IconButton

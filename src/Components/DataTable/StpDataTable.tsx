@@ -11,7 +11,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
 
-import { Stack } from '@mui/material';
+import { Stack, TableFooter } from '@mui/material';
 import { useSort } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { useTags } from '../../Hooks/useTags';
@@ -37,7 +37,7 @@ export function StpDataTable() {
 
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
-    const [rowsPerPage, setRowsPerPage] = React.useState(-1);
+    const [RPP, setRowsPerPage] = React.useState(-1);
     const { StpStore, select, selectedItems, _type, setFcount } = useAppContext()
     const selectedTags = useTags(_type)
     const handleRequestSort = (
@@ -50,10 +50,14 @@ export function StpDataTable() {
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (selectedItems.length > 1) {
+            select([])
+            return
+        }
         if (event.target.checked) {
             const newSelectedAll = StpStore.table.map((n) => n.id);
-            select(newSelectedAll)
 
+            select(newSelectedAll)
             return;
         }
         select([])
@@ -100,29 +104,29 @@ export function StpDataTable() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0
-        ? Math.max(0, (1 + page) * rowsPerPage - StpStore.table.length)
+        ? Math.max(0, (1 + page) * RPP - StpStore.table.length)
         : 0;
 
     const sorted = useSort(StpStore.table, order, orderBy, selectedTags)
     const visibleRows = React.useMemo(
         () => {
             const sliced = sorted.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage)
+                page * RPP,
+                page * RPP + RPP)
             return sliced
         },
-        [order, orderBy, page, rowsPerPage, selectedTags],
+        [order, orderBy, page, RPP, selectedTags],
     );
     React.useEffect(() => {
         setFcount(sorted.length)
     }, [sorted])
     return (
-        <Box sx={ { width: '100%' } }>
-            <Paper sx={ { width: '100%', mb: 2 } }>
+        <Box sx={ { width: '100%', height: '100%' } }>
+            <Paper sx={ { width: '100%', mb: 2 } } elevation={ 4 }>
 
                 <StpTableToolbar numSelected={ selectedItems.length } />
 
-                <TableContainer sx={ { overflowY: 'auto', maxHeight: '72vh', } } >
+                <TableContainer sx={ { overflowY: 'auto', maxHeight: '75vh', } } >
                     <Table
                         sx={ { minWidth: 750 } }
                         aria-labelledby="tableTitle"
@@ -174,8 +178,8 @@ export function StpDataTable() {
                                                 component="th"
                                                 id={ labelId }
                                                 scope="row"
-                                                padding="normal"
-                                                sx={ { minWidth: 'fit-content', textWrap: 'nowrap' } }
+                                                padding="none"
+                                                sx={ { maxWidth: 'max-content', textWrap: 'nowrap' } }
                                             >
                                                 { row.name }
                                             </TableCell>
@@ -209,6 +213,7 @@ export function StpDataTable() {
                             ) }
                         </TableBody>
                     </Table>
+
                 </TableContainer>
                 <Stack direction={ 'row' } justifyContent={ 'space-between' }>
 
@@ -218,14 +223,16 @@ export function StpDataTable() {
                         sx={ { ml: 4 } }
                     />
                     <TablePagination
-                        rowsPerPageOptions={ [5, 10, 15, 20, { value: -1, label: 'All' }] }
+                        rowsPerPageOptions={ [5, 10, 15, 20, { value: -1, label: 'Все' }] }
                         component="div"
                         count={ StpStore.table.length }
-                        rowsPerPage={ rowsPerPage }
+                        rowsPerPage={ RPP }
                         page={ page }
                         onPageChange={ handleChangePage }
                         onRowsPerPageChange={ handleChangeRowsPerPage }
                         id='rows_per_page_id'
+                        labelRowsPerPage='Рядов на странице:'
+                        labelDisplayedRows={ ({ from, to, count }) => `${from} – ${to} из ${count !== -1 ? count : `more than ${to}`}` }
                     />
                 </Stack>
             </Paper>
