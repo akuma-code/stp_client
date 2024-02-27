@@ -1,4 +1,4 @@
-import { Button, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -7,6 +7,7 @@ import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 import { useToggle } from '../../Hooks/useToggle';
 import { StpTagsForm } from './StpTagsGroup';
 import { useAppContext } from '../../Hooks/useStoresContext';
+import TagSelector from './StpFilterForm';
 interface TableToolbarProps {
     numSelected: number;
 }
@@ -31,11 +32,11 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
 
     const toggledText = showTags ? "" : `Выбери основные свойства`
     return (
-        <Toolbar
+        <Toolbar component={ Stack }
             sx={ {
-                display: 'flex',
+                // display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-evenly',
+                // justifyContent: 'space-evenly',
                 height: 100,
                 pl: { sm: 2 },
                 pr: { xs: 1, sm: 1 },
@@ -44,53 +45,54 @@ export function StpTableToolbar({ numSelected }: TableToolbarProps) {
                 }),
             } }
         >
-            <Stack sx={ { flex: '1 1 60%', flexDirection: 'row', alignItems: 'center' } }>
 
-                { numSelected > 0 ? (
-                    <Typography
-                        // sx={ { flex: '1 1 20%' } }
-                        textAlign={ 'center' }
-                        color="inherit"
-                        variant="subtitle1"
-                        component="div"
-                        id="tableTitle"
-                    >
-                        { numSelected } выбрано
-                    </Typography>
-                ) : (
-                    <Typography
-                        // sx={ { flex: '1 1 20%' } }
-                        variant="h6"
-                        id="tableTitle"
-                        component="div"
-                    >
-                        Выбрать стеклопакет для сравнения (не более 5!)
-                    </Typography>
-                ) }
-            </Stack>
-            <Stack sx={ { flexDirection: 'row', alignItems: 'center', flexGrow: 0 } }>
+            <Stack
+                direction={ 'row' }
+                flex={ '1 1 100%' }
+                alignItems={ 'center' }
+                justifyContent={ 'space-between' }
+                flexWrap={ 'nowrap' }
+            >
 
-                <StpTagsForm open={ showTags } />
 
-                <Button variant='contained' color='success'
-                    endIcon={ showTags
-                        ? <FaAnglesRight />
-                        : <FaAnglesLeft />
-                    }
-                    onClick={ handleTagsClick }
-                    sx={ {
-                        // bgcolor: (theme) => theme.palette.success.main,
-                        // borderRadius: 5,
-                        // bgcolor: (theme) => alpha(theme.palette.success.main, theme.palette.action.activatedOpacity + .5),
-                        color: 'white',
-                        [`& :hover`]: {
-                            opacity: .5,
-                            // bgcolor: 'Background' 
+
+
+                <Typography
+                    // sx={ { flex: '1 1 20%' } }
+                    textAlign={ 'center' }
+                    color="inherit"
+                    variant="body1"
+                    component="div"
+                    id="tableTitle"
+
+                >
+                    { numSelected > 0 ? `${numSelected} выбрано` : `Выбрать стеклопакет для сравнения (не более 5!)` }
+                </Typography>
+                <TagSelector />
+                {/* <Box>
+
+                    <StpTagsForm open={ showTags } />
+
+                    <Button variant='contained' color='success'
+                        endIcon={ showTags
+                            ? <FaAnglesRight />
+                            : <FaAnglesLeft />
                         }
-                    } }>
-                    { toggledText }
+                        onClick={ handleTagsClick }
+                        sx={ {
+                            // bgcolor: (theme) => theme.palette.success.main,
+                            // borderRadius: 5,
+                            // bgcolor: (theme) => alpha(theme.palette.success.main, theme.palette.action.activatedOpacity + .5),
+                            color: 'white',
+                            [`& :hover`]: {
+                                opacity: .5,
+                                // bgcolor: 'Background' 
+                            }
+                        } }>
+                        { toggledText }
 
-                </Button>
+                    </Button>
+                </Box> */}
             </Stack>
 
         </Toolbar>

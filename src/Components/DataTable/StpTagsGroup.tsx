@@ -63,7 +63,7 @@ export const StpTagsForm = ({ open }: StpTypeFGProps) => {
                 // onChange={ (e) => setQuery(e.target.value) }
                 // value={ query }
                 />
-                <Stack direction={ 'row' } flexWrap={ 'wrap' } width={ '60%' } flexGrow={ 0 }>
+                <Stack direction={ 'row' } flexWrap={ 'wrap' } flexGrow={ 0 }>
 
                     <FormControlLabel
                         control={
