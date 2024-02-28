@@ -104,7 +104,11 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                     value={ filterView }
                     onChange={ handleChangeView }
                     size='small'
-
+                    sx={ {
+                        [`& .MuiToggleButton-root`]: { bgcolor: 'green', color: 'white' },
+                        [`& .MuiToggleButton-root.MuiToggleButtonGroup-middleButton`]: { borderLeft: '2px solid black', borderRight: '2px solid black' },
+                        [`& .MuiToggleButton-root:hover`]: { bgcolor: '#a6f5a6', color: 'black' },
+                    } }
 
                 >
                     <ToggleButton
