@@ -112,20 +112,20 @@ const stp_headCells: readonly HeadStpCell[] = [
         align: 'left'
     },
     {
-        id: 'cams',
-        label: _EnFieldsStp.cams,
-        disablePadding: true,
-        numeric: false,
-        align: 'right',
-        desc: "1 камера = 2 стекла, 2 камеры = 3 стекла"
-    },
-    {
         id: 'depth',
         label: _EnFieldsStp.depth,
         disablePadding: true,
         numeric: false,
         align: 'center',
         desc: 'Толщина стеклопакета, мм'
+    },
+    {
+        id: 'cams',
+        label: _EnFieldsStp.cams,
+        disablePadding: true,
+        numeric: false,
+        align: 'right',
+        desc: "1 камера = 2 стекла, 2 камеры = 3 стекла"
     },
     {
         id: 'weight',

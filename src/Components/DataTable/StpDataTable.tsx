@@ -11,20 +11,19 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
 
-import { Stack, TableFooter } from '@mui/material';
-import { useFilterTags, useSortAndFilter } from '../../Hooks/useCompare';
+import { Stack } from '@mui/material';
+import { _ID } from '../../Helpers/helpersFns';
+import { FilterItemParams, useEnchancedFilter, useFilterTags } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
-import { useTags } from '../../Hooks/useTags';
+import { StpTagsList } from '../../Interfaces/Types';
 import { StpItem } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 import { StpTableToolbar } from './StpTableToolbar';
-import { StpTagsList } from '../../Interfaces/Types';
-import { _ID } from '../../Helpers/helpersFns';
 
 //__ Data Create*/
-//TODO: перенести все данные в контекст
-//TODO: вынести логику селекторов в хук
-//TODO: добавить добавление в сравнение, стартовать сравнение по кнопке, где сейчас выбор
+//TODO: Добавить фильтрацию по толщине стекла и количеству камер
+//TODO: 
+//TODO: 
 
 
 export type StpData = Omit<StpItem, '_type'> & { id: number }
@@ -120,6 +119,7 @@ export function StpDataTable() {
         [order, orderBy, page, RPP, selectedTags, query],
     );
     React.useEffect(() => {
+
         setFcount(prev => sorted.length)
     }, [sorted])
     return (
@@ -155,11 +155,11 @@ export function StpDataTable() {
                                     return (
                                         <TableRow
                                             hover
+                                            key={ row.name }
                                             onClick={ (event) => handleClick(event, +row.id) }
                                             role="checkbox"
                                             aria-checked={ isItemSelected }
                                             tabIndex={ -1 }
-                                            key={ _ID() }
                                             selected={ isItemSelected }
                                             sx={ {
                                                 cursor: 'pointer',
@@ -181,12 +181,12 @@ export function StpDataTable() {
                                                 id={ labelId }
                                                 scope="row"
                                                 padding="none"
-                                                sx={ { maxWidth: 'max-content', textWrap: 'nowrap' } }
+                                                sx={ { width: 'max-content', textWrap: 'nowrap' } }
                                             >
                                                 { row.name }
                                             </TableCell>
-                                            <TableCell align="center">{ row.cams }</TableCell>
                                             <TableCell align="center">{ row.depth }</TableCell>
+                                            <TableCell align="center">{ row.cams }</TableCell>
                                             <TableCell align="center">{ row.weight }</TableCell>
                                             <TableCell align="right">{ row.Ro }</TableCell>
                                             <TableCell align="right">{ row.Det }</TableCell>
@@ -225,7 +225,7 @@ export function StpDataTable() {
                         sx={ { ml: 4 } }
                     />
                     <TablePagination
-                        rowsPerPageOptions={ [5, 10, 15, 20, { value: -1, label: 'Все' }] }
+                        rowsPerPageOptions={ [5, 10, 20, { value: -1, label: 'Все' }] }
                         component="div"
                         count={ StpStore.table.length }
                         rowsPerPage={ RPP }

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
-import { StpTags } from "../Components/StpTable/TableObjects";
+import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
 import { AnyObj } from "../Interfaces/Types";
 
 
@@ -45,9 +45,44 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
     });
     return stabilizedThis.map((el) => el[0]);
 }
-const hasTags = (item: StpData, tags: StpTags[]) => tags.length > 0
+const hasTags = (item: StpItem, tags: StpTags[]) => tags.length > 0
     ? tags.every(t => item.tags.includes(t))
     : false
+
+type FilterByName = {
+    type: 'name',
+    payload: { query: string }
+}
+type FilterByTags = {
+    type: 'tags',
+    payload: StpTags[]
+}
+type FilterByDepth = {
+    type: 'depth',
+    payload: number
+}
+type FilterByCams = {
+    type: 'cams',
+    payload: number
+}
+
+type FiltrationType = | FilterByName | FilterByTags | FilterByDepth | FilterByCams
+export type FilterItemParams = { depth: number, name: string, tags: StpTags[], cams: number }
+function filtrationReducer<T extends FilterItemParams>(array: T[], filter: FiltrationType) {
+    const filterName = ({ query }: { query: string }) => array.filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
+    const filterTags = (tags: StpTags[]) => tags.length > 0 ? [...array].filter(s => hasTags(s as unknown as StpItem, tags)) : [...array]
+    const filterDepth = (depth: number) => array.filter(item => item.depth === depth)
+    const filterCams = (cams: number) => array.filter(item => item.cams === cams)
+    switch (filter.type) {
+        case "name": return filterName(filter.payload)
+        case "tags": return filterTags(filter.payload)
+        case "depth": return filterDepth(filter.payload)
+        case "cams": return filterCams(filter.payload)
+    }
+
+
+}
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useCompare<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any) {
@@ -74,13 +109,46 @@ export function useSortAndFilter<T extends AnyObj>(array: readonly T[], order: O
 
     return filtered
 }
+export function useEnchancedFilter<T extends FilterItemParams>(array: T[], order: Order, sort_field: any, filter: FiltrationType) {
+
+    const sorted = useCompare(array, order, sort_field)
+
+    const filtered = useMemo(() => {
+        const cb = filtrationReducer(sorted as unknown as T[], filter)
+        // switch (filter.type) {
+        //     case "name": {
+        //         return cb
+
+        //     }
+        //     case "tags": {
+        //         return cb
+
+        //     }
+        //     case "depth": {
+        //         return cb
+
+        //     }
+        //     case "cams": {
+        //         return cb
+
+        //     }
+        //     default: return cb
+        // }
+
+        return cb
+
+    }, [sorted, filter])
+
+    return filtered
+}
 
 export function useFilterTags<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, tags: StpTags[], query: string) {
 
     const sorted = useSortAndFilter(array, order, sort_field, query)
 
-    const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(s => hasTags(s as unknown as StpData, tags)) : [...sorted],
+    const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(s => hasTags(s as unknown as StpItem, tags)) : [...sorted],
         [array, order, sort_field, tags, query])
 
     return tagged
 }
+

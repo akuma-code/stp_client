@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 import { useState } from 'react';
 import { useAppContext } from '../../Hooks/useStoresContext';
-import TagSelector from './StpFilterForm';
+import { TagSelector } from './StpFilterForm';
 import { MdOutlineCancel } from "react-icons/md";
 import { SelectedTagList } from './SelectedTagList';
 interface TableToolbarProps {
@@ -83,8 +83,9 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                             name='search_query'
                             helperText='Начните вводить название....'
                             placeholder='формула стеклопакета'
+                            autoFocus
                             size='small'
-                            variant='standard'
+                            variant='filled'
                             inputMode='text'
                             margin='normal'
                             sx={ { width: 300, mx: 2, textAlign: 'center', color: 'black', } }
