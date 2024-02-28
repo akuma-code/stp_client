@@ -12,6 +12,7 @@ import { grey } from '@mui/material/colors';
 import { Stp_Tags, Stp_TypeFields } from '../../Interfaces/Enums';
 import { TextField } from '@mui/material';
 import { useAppContext } from '../../Hooks/useStoresContext';
+import { SelectedTagList } from './SelectedTagList';
 
 const ITEM_HEIGHT = 50;
 const ITEM_PADDING_TOP = 18;
@@ -19,7 +20,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       height: ITEM_HEIGHT * 7 + ITEM_PADDING_TOP,
-      width: 300,
+      width: 280,
     },
   },
 };
@@ -47,20 +48,12 @@ export default function TagSelector({ filteredCount }: { filteredCount: number }
   };
 
   return (
-    <div className='flex flex-row gap-2 text-xs min-w-[470px] align-baseline py-1'>
+    <div className='flex flex-row  text-xs align-baseline py-1'>
 
-      <ul>
-        { tags.map(t =>
-          <li key={ t }
-            className='list-disc'
-          >
-            { Stp_Tags[t as keyof typeof Stp_Tags] }
-          </li>
-        ) }
-      </ul>
 
-      <FormControl sx={ { m: 1, width: 300 } } >
-        <InputLabel id="demo-multiple-checkbox-label" sx={ {} } >Укажите нужные свойства</InputLabel>
+
+      <FormControl sx={ { m: 1, width: 250 } } >
+        <InputLabel id="demo-multiple-checkbox-label" >Укажите нужные свойства</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
           id="multitag"
@@ -68,7 +61,7 @@ export default function TagSelector({ filteredCount }: { filteredCount: number }
           placeholder='Укажите нужные свойства'
           value={ tags }
           onChange={ handleChange }
-          input={ <OutlinedInput label="Свойства стеклафффффффффф" sx={ { fontSize: 18 } } /> }
+          input={ <OutlinedInput label="Свойства стеклафффффф" sx={ { fontSize: 18 } } /> }
           renderValue={ () => `Найдено: ${filteredCount}` }
           // renderValue={ (selected) => selected.map(s => Stp_Tags[s as keyof typeof Stp_Tags]).join(' | ') }
           MenuProps={ MenuProps }
@@ -85,9 +78,10 @@ export default function TagSelector({ filteredCount }: { filteredCount: number }
         </Select>
 
       </FormControl>
-
+      {/* <SelectedTagList tags={ tags } /> */ }
     </div>
   );
 }
+
 
 

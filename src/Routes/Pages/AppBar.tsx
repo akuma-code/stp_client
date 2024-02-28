@@ -36,13 +36,14 @@ export function AppHeaderBreadcrump() {
                         </IconButton>
                         { currentPath === routePaths.compare
                             ?
-                            <Button size='medium' variant='text'
-                                sx={ { mx: 2, display: 'flex', gap: 2, color: 'beige', fontSize: 20, alignSelf: 'center' } }
+                            null
+                            // <Button size='medium' variant='text'
+                            //     sx={ { mx: 2, display: 'flex', gap: 2, color: 'beige', fontSize: 20, alignSelf: 'center' } }
 
-                            >
+                            // >
 
-                                <Link to={ routePaths.export }> <strong>Экспортировать</strong></Link>
-                            </Button>
+                            //     <Link to={ routePaths.export }> <strong>Экспортировать</strong></Link>
+                            // </Button>
                             :
                             <IconButton disabled={ selectedItems.length === 0 }
                                 edge={ 'start' }

@@ -56,6 +56,7 @@ export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
         mt={ 2 }
         border={ '4px double black' }
         ref={ ref }
+        displayPrint={ 'flex' }
 
     >
         { items.map(i =>

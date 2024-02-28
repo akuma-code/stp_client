@@ -14,8 +14,6 @@ export const PrintPage = (props: PrintPageProps) => {
     const printRef = useRef(null)
     const handlePrint = useReactToPrint({
         content: () => printRef.current,
-
-
     })
 
 
@@ -44,7 +42,7 @@ export const PrintPage = (props: PrintPageProps) => {
 export const ItemsToPrint = forwardRef<HTMLDivElement, FilteredItemsProps>((props, ref) => {
 
     return (
-        <Box ref={ ref } component={ Paper } elevation={ 0 } displayPrint={ 'block' } bgcolor={ 'beige' }>
+        <Box ref={ ref } component={ Paper } elevation={ 0 } displayPrint={ 'block' } bgcolor={ 'whitesmoke' }>
 
 
             <StpCompareItems items={ props.items } />
