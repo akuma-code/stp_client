@@ -18,6 +18,8 @@ import { useTags } from '../../Hooks/useTags';
 import { StpItem } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 import { StpTableToolbar } from './StpTableToolbar';
+import { StpTagsList } from '../../Interfaces/Types';
+import { _ID } from '../../Helpers/helpersFns';
 
 //__ Data Create*/
 //TODO: перенести все данные в контекст
@@ -38,8 +40,8 @@ export function StpDataTable() {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
     const [RPP, setRowsPerPage] = React.useState(-1);
-    const { StpStore, select, selectedItems, _type, setFcount, query } = useAppContext()
-    const selectedTags = useTags(_type)
+    const { StpStore, select, selectedItems, _type, setFcount, query, selectedTags } = useAppContext()
+    const sorted = useFilterTags(StpStore.table, order, orderBy, selectedTags as StpTagsList[], query)
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
         property: keyof StpData,
@@ -99,7 +101,7 @@ export function StpDataTable() {
 
     const isSelected = (id: number) => selectedItems.indexOf(id) !== -1;
     const hasTags = (item: StpData) => selectedTags.length > 0
-        ? selectedTags.every(t => item.tags.includes(t))
+        ? selectedTags.every(t => item.tags.includes(t as StpTagsList))
         : false
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -107,7 +109,7 @@ export function StpDataTable() {
         ? Math.max(0, (1 + page) * RPP - StpStore.table.length)
         : 0;
 
-    const sorted = useFilterTags(StpStore.table, order, orderBy, selectedTags, query)
+
     const visibleRows = React.useMemo(
         () => {
             const sliced = [...sorted].slice(
@@ -118,13 +120,13 @@ export function StpDataTable() {
         [order, orderBy, page, RPP, selectedTags, query],
     );
     React.useEffect(() => {
-        setFcount(sorted.length)
+        setFcount(prev => sorted.length)
     }, [sorted])
     return (
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { mb: 2 } } elevation={ 4 }>
 
-                <StpTableToolbar numSelected={ selectedItems.length } />
+                <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ sorted.length } />
 
                 <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', } } >
                     <Table
@@ -157,7 +159,7 @@ export function StpDataTable() {
                                             role="checkbox"
                                             aria-checked={ isItemSelected }
                                             tabIndex={ -1 }
-                                            key={ row.id }
+                                            key={ _ID() }
                                             selected={ isItemSelected }
                                             sx={ {
                                                 cursor: 'pointer',

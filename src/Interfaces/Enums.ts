@@ -26,10 +26,18 @@ export enum _EnFieldsStp {
     secure = 'Класс безопасности'
 }
 
-export const enum Stp_TypeFields {
+export enum Stp_TypeFields {
     simple = "Простой",
     multi = "Мультифункциональный",
     triplex = "Триплекс",
+    soundproof = "Шумоизоляционный",
+    hitproof = "Противоударный",
+    solarproof = "Солнцеотражающий",
+}
+export enum Stp_Tags {
+    multi = "Мультифункциональный",
+    simple = "Простой",
+    energy = "Энергосберегающий",
     soundproof = "Шумоизоляционный",
     hitproof = "Противоударный",
     solarproof = "Солнцеотражающий",

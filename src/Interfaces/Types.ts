@@ -1,5 +1,5 @@
 
-export type IGlassPropsFields =
+export type StpTagsList =
     | "multi"
     | "simple"
     | "energy"
@@ -11,7 +11,7 @@ export type IFormulaProps = {
     formula: string,
     glassPropId?: number,
 }
-export type StpTypeProps = Partial<Record<IGlassPropsFields, boolean>>
+export type StpTypeProps = Partial<Record<StpTagsList, boolean>>
 
 
 export type AnyObj = { [key: string]: any }

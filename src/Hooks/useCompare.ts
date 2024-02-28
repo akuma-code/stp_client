@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpTags } from "../Components/StpTable/TableObjects";
 import { AnyObj } from "../Interfaces/Types";
-import { useDebounce } from "./useDebounce";
+
 
 type Order = 'asc' | 'desc';
 type TSort = { [key: string]: string | number }
@@ -57,7 +57,7 @@ export function useCompare<T extends AnyObj>(array: readonly T[], order: Order, 
 }
 
 export function useSortAndFilter<T extends AnyObj>(array: readonly T[], order: Order, sort_field: any, query: string) {
-    const _query = useDebounce(query, 1500)
+
 
     const sorted = useCompare(array, order, sort_field)
 
@@ -65,12 +65,12 @@ export function useSortAndFilter<T extends AnyObj>(array: readonly T[], order: O
 
         return [...sorted].filter(item => {
             if ('name' in item) {
-                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(_query.toLowerCase()) : false
+                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : false
             }
             else return []
         })
 
-    }, [_query, sorted])
+    }, [query, sorted])
 
     return filtered
 }

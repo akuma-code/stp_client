@@ -3,7 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import { table_data_preset } from "./Components/StpTable/FullTable";
 import { StpStore } from "./Context/StpStore";
 import { AppContext } from "./Hooks/useStoresContext";
-import { StpTypeProps } from "./Interfaces/Types";
+import { StpTagsList, StpTypeProps } from "./Interfaces/Types";
 import { router } from "./Routes/AppRouter";
 
 type CheckboxGroup = StpTypeProps
@@ -13,6 +13,7 @@ const stores = { StpStore: new StpStore(table_data_preset) }
 function App() {
   const [selected, setSelected] = useState<number[]>([])
   const [fcount, setFc] = useState<number>(0)
+  const [tags, setTags] = useState<string[]>([])
   const [selectedType, selectType] = useState<CheckboxGroup>({
     energy: false,
     hitproof: false,
@@ -33,8 +34,8 @@ function App() {
       filteredItemsCount: fcount,
       setFcount: setFc,
       query: querySearch,
-      setQuery: setQuery
-
+      setQuery: setQuery,
+      selectedTags: tags, setTags
     } }>
 
       <RouterProvider

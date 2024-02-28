@@ -3,7 +3,8 @@ import { createContext } from "react"
 import { useContext } from "react"
 import { StpItem } from "../Components/StpTable/TableObjects"
 import { StpStore } from "../Context/StpStore"
-import { StpTypeProps } from "../Interfaces/Types"
+import { StpTagsList, StpTypeProps } from "../Interfaces/Types"
+import { Stp_Tags } from "../Interfaces/Enums"
 
 
 
@@ -17,6 +18,8 @@ export type AContext = {
     setQuery: React.Dispatch<React.SetStateAction<string>>
     _type: StpTypeProps,
     setType: React.Dispatch<React.SetStateAction<StpTypeProps>>
+    selectedTags: string[],
+    setTags: React.Dispatch<React.SetStateAction<string[]>>
 }
 export const AppContext = createContext<AContext | null>(null)
 
