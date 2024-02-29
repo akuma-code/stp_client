@@ -119,7 +119,7 @@ export function StpDataTable() {
         : 0;
 
 
-    const sorted = useCompare(filtered, order, orderBy)
+    const sorted = useCompare([...filtered], order, orderBy)
     const visibleRows = React.useMemo(
         () => {
             const sliced = sorted.slice(
@@ -134,7 +134,7 @@ export function StpDataTable() {
         setFcount(filtered.length)
         console.log('filtered: ', filtered.length)
 
-    }, [filtered.length, setFcount])
+    }, [filtered.length])
     return (
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { mb: 2 } } elevation={ 4 }>

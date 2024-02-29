@@ -25,9 +25,12 @@ export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersPa
         const tagIds = items.filter(item => hasTags(item, tags)).map(i => i.id)
 
         const queryIds = query ? items.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).map(i => i.id) : []
-        const combine = [...camsIds, ...depthIds, ...tagIds, ...queryIds]
-        const setIds = Array.from(new Set(combine))
-        console.log('setIds', setIds)
+        const combine = [camsIds, depthIds, tagIds, queryIds]
+        const setIds = Array.from(new Set([...camsIds, ...depthIds, ...tagIds, ...queryIds]))
+        const combinedResult = combine.reduce((res, numbs) => {
+            return ccEq(res, numbs)
+        }, [] as number[])
+        console.log('combinedResult', combinedResult)
         const result = items.filter(i => setIds.includes(i.id))
 
         const noFilter = (cams.length === 0 && depths.length === 0 && tags.length === 0)
@@ -49,7 +52,11 @@ export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersPa
 
 
 
-
+const ccEq = (arr1: number[], arr2: number[]) => {
+    if (arr2.length === 0) return arr1
+    const res = arr2.concat(arr1.filter(n1 => !arr2.includes(n1)))
+    return res
+}
 
 
 
