@@ -13,12 +13,13 @@ import * as React from 'react';
 
 import { Stack } from '@mui/material';
 import { _ID } from '../../Helpers/helpersFns';
-import { FilterItemParams, useEnchancedFilter, useFilterTags } from '../../Hooks/useCompare';
+import { FilterItemParams, useCompare, useEnchancedFilter, useFilterTags } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpTagsList } from '../../Interfaces/Types';
-import { StpItem } from '../StpTable/TableObjects';
+import { StpItem, StpTags } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 import { StpTableToolbar } from './StpTableToolbar';
+import { ItemFilteringProps, useCombinedFilter } from '../../Hooks/useFiltration';
 
 //__ Data Create*/
 //TODO: Добавить фильтрацию по толщине стекла и количеству камер
@@ -26,8 +27,8 @@ import { StpTableToolbar } from './StpTableToolbar';
 //TODO: 
 
 
-export type StpData = Omit<StpItem, '_type'> & { id: number }
-export type StpDataFull = StpItem & { id: number }
+export type StpData = StpItem & { id: number }
+
 export type Order = 'asc' | 'desc';
 
 
@@ -39,8 +40,17 @@ export function StpDataTable() {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
     const [RPP, setRowsPerPage] = React.useState(-1);
-    const { StpStore, select, selectedItems, _type, setFcount, query, selectedTags } = useAppContext()
-    const sorted = useFilterTags(StpStore.table, order, orderBy, selectedTags as StpTagsList[], query)
+    const { StpStore, select, selectedItems, setFcount, query, selectedTags, filterParams } = useAppContext()
+
+    // const filtered = useFiltration(StpStore.table as unknown as ItemFilteringProps[], filterParams)
+    const filtered = useCombinedFilter(
+        StpStore.table,
+        filterParams.cams,
+        filterParams.depths,
+        filterParams.tags,
+        filterParams.query = "")
+
+    // const sorted = useFilterTags(StpStore.table, order, orderBy, filterParams.tags as StpTagsList[], query)
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
         property: keyof StpData,
@@ -109,24 +119,27 @@ export function StpDataTable() {
         : 0;
 
 
+    const sorted = useCompare(filtered, order, orderBy)
     const visibleRows = React.useMemo(
         () => {
-            const sliced = [...sorted].slice(
+            const sliced = sorted.slice(
                 page * RPP,
                 page * RPP + RPP)
-            return sliced
+            return sliced as unknown as StpData[]
         },
-        [order, orderBy, page, RPP, selectedTags, query],
+        [page, RPP, sorted]
     );
     React.useEffect(() => {
 
-        setFcount(prev => sorted.length)
-    }, [sorted])
+        setFcount(filtered.length)
+        console.log('filtered: ', filtered.length)
+
+    }, [filtered.length, setFcount])
     return (
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { mb: 2 } } elevation={ 4 }>
 
-                <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ sorted.length } />
+                <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ filtered.length } />
 
                 <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', } } >
                     <Table

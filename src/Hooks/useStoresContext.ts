@@ -5,6 +5,7 @@ import { StpItem } from "../Components/StpTable/TableObjects"
 import { StpStore } from "../Context/StpStore"
 import { StpTagsList, StpTypeProps } from "../Interfaces/Types"
 import { Stp_Tags } from "../Interfaces/Enums"
+import { Filters, FiltersParams } from "./useFiltration"
 
 
 
@@ -20,6 +21,8 @@ export type AContext = {
     setType: React.Dispatch<React.SetStateAction<StpTypeProps>>
     selectedTags: string[],
     setTags: React.Dispatch<React.SetStateAction<string[]>>
+    filterParams: FiltersParams
+    filterFn: React.Dispatch<React.SetStateAction<FiltersParams>>
 }
 export const AppContext = createContext<AContext | null>(null)
 

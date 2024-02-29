@@ -1,11 +1,11 @@
-import { Box, Divider, Icon, IconButton, Stack, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box, Button, Divider, Icon, Stack, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 import { useState } from 'react';
-import { useAppContext } from '../../Hooks/useStoresContext';
-import { TagSelector } from './StpFilterForm';
 import { MdOutlineCancel } from "react-icons/md";
+import { useAppContext } from '../../Hooks/useStoresContext';
+import { PropertySelector } from './PropertySelector';
 import { SelectedTagList } from './SelectedTagList';
 interface TableToolbarProps {
     numSelected: number;
@@ -13,7 +13,7 @@ interface TableToolbarProps {
 }
 type FilterVariant = 'search' | 'tags' | 'none' | null
 export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps) {
-    const { setQuery, query, setTags, select, selectedTags } = useAppContext()
+    const { setQuery, query, setTags, select, selectedTags, filterParams, filterFn } = useAppContext()
 
     const [filterView, setFilterView] = useState<FilterVariant>(null)
 
@@ -23,6 +23,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
         switch (v) {
             case 'tags': {
                 setQuery(prev => "")
+                filterFn(prev => ({ ...prev, query: "" }))
                 select([])
                 break
             }
@@ -32,6 +33,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 break
             }
             case 'none': {
+                filterFn(prev => ({ ...prev, query: "" }))
                 setQuery(prev => "")
                 select([])
                 setTags([])
@@ -43,10 +45,10 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
     }
 
     return (
-        <Toolbar component={ Stack }
+        <Toolbar component={ Stack } direction={ 'row' }
             sx={ {
-                display: 'flex',
-                flexDirection: 'row',
+                // display: 'flex',
+                // flexDirection: 'row',
                 height: 100,
                 pl: { sm: 2 },
                 pr: { xs: 1, sm: 1 },
@@ -71,39 +73,46 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 </Typography>
             </Box>
             <Divider orientation='vertical' flexItem />
-            <Box width={ '33%' } margin={ 'auto' } component={ Stack } direction={ 'row' } alignItems={ 'center' }>
+            <Box width={ '25%' } component={ Stack } direction={ 'row' } alignItems={ 'center' } flexGrow={ 1 } justifyContent={ 'space-between' }>
                 { filterView === 'search' &&
                     <Box
                         columnGap={ 2 }
                         component={ Stack }
                         direction={ 'row' }
-                        alignItems={ 'normal' }>
+                        alignItems={ 'baseline' }>
 
                         <TextField
                             name='search_query'
-                            helperText='Начните вводить название....'
+                            helperText='Начните вводить формулу стеклопакета....'
                             placeholder='формула стеклопакета'
                             autoFocus
-                            size='small'
-                            variant='filled'
-                            inputMode='text'
+                            size='medium'
+                            variant='outlined'
+                            inputMode='search'
                             margin='normal'
                             sx={ { width: 300, mx: 2, textAlign: 'center', color: 'black', } }
-                            onChange={ (e) => setQuery(prev => e.target.value) }
+                            onChange={ (e) => filterFn(prev => ({ ...prev, query: e.target.value })) }
                             value={ query }
 
+
                         />
-                        <IconButton color='error' sx={ { pointerEvents: 'all' } } size='large' onClick={ () => setQuery("") }>
-                            <MdOutlineCancel />
-                        </IconButton>
+                        <Button
+                            color='error'
+                            onClick={ () => filterFn(prev => ({ ...prev, query: "" })) }
+                            startIcon={ <MdOutlineCancel /> }
+                        >
+                            очистить
+                        </Button>
+
                     </Box>
                 }
                 {
                     filterView === 'tags' &&
-                    <Box component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } gap={ 3 }>
-                        <TagSelector filteredCount={ numFiltered } />
+                    <Stack direction={ 'row' } gap={ 3 } justifyContent={ 'space-between' } flexGrow={ 1 }>
+
                         <SelectedTagList tags={ selectedTags } />
-                    </Box>
+                        <PropertySelector filteredCount={ numFiltered } />
+                    </Stack>
 
                 }
             </Box>
@@ -112,7 +121,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
             <Divider orientation='vertical' flexItem />
 
 
-            <Box width={ '33%' } paddingLeft={ { lg: 10, sm: 2 } }>
+            <Box width={ '25%' } paddingLeft={ { lg: 10, sm: 2 } }>
                 <ToggleButtonGroup
                     exclusive
                     value={ filterView }
@@ -174,29 +183,3 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
 
 
-
-
-{/* <Box>
-
-                    <StpTagsForm open={ showTags } />
-
-                    <Button variant='contained' color='success'
-                        endIcon={ showTags
-                            ? <FaAnglesRight />
-                            : <FaAnglesLeft />
-                        }
-                        onClick={ handleTagsClick }
-                        sx={ {
-                            // bgcolor: (theme) => theme.palette.success.main,
-                            // borderRadius: 5,
-                            // bgcolor: (theme) => alpha(theme.palette.success.main, theme.palette.action.activatedOpacity + .5),
-                            color: 'white',
-                            [`& :hover`]: {
-                                opacity: .5,
-                                // bgcolor: 'Background' 
-                            }
-                        } }>
-                        { toggledText }
-
-                    </Button>
-                </Box> */}

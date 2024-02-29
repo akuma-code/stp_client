@@ -5,6 +5,7 @@ import { StpStore } from "./Context/StpStore";
 import { AppContext } from "./Hooks/useStoresContext";
 import { StpTagsList, StpTypeProps } from "./Interfaces/Types";
 import { router } from "./Routes/AppRouter";
+import { FiltersParams, useFilterParams } from "./Hooks/useFiltration";
 
 type CheckboxGroup = StpTypeProps
 const stores = { StpStore: new StpStore(table_data_preset) }
@@ -24,6 +25,7 @@ function App() {
   })
   const [querySearch, setQuery] = useState("")
 
+  const [filters, setFilters] = useState<FiltersParams>({ cams: [], depths: [], tags: [] })
   return (
     <AppContext.Provider value={ {
       ...stores,
@@ -33,9 +35,10 @@ function App() {
       setType: selectType,
       filteredItemsCount: fcount,
       setFcount: setFc,
-      query: querySearch,
+      query: filters.query || "",
       setQuery: setQuery,
-      selectedTags: tags, setTags
+      selectedTags: tags, setTags,
+      filterParams: filters, filterFn: setFilters
     } }>
 
       <RouterProvider
