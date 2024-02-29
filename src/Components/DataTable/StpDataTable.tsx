@@ -48,7 +48,7 @@ export function StpDataTable() {
         filterParams.cams,
         filterParams.depths,
         filterParams.tags,
-        filterParams.query = "")
+    )
 
     // const sorted = useFilterTags(StpStore.table, order, orderBy, filterParams.tags as StpTagsList[], query)
     const handleRequestSort = (
@@ -132,7 +132,7 @@ export function StpDataTable() {
     React.useEffect(() => {
 
         setFcount(filtered.length)
-        console.log('filtered: ', filtered.length)
+        console.log('________FILTERD : ', filtered.length)
 
     }, [filtered.length])
     return (

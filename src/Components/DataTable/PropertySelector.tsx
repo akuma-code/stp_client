@@ -60,7 +60,7 @@ export type SelectorProps = {
 };
 
 export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
-    const [selectors, setSelector] = useState<FiltersParams>({ tags: [], depths: [], cams: [], query: "" });
+    const [selectors, setSelector] = useState<FiltersParams>({ tags: [], depths: [], cams: [] });
     const { filterFn } = useAppContext();
 
     const handleSelectorChange = (selectorType: keyof FiltersParams) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {

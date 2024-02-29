@@ -17,30 +17,37 @@ const hasTags = (item: StpItem, tags: StpTags[]) => tags.length > 0
 
 
 
-export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersParams['cams'], depths: FiltersParams['depths'], tags: FiltersParams['tags'], query: string) {
+export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersParams['cams'], depths: FiltersParams['depths'], tags: FiltersParams['tags']) {
     // const { cams, depths, tags, query } = params
     const filtered = useMemo(() => {
-        const camsIds = items.filter(item => cams.includes(item.cams)).map(i => i.id)
-        const depthIds = items.filter(item => depths.includes(item.depth)).map(i => i.id)
-        const tagIds = items.filter(item => hasTags(item, tags)).map(i => i.id)
+        const camsIds = items.filter(item => cams.indexOf(item.cams) > -1)
+        const depthIds = items.filter(item => depths.indexOf(item.depth) > -1)
+        const tagIds = items.filter(item => hasTags(item, tags))
 
-        const queryIds = query ? items.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).map(i => i.id) : []
-        const combine = [camsIds, depthIds, tagIds, queryIds]
-        const setIds = Array.from(new Set([...camsIds, ...depthIds, ...tagIds, ...queryIds]))
-        const combinedResult = combine.reduce((res, numbs) => {
-            return ccEq(res, numbs)
-        }, [] as number[])
-        console.log('combinedResult', combinedResult)
-        const result = items.filter(i => setIds.includes(i.id))
+        // const queryIds = query ? items.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).map(i => i.id) : []
+        const combine = [camsIds.map(i => i.name), depthIds.map(i => i.name), tagIds.map(i => i.name)]
+        const foiundedIds = [...camsIds, ...depthIds, ...tagIds,]
+        // const setIds = Array.from(new Set([...camsIds, ...depthIds, ...tagIds, ...queryIds]))
+        // const combinedResult = combine.map(fresult=>[...fresult]).reduce((res, numbs) => {
+        // }, [] as number[])
+        // combine.map(idArr=>)
+
+        console.log(Array.from(new Set(...combine).values()))
+        console.log('camsIds', camsIds)
+        console.log('depthIds', depthIds)
+        console.log('tagIds', depthIds)
+
+
+
+        const result = items.filter(i => foiundedIds.indexOf(i) > -1)
 
         const noFilter = (cams.length === 0 && depths.length === 0 && tags.length === 0)
-        if (noFilter && !query) {
+        if (noFilter) {
             console.log('returned Items')
             return items
         }
         return result
-    }, [cams, depths, items, query, tags])
-
+    }, [cams, depths, items, tags])
     return filtered
 
 
