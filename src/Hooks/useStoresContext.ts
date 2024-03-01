@@ -17,8 +17,8 @@ export type AContext = {
     setFcount: React.Dispatch<React.SetStateAction<number>>
     query: string
     setQuery: React.Dispatch<React.SetStateAction<string>>
-    _type: StpTypeProps,
-    setType: React.Dispatch<React.SetStateAction<StpTypeProps>>
+    _type?: StpTypeProps,
+    setType?: React.Dispatch<React.SetStateAction<StpTypeProps>>
     selectedTags: string[],
     setTags: React.Dispatch<React.SetStateAction<string[]>>
     filterParams: FiltersParams

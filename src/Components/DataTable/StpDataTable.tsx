@@ -13,7 +13,7 @@ import * as React from 'react';
 
 import { Stack } from '@mui/material';
 import { _ID } from '../../Helpers/helpersFns';
-import { FilterItemParams, useCompare, useEnchancedFilter, useFilterTags } from '../../Hooks/useCompare';
+import { FilterItemParams, useCompare, useEnchancedFilter, useFilterTags, useSortAndFilter } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpTagsList } from '../../Interfaces/Types';
 import { StpItem, StpTags } from '../StpTable/TableObjects';
@@ -28,7 +28,6 @@ import { ItemFilteringProps, useCombinedFilter } from '../../Hooks/useFiltration
 
 
 export type StpData = StpItem & { id: number }
-
 export type Order = 'asc' | 'desc';
 
 
@@ -119,12 +118,14 @@ export function StpDataTable() {
         : 0;
 
 
-    const sorted = useCompare([...filtered], order, orderBy)
+    const sorted = useSortAndFilter(filtered, order, orderBy, query)
     const visibleRows = React.useMemo(
         () => {
-            const sliced = sorted.slice(
+
+            const sliced = RPP !== -1 ? sorted.slice(
                 page * RPP,
                 page * RPP + RPP)
+                : sorted
             return sliced as unknown as StpData[]
         },
         [page, RPP, sorted]
@@ -141,13 +142,13 @@ export function StpDataTable() {
 
                 <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ filtered.length } />
 
-                <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', } } >
+                <TableContainer sx={ { overflowY: 'auto', maxHeight: '75vh', } } >
                     <Table
                         sx={ { minWidth: 750 } }
                         aria-labelledby="tableTitle"
                         size={ dense ? 'small' : 'medium' }
                         stickyHeader
-                        padding='normal'
+                        padding='none'
                     >
                         <EnhancedTableHead
                             numSelected={ selectedItems.length }
@@ -163,14 +164,14 @@ export function StpDataTable() {
                             {
                                 visibleRows.map((row, index) => {
                                     const isItemSelected = isSelected(+row.id);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                    const labelId = `enhanced-table-${index}`;
                                     const isTagged = hasTags(row as unknown as StpData)
                                     return (
                                         <TableRow
                                             hover
                                             key={ row.name }
                                             onClick={ (event) => handleClick(event, +row.id) }
-                                            role="checkbox"
+                                            // role="checkbox"
                                             aria-checked={ isItemSelected }
                                             tabIndex={ -1 }
                                             selected={ isItemSelected }
@@ -223,7 +224,7 @@ export function StpDataTable() {
                                         height: (dense ? 33 : 53) * emptyRows,
                                     } }
                                 >
-                                    <TableCell colSpan={ 6 } />
+                                    <TableCell colSpan={ 8 } />
                                 </TableRow>
                             ) }
                         </TableBody>
@@ -240,7 +241,7 @@ export function StpDataTable() {
                     <TablePagination
                         rowsPerPageOptions={ [5, 10, 20, { value: -1, label: 'Все' }] }
                         component="div"
-                        count={ StpStore.table.length }
+                        count={ StpStore.table.length + 1 }
                         rowsPerPage={ RPP }
                         page={ page }
                         onPageChange={ handleChangePage }

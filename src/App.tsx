@@ -15,14 +15,14 @@ function App() {
   const [selected, setSelected] = useState<number[]>([])
   const [fcount, setFc] = useState<number>(0)
   const [tags, setTags] = useState<string[]>([])
-  const [selectedType, selectType] = useState<CheckboxGroup>({
-    energy: false,
-    hitproof: false,
-    multi: false,
-    simple: false,
-    solarproof: false,
-    soundproof: false
-  })
+  // const [selectedType, selectType] = useState<CheckboxGroup>({
+  //   energy: false,
+  //   hitproof: false,
+  //   multi: false,
+  //   simple: false,
+  //   solarproof: false,
+  //   soundproof: false
+  // })
   const [querySearch, setQuery] = useState("")
 
   const [filters, setFilters] = useState<FiltersParams>({ cams: [], depths: [], tags: [] })
@@ -31,11 +31,11 @@ function App() {
       ...stores,
       selectedItems: selected,
       select: setSelected,
-      _type: selectedType,
-      setType: selectType,
+      // _type: selectedType,
+      // setType: selectType,
       filteredItemsCount: fcount,
       setFcount: setFc,
-      query: filters.query || "",
+      query: querySearch,
       setQuery: setQuery,
       selectedTags: tags, setTags,
       filterParams: filters, filterFn: setFilters

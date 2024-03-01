@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
-import { _isArr } from "../Helpers/helpersFns";
+import { _isArr, _log } from "../Helpers/helpersFns";
 import { StpData } from "../Components/DataTable/StpDataTable";
+import { AnyObj } from "../Interfaces/Types";
 
 export type FiltersParams = {
     depths: number[],
-    query?: string,
+    query?: string
     tags: StpTags[],
     cams: number[]
 }
@@ -15,12 +16,24 @@ const hasTags = (item: StpItem, tags: StpTags[]) => tags.length > 0
     ? tags.every(t => item.tags.includes(t))
     : false
 
+type SearchPropsArr<T extends StpData> = { [P in keyof T]?: Array<T[P]> }
+type tt = SearchPropsArr<StpData>
+const includeValue = <T extends StpData>(item: T[], search: tt) => {
+    const { cams, depth, tags } = search
+    const arr = [cams, depth, tags]
 
+    return
+}
 
 export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersParams['cams'], depths: FiltersParams['depths'], tags: FiltersParams['tags']) {
     // const { cams, depths, tags, query } = params
+    const s = { cams: [1, 2], depth: [28, 36] } satisfies SearchPropsArr<StpData>
+    includeValue(items, s)
+
     const filtered = useMemo(() => {
         const camsIds = items.filter(item => cams.indexOf(item.cams) > -1)
+        // const camsInclude = items.filter(item => includeValue(item, 'cams', cams) && includeValue(item, 'depth', depths))
+        // _log("inc: ", camsInclude)
         const depthIds = items.filter(item => depths.indexOf(item.depth) > -1)
         const tagIds = items.filter(item => hasTags(item, tags))
 
@@ -32,10 +45,10 @@ export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersPa
         // }, [] as number[])
         // combine.map(idArr=>)
 
-        console.log(Array.from(new Set(...combine).values()))
-        console.log('camsIds', camsIds)
-        console.log('depthIds', depthIds)
-        console.log('tagIds', depthIds)
+        // console.log(Array.from(new Set(...combine).values()))
+        // console.log('camsIds', camsIds)
+        // console.log('depthIds', depthIds)
+        // console.log('tagIds', depthIds)
 
 
 
@@ -74,7 +87,7 @@ const ccEq = (arr1: number[], arr2: number[]) => {
 
 
 
-export function _useFiltration<T extends ItemFilteringProps>(items: T[], { cams, depths, query, tags }: FiltersParams) {
+export function _useFiltration<T extends ItemFilteringProps & { query: string }>(items: T[], { cams, depths, query, tags }: FiltersParams) {
     const FQuery = useCallback((query: string) => items.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).map(i => i.id), [items])
     const FTags = useCallback((tags: StpTags[]) => items.filter(s => hasTags(s as unknown as StpItem, tags)).map(i => i.id), [items])
     const FDepth = useCallback((depths: number[]) => items.filter(item => depths.includes(item.depth)).map(i => i.id), [items])
@@ -119,7 +132,7 @@ type FilterByCams<T extends keyof FiltersParams> = {
     payload: number[]
 }
 
-export type Filters = | FilterByName<'query'> | FilterByTags<'tags'> | FilterByDepth<'depths'> | FilterByCams<'cams'>
+export type Filters = | FilterByTags<'tags'> | FilterByDepth<'depths'> | FilterByCams<'cams'>
 
 
 export function useFilterParams() {

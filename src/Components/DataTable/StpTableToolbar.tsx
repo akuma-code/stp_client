@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Icon, Stack, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Autocomplete, Box, Button, Divider, Icon, Stack, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
@@ -7,14 +7,21 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { PropertySelector } from './PropertySelector';
 import { SelectedTagList } from './SelectedTagList';
+import { table_data_preset } from '../StpTable/FullTable';
 interface TableToolbarProps {
     numSelected: number;
     numFiltered: number
 }
+type AutoCompleteOptions = {
+    name: string
+}[]
 type FilterVariant = 'search' | 'tags' | 'none' | null
+const _autoCompleteOptions = table_data_preset.map(i => (i.name))
 export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps) {
     const { setQuery, query, setTags, select, selectedTags, filterParams, filterFn } = useAppContext()
 
+    const [value, setValue] = useState<string | null>("");
+    // const [inputValue, setInputValue] = useState('');
     const [filterView, setFilterView] = useState<FilterVariant>(null)
 
     function handleChangeView(e: React.MouseEvent<HTMLElement, MouseEvent>, v: FilterVariant): void {
@@ -75,36 +82,32 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
             <Divider orientation='vertical' flexItem />
             <Box width={ '25%' } component={ Stack } direction={ 'row' } alignItems={ 'center' } flexGrow={ 1 } justifyContent={ 'space-between' }>
                 { filterView === 'search' &&
-                    <Box
-                        columnGap={ 2 }
-                        component={ Stack }
-                        direction={ 'row' }
-                        alignItems={ 'baseline' }>
 
-                        <TextField
-                            name='search_query'
-                            helperText='Начните вводить формулу стеклопакета....'
-                            placeholder='формула стеклопакета'
-                            autoFocus
-                            size='medium'
-                            variant='outlined'
-                            inputMode='search'
-                            margin='normal'
-                            sx={ { width: 300, mx: 2, textAlign: 'center', color: 'black', } }
-                            onChange={ (e) => filterFn(prev => ({ ...prev, query: e.target.value })) }
-                            value={ query }
+                    <Autocomplete
+                        value={ value }
+                        onChange={ (e, v) => setValue(v) }
+
+                        inputValue={ query }
+                        onInputChange={ (e, v) => setQuery(v) }
+                        options={ _autoCompleteOptions }
+                        renderInput={ (params) =>
+                            <TextField { ...params }
+                                name='search_query'
+                                helperText='Начните вводить формулу стеклопакета....'
+                                autoFocus
+                                size='medium'
+                                variant='outlined'
+                                inputMode='search'
+                                margin='normal'
+                                label="Формула стеклопакета"
+                                sx={ { width: 320, mx: 2, textAlign: 'center', color: 'black', } }
+                            />
+                        }
+                    />
 
 
-                        />
-                        <Button
-                            color='error'
-                            onClick={ () => filterFn(prev => ({ ...prev, query: "" })) }
-                            startIcon={ <MdOutlineCancel /> }
-                        >
-                            очистить
-                        </Button>
 
-                    </Box>
+
                 }
                 {
                     filterView === 'tags' &&

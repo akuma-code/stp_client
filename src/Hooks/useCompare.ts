@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
 import { AnyObj } from "../Interfaces/Types";
-
+import { useDebounceValue } from 'usehooks-ts'
 
 type Order = 'asc' | 'desc';
 type TSort = { [key: string]: string | number }
@@ -96,17 +96,17 @@ export function useSortAndFilter<T extends AnyObj>(array: readonly T[], order: O
 
 
     const sorted = useCompare(array, order, sort_field)
-
+    const [querySearch, status] = useDebounceValue<string>(query, 500)
     const filtered = useMemo(() => {
 
         return [...sorted].filter(item => {
             if ('name' in item) {
-                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : false
+                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(querySearch.toLowerCase()) : false
             }
             else return []
         })
 
-    }, [query, sorted])
+    }, [querySearch, sorted])
 
     return filtered
 }
