@@ -129,7 +129,7 @@ export function useFilterTags<T extends AnyObj>(array: readonly T[], order: Orde
     const sorted = useSortAndFilter(array, order, sort_field, query)
 
     const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(s => hasTags(s as unknown as StpItem, tags)) : [...sorted],
-        [array, order, sort_field, tags, query])
+        [tags, sorted])
 
     return tagged
 }

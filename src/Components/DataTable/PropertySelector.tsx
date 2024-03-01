@@ -25,7 +25,7 @@ export const TagsMenuProps = {
 const DepthMenuProps = {
     PaperProps: {
         style: {
-            height: ITEM_HEIGHT * 6 + 5,
+            height: ITEM_HEIGHT * 12 + 5,
             width: 140,
         },
     },
@@ -56,12 +56,12 @@ export const tagsArray: (keyof typeof Stp_Tags)[] = [
 export type SelectorProps = {
 
     tags: StpTags[];
-    cams: number;
+    cams: number[];
     depth: number[];
 };
 
 export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
-    const [selectors, setSelector] = useState<SelectorProps>({ tags: [], depth: [], cams: 1 });
+    const [selectors, setSelector] = useState<SelectorProps>({ tags: [], depth: [], cams: [] });
     const { filterFn } = useAppContext();
 
     const handleSelectorChange = (selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
@@ -73,7 +73,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             }
             case 'cams': {
                 const { value } = event.target;
-                setSelector(prev => ({ ...prev, cams: value as number }))
+                setSelector(prev => ({ ...prev, cams: value as number[] }))
                 break
             }
             case 'depth': {
@@ -85,7 +85,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
     };
 
     useEffect(() => {
-        // filterFn(selectors as FiltersParams)
+        filterFn(selectors as FiltersParams)
     }, [selectors])
     const camTxt = (num: number) => num === 1 ? `1 камера` : num === 2 ? `2 камеры` : '';
     return (
@@ -94,7 +94,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             <FormControl sx={ { m: 1, width: 200 } }>
                 <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
                 <Select
-                    disabled
+
                     multiple
                     labelId="multitag-label"
                     id="multitag"
@@ -119,7 +119,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
 
             <FormControl sx={ { m: 1, width: 150 } }>
                 <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
-                <Select disabled
+                <Select
                     multiple
                     labelId="depth-label"
                     name='depth-selector'
@@ -139,7 +139,13 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                         </MenuItem>
 
                     )) }
-
+                    {/* <ListSubheader> cams </ListSubheader>
+                    { camsArray.map((cam) => (
+                        <MenuItem key={ cam } value={ cam } divider dense>
+                            <Checkbox checked={ selectors.cams.indexOf(cam) > -1 } name={ cam + '_checkCam' } />
+                            <ListItemText primary={ camTxt(cam) } />
+                        </MenuItem>
+                    )) } */}
 
                 </Select>
 
@@ -148,7 +154,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             <FormControl sx={ { m: 1, width: 150 } }>
                 <InputLabel id="cams-label">Кол-во камер</InputLabel>
                 <Select
-                    disabled
+                    multiple
                     labelId="cams-label"
                     name="cams-selector"
                     value={ selectors.cams }
@@ -162,7 +168,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
 
                     { camsArray.map((cam) => (
                         <MenuItem key={ cam } value={ cam } divider dense>
-                            <Checkbox checked={ selectors.cams === cam } name={ cam + '_checkCam' } />
+                            <Checkbox checked={ selectors.cams.indexOf(cam) > -1 } name={ cam + '_checkCam' } />
                             <ListItemText primary={ camTxt(cam) } />
                         </MenuItem>
                     )) }

@@ -3,12 +3,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 import { useState } from 'react';
-import { MdOutlineCancel } from "react-icons/md";
+import { MdOutlineCancel, MdOutlineFilterListOff } from "react-icons/md";
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { PropertySelector } from './PropertySelector';
 import { SelectedTagList } from './SelectedTagList';
 import { table_data_preset } from '../StpTable/FullTable';
 import { AcSearch } from './AcSearch';
+import { MdOutlineFilterList } from "react-icons/md";
 interface TableToolbarProps {
     numSelected: number;
     numFiltered: number
@@ -66,17 +67,22 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
 
             <Box width={ '25%' }>
-                <Typography
-                    // sx={ { flex: '1 1 33%' } }
-                    textAlign={ 'left' }
-                    color="inherit"
-                    variant="body1"
-                    component="div"
-                    id="tableTitle"
+                { numSelected > 0 ?
 
-                >
-                    { numSelected > 0 ? `${numSelected} выбрано` : `Выбрать стеклопакет для сравнения (не более 5!)` }
-                </Typography>
+                    <Typography
+                        // sx={ { flex: '1 1 33%' } }
+                        textAlign={ 'left' }
+                        color="inherit"
+                        variant="body1"
+                        component="div"
+                        id="tableTitle"
+
+                    >
+                        { numSelected > 0 ? `${numSelected} выбрано` : `Выбрать стеклопакет для сравнения (не более 5!)` }
+                    </Typography>
+                    :
+                    <AcSearch />
+                }
             </Box>
             <Divider orientation='vertical' flexItem />
             <Box
@@ -86,26 +92,26 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 flexGrow={ 1 }
                 justifyContent={ 'end' }>
                 {
-                    filterView === 'search' &&
+                    // filterView === 'search' &&
 
-                    <AcSearch />
+                    // <AcSearch />
                 }
-                {
-                    filterView === 'tags' &&
-                    <Stack direction={ 'row' } gap={ 3 } justifyContent={ 'space-between' } flexGrow={ 1 }>
+                <Stack direction={ 'row' } gap={ 3 } justifyContent={ 'space-between' } flexGrow={ 1 }>
 
-                        <SelectedTagList tags={ selectedTags } />
-                        <PropertySelector filteredCount={ numFiltered } />
-                    </Stack>
+                    <SelectedTagList tags={ selectedTags } />
+                    <PropertySelector filteredCount={ numFiltered } />
+                </Stack>
+                {
+                    // filterView === 'tags' &&
 
                 }
             </Box>
 
 
-            <Divider orientation='vertical' flexItem />
+            {/* <Divider orientation='vertical' flexItem /> */ }
 
 
-            <Box width={ '25%' } paddingLeft={ { lg: 10, sm: 2 } }>
+            {/* <Box width={ '25%' } paddingLeft={ { lg: 10, sm: 2 } }>
                 <ToggleButtonGroup
                     exclusive
                     value={ filterView }
@@ -132,22 +138,23 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                             value={ 'tags' }
                             // onChange={ handleChangeView }
                             selected={ filterView === 'tags' }
-                        >Фильтрация по свойствам
+                        >{ filterView === 'none' ? `Скрыть фильтры` : `показать Фильтры` }
                         </ToggleButton>
                     </Tooltip>
+                    
                     <ToggleButton
                         value={ 'none' }
                         // onChange={ handleChangeView }
                         defaultChecked
-                        selected={ filterView === 'none' }
+                    // selected={ filterView === 'none' }
                     >
                         <Icon color='error'>
-                            <MdOutlineCancel />
+                            { filterView === 'none' ? <MdOutlineFilterList /> : <MdOutlineFilterListOff /> }
                         </Icon>
                     </ToggleButton>
 
                 </ToggleButtonGroup>
-            </Box>
+            </Box> */}
 
         </Toolbar>
     );

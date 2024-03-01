@@ -26,22 +26,36 @@ const includeValue = <T extends StpData>(item: T[], search: tt) => {
 export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersParams['cams'], depths: FiltersParams['depth'], tags: FiltersParams['tags']) {
     // const { cams, depths, tags, query } = params
     const s = { cams: [1, 2], depth: [28, 36] } satisfies SearchPropsArr<StpData>
-    includeValue(items, s)
+
 
     const filtered = useMemo(() => {
-        const camsIds = items
+        const camsset = new Set<number[]>()
+        const depthset = new Set<number[]>()
+        cams.forEach((cam) => {
 
-        const depthIds = items
-        const tagIds = items.filter(item => hasTags(item, tags))
+            const finded = items.filter(i => i.cams === cam)
+            camsset.add(finded.map(f => f.id))
+
+        })
+        const camsIds = Array.from(camsset.values())
+        depths.forEach((depth) => {
+
+            const finded = items.filter(i => i.depth === depth)
+            depthset.add(finded.map(f => f.id))
+
+        })
+        const depthIds = depthset.values()
+        const tagIds = items.filter(item => hasTags(item, tags)).map(item => item.id)
 
 
-        const combine = [camsIds.map(i => i.name), depthIds.map(i => i.name), tagIds.map(i => i.name)]
-        const foiundedIds = [...camsIds, ...depthIds, ...tagIds,]
+        const combine = [...camsIds, ...depthIds, ...tagIds]
+        const foiundedIds = [...combine]
 
 
 
-
-        const result = items.filter(i => foiundedIds.indexOf(i) > -1)
+        const result = items.filter(i => foiundedIds.includes(i.id))
+        console.log('combine', result)
+        // const result = foiundedIds.map(id=>filterProp(items, 'id', id))
 
         const noFilter = tags.length === 0
         if (noFilter) {
@@ -55,9 +69,12 @@ export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersPa
 
 }
 
+const _compareProp = <T extends StpData, P extends keyof T>(item: T, searchProp: P, searchValue: T[P]) => item[searchProp] === searchValue
 
+function filterProp<T extends StpData, P extends keyof T>(items_array: T[], searchProp: P, searchValue: T[P]) {
+    return [...items_array].filter(item => _compareProp(item, searchProp, searchValue))
 
-
+}
 
 
 
