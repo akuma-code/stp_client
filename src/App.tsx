@@ -2,10 +2,10 @@ import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { table_data_preset } from "./Components/StpTable/FullTable";
 import { StpStore } from "./Context/StpStore";
+import { FiltersParams } from "./Hooks/useFiltration";
 import { AppContext } from "./Hooks/useStoresContext";
-import { StpTagsList, StpTypeProps } from "./Interfaces/Types";
+import { StpTypeProps } from "./Interfaces/Types";
 import { router } from "./Routes/AppRouter";
-import { FiltersParams, useFilterParams } from "./Hooks/useFiltration";
 
 type CheckboxGroup = StpTypeProps
 const stores = { StpStore: new StpStore(table_data_preset) }
@@ -25,7 +25,7 @@ function App() {
   // })
   const [querySearch, setQuery] = useState("")
 
-  const [filters, setFilters] = useState<FiltersParams>({ cams: [], depths: [], tags: [] })
+  const [filters, setFilters] = useState<FiltersParams>({ cams: [], depth: [], tags: [] })
   return (
     <AppContext.Provider value={ {
       ...stores,

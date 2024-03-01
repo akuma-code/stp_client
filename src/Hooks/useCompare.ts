@@ -96,17 +96,17 @@ export function useSortAndFilter<T extends AnyObj>(array: readonly T[], order: O
 
 
     const sorted = useCompare(array, order, sort_field)
-    const [querySearch, status] = useDebounceValue<string>(query, 500)
+
     const filtered = useMemo(() => {
 
         return [...sorted].filter(item => {
             if ('name' in item) {
-                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(querySearch.toLowerCase()) : false
+                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : false
             }
             else return []
         })
 
-    }, [querySearch, sorted])
+    }, [query, sorted])
 
     return filtered
 }

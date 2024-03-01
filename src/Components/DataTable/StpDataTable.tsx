@@ -18,8 +18,9 @@ import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpTagsList } from '../../Interfaces/Types';
 import { StpItem, StpTags } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
-import { StpTableToolbar } from './StpTableToolbar';
+
 import { ItemFilteringProps, useCombinedFilter } from '../../Hooks/useFiltration';
+import { StpTableToolbar } from './StpTableToolbar';
 
 //__ Data Create*/
 //TODO: Добавить фильтрацию по толщине стекла и количеству камер
@@ -45,7 +46,7 @@ export function StpDataTable() {
     const filtered = useCombinedFilter(
         StpStore.table,
         filterParams.cams,
-        filterParams.depths,
+        filterParams.depth,
         filterParams.tags,
     )
 
@@ -122,9 +123,10 @@ export function StpDataTable() {
     const visibleRows = React.useMemo(
         () => {
 
-            const sliced = RPP !== -1 ? sorted.slice(
-                page * RPP,
-                page * RPP + RPP)
+            const sliced = RPP !== -1
+                ? sorted.slice(
+                    page * RPP,
+                    page * RPP + RPP)
                 : sorted
             return sliced as unknown as StpData[]
         },
@@ -133,7 +135,7 @@ export function StpDataTable() {
     React.useEffect(() => {
 
         setFcount(filtered.length)
-        console.log('________FILTERD : ', filtered.length)
+        // console.log('________FILTERD : ', filtered.length)
 
     }, [filtered.length])
     return (

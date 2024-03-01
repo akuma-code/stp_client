@@ -7,9 +7,10 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { Stp_Tags } from '../../Interfaces/Enums';
-import { Stack } from '@mui/material';
+import { ListSubheader, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Filters, FiltersParams } from '../../Hooks/useFiltration';
+import { StpTags } from '../StpTable/TableObjects';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -53,49 +54,38 @@ export const tagsArray: (keyof typeof Stp_Tags)[] = [
 
 
 export type SelectorProps = {
-    name: string
-    tags: (keyof typeof Stp_Tags)[];
-    cams: number[];
-    depths: number[];
+
+    tags: StpTags[];
+    cams: number;
+    depth: number[];
 };
 
 export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
-    const [selectors, setSelector] = useState<FiltersParams>({ tags: [], depths: [], cams: [] });
+    const [selectors, setSelector] = useState<SelectorProps>({ tags: [], depth: [], cams: 1 });
     const { filterFn } = useAppContext();
 
-    const handleSelectorChange = (selectorType: keyof FiltersParams) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
-        const { value } = event.target;
-        setSelector(prev => ({ ...prev, [selectorType]: value }));
-
-        // switch (selectorType) {
-
-        //     case 'depths': {
-        //         const fvalue = selectors[selectorType]
-        //         filterFn(prev => ({ ...prev, [selectorType]: fvalue }))
-        //         break
-        //     }
-        //     case 'name': {
-        //         const fvalue = selectors[selectorType]
-        //         filterFn(prev => ({ ...prev, [selectorType]: fvalue }))
-        //         break
-        //     }
-        //     case 'tags': {
-        //         const fvalue = selectors[selectorType]
-        //         filterFn(prev => ({ ...prev, [selectorType]: fvalue }))
-        //         break
-        //     }
-        //     case 'cams': {
-        //         const fvalue = selectors[selectorType]
-        //         filterFn(prev => ({ ...prev, [selectorType]: fvalue }))
-        //         break
-        //     }
-        // }
-
-
+    const handleSelectorChange = (selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
+        switch (selectorType) {
+            case 'tags': {
+                const { value } = event.target;
+                setSelector(prev => ({ ...prev, tags: value as StpTags[] }))
+                break
+            }
+            case 'cams': {
+                const { value } = event.target;
+                setSelector(prev => ({ ...prev, cams: value as number }))
+                break
+            }
+            case 'depth': {
+                const { value } = event.target;
+                setSelector(prev => ({ ...prev, depth: value as number[] }))
+                break
+            }
+        }
     };
 
     useEffect(() => {
-        filterFn(selectors)
+        // filterFn(selectors as FiltersParams)
     }, [selectors])
     const camTxt = (num: number) => num === 1 ? `1 камера` : num === 2 ? `2 камеры` : '';
     return (
@@ -104,6 +94,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             <FormControl sx={ { m: 1, width: 200 } }>
                 <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
                 <Select
+                    disabled
                     multiple
                     labelId="multitag-label"
                     id="multitag"
@@ -128,22 +119,25 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
 
             <FormControl sx={ { m: 1, width: 150 } }>
                 <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
-                <Select
+                <Select disabled
                     multiple
                     labelId="depth-label"
                     name='depth-selector'
-                    value={ selectors.depths }
-                    onChange={ handleSelectorChange('depths') }
+                    value={ selectors.depth }
+                    onChange={ handleSelectorChange('depth') }
                     input={ <OutlinedInput label="Толщина ст-та____" id='multitag2' sx={ { fontSize: 12 } } /> }
                     renderValue={ () => `Найдено: ${filteredCount}` }
                     MenuProps={ DepthMenuProps }
 
                 >
+
+                    <ListSubheader> depth </ListSubheader>
                     { depthArray.map((depth) => (
                         <MenuItem key={ depth } value={ depth } divider dense>
-                            <Checkbox checked={ selectors.depths.indexOf(depth) > -1 } name={ depth + '_checkDepth' } />
+                            <Checkbox checked={ selectors.depth.indexOf(depth) > -1 } name={ depth + '_checkDepth' } />
                             <ListItemText primary={ `${depth} мм` } />
                         </MenuItem>
+
                     )) }
 
 
@@ -154,7 +148,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             <FormControl sx={ { m: 1, width: 150 } }>
                 <InputLabel id="cams-label">Кол-во камер</InputLabel>
                 <Select
-                    multiple
+                    disabled
                     labelId="cams-label"
                     name="cams-selector"
                     value={ selectors.cams }
@@ -168,7 +162,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
 
                     { camsArray.map((cam) => (
                         <MenuItem key={ cam } value={ cam } divider dense>
-                            <Checkbox checked={ selectors.cams.indexOf(cam) > -1 } name={ cam + '_checkCam' } />
+                            <Checkbox checked={ selectors.cams === cam } name={ cam + '_checkCam' } />
                             <ListItemText primary={ camTxt(cam) } />
                         </MenuItem>
                     )) }

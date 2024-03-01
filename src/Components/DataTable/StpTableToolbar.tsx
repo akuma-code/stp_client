@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Divider, Icon, Stack, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box, Button, Divider, Icon, Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
@@ -8,15 +8,14 @@ import { useAppContext } from '../../Hooks/useStoresContext';
 import { PropertySelector } from './PropertySelector';
 import { SelectedTagList } from './SelectedTagList';
 import { table_data_preset } from '../StpTable/FullTable';
+import { AcSearch } from './AcSearch';
 interface TableToolbarProps {
     numSelected: number;
     numFiltered: number
 }
-type AutoCompleteOptions = {
-    name: string
-}[]
+
 type FilterVariant = 'search' | 'tags' | 'none' | null
-const _autoCompleteOptions = table_data_preset.map(i => (i.name))
+
 export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps) {
     const { setQuery, query, setTags, select, selectedTags, filterParams, filterFn } = useAppContext()
 
@@ -80,34 +79,16 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 </Typography>
             </Box>
             <Divider orientation='vertical' flexItem />
-            <Box width={ '25%' } component={ Stack } direction={ 'row' } alignItems={ 'center' } flexGrow={ 1 } justifyContent={ 'space-between' }>
-                { filterView === 'search' &&
+            <Box
+                component={ Stack }
+                direction={ 'row' }
+                alignItems={ 'center' }
+                flexGrow={ 1 }
+                justifyContent={ 'end' }>
+                {
+                    filterView === 'search' &&
 
-                    <Autocomplete
-                        value={ value }
-                        onChange={ (e, v) => setValue(v) }
-
-                        inputValue={ query }
-                        onInputChange={ (e, v) => setQuery(v) }
-                        options={ _autoCompleteOptions }
-                        renderInput={ (params) =>
-                            <TextField { ...params }
-                                name='search_query'
-                                helperText='Начните вводить формулу стеклопакета....'
-                                autoFocus
-                                size='medium'
-                                variant='outlined'
-                                inputMode='search'
-                                margin='normal'
-                                label="Формула стеклопакета"
-                                sx={ { width: 320, mx: 2, textAlign: 'center', color: 'black', } }
-                            />
-                        }
-                    />
-
-
-
-
+                    <AcSearch />
                 }
                 {
                     filterView === 'tags' &&
@@ -143,12 +124,17 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                         selected={ filterView === 'search' }
                     >фильтрация по названию
                     </ToggleButton>
-                    <ToggleButton
-                        value={ 'tags' }
-                        // onChange={ handleChangeView }
-                        selected={ filterView === 'tags' }
-                    >Фильтрация по свойствам
-                    </ToggleButton>
+                    <Tooltip title={ 'Фильтрация по толщине, камерам и тегам пока отключена! Ожидайте обновлений' }
+                        PopperProps={ { color: 'error' } }
+                    >
+
+                        <ToggleButton
+                            value={ 'tags' }
+                            // onChange={ handleChangeView }
+                            selected={ filterView === 'tags' }
+                        >Фильтрация по свойствам
+                        </ToggleButton>
+                    </Tooltip>
                     <ToggleButton
                         value={ 'none' }
                         // onChange={ handleChangeView }
@@ -162,17 +148,6 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
                 </ToggleButtonGroup>
             </Box>
-
-
-
-
-
-
-
-
-
-
-
 
         </Toolbar>
     );
