@@ -18,7 +18,7 @@ export const TagsMenuProps = {
     PaperProps: {
         style: {
             height: ITEM_HEIGHT * 7 + ITEM_PADDING_TOP,
-            width: 280,
+            width: 240,
         },
     },
 };
@@ -58,13 +58,21 @@ export type SelectorProps = {
     tags: StpTags[];
     cams: number[];
     depth: number[];
+    order?: (keyof SelectorProps)[]
 };
 
 export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
     const [selectors, setSelector] = useState<SelectorProps>({ tags: [], depth: [], cams: [] });
     const { filterFn } = useAppContext();
-
+    const [filterOrder, setFilterOrder] = useState<(keyof SelectorProps)[]>([])
+    const [filterState, setFilterState] = useState(false)
+    const reset = () => {
+        setFilterOrder([])
+        setFilterState(false)
+        setSelector(prev => ({ ...prev, order: [] }))
+    }
     const handleSelectorChange = (selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
+
         switch (selectorType) {
             case 'tags': {
                 const { value } = event.target;
@@ -85,8 +93,9 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
     };
 
     useEffect(() => {
-        filterFn(selectors as FiltersParams)
-    }, [selectors])
+        filterFn(prev => ({ ...prev, ...selectors }) as FiltersParams)
+        return () => reset()
+    }, [filterFn, selectors])
     const camTxt = (num: number) => num === 1 ? `1 камера` : num === 2 ? `2 камеры` : '';
     return (
         <Stack direction={ 'row' } alignContent={ 'baseline' } py={ 1 } >
@@ -101,7 +110,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     name='tags-select'
                     value={ selectors.tags }
                     onChange={ handleSelectorChange('tags') }
-                    input={ <OutlinedInput label="Свойства ст-та" sx={ { fontSize: 18 } } /> }
+                    input={ <OutlinedInput label="Свойства ст-та_____" sx={ { fontSize: 12 } } /> }
                     renderValue={ () => `Найдено: ${filteredCount}` }
                     // renderValue={ (selected) => selected.map(s => Stp_Tags[s as keyof typeof Stp_Tags]).join(' | ') }
                     MenuProps={ TagsMenuProps }

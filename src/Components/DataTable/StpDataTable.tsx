@@ -12,15 +12,16 @@ import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
 
 import { Stack } from '@mui/material';
-import { _ID } from '../../Helpers/helpersFns';
+import { _ID, _log } from '../../Helpers/helpersFns';
 import { FilterItemParams, useCompare, useEnchancedFilter, useFilterTags, useSortAndFilter } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpTagsList } from '../../Interfaces/Types';
 import { StpItem, StpTags } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 
-import { ItemFilteringProps, useCombinedFilter } from '../../Hooks/useFiltration';
+import { ItemFilteringProps, useCombinedFilter, useFilterReduce } from '../../Hooks/useFiltration';
 import { StpTableToolbar } from './StpTableToolbar';
+import { useMemoFilters } from '../../Hooks/useMemoFilter';
 
 //__ Data Create*/
 //TODO: Добавить фильтрацию по толщине стекла и количеству камер
@@ -41,7 +42,7 @@ export function StpDataTable() {
     const [dense, setDense] = React.useState(true);
     const [RPP, setRowsPerPage] = React.useState(-1);
     const { StpStore, select, selectedItems, setFcount, query, selectedTags, filterParams } = useAppContext()
-
+    const memoFilter = useMemoFilters(StpStore.table)
     // const filtered = useFiltration(StpStore.table as unknown as ItemFilteringProps[], filterParams)
     const filtered = useCombinedFilter(
         StpStore.table,
@@ -119,7 +120,12 @@ export function StpDataTable() {
         : 0;
 
 
-    const sorted = useSortAndFilter(filtered, order, orderBy, query)
+    const reduced = useFilterReduce(StpStore.table,
+        ['cams', 'depth'],
+        { cams: filterParams.cams },
+        { depth: filterParams.depth }
+    )
+    const sorted = useSortAndFilter(StpStore.table, order, orderBy, query)
     const visibleRows = React.useMemo(
         () => {
 
@@ -133,11 +139,15 @@ export function StpDataTable() {
         [page, RPP, sorted]
     );
     React.useEffect(() => {
+        const fff = memoFilter(filterParams)
 
+        _log("filtered: ", fff.map(f => f.length))
+
+        // reduced && _log(reduced.length)
         setFcount(filtered.length)
         // console.log('________FILTERD : ', filtered.length)
 
-    }, [filtered.length])
+    }, [filterParams.cams, filtered.length, memoFilter, reduced, setFcount])
     return (
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { mb: 2 } } elevation={ 4 }>
@@ -243,7 +253,7 @@ export function StpDataTable() {
                     <TablePagination
                         rowsPerPageOptions={ [5, 10, 20, { value: -1, label: 'Все' }] }
                         component="div"
-                        count={ StpStore.table.length + 1 }
+                        count={ sorted.length + 1 }
                         rowsPerPage={ RPP }
                         page={ page }
                         onPageChange={ handleChangePage }

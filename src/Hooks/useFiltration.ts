@@ -25,7 +25,7 @@ const includeValue = <T extends StpData>(item: T[], search: tt) => {
 
 export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersParams['cams'], depths: FiltersParams['depth'], tags: FiltersParams['tags']) {
     // const { cams, depths, tags, query } = params
-    const s = { cams: [1, 2], depth: [28, 36] } satisfies SearchPropsArr<StpData>
+
 
 
     const filtered = useMemo(() => {
@@ -54,7 +54,7 @@ export function useCombinedFilter<T extends StpData>(items: T[], cams: FiltersPa
 
 
         const result = items.filter(i => foiundedIds.includes(i.id))
-        console.log('combine', result)
+        // console.log('combine', result)
         // const result = foiundedIds.map(id=>filterProp(items, 'id', id))
 
         const noFilter = tags.length === 0
@@ -78,18 +78,29 @@ function filterProp<T extends StpData, P extends keyof T>(items_array: T[], sear
 
 
 
-const ccEq = (arr1: number[], arr2: number[]) => {
-    if (arr2.length === 0) return arr1
-    const res = arr2.concat(arr1.filter(n1 => !arr2.includes(n1)))
-    return res
+export type TSearchProp<T> = { [Key in keyof T]?: T[Key] extends Array<any> ? T[Key] : T[Key][] }
+type StpFilters = Pick<TSearchProp<StpData>, 'cams' | 'depth' | 'tags'>
+
+export function useFilterReduce<T>(
+    items: T[],
+    filterOrder: (keyof T)[],
+    ...args: StpFilters[]
+) {
+    if (args) {
+
+
+
+        const filtered = items
+        return filtered
+    }
 }
 
 
-
-
-
-
-
+const filterFn = <T, P extends keyof T>(items: T[], search_prop: TSearchProp<T>) => {
+    const [prop_name, prop_value] = Object.entries(search_prop) as [P, T[P]]
+    const filtered = items.filter(item => item[prop_name] === prop_value)
+    return filtered
+}
 
 
 

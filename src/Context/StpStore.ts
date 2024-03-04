@@ -1,6 +1,7 @@
 import { StpData } from "../Components/DataTable/StpDataTable";
-import { StpItem } from "../Components/StpTable/TableObjects";
+import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
 import { _isArr } from "../Helpers/helpersFns";
+import { TSearchProp } from "../Hooks/useFiltration";
 
 export class StpStore {
     private stp_table: readonly StpData[] = []
@@ -24,4 +25,22 @@ export class StpStore {
     // public select(idx: number | number[]) {
     //     this.selected = _isArr(idx) ? [...idx] : [idx]
     // }
+}
+
+export class StpService {
+
+    store: StpData[]
+    constructor(init_items?: StpData[]) {
+        this.store = init_items ? init_items : []
+    }
+    filterProp(filter_type: 'include' | 'exclude', ...props: { [P in keyof StpData]?: StpData[P] }[]) {
+
+        const order: Partial<StpData>[] = props
+
+        function next<T extends StpData>(filtered_items: T[], { cams, depth, tags, name, id }: Partial<T>) {
+
+
+        }
+
+    }
 }
