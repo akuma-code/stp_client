@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
 import { _log } from "../Helpers/helpersFns";
@@ -7,21 +7,29 @@ const hasTags = (item: StpItem, tags: StpTags[]) => tags.length > 0
     : false
 export const hasCams = (cams: number[]) => <T extends { cams: number }>(item: T) => cams.includes(item.cams)
 export const hasDepths = (depths: number[]) => <T extends { depth: number }>(item: T) => depths.includes(item.depth)
-export function useMemoFilters<T extends StpData>(items: T[]) {
 
-    const funcs = useCallback((search_prop: { cams?: number[], depth?: number[], tags?: StpTags[] }) => {
-        const memoCams = (filter_cams: { cams?: number[] }) => items.filter(i => filter_cams.cams?.includes(i.cams))
-        const memoDepth = ({ depth }: { depth?: number[] }) => items.filter(i => depth?.includes(i.depth))
-        const memoTags = (tags: T['tags']) => items.filter(i => hasTags(i, tags))
-        const ff = search_prop.cams ? memoCams({ ...search_prop }) : []
-        const dd = search_prop.depth ? memoDepth({ depth: search_prop.depth }) : []
-        const tt = search_prop.tags ? memoTags(search_prop.tags) : []
-        return [ff, dd, tt]
+type FilterPropFn<T> = (itemProp: Partial<T>) => boolean
+type MFuncArgs = { cams?: number[], depth?: number[], tags?: StpTags[] }
+export function useMemoFilters<T extends StpData>(items: T[], searchProps: MFuncArgs) {
+    const [filterOrder, setFilterOrder] = useState<MFuncArgs>({ ...searchProps })
 
-    }, [items])
+    const { cams, depth, tags } = searchProps
+    const funcs = useMemo(() => {
+        // const memoCams = (cams:number[]) => items.filter(i => cams.includes(i.cams))
+        // const memoDepth = (depths:number[]) => items.filter(i => depths.includes(i.depth))
+        // const memoTags = (tags: T['tags']) => items.filter(i => hasTags(i, tags))
+        const fcams = cams ? items.filter(hasCams(cams)) : []
+        const fdepths = depth ? items.filter(hasCams(depth)) : []
+        const ftags = tags ? items.filter(item => hasTags(item, tags)) : []
+
+        return [fcams, fdepths, ftags] as const
+
+    }, [cams, depth, items, tags])
 
 
-    return funcs
+
+    return [cams, tags] as const
+
 }
 export type PropSearch<T, P extends keyof T> = T[P] extends Array<any> ? { key: P, search: T[P] } : { key: P, search: T[P][] }
 type r = PropSearch<StpData, 'cams'>
@@ -31,18 +39,28 @@ type r = PropSearch<StpData, 'cams'>
 
 //     return (items:T[])=>items.filter(i => search.includes(i[key]))
 // }
-
+type FiltersArrayElement = {
+    cams?: number[]
+    depth?: number[]
+    tags?: StpTags[]
+}
 const filterProp = <T>(prop: keyof T & string, values: (number)[]) => (item: T) => values.includes(item[prop] as number)
+const ArrayFilter = <T>(items: T[], filter: FiltersArrayElement) => {
 
 
-export const ReduceFilter = <T>(items: T[], searchFilter: { cams: number[], depth: number[], tags: StpTags[] }) => {
+}
 
-    const filters = []
+export const ReduceFilter = <T>(searchFilter: { cams: number[], depth: number[], tags: StpTags[] }) => {
+
+    let filters: (Partial<typeof searchFilter>)[] = []
 
     const { cams, depth, tags } = searchFilter
-    if (cams.length > 0) filters.push(cams)
-    if (depth.length > 0) filters.push(depth)
-    if (tags.length > 0) filters.push(tags)
+    if (cams.length > 0) filters = [...filters, { cams: cams }]
+    if (depth.length > 0) filters = [...filters, { depth: depth }]
+    if (tags.length > 0) filters = [...filters, { tags: tags }]
 
     _log(filters)
+
+
 }
+

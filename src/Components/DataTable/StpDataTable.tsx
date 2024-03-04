@@ -36,14 +36,14 @@ export type Order = 'asc' | 'desc';
 
 
 export function StpDataTable() {
-    _log("RENDER!")
+    console.count("RENDER!")
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof StpData>('depth');
-
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
     const [RPP, setRowsPerPage] = React.useState(-1);
     const { StpStore, select, selectedItems, setFcount, query, selectedTags, filterParams } = useAppContext()
+    const sorted = useSortAndFilter(StpStore.table, order, orderBy, query)
     // const memoFilter = useMemoFilters(StpStore.table)
     // const filtered = useFiltration(StpStore.table as unknown as ItemFilteringProps[], filterParams)
     // const filtered = useCombinedFilter(
@@ -54,31 +54,31 @@ export function StpDataTable() {
     // )
     // const f = ReduceFilter(StpStore.table, { cams: [1, 2], depth: [28, 32], tags: ['multi'] })
     // const sorted = useFilterTags(StpStore.table, order, orderBy, filterParams.tags as StpTagsList[], query)
-    const handleRequestSort = (
+    const handleRequestSort = React.useCallback((
         event: React.MouseEvent<unknown>,
         property: keyof StpData,
     ) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
-    };
+    }, [order, orderBy]);
 
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectAllClick = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         if (selectedItems.length >= 1) {
             select([])
             return
         }
         if (event.target.checked) {
-            const newSelectedAll = StpStore.table.map((n) => n.id);
+            const newSelectedAll = StpStore.table.map((n) => +n.id);
 
             select(newSelectedAll)
             return;
         }
         select([])
 
-    };
+    }, [StpStore.table, select, selectedItems.length]);
 
-    const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+    const handleClick = React.useCallback((event: React.MouseEvent<unknown>, id: number) => {
         const store_selectedIndex = selectedItems.indexOf(id);
         let newSelected: number[] = [];
 
@@ -96,7 +96,7 @@ export function StpDataTable() {
         }
         if (selectedItems.length >= 5) newSelected = newSelected.slice(0, 5)
         select(newSelected)
-    };
+    }, [select, selectedItems]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -111,7 +111,7 @@ export function StpDataTable() {
         setDense(event.target.checked);
     };
 
-    const isSelected = (id: number) => selectedItems.indexOf(id) !== -1;
+    const isSelected = React.useCallback((id: number) => selectedItems.indexOf(id) !== -1, [selectedItems]);
     const hasTags = (item: StpData) => selectedTags.length > 0
         ? selectedTags.every(t => item.tags.includes(t as StpTagsList))
         : false
@@ -127,7 +127,7 @@ export function StpDataTable() {
     //     { cams: filterParams.cams },
     //     { depth: filterParams.depth }
     // )
-    const sorted = useSortAndFilter(StpStore.table, order, orderBy, query)
+
     const visibleRows = React.useMemo(
         () => {
 
