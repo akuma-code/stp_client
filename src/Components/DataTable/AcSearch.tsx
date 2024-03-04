@@ -11,19 +11,19 @@ import { useDebounceCallback } from 'usehooks-ts';
 
 
 
-
 export const AcSearch = () => {
     const [value, setValue] = useState<string | null>(null);
     const { query, setQuery, StpStore } = useAppContext();
+    const options = StpStore.table.map(stp => stp.name);
     const [show, control] = useToggle(false)
-    const handleInput = useDebounceCallback((event: React.SyntheticEvent<Element, Event>, value: string, reason: AutocompleteInputChangeReason) => setQuery(value), 500)
+    // const handleInput = useDebounceCallback((event: React.SyntheticEvent<Element, Event>, value: string, reason: AutocompleteInputChangeReason) => setQuery(value), 500)
 
     const selectedOptions = useMemo(() => {
-        const options = StpStore.table.map(stp => stp.name);
+
         if (!value) return options;
         const selectedOpts = options.filter(o => o.includes(query));
         return selectedOpts;
-    }, [StpStore.table, query, value]);
+    }, [options, query, value]);
 
 
 
@@ -32,6 +32,7 @@ export const AcSearch = () => {
             clearOnEscape
             autoHighlight
             handleHomeEndKeys
+            freeSolo
             options={ selectedOptions }
             noOptionsText='Ничего не найдено!'
             value={ value }

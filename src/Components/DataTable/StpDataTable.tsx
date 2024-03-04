@@ -21,7 +21,8 @@ import { EnhancedTableHead } from './EnhancedTableHead';
 
 import { ItemFilteringProps, useCombinedFilter, useFilterReduce } from '../../Hooks/useFiltration';
 import { StpTableToolbar } from './StpTableToolbar';
-import { useMemoFilters } from '../../Hooks/useMemoFilter';
+import { ReduceFilter } from '../../Hooks/useMemoFilter';
+
 
 //__ Data Create*/
 //TODO: Добавить фильтрацию по толщине стекла и количеству камер
@@ -35,6 +36,7 @@ export type Order = 'asc' | 'desc';
 
 
 export function StpDataTable() {
+    _log("RENDER!")
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof StpData>('depth');
 
@@ -42,15 +44,15 @@ export function StpDataTable() {
     const [dense, setDense] = React.useState(true);
     const [RPP, setRowsPerPage] = React.useState(-1);
     const { StpStore, select, selectedItems, setFcount, query, selectedTags, filterParams } = useAppContext()
-    const memoFilter = useMemoFilters(StpStore.table)
+    // const memoFilter = useMemoFilters(StpStore.table)
     // const filtered = useFiltration(StpStore.table as unknown as ItemFilteringProps[], filterParams)
-    const filtered = useCombinedFilter(
-        StpStore.table,
-        filterParams.cams,
-        filterParams.depth,
-        filterParams.tags,
-    )
-
+    // const filtered = useCombinedFilter(
+    //     StpStore.table,
+    //     filterParams.cams,
+    //     filterParams.depth,
+    //     filterParams.tags,
+    // )
+    // const f = ReduceFilter(StpStore.table, { cams: [1, 2], depth: [28, 32], tags: ['multi'] })
     // const sorted = useFilterTags(StpStore.table, order, orderBy, filterParams.tags as StpTagsList[], query)
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -120,11 +122,11 @@ export function StpDataTable() {
         : 0;
 
 
-    const reduced = useFilterReduce(StpStore.table,
-        ['cams', 'depth'],
-        { cams: filterParams.cams },
-        { depth: filterParams.depth }
-    )
+    // const reduced = useFilterReduce(StpStore.table,
+    //     ['cams', 'depth'],
+    //     { cams: filterParams.cams },
+    //     { depth: filterParams.depth }
+    // )
     const sorted = useSortAndFilter(StpStore.table, order, orderBy, query)
     const visibleRows = React.useMemo(
         () => {
@@ -136,23 +138,23 @@ export function StpDataTable() {
                 : sorted
             return sliced as unknown as StpData[]
         },
-        [page, RPP, sorted]
+        [RPP, sorted, page]
     );
-    React.useEffect(() => {
-        const fff = memoFilter(filterParams)
+    // React.useEffect(() => {
+    // const fff = memoFilter(filterParams)
 
-        _log("filtered: ", fff.map(f => f.length))
+    // _log("filtered: ", fff.map(f => f.length))
 
-        // reduced && _log(reduced.length)
-        setFcount(filtered.length)
-        // console.log('________FILTERD : ', filtered.length)
+    // reduced && _log(reduced.length)
+    // console.log('________FILTERD : ', filtered.length)
 
-    }, [filterParams.cams, filtered.length, memoFilter, reduced, setFcount])
+    // setFcount(filtered.length)
+    // }, [])
     return (
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { mb: 2 } } elevation={ 4 }>
 
-                <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ filtered.length } />
+                <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ 0 } />
 
                 <TableContainer sx={ { overflowY: 'auto', maxHeight: '75vh', } } >
                     <Table
@@ -181,9 +183,9 @@ export function StpDataTable() {
                                     return (
                                         <TableRow
                                             hover
-                                            key={ row.name }
+                                            key={ row.id }
                                             onClick={ (event) => handleClick(event, +row.id) }
-                                            // role="checkbox"
+                                            role="checkbox"
                                             aria-checked={ isItemSelected }
                                             tabIndex={ -1 }
                                             selected={ isItemSelected }

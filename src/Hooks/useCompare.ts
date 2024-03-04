@@ -99,7 +99,7 @@ export function useSortAndFilter<T extends AnyObj>(array: readonly T[], order: O
 
     const filtered = useMemo(() => {
 
-        return [...sorted].filter(item => {
+        return sorted.filter(item => {
             if ('name' in item) {
                 return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : false
             }

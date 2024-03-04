@@ -51,7 +51,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                 {
                     stp_headCells.map((headCell) => (
                         <TableCell
-                            key={ _ID() }
+                            key={ headCell.id }
                             align={ headCell.align
                                 ? headCell.align
                                 : headCell.numeric
