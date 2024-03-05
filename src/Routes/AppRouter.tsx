@@ -53,10 +53,14 @@ export const appRoutes: RouteObject[] = [
                 loader: ({ request, params }) => {
                     // console.log('request', request)
                     const id = params.id ? +params.id : -1
+                    // const item =
                     // console.log('params', { id })
                     return { id }
                 },
-
+                // lazy () {
+                //     const { table_data_preset } = await import('./../Components/StpTable/FullTable')
+                //     return PrintPage
+                // },
             },
             {
                 path: routePaths.compare,
