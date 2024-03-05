@@ -1,4 +1,4 @@
-import { TextField, Tooltip } from '@mui/material';
+import { SvgIcon, TextField, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
@@ -56,7 +56,8 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                 ? headCell.align
                                 : headCell.numeric
                                     ? 'right'
-                                    : 'left' }
+                                    : 'center'
+                            }
                             padding={ headCell.disablePadding ? 'none' : 'normal' }
                             sortDirection={ orderBy === headCell.id ? order : false }
                             sx={ {
@@ -77,8 +78,15 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                         : headCell.label }
                                     PopperProps={ { placement: 'top', } }
                                 >
-                                    <Box display={ 'flex' } sx={ { mx: .5 } }>
-                                        { notInfo(headCell) && <FaRegQuestionCircle className='text-blue-600' /> }
+                                    <Box
+                                    //  sx={ { mx: .5 } }
+                                    >
+                                        { notInfo(headCell) &&
+                                            <SvgIcon sx={ { maxHeight: 15 } }>
+
+                                                <FaRegQuestionCircle className='text-blue-600' />
+                                            </SvgIcon>
+                                        }
                                     </Box>
                                 </Tooltip>
                                 <Box>
@@ -124,7 +132,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: _EnFieldsStp.cams,
         disablePadding: true,
         numeric: false,
-        align: 'right',
+        align: 'center',
         desc: "1 камера = 2 стекла, 2 камеры = 3 стекла"
     },
     {
@@ -132,7 +140,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Вес',
         disablePadding: true,
         numeric: true,
-        align: 'right',
+        align: 'center',
         desc: _EnFieldsStp.weight
     },
     {
@@ -140,6 +148,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Ro',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.Ro
     },
     {
@@ -147,6 +156,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Det',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.Det
     },
     {
@@ -154,6 +164,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Ea',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.Ea
     },
     {
@@ -161,6 +172,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Er',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.Er
     },
     {
@@ -168,6 +180,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Lr',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.Lr
     },
     {
@@ -175,6 +188,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Lt',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.Lt
     },
     {
@@ -182,6 +196,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Ra',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.Ra
     },
 
@@ -190,6 +205,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Rw',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.Rw
     },
     {
@@ -197,6 +213,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'S',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.S
     },
     // {
@@ -211,14 +228,15 @@ const stp_headCells: readonly HeadStpCell[] = [
         label: 'Sf',
         disablePadding: true,
         numeric: true,
+        align: 'center',
         desc: _EnFieldsStp.Sf
     },
     {
         id: 'secure',
         label: 'Secure',
         disablePadding: true,
-        numeric: false,
-        align: 'right',
+        numeric: true,
+        align: 'center',
         desc: "Класс безопасности"
     },
 

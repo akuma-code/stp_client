@@ -37,16 +37,21 @@ export const AcSearch = () => {
             noOptionsText='Ничего не найдено!'
             value={ value }
             onChange={ (e, v) => setValue(v) }
-            sx={ { mx: 2 } }
+            sx={ { mx: 2, textAlign: 'center', maxWidth: 300 } }
+
             inputValue={ query }
             onInputChange={ (e, v) => setQuery(v) }
             renderInput={ (params) => <TextField { ...params }
                 name='search_query'
                 helperText='Начните вводить формулу или выберите стеклопакет для сравнения из таблицы'
                 autoFocus
+
                 size='small'
                 variant='outlined'
                 inputMode='search'
-                margin='normal'
-                label="Формула стеклопакета" /> } />);
+                margin='dense'
+                label="Формула стеклопакета"
+                fullWidth={ false } />
+            }
+        />);
 };

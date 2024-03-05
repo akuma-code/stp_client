@@ -49,7 +49,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
     }
 
     return (
-        <Toolbar component={ Stack } direction={ 'row' }
+        <Toolbar component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } columnGap={ 2 }
             sx={ {
                 // display: 'flex',
                 // flexDirection: 'row',
@@ -63,7 +63,11 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
         >
 
 
-            <Box width={ '25%' }>
+            <Box component={ Stack }
+                flexGrow={ 0 }
+                maxWidth={ '30%' }
+            // width={ '25%' }
+            >
                 { numSelected > 0 ?
 
                     <Typography
@@ -81,12 +85,21 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                     <AcSearch />
                 }
             </Box>
-            <Divider orientation='vertical' flexItem />
-            <Stack direction={ 'row' } gap={ 3 } justifyContent={ 'space-between' } flexGrow={ 1 }>
+            <Box component={ Stack }
+                direction={ 'row' }
+                flexGrow={ 1 }
+                justifyContent={ 'space-between' }
+            >
 
-                <PropertySelector filteredCount={ numFiltered } />
+                {/* <Divider orientation='vertical' flexItem /> */ }
                 <SelectedTagList { ...filterParams } />
-            </Stack>
+                {/* <Divider orientation='vertical' flexItem /> */ }
+                <PropertySelector filteredCount={ numFiltered } />
+            </Box>
+            {/* <Stack direction={ 'row' } justifyContent={ 'space-between' }
+             minWidth={ '50%' } >
+
+            </Stack> */}
 
 
         </Toolbar>

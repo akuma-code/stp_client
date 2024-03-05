@@ -1,3 +1,4 @@
+import { Button, FormHelperText, IconButton, Stack } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -5,13 +6,11 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useState } from 'react';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { Stp_Tags } from '../../Interfaces/Enums';
-import { FormHelperText, ListSubheader, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { Filters, FiltersParams } from '../../Hooks/useFiltration';
 import { StpTags } from '../StpTable/TableObjects';
-
+import { MdFilterListOff } from "react-icons/md";
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
 export const TagsMenuProps = {
@@ -91,9 +90,28 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
     };
 
     const camTxt = (num: number) => num === 1 ? `1 камера` : num === 2 ? `2 камеры` : '';
-    return (
-        <Stack direction={ 'row' } alignContent={ 'baseline' } py={ 1 } >
+    const handleReset = () => {
+        filterFn(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
+        setSelector(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
 
+    }
+    const isFiltering = (selectors.cams.length > 0 ||
+        selectors.depth.length > 0 ||
+        selectors.tags.length > 0)
+    return (
+        <Stack direction={ 'row' } alignContent={ 'baseline' } py={ 1 } justifyContent={ 'space-around' } useFlexGap>
+            <IconButton
+                title='Сбросить фильтры'
+                disabled={ !isFiltering }
+                color='error'
+                sx={ { maxHeight: '3rem', maxWidth: '3rem', my: 1.5, border: `2px solid ${isFiltering ? 'red' : 'inherit'} ` } }
+
+                onClick={ handleReset }
+            ><MdFilterListOff />
+            </IconButton>
+            {
+                //__Tags
+            }
             <FormControl sx={ { m: 1, width: 200 } }>
                 <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
                 <Select
@@ -120,7 +138,9 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                 </Select>
                 <FormHelperText>Выберете нужные свойства</FormHelperText>
             </FormControl>
-
+            {
+                //*Depths
+            }
             <FormControl sx={ { m: 1, width: 180 } }>
                 <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
                 <Select
@@ -131,7 +151,8 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     value={ selectors.depth }
                     onChange={ handleSelectorChange('depth') }
                     input={ <OutlinedInput label="Толщина ст-та____" id='multitag2' sx={ { fontSize: 12 } } /> }
-                    renderValue={ () => `Найдено: ${filteredCount}` }
+
+                    renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || '' }
                     MenuProps={ DepthMenuProps }
 
                 >
@@ -143,19 +164,14 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                         </MenuItem>
 
                     )) }
-                    {/* <ListSubheader> Толщина </ListSubheader> */ }
-                    {/* <ListSubheader> cams </ListSubheader>
-                    { camsArray.map((cam) => (
-                        <MenuItem key={ cam } value={ cam } divider dense>
-                            <Checkbox checked={ selectors.cams.indexOf(cam) > -1 } name={ cam + '_checkCam' } />
-                            <ListItemText primary={ camTxt(cam) } />
-                        </MenuItem>
-                    )) } */}
 
                 </Select>
                 <FormHelperText>Выберете толщину</FormHelperText>
             </FormControl>
 
+            {
+                //*Cams
+            }
             <FormControl sx={ { m: 1, width: 180 } }>
                 <InputLabel id="cams-label">Кол-во камер</InputLabel>
                 <Select
@@ -165,8 +181,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     value={ selectors.cams }
                     onChange={ handleSelectorChange('cams') }
                     input={ <OutlinedInput label="Кол-во камер____" sx={ { fontSize: 12 } } /> }
-                    renderValue={ () => `Найдено: ${filteredCount}` }
-                    // renderValue={ (selected) => selected.map(s => Stp_Tags[s as keyof typeof Stp_Tags]).join(' | ') }
+                    renderValue={ (selected) => selected?.map(s => camTxt(s as number)).join(" | ") || "Ничего не выбрано" }
                     MenuProps={ CamsMenuProps }
 
                 >
@@ -177,7 +192,6 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                             <ListItemText primary={ camTxt(cam) } />
                         </MenuItem>
                     )) }
-                    {/* <ListSubheader> Кол-во камер </ListSubheader> */ }
 
                 </Select>
                 <FormHelperText>Укажите, сколько камер</FormHelperText>

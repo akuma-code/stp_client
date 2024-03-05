@@ -120,7 +120,7 @@ export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sor
         return acc
     }, [] as FilterFnOrder[keyof FilterFnOrder][])
 
-    console.log('fo', fnOrder)
+
 
     const filtered = useMemo(() => {
         const init_items = array as unknown as StpData[]
@@ -135,19 +135,20 @@ export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sor
                 return res.filter(fn!)
             }, [] as StpData[])
             result_items = orderFiltered
-        }
-        if (result_items.length > 0) return result_items.filter(item => {
-            if ('name' in item) {
-                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : false
-            }
+        } else result_items = array as unknown as StpData[]
+
+        return result_items.filter(item => {
+            if ('name' in item && typeof item.name === 'string') { return item.name.toLowerCase().includes(query.toLowerCase()) }
+            //     return (typeof item.name === 'string') ?  : false
+            // }
             else return []
         })
-        return array.filter(item => {
-            if ('name' in item) {
-                return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : false
-            }
-            else return []
-        })
+        // return array.filter(item => {
+        //     if ('name' in item) {
+        //         return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : false
+        //     }
+        //     else return []
+        // })
 
     }, [array, fnOrder, query])
 

@@ -24,9 +24,7 @@ import { ReduceFilter } from '../../Hooks/useMemoFilter';
 
 
 //__ Data Create*/
-//TODO: Добавить фильтрацию по толщине стекла и количеству камер
-//TODO: 
-//TODO: 
+
 
 
 export type StpData = StpItem & { id: number }
@@ -41,18 +39,10 @@ export function StpDataTable() {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(true);
     const [RPP, setRowsPerPage] = useState(-1);
-    const { StpStore, select, selectedItems, setFcount, query, selectedTags, filterParams } = useAppContext()
-    const sorted = useSortAndFilter(StpStore.table, order, orderBy, query, filterParams)
-    // const memoFilter = useMemoFilters(StpStore.table)
-    // const filtered = useFiltration(StpStore.table as unknown as ItemFilteringProps[], filterParams)
-    // const filtered = useCombinedFilter(
-    //     StpStore.table,
-    //     filterParams.cams,
-    //     filterParams.depth,
-    //     filterParams.tags,
-    // )
-    // const f = ReduceFilter(StpStore.table, { cams: [1, 2], depth: [28, 32], tags: ['multi'] })
-    // const sorted = useFilterTags(StpStore.table, order, orderBy, filterParams.tags as StpTagsList[], query)
+    const { StpStore: { table }, select, selectedItems, query, selectedTags, filterParams } = useAppContext()
+
+    const sorted = useSortAndFilter(table, order, orderBy, query, filterParams)
+
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
         property: keyof StpData,
@@ -68,14 +58,14 @@ export function StpDataTable() {
             return
         }
         if (event.target.checked) {
-            const newSelectedAll = StpStore.table.map((n) => +n.id);
+            const newSelectedAll = sorted.map((n) => +n.id);
 
             select(newSelectedAll)
             return;
         }
         select([])
 
-    }, [StpStore.table, select, selectedItems.length]);
+    }, [sorted, select, selectedItems.length]);
 
     const handleClick = useCallback((event: React.MouseEvent<unknown>, id: number) => {
         const store_selectedIndex = selectedItems.indexOf(id);
@@ -117,15 +107,8 @@ export function StpDataTable() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0
-        ? Math.max(0, (1 + page) * RPP - StpStore.table.length)
+        ? Math.max(0, (1 + page) * RPP - table.length)
         : 0;
-
-
-    // const reduced = useFilterReduce(StpStore.table,
-    //     ['cams', 'depth'],
-    //     { cams: filterParams.cams },
-    //     { depth: filterParams.depth }
-    // )
 
     const visibleRows = useMemo(
         () => {
@@ -139,23 +122,14 @@ export function StpDataTable() {
         },
         [RPP, sorted, page]
     );
-    // React.useEffect(() => {
-    // const fff = memoFilter(filterParams)
 
-    // _log("filtered: ", fff.map(f => f.length))
-
-    // reduced && _log(reduced.length)
-    // console.log('________FILTERD : ', filtered.length)
-
-    // setFcount(filtered.length)
-    // }, [])
     return (
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { mb: 2 } } elevation={ 4 }>
 
                 <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ sorted.length } />
 
-                <TableContainer sx={ { overflowY: 'auto', maxHeight: '75vh', } } >
+                <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', } } >
                     <Table
                         sx={ { minWidth: 750 } }
                         aria-labelledby="tableTitle"
@@ -169,7 +143,7 @@ export function StpDataTable() {
                             orderBy={ orderBy }
                             onSelectAllClick={ handleSelectAllClick }
                             onRequestSort={ handleRequestSort }
-                            rowCount={ StpStore.table.length }
+                            rowCount={ sorted.length }
                         />
 
 
@@ -178,7 +152,7 @@ export function StpDataTable() {
                                 visibleRows.map((row, index) => {
                                     const isItemSelected = isSelected(+row.id);
                                     const labelId = `enhanced-table-${index}`;
-                                    const isTagged = hasTags(row as unknown as StpData)
+                                    // const isTagged = hasTags(row as unknown as StpData)
                                     return (
                                         <TableRow
                                             hover
@@ -190,7 +164,7 @@ export function StpDataTable() {
                                             selected={ isItemSelected }
                                             sx={ {
                                                 cursor: 'pointer',
-                                                bgcolor: isTagged ? '#d1e8f8' : '#ffffffDE'
+                                                // bgcolor: isTagged ? '#d1e8f8' : '#ffffffDE'
                                             } }
                                         >
                                             <TableCell padding="checkbox">
@@ -215,17 +189,17 @@ export function StpDataTable() {
                                             <TableCell align="center">{ row.depth }</TableCell>
                                             <TableCell align="center">{ row.cams }</TableCell>
                                             <TableCell align="center">{ row.weight }</TableCell>
-                                            <TableCell align="right">{ row.Ro }</TableCell>
-                                            <TableCell align="right">{ row.Det }</TableCell>
-                                            <TableCell align="right">{ row.Ea }</TableCell>
-                                            <TableCell align="right">{ row.Er }</TableCell>
-                                            <TableCell align="right">{ row.Lr }</TableCell>
-                                            <TableCell align="right">{ row.Lt }</TableCell>
-                                            <TableCell align="right">{ row.Ra }</TableCell>
-                                            <TableCell align="right">{ row.Rw }</TableCell>
-                                            <TableCell align="right">{ row.S }</TableCell>
+                                            <TableCell align="center">{ row.Ro }</TableCell>
+                                            <TableCell align="center">{ row.Det }</TableCell>
+                                            <TableCell align="center">{ row.Ea }</TableCell>
+                                            <TableCell align="center">{ row.Er }</TableCell>
+                                            <TableCell align="center">{ row.Lr }</TableCell>
+                                            <TableCell align="center">{ row.Lt }</TableCell>
+                                            <TableCell align="center">{ row.Ra }</TableCell>
+                                            <TableCell align="center">{ row.Rw }</TableCell>
+                                            <TableCell align="center">{ row.S }</TableCell>
 
-                                            <TableCell align="right">{ row.Sf }</TableCell>
+                                            <TableCell align="center">{ row.Sf }</TableCell>
                                             <TableCell align="center">{ row.secure }</TableCell>
 
                                         </TableRow>
@@ -254,7 +228,7 @@ export function StpDataTable() {
                     <TablePagination
                         rowsPerPageOptions={ [5, 10, 20, { value: -1, label: 'Все' }] }
                         component="div"
-                        count={ sorted.length + 1 }
+                        count={ sorted.length }
                         rowsPerPage={ RPP }
                         page={ page }
                         onPageChange={ handleChangePage }
