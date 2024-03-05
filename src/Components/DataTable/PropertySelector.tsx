@@ -64,38 +64,36 @@ export type SelectorProps = {
 export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
     const [selectors, setSelector] = useState<SelectorProps>({ tags: [], depth: [], cams: [] });
     const { filterFn } = useAppContext();
-    const [filterOrder, setFilterOrder] = useState<(keyof SelectorProps)[]>([])
-    const [filterState, setFilterState] = useState(false)
-    const reset = () => {
-        setFilterOrder([])
-        setFilterState(false)
-        setSelector(prev => ({ ...prev, order: [] }))
-    }
+
     const handleSelectorChange = (selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
 
         switch (selectorType) {
             case 'tags': {
                 const { value } = event.target;
                 setSelector(prev => ({ ...prev, tags: value as StpTags[] }))
+                filterFn(prev => ({ ...prev, tags: value as StpTags[] }))
                 break
             }
             case 'cams': {
                 const { value } = event.target;
+
                 setSelector(prev => ({ ...prev, cams: value as number[] }))
+                filterFn(prev => ({ ...prev, cams: value as number[] }))
                 break
             }
             case 'depth': {
                 const { value } = event.target;
                 setSelector(prev => ({ ...prev, depth: value as number[] }))
+                filterFn(prev => ({ ...prev, depth: value as number[] }))
                 break
             }
         }
     };
 
-    useEffect(() => {
-        filterFn(prev => ({ ...prev, ...selectors }) as FiltersParams)
-        return () => reset()
-    }, [filterFn, selectors])
+    // useEffect(() => {
+    //     filterFn(prev => ({ ...prev, ...selectors }) as FiltersParams)
+    //     return () => reset()
+    // }, [filterFn, selectors])
     const camTxt = (num: number) => num === 1 ? `1 камера` : num === 2 ? `2 камеры` : '';
     return (
         <Stack direction={ 'row' } alignContent={ 'baseline' } py={ 1 } >

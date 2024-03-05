@@ -2,13 +2,22 @@ import { useCallback, useMemo, useState } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
 import { _log } from "../Helpers/helpersFns";
-const hasTags = (item: StpItem, tags: StpTags[]) => tags.length > 0
+const hasTags = (tags: StpTags[]) => (item: StpItem) => tags.length > 0
     ? tags.every(t => item.tags.includes(t))
     : false
 export const hasCams = (cams: number[]) => <T extends { cams: number }>(item: T) => cams.includes(item.cams)
 export const hasDepths = (depths: number[]) => <T extends { depth: number }>(item: T) => depths.includes(item.depth)
 
+export const _FilterFns = {
+    cams: hasCams,
+    depth: hasDepths,
+    tags: hasTags
+}
+
+export type _FilterFnKeys = keyof typeof _FilterFns
 type FilterPropFn<T> = (itemProp: Partial<T>) => boolean
+
+
 type MFuncArgs = { cams?: number[], depth?: number[], tags?: StpTags[] }
 export function useMemoFilters<T extends StpData>(items: T[], searchProps: MFuncArgs) {
     const [filterOrder, setFilterOrder] = useState<MFuncArgs>({ ...searchProps })
@@ -20,7 +29,7 @@ export function useMemoFilters<T extends StpData>(items: T[], searchProps: MFunc
         // const memoTags = (tags: T['tags']) => items.filter(i => hasTags(i, tags))
         const fcams = cams ? items.filter(hasCams(cams)) : []
         const fdepths = depth ? items.filter(hasCams(depth)) : []
-        const ftags = tags ? items.filter(item => hasTags(item, tags)) : []
+        const ftags = tags ? items.filter(item => hasTags(tags)) : []
 
         return [fcams, fdepths, ftags] as const
 

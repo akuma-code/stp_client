@@ -66,7 +66,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
         >
 
 
-            {/* <Box width={ '25%' }>
+            <Box width={ '25%' }>
                 { numSelected > 0 ?
 
                     <Typography
@@ -83,7 +83,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                     :
                     <AcSearch />
                 }
-            </Box> */}
+            </Box>
             <Divider orientation='vertical' flexItem />
             <Box
                 component={ Stack }
@@ -98,8 +98,8 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 }
                 <Stack direction={ 'row' } gap={ 3 } justifyContent={ 'space-between' } flexGrow={ 1 }>
 
-                    {/* <SelectedTagList tags={ selectedTags } />
-                    <PropertySelector filteredCount={ numFiltered } /> */}
+                    <SelectedTagList tags={ selectedTags } />
+                    <PropertySelector filteredCount={ numFiltered } />
                 </Stack>
                 {
                     // filterView === 'tags' &&
@@ -141,7 +141,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                         >{ filterView === 'none' ? `Скрыть фильтры` : `показать Фильтры` }
                         </ToggleButton>
                     </Tooltip>
-                    
+
                     <ToggleButton
                         value={ 'none' }
                         // onChange={ handleChangeView }

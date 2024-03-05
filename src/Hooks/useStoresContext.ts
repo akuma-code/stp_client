@@ -1,11 +1,9 @@
 import { createContext } from "react"
 
 import { useContext } from "react"
-import { StpItem } from "../Components/StpTable/TableObjects"
 import { StpStore } from "../Context/StpStore"
-import { StpTagsList, StpTypeProps } from "../Interfaces/Types"
-import { Stp_Tags } from "../Interfaces/Enums"
-import { Filters, FiltersParams } from "./useFiltration"
+import { StpTypeProps } from "../Interfaces/Types"
+import { FiltersParams } from "./useFiltration"
 
 
 

@@ -9,14 +9,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import * as React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Stack } from '@mui/material';
 import { _ID, _log } from '../../Helpers/helpersFns';
 import { FilterItemParams, useCompare, useEnchancedFilter, useFilterTags, useSortAndFilter } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
-import { StpTagsList } from '../../Interfaces/Types';
-import { StpItem, StpTags } from '../StpTable/TableObjects';
+import { StpItem, StpTags, depths } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 
 import { ItemFilteringProps, useCombinedFilter, useFilterReduce } from '../../Hooks/useFiltration';
@@ -37,13 +36,13 @@ export type Order = 'asc' | 'desc';
 
 export function StpDataTable() {
     console.count("RENDER!")
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof StpData>('depth');
-    const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(true);
-    const [RPP, setRowsPerPage] = React.useState(-1);
+    const [order, setOrder] = useState<Order>('asc');
+    const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
+    const [page, setPage] = useState(0);
+    const [dense, setDense] = useState(true);
+    const [RPP, setRowsPerPage] = useState(-1);
     const { StpStore, select, selectedItems, setFcount, query, selectedTags, filterParams } = useAppContext()
-    const sorted = useSortAndFilter(StpStore.table, order, orderBy, query)
+    const sorted = useSortAndFilter(StpStore.table, order, orderBy, query, filterParams)
     // const memoFilter = useMemoFilters(StpStore.table)
     // const filtered = useFiltration(StpStore.table as unknown as ItemFilteringProps[], filterParams)
     // const filtered = useCombinedFilter(
@@ -54,7 +53,7 @@ export function StpDataTable() {
     // )
     // const f = ReduceFilter(StpStore.table, { cams: [1, 2], depth: [28, 32], tags: ['multi'] })
     // const sorted = useFilterTags(StpStore.table, order, orderBy, filterParams.tags as StpTagsList[], query)
-    const handleRequestSort = React.useCallback((
+    const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
         property: keyof StpData,
     ) => {
@@ -63,7 +62,7 @@ export function StpDataTable() {
         setOrderBy(property);
     }, [order, orderBy]);
 
-    const handleSelectAllClick = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectAllClick = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         if (selectedItems.length >= 1) {
             select([])
             return
@@ -78,7 +77,7 @@ export function StpDataTable() {
 
     }, [StpStore.table, select, selectedItems.length]);
 
-    const handleClick = React.useCallback((event: React.MouseEvent<unknown>, id: number) => {
+    const handleClick = useCallback((event: React.MouseEvent<unknown>, id: number) => {
         const store_selectedIndex = selectedItems.indexOf(id);
         let newSelected: number[] = [];
 
@@ -111,9 +110,9 @@ export function StpDataTable() {
         setDense(event.target.checked);
     };
 
-    const isSelected = React.useCallback((id: number) => selectedItems.indexOf(id) !== -1, [selectedItems]);
+    const isSelected = useCallback((id: number) => selectedItems.indexOf(id) !== -1, [selectedItems]);
     const hasTags = (item: StpData) => selectedTags.length > 0
-        ? selectedTags.every(t => item.tags.includes(t as StpTagsList))
+        ? selectedTags.every(t => item.tags.includes(t as StpTags))
         : false
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -128,7 +127,7 @@ export function StpDataTable() {
     //     { depth: filterParams.depth }
     // )
 
-    const visibleRows = React.useMemo(
+    const visibleRows = useMemo(
         () => {
 
             const sliced = RPP !== -1
@@ -225,7 +224,7 @@ export function StpDataTable() {
                                             <TableCell align="right">{ row.Ra }</TableCell>
                                             <TableCell align="right">{ row.Rw }</TableCell>
                                             <TableCell align="right">{ row.S }</TableCell>
-                                            <TableCell align="right">{ row.Sc }</TableCell>
+
                                             <TableCell align="right">{ row.Sf }</TableCell>
                                             <TableCell align="center">{ row.secure }</TableCell>
 

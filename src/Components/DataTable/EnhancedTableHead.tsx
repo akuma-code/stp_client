@@ -199,13 +199,13 @@ const stp_headCells: readonly HeadStpCell[] = [
         numeric: true,
         desc: _EnFieldsStp.S
     },
-    {
-        id: 'Sc',
-        label: 'Sc',
-        disablePadding: true,
-        numeric: true,
-        desc: _EnFieldsStp.Sc
-    },
+    // {
+    //     id: 'Sc',
+    //     label: 'Sc',
+    //     disablePadding: true,
+    //     numeric: true,
+    //     desc: _EnFieldsStp.Sc
+    // },
     {
         id: 'Sf',
         label: 'Sf',

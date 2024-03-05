@@ -7,7 +7,7 @@ import {
 import { StpData } from '../../Components/DataTable/StpDataTable';
 import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
 
-import { SecondaryDescription } from '../../Components/StpTable/TerminsDesc';
+import { TerminsDesc } from '../../Components/StpTable/TerminsDesc';
 import { _ID } from '../../Helpers/helpersFns';
 import { CompareContext } from './ComparePage';
 
@@ -32,7 +32,6 @@ const listOrder: Stp_Key[] = [
     'Ro',
     'Rw',
     'S',
-    'Sc',
     'Sf',
     'secure',
 ] as const
@@ -107,7 +106,7 @@ export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
                             } }
 
                             primary={ _EnFieldsStp[item] }
-                            secondary={ SecondaryDescription[item as keyof typeof SecondaryDescription] }
+                            secondary={ TerminsDesc[item as keyof typeof TerminsDesc] }
                         />
 
                     </ListItem>

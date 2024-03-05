@@ -1,6 +1,11 @@
-import { StpTypeProps } from "../../Interfaces/Types";
 
-export type StpTags = keyof StpTypeProps
+export type StpTags =
+    | "multi"
+    | "simple"
+    | "energy"
+    | "soundproof"
+    | "hitproof"
+    | "solarproof"
 export type StpItem = {
 
     cams: number
@@ -14,14 +19,14 @@ export type StpItem = {
     Er: number
     Ea: number
     Sf: number
-    Sc: number
+    // Sc?: number
     S: number
     weight: number
     secure: "P2A" | "нет"
     name: string
     tags: StpTags[]
 }
-export const StpItems: readonly StpItem[] = [
+const StpItems = [
     {
         cams: 1, depth: 24, Ro: 1.00, Rw: 36, Lt: 65, Lr: 17, Ra: 94, Det: 30, Er: 41, Ea: 29, Sf: 36, Sc: 0.41, S: 1.81, weight: 37, secure: "P2A", name: "3.3.1-14Ar-4Эл", tags: ['hitproof', 'soundproof', 'multi'] as const,
     },
@@ -215,12 +220,9 @@ export const depths = [
 
 
 
-type tt = {
-    name: string, tags: StpTags[]
-}
 
 
-export const stpNames: tt[] = [
+const stpNames = [
     { name: "3.3.1-14Ar-4Эл", tags: ['hitproof', 'soundproof', 'multi'] },
     { name: "4-16Ar-4Эл", tags: ['multi'] },
     { name: "4TopN-14Ar-6(FHcl)", tags: ['soundproof', 'solarproof', 'energy'] },
