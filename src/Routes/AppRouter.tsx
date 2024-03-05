@@ -7,6 +7,7 @@ import { routePaths } from "./routePath";
 import { PrintPage } from "./Pages/PrintPage";
 import { table_data_preset } from "../Components/StpTable/FullTable";
 import { StpData } from "../Components/DataTable/StpDataTable";
+import { StpIdPage } from "./Pages/StpIdPage";
 
 export type StpDataLoad = Omit<StpData, 'id'>
 
@@ -40,15 +41,20 @@ export const appRoutes: RouteObject[] = [
 
                     console.count("Data load: ")
                     console.log(data.length)
-                    // const res = new Response(JSON.stringify(data), {
-                    //     status: 200,
-                    //     headers: {
-                    //         "Content-Type": "application/json; utf-8",
-                    //     },
-                    // });
                     const resp = JSON.stringify(data)
                     // console.log('data', { data })
                     return resp
+                },
+
+            },
+            {
+                path: routePaths.stp_id,
+                element: <StpIdPage />,
+                loader: ({ request, params }) => {
+                    // console.log('request', request)
+                    const id = params.id ? +params.id : -1
+                    // console.log('params', { id })
+                    return { id }
                 },
 
             },

@@ -155,6 +155,22 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                 visibleRows.map((row, index) => {
                                     const isItemSelected = isSelected(+row.id);
                                     const labelId = `enhanced-table-${index}`;
+                                    const cells = [
+                                        'depth',
+                                        'cams',
+                                        'weight',
+                                        'Ro',
+                                        'Det',
+                                        'Ea',
+                                        'Er',
+                                        'Lr',
+                                        'Lt',
+                                        'Ra',
+                                        'Rw',
+                                        'S',
+                                        'Sf',
+                                        'secure',
+                                    ] as const
                                     // const isTagged = hasTags(row as unknown as StpData)
                                     return (
                                         <TableRow
@@ -185,25 +201,14 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                 id={ labelId }
                                                 scope="row"
                                                 padding="none"
-                                                sx={ { width: 'max-content', textWrap: 'nowrap' } }
+                                                sx={ { textWrap: 'nowrap' } }
                                             >
                                                 { row.name }
                                             </TableCell>
-                                            <TableCell align="center">{ row.depth }</TableCell>
-                                            <TableCell align="center">{ row.cams }</TableCell>
-                                            <TableCell align="center">{ row.weight }</TableCell>
-                                            <TableCell align="center">{ row.Ro }</TableCell>
-                                            <TableCell align="center">{ row.Det }</TableCell>
-                                            <TableCell align="center">{ row.Ea }</TableCell>
-                                            <TableCell align="center">{ row.Er }</TableCell>
-                                            <TableCell align="center">{ row.Lr }</TableCell>
-                                            <TableCell align="center">{ row.Lt }</TableCell>
-                                            <TableCell align="center">{ row.Ra }</TableCell>
-                                            <TableCell align="center">{ row.Rw }</TableCell>
-                                            <TableCell align="center">{ row.S }</TableCell>
-
-                                            <TableCell align="center">{ row.Sf }</TableCell>
-                                            <TableCell align="center">{ row.secure }</TableCell>
+                                            { cells.map(cell =>
+                                                <TableCell align="center" key={ cell }>{ row[cell] }</TableCell>
+                                            )
+                                            }
 
                                         </TableRow>
                                     );
