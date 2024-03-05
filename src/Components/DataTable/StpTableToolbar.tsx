@@ -50,7 +50,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                         id="tableTitle"
 
                     >
-                        { numSelected > 0 ? `${numSelected} выбрано` : `Выбрать стеклопакет для сравнения (не более 5!)` }
+                        { numSelected > 0 ? `${numSelected} выбрано для сравнения` : `Выбрать стеклопакет для сравнения (не более 5!)` }
                     </Typography>
                     :
                     <AcSearch />

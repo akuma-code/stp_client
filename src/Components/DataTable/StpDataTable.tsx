@@ -44,7 +44,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     //     return isJson(data) ? JSON.parse(data) : []
     // }, [data])
 
-    const { select, selectedItems, query, selectedTags, filterParams } = useAppContext()
+    const { select, selectedItems, query, filterParams } = useAppContext()
     const sorted = useSortAndFilter(memodata, order, orderBy, query, filterParams)
     // const [data, loading] = useLazyDataLoad(table, order, orderBy, query, filterParams)
     const handleRequestSort = useCallback((
@@ -106,21 +106,22 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
     const isSelected = useCallback((id: number) => selectedItems.indexOf(id) !== -1, [selectedItems]);
     const isFiltersOn = filterParams.cams.length !== 0 || filterParams.depth.length !== 0 || filterParams.tags.length !== 0 || query !== ""
-    const hasTags = (item: StpData) => selectedTags.length > 0
-        ? selectedTags.every(t => item.tags.includes(t as StpTags))
+    const hasTags = (item: StpData) => filterParams.tags.length > 0
+        ? filterParams.tags.every(t => item.tags.includes(t as StpTags))
         : false
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0
         ? Math.max(0, (1 + page) * RPP - memodata.length)
-        : 0;
+        : 1;
 
     const visibleRows = useMemo(
         () => {
             // console.log('loading: ', loading)
             const sliced = sorted.slice(
                 page * RPP,
-                page * RPP + RPP)
+                page * RPP + RPP + 1)
+            console.log('sliced', sliced)
             return sliced as unknown as StpData[]
         },
         [RPP, page, sorted]
@@ -132,13 +133,13 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
                 <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ sorted.length } />
 
-                <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', position: 'relative' } } >
+                <TableContainer sx={ { overflowY: 'auto', maxHeight: '70vh', position: 'relative' } } >
                     <Table
                         sx={ { minWidth: 750, position: 'relative' } }
                         aria-labelledby="tableTitle"
                         size={ dense ? 'small' : 'medium' }
                         stickyHeader
-                        padding='none'
+                        padding='normal'
                     >
                         <EnhancedTableHead
                             numSelected={ selectedItems.length }
@@ -152,7 +153,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
                         <TableBody>
                             {
-                                visibleRows.map((row, index) => {
+                                sorted.map((row, index) => {
                                     const isItemSelected = isSelected(+row.id);
                                     const labelId = `enhanced-table-${index}`;
                                     const cells = [
@@ -216,27 +217,36 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                             { emptyRows > 0 && (
                                 <TableRow
                                     style={ {
-                                        height: (dense ? 33 : 53) * emptyRows,
+                                        height: 53,
                                     } }
                                 >
-                                    <TableCell colSpan={ 8 } />
+                                    <TableCell colSpan={ 4 } />
                                 </TableRow>
                             ) }
                         </TableBody>
                     </Table>
-                    {
-                        (selectedItems.length !== 0 || isFiltersOn) &&
 
-                        <TableFooter sx={ {
+
+
+                </TableContainer>
+                <Stack direction={ 'row' } justifyContent={ 'space-around' } maxHeight={ 55 }>
+
+
+                    { (selectedItems.length !== 0 || isFiltersOn) &&
+
+                        <Stack sx={ {
                             bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
-                            position: 'sticky', display: 'flex', columnGap: 6, bottom: 8, justifyContent: 'center', color: 'whitesmoke'
-                        } } component={ Paper } elevation={ 4 }>
+                            justifyContent: 'space-around', color: 'whitesmoke'
+                        } }
+                            // component={ Paper } elevation={ 2 }
+                            flexGrow={ 1 } direction={ 'row' } alignItems={ 'center' }
+                        >
 
 
                             {
                                 selectedItems.length !== 0 &&
                                 <Box>
-                                    Выбрано: { selectedItems.length }
+                                    Выбрано для сравнения: { selectedItems.length }
                                 </Box>
                             }
                             { isFiltersOn &&
@@ -244,17 +254,14 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                     Совпадений найдено: { sorted.length }
                                 </Box>
                             }
-                        </TableFooter> }
-
-                </TableContainer>
-                <Stack direction={ 'row' } justifyContent={ 'space-between' } maxHeight={ 55 }>
-
+                        </Stack> }
                     <FormControlLabel
+
                         control={ <Switch checked={ dense } onChange={ handleChangeDense } id='dense_checkbox' /> }
                         label="Уменьшить отступы"
-                        sx={ { ml: 4 } }
+                        sx={ { ml: 4, alignContent: 'center' } }
                     />
-                    <TablePagination
+                    {/* <TablePagination
                         rowsPerPageOptions={ [5, 10, 20, { value: -1, label: 'Все' }] }
                         component="div"
                         count={ sorted.length }
@@ -265,7 +272,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                         id='rows_per_page_id'
                         labelRowsPerPage='Показывать количество строчек на странице: '
                         labelDisplayedRows={ ({ from, to, count }) => `${from} – ${to} из ${count !== -1 ? count : `more than ${to}`}` }
-                    />
+                    /> */}
                 </Stack>
             </Paper>
         </Box>
