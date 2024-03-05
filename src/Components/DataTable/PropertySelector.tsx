@@ -7,7 +7,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { Stp_Tags } from '../../Interfaces/Enums';
-import { ListSubheader, Stack } from '@mui/material';
+import { FormHelperText, ListSubheader, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Filters, FiltersParams } from '../../Hooks/useFiltration';
 import { StpTags } from '../StpTable/TableObjects';
@@ -25,7 +25,7 @@ export const TagsMenuProps = {
 const DepthMenuProps = {
     PaperProps: {
         style: {
-            height: ITEM_HEIGHT * 12 + 5,
+            height: ITEM_HEIGHT * 6 + 5,
             width: 140,
         },
     },
@@ -33,7 +33,7 @@ const DepthMenuProps = {
 const CamsMenuProps = {
     PaperProps: {
         style: {
-            height: ITEM_HEIGHT * 3 - 10,
+            height: ITEM_HEIGHT * 3 + 10,
             width: 140,
         },
     },
@@ -90,10 +90,6 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
         }
     };
 
-    // useEffect(() => {
-    //     filterFn(prev => ({ ...prev, ...selectors }) as FiltersParams)
-    //     return () => reset()
-    // }, [filterFn, selectors])
     const camTxt = (num: number) => num === 1 ? `1 камера` : num === 2 ? `2 камеры` : '';
     return (
         <Stack direction={ 'row' } alignContent={ 'baseline' } py={ 1 } >
@@ -122,11 +118,13 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                         </MenuItem>
                     )) }
                 </Select>
+                <FormHelperText>Выберете нужные свойства</FormHelperText>
             </FormControl>
 
-            <FormControl sx={ { m: 1, width: 150 } }>
+            <FormControl sx={ { m: 1, width: 180 } }>
                 <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
                 <Select
+
                     multiple
                     labelId="depth-label"
                     name='depth-selector'
@@ -138,7 +136,6 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
 
                 >
 
-                    <ListSubheader> depth </ListSubheader>
                     { depthArray.map((depth) => (
                         <MenuItem key={ depth } value={ depth } divider dense>
                             <Checkbox checked={ selectors.depth.indexOf(depth) > -1 } name={ depth + '_checkDepth' } />
@@ -146,6 +143,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                         </MenuItem>
 
                     )) }
+                    {/* <ListSubheader> Толщина </ListSubheader> */ }
                     {/* <ListSubheader> cams </ListSubheader>
                     { camsArray.map((cam) => (
                         <MenuItem key={ cam } value={ cam } divider dense>
@@ -155,10 +153,10 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     )) } */}
 
                 </Select>
-
+                <FormHelperText>Выберете толщину</FormHelperText>
             </FormControl>
 
-            <FormControl sx={ { m: 1, width: 150 } }>
+            <FormControl sx={ { m: 1, width: 180 } }>
                 <InputLabel id="cams-label">Кол-во камер</InputLabel>
                 <Select
                     multiple
@@ -179,10 +177,10 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                             <ListItemText primary={ camTxt(cam) } />
                         </MenuItem>
                     )) }
-
+                    {/* <ListSubheader> Кол-во камер </ListSubheader> */ }
 
                 </Select>
-
+                <FormHelperText>Укажите, сколько камер</FormHelperText>
             </FormControl>
 
         </Stack>

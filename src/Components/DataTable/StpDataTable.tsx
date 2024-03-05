@@ -153,7 +153,7 @@ export function StpDataTable() {
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { mb: 2 } } elevation={ 4 }>
 
-                <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ 0 } />
+                <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ sorted.length } />
 
                 <TableContainer sx={ { overflowY: 'auto', maxHeight: '75vh', } } >
                     <Table
