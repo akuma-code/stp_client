@@ -110,16 +110,17 @@ export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sor
 
     //__ [ {cams:[1,2]}, {depth:[24,28]},... ]
 
-    const filterOrder = getFilters(restFilters)
-    const fnOrder = filterOrder.reduce((acc, curr) => {
-        const [key, fn] = getKeyValue(curr)
-        acc.push(fn)
-        return acc
-    }, [] as FilterFnOrder[keyof FilterFnOrder][])
 
 
 
     const filtered = useMemo(() => {
+        const filterOrder = getFilters(restFilters)
+
+        const fnOrder = filterOrder.reduce((acc, curr) => {
+            const [_, fn] = getKeyValue(curr)
+            acc.push(fn)
+            return acc
+        }, [] as FilterFnOrder[keyof FilterFnOrder][])
         const init_items = array as unknown as StpData[]
         let result_items = [] as StpData[]
         if (fnOrder.length > 0) {
@@ -134,20 +135,10 @@ export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sor
             result_items = orderFiltered
         } else result_items = array as unknown as StpData[]
 
-        return result_items.filter(item => {
-            if ('name' in item && typeof item.name === 'string') { return item.name.toLowerCase().includes(query.toLowerCase()) }
-            //     return (typeof item.name === 'string') ?  : false
-            // }
-            else return []
-        })
-        // return array.filter(item => {
-        //     if ('name' in item) {
-        //         return (typeof item.name === 'string') ? item.name.toLowerCase().includes(query.toLowerCase()) : false
-        //     }
-        //     else return []
-        // })
+        const filtered_items = result_items.filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
+        return filtered_items
 
-    }, [array, fnOrder, query])
+    }, [array, query, restFilters])
 
     const sorted = useCompare(filtered as StpData[], order, sort_field)
     return sorted
@@ -171,13 +162,13 @@ export function useLazyDataLoad<T extends StpData>(array: T[], order: Order, sor
     return [loadData, isLoading] as const
 }
 
-export function useFilterTags<T extends AnyObj>(array: T[], order: Order, sort_field: any, tags: StpTags[], query: string) {
+// export function useFilterTags<T extends AnyObj>(array: T[], order: Order, sort_field: any, tags: StpTags[], query: string) {
 
-    const sorted = useSortAndFilter(array, order, sort_field, query, {})
+//     const sorted = useSortAndFilter(array, order, sort_field, query, {})
 
-    const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(i => hasTags(tags)(i as unknown as StpData)) : [...sorted],
-        [tags, sorted])
+//     const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(i => hasTags(tags)(i as unknown as StpData)) : [...sorted],
+//         [tags, sorted])
 
-    return tagged
-}
+//     return tagged
+// }
 

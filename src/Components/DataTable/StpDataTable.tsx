@@ -18,6 +18,8 @@ import { StpItem, StpTags } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 
 import { StpTableToolbar } from './StpTableToolbar';
+import { useLoaderData } from 'react-router-dom';
+import { StpDataLoad } from '../../Routes/AppRouter';
 
 
 //__ Data Create*/
@@ -27,18 +29,23 @@ import { StpTableToolbar } from './StpTableToolbar';
 export type StpData = StpItem & { id: number }
 export type Order = 'asc' | 'desc';
 
+export const isJson = (i: any) => JSON.parse(i) ? true : false
 
-
-export function StpDataTable() {
+export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     console.count("RENDER!")
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(true);
     const [RPP, setRowsPerPage] = useState(-1);
-    const { StpStore: { table }, select, selectedItems, query, selectedTags, filterParams } = useAppContext()
+    const [checkedCells, setCheckedCells] = useState<number[]>([])
+    const memodata = preload_data ?? []
+    // useMemo(() => {
+    //     return isJson(data) ? JSON.parse(data) : []
+    // }, [data])
 
-    const sorted = useSortAndFilter(table, order, orderBy, query, filterParams)
+    const { select, selectedItems, query, selectedTags, filterParams } = useAppContext()
+    const sorted = useSortAndFilter(memodata, order, orderBy, query, filterParams)
     // const [data, loading] = useLazyDataLoad(table, order, orderBy, query, filterParams)
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
@@ -82,7 +89,7 @@ export function StpDataTable() {
         }
         if (selectedItems.length >= 5) newSelected = newSelected.slice(0, 5)
         select(newSelected)
-    }, [select, selectedItems]);
+    }, [selectedItems, select]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -105,20 +112,18 @@ export function StpDataTable() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0
-        ? Math.max(0, (1 + page) * RPP - table.length)
+        ? Math.max(0, (1 + page) * RPP - memodata.length)
         : 0;
 
     const visibleRows = useMemo(
         () => {
             // console.log('loading: ', loading)
-            const sliced = RPP !== -1
-                ? sorted.slice(
-                    page * RPP,
-                    page * RPP + RPP)
-                : sorted
+            const sliced = sorted.slice(
+                page * RPP,
+                page * RPP + RPP)
             return sliced as unknown as StpData[]
         },
-        [RPP, sorted, page]
+        [RPP, page, sorted]
     );
 
     return (
@@ -127,7 +132,7 @@ export function StpDataTable() {
 
                 <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ sorted.length } />
 
-                <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', } } >
+                <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', position: 'relative' } } >
                     <Table
                         sx={ { minWidth: 750, position: 'relative' } }
                         aria-labelledby="tableTitle"
@@ -216,22 +221,24 @@ export function StpDataTable() {
                     </Table>
                     {
                         (selectedItems.length !== 0 || isFiltersOn) &&
-                        <TableFooter sx={ {
-                            bgcolor: (theme) => alpha(theme.palette.primary.main, .9),
-                            position: 'sticky', display: 'flex', columnGap: 6, bottom: 0, justifyContent: 'center', color: 'whitesmoke'
-                        } } component={ Paper } elevation={ 4 }>
-                            <Box>
 
-                                {
-                                    selectedItems.length > 0 &&
-                                    `Выбрано: ${selectedItems.length}`
-                                }
-                            </Box>
-                            <Box>
-                                { isFiltersOn &&
-                                    `Совпадений найдено: ${sorted.length}`
-                                }
-                            </Box>
+                        <TableFooter sx={ {
+                            bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
+                            position: 'sticky', display: 'flex', columnGap: 6, bottom: 8, justifyContent: 'center', color: 'whitesmoke'
+                        } } component={ Paper } elevation={ 4 }>
+
+
+                            {
+                                selectedItems.length !== 0 &&
+                                <Box>
+                                    Выбрано: { selectedItems.length }
+                                </Box>
+                            }
+                            { isFiltersOn &&
+                                <Box>
+                                    Совпадений найдено: { sorted.length }
+                                </Box>
+                            }
                         </TableFooter> }
 
                 </TableContainer>
