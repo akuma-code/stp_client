@@ -7,7 +7,7 @@ import { AppContext } from "./Hooks/useStoresContext";
 import { StpTypeProps } from "./Interfaces/Types";
 import { router } from "./Routes/AppRouter";
 
-type CheckboxGroup = StpTypeProps
+
 const stores = { StpStore: new StpStore(table_data_preset) }
 
 
@@ -15,14 +15,7 @@ function App() {
   const [selected, setSelected] = useState<number[]>([])
   const [fcount, setFc] = useState<number>(0)
   const [tags, setTags] = useState<string[]>([])
-  // const [selectedType, selectType] = useState<CheckboxGroup>({
-  //   energy: false,
-  //   hitproof: false,
-  //   multi: false,
-  //   simple: false,
-  //   solarproof: false,
-  //   soundproof: false
-  // })
+
   const [querySearch, setQuery] = useState("")
 
   const [filters, setFilters] = useState<FiltersParams>({ cams: [], depth: [], tags: [] })
@@ -31,8 +24,6 @@ function App() {
       ...stores,
       selectedItems: selected,
       select: setSelected,
-      // _type: selectedType,
-      // setType: selectType,
       filteredItemsCount: fcount,
       setFcount: setFc,
       query: querySearch,

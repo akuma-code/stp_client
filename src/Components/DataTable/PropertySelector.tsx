@@ -1,4 +1,4 @@
-import { Button, FormHelperText, IconButton, Stack } from '@mui/material';
+import { FormHelperText, IconButton, Stack } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -6,11 +6,11 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { MdFilterListOff } from "react-icons/md";
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { Stp_Tags } from '../../Interfaces/Enums';
 import { StpTags } from '../StpTable/TableObjects';
-import { MdFilterListOff } from "react-icons/md";
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
 export const TagsMenuProps = {
@@ -64,7 +64,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
     const [selectors, setSelector] = useState<SelectorProps>({ tags: [], depth: [], cams: [] });
     const { filterFn } = useAppContext();
 
-    const handleSelectorChange = (selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
+    const handleSelectorChange = useCallback((selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
 
         switch (selectorType) {
             case 'tags': {
@@ -87,7 +87,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                 break
             }
         }
-    };
+    }, [filterFn]);
 
     const camTxt = (num: number) => num === 1 ? `1 камера` : num === 2 ? `2 камеры` : '';
     const handleReset = () => {
@@ -95,16 +95,14 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
         setSelector(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
 
     }
-    const isFiltering = (selectors.cams.length > 0 ||
-        selectors.depth.length > 0 ||
-        selectors.tags.length > 0)
+    const isFilterOff = selectors.cams.length === 0 && selectors.depth.length === 0 && selectors.tags.length === 0
     return (
         <Stack direction={ 'row' } alignContent={ 'baseline' } py={ 1 } justifyContent={ 'space-around' } useFlexGap>
             <IconButton
                 title='Сбросить фильтры'
-                disabled={ !isFiltering }
+                disabled={ isFilterOff }
                 color='error'
-                sx={ { maxHeight: '3rem', maxWidth: '3rem', my: 1.5, border: `2px solid ${isFiltering ? 'red' : 'inherit'} ` } }
+                sx={ { maxHeight: '3rem', maxWidth: '3rem', my: 1.5, border: `2px solid ${!isFilterOff ? 'red' : 'inherit'} ` } }
 
                 onClick={ handleReset }
             ><MdFilterListOff />
@@ -115,7 +113,6 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             <FormControl sx={ { m: 1, width: 200 } }>
                 <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
                 <Select
-
                     multiple
                     labelId="multitag-label"
                     id="multitag"

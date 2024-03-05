@@ -1,9 +1,7 @@
-import { useCallback, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
 import { AnyObj } from "../Interfaces/Types";
-import { useDebounceValue } from 'usehooks-ts'
-import { _log } from "../Helpers/helpersFns";
 import { FiltersParams } from "./useFiltration";
 import { hasCams, hasDepths } from "./useMemoFilter";
 
@@ -106,13 +104,12 @@ const getFilters = (restFilters: Partial<FiltersParams>) => Object.entries(restF
     return acc
 }, [] as FilterFnOrder[])
 
-const applyFilter = (filter: FilterFnOrder) => {
-    const ff = []
-}
+
 export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
 
 
-    //* [{cams:[1,2]},{depth:[24,28]},...]
+    //__ [ {cams:[1,2]}, {depth:[24,28]},... ]
+
     const filterOrder = getFilters(restFilters)
     const fnOrder = filterOrder.reduce((acc, curr) => {
         const [key, fn] = getKeyValue(curr)
@@ -155,18 +152,23 @@ export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sor
     const sorted = useCompare(filtered as StpData[], order, sort_field)
     return sorted
 }
-export function useEnchancedFilter<T extends FilterItemParams>(array: T[], order: Order, sort_field: any, filter: FiltrationType) {
+export function useLazyDataLoad<T extends StpData>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
+    const [isLoading, setIsLoading] = useState(false)
+    const data = useSortAndFilter(array, order, sort_field, query, restFilters)
+    const [loadData, setLoadData] = useState<StpData[]>(data as unknown as StpData[])
+    function load(data: { [x: string]: string | number }[]) {
 
-    const sorted = useCompare(array, order, sort_field) as unknown as T[]
-    const filterCb = useCallback((filter_type: FiltrationType) => filtrationReducer(sorted, filter_type), [sorted])
-    // const filtered = useMemo(() => {
-    //     const cb = filtrationReducer(sorted as unknown as T[], filter)
+        const p = new Promise<StpData[]>(() => data)
+        return p
 
-    //     return cb
+    }
 
-    // }, [sorted, filter])
+    useEffect(() => {
+        setIsLoading(true)
+        load(data).then(d => setLoadData(d))
 
-    return filterCb(filter)
+    }, [data])
+    return [loadData, isLoading] as const
 }
 
 export function useFilterTags<T extends AnyObj>(array: T[], order: Order, sort_field: any, tags: StpTags[], query: string) {

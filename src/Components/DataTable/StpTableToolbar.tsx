@@ -1,8 +1,7 @@
-import { Box, Divider, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
-import { useState } from 'react';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { AcSearch } from './AcSearch';
 import { PropertySelector } from './PropertySelector';
@@ -12,47 +11,19 @@ interface TableToolbarProps {
     numFiltered: number
 }
 
-type FilterVariant = 'search' | 'tags' | 'none' | null
+
 
 export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps) {
-    const { setQuery, setTags, select, selectedTags, filterParams, filterFn } = useAppContext()
+    const { filterParams } = useAppContext()
 
-    const [value, setValue] = useState<string | null>("");
+    // const [value, setValue] = useState<string | null>("");
     // const [inputValue, setInputValue] = useState('');
-    const [filterView, setFilterView] = useState<FilterVariant>(null)
+    // const [filterView, setFilterView] = useState<FilterVariant>(null)
 
-    function handleChangeView(e: React.MouseEvent<HTMLElement, MouseEvent>, v: FilterVariant): void {
-
-        setFilterView(prev => v)
-        switch (v) {
-            case 'tags': {
-                setQuery(prev => "")
-                filterFn(prev => ({ ...prev, query: "" }))
-                select([])
-                break
-            }
-            case 'search': {
-                setTags([])
-                select([])
-                break
-            }
-            case 'none': {
-                filterFn(prev => ({ ...prev, query: "" }))
-                setQuery(prev => "")
-                select([])
-                setTags([])
-                break
-            }
-
-        }
-
-    }
 
     return (
         <Toolbar component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } columnGap={ 2 }
             sx={ {
-                // display: 'flex',
-                // flexDirection: 'row',
                 height: 100,
                 pl: { sm: 2 },
                 pr: { xs: 1, sm: 1 },
@@ -91,15 +62,12 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 justifyContent={ 'space-between' }
             >
 
-                {/* <Divider orientation='vertical' flexItem /> */ }
+
                 <SelectedTagList { ...filterParams } />
-                {/* <Divider orientation='vertical' flexItem /> */ }
+
                 <PropertySelector filteredCount={ numFiltered } />
             </Box>
-            {/* <Stack direction={ 'row' } justifyContent={ 'space-between' }
-             minWidth={ '50%' } >
 
-            </Stack> */}
 
 
         </Toolbar>
