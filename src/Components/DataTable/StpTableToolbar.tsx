@@ -31,25 +31,9 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 flexGrow={ 0 }
                 maxWidth={ '30%' }
                 pt={ 1 }
-            // width={ '25%' }
-            >
-                {
-                    // numSelected > 0 ?
 
-                    //     <Typography
-                    //         // sx={ { flex: '1 1 33%' } }
-                    //         textAlign={ 'left' }
-                    //         color="inherit"
-                    //         variant="body1"
-                    //         component="div"
-                    //         id="tableTitle"
+            >    <AcSearch />
 
-                    //     >
-                    //         { numSelected > 0 ? `${numSelected} выбрано для сравнения` : `Выбрать стеклопакет для сравнения (не более 5!)` }
-                    //     </Typography>
-                    //     :
-                    <AcSearch />
-                }
             </Box>
             <Box component={ Stack }
                 direction={ 'row' }
@@ -77,4 +61,20 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
 
 
+
+
+// numSelected > 0 ?
+
+//     <Typography
+//         // sx={ { flex: '1 1 33%' } }
+//         textAlign={ 'left' }
+//         color="inherit"
+//         variant="body1"
+//         component="div"
+//         id="tableTitle"
+
+//     >
+//         { numSelected > 0 ? `${numSelected} выбрано для сравнения` : `Выбрать стеклопакет для сравнения (не более 5!)` }
+//     </Typography>
+//     :
 
