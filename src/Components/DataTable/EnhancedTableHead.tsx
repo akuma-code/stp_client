@@ -36,7 +36,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     };
     const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth')
     const isFormula = (headCell: HeadStpCell) => headCell.id === 'name'
-    const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea', 'Er'].includes(headCell.id)
+    const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea', 'Er', 'Rw'].includes(headCell.id)
     const getImgName = (cellId: keyof StpData) => {
 
         const img_id = {
