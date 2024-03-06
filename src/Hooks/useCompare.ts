@@ -108,11 +108,10 @@ const getFilters = (restFilters: Partial<FiltersParams>) => Object.entries(restF
 export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
 
 
-    //__ [ {cams:[1,2]}, {depth:[24,28]},... ]
 
 
 
-
+    const init_items = array.slice() as unknown as StpData[]
     const filtered = useMemo(() => {
         const filterOrder = getFilters(restFilters)
 
@@ -121,7 +120,6 @@ export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sor
             acc.push(fn)
             return acc
         }, [] as FilterFnOrder[keyof FilterFnOrder][])
-        const init_items = array as unknown as StpData[]
         let result_items = [] as StpData[]
         if (fnOrder.length > 0) {
             const orderFiltered = fnOrder.reduce((res, fn, idx) => {
@@ -133,15 +131,50 @@ export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sor
                 return res.filter(fn!)
             }, [] as StpData[])
             result_items = orderFiltered
-        } else result_items = array as unknown as StpData[]
+        } else result_items = init_items as unknown as StpData[]
 
-        const filtered_items = result_items.filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
+        const filtered_items = [...result_items].filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
         return filtered_items
 
-    }, [array, query, restFilters])
+    }, [init_items, query, restFilters])
 
     const sorted = useCompare(filtered as StpData[], order, sort_field)
     return sorted
+}
+export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFilters: Partial<FiltersParams>) {
+
+
+
+
+
+    const init_items = array.slice() as unknown as StpData[]
+    const filtered = useMemo(() => {
+        const filterOrder = getFilters(restFilters)
+
+        const fnOrder = filterOrder.reduce((acc, curr) => {
+            const [_, fn] = getKeyValue(curr)
+            acc.push(fn)
+            return acc
+        }, [] as FilterFnOrder[keyof FilterFnOrder][])
+        let result_items = [] as StpData[]
+        if (fnOrder.length > 0) {
+            const orderFiltered = fnOrder.reduce((res, fn, idx) => {
+                if (idx === 0) {
+                    const firstresult = init_items.filter(fn!)
+                    res.push(...firstresult)
+                    return res
+                }
+                return res.filter(fn!)
+            }, [] as StpData[])
+            result_items = orderFiltered
+        } else result_items = init_items as unknown as StpData[]
+
+        const filtered_items = [...result_items].filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
+        return filtered_items
+
+    }, [init_items, query, restFilters])
+
+    return filtered
 }
 export function useLazyDataLoad<T extends StpData>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
     const [isLoading, setIsLoading] = useState(false)

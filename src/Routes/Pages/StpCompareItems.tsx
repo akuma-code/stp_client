@@ -1,13 +1,9 @@
-import { List, ListItem, ListItemIcon, ListItemText, Stack } from '@mui/material';
-import { forwardRef, useContext } from 'react';
-import {
-    Link as RouterLink,
-    LinkProps as RouterLinkProps
-} from 'react-router-dom';
+import { List, ListItem, ListItemText, Stack } from '@mui/material';
+import { useContext } from 'react';
 import { StpData } from '../../Components/DataTable/StpDataTable';
 import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
 
-import { TerminsDesc } from '../../Components/StpTable/TerminsDesc';
+import { _TerminsDesc } from '../../Components/StpTable/TerminsDesc';
 import { _ID } from '../../Helpers/helpersFns';
 import { CompareContext } from './ComparePage';
 
@@ -106,7 +102,7 @@ export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
                             } }
 
                             primary={ _EnFieldsStp[item] }
-                            secondary={ TerminsDesc[item as keyof typeof TerminsDesc] }
+                            secondary={ _TerminsDesc[item as keyof typeof _TerminsDesc] }
                         />
 
                     </ListItem>
@@ -180,28 +176,6 @@ export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, li
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 
-
-
-interface ListItemLinkProps {
-    icon?: React.ReactElement;
-    primary: string;
-    to: string;
-}
-
-const Link = forwardRef<HTMLAnchorElement, RouterLinkProps>((itemProps, ref) => <RouterLink ref={ ref } { ...itemProps } />);
-
-function ListItemLink(props: ListItemLinkProps) {
-    const { icon, primary, to } = props;
-
-    return (
-        <li>
-            <ListItem component={ Link } to={ to }>
-                { icon ? <ListItemIcon>{ icon }</ListItemIcon> : null }
-                <ListItemText primary={ primary } />
-            </ListItem>
-        </li>
-    );
-}
 
 
 

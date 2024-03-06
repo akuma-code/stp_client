@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Stack, TableFooter, alpha } from '@mui/material';
-import { useSortAndFilter } from '../../Hooks/useCompare';
+import { useStpFilter, useCompare, useSortAndFilter } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpItem, StpTags } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
@@ -31,6 +31,22 @@ export type Order = 'asc' | 'desc';
 
 export const isJson = (i: any) => JSON.parse(i) ? true : false
 
+const cells: (keyof StpData)[] = [
+    'depth',
+    'cams',
+    'weight',
+    'Ro',
+    'Det',
+    'Ea',
+    'Er',
+    'Lr',
+    'Lt',
+    'Ra',
+    'Rw',
+    'S',
+    'Sf',
+    'secure',
+] as const
 export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     console.count("RENDER!")
     const [order, setOrder] = useState<Order>('asc');
@@ -40,12 +56,11 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     const [RPP, setRowsPerPage] = useState(-1);
     const [checkedCells, setCheckedCells] = useState<number[]>([])
     const memodata = preload_data ?? []
-    // useMemo(() => {
-    //     return isJson(data) ? JSON.parse(data) : []
-    // }, [data])
 
     const { select, selectedItems, query, filterParams } = useAppContext()
-    const sorted = useSortAndFilter(memodata, order, orderBy, query, filterParams)
+    const filtered = useStpFilter(memodata, query, filterParams)
+    const sorted = useCompare(filtered, order, orderBy)
+    // const sorted = useSortAndFilter(memodata, order, orderBy, query, filterParams)
     // const [data, loading] = useLazyDataLoad(table, order, orderBy, query, filterParams)
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
@@ -111,7 +126,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
         : false
 
     // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0
+    const emptyRows = page >= 0
         ? Math.max(0, (1 + page) * RPP - memodata.length)
         : 1;
 
@@ -133,13 +148,16 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
                 <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ sorted.length } />
 
-                <TableContainer sx={ { overflowY: 'auto', maxHeight: '70vh', position: 'relative' } } >
+                <TableContainer sx={ { overflowY: 'auto', maxHeight: '74vh', position: 'relative' } } >
                     <Table
-                        sx={ { minWidth: 750, position: 'relative' } }
                         aria-labelledby="tableTitle"
                         size={ dense ? 'small' : 'medium' }
                         stickyHeader
                         padding='normal'
+                        sx={ {
+                            minWidth: 750,
+                            // [`& .MuiTableRow-root .MuiTableCell-head#name`]: { bgcolor: 'red' }
+                        } }
                     >
                         <EnhancedTableHead
                             numSelected={ selectedItems.length }
@@ -156,22 +174,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                 sorted.map((row, index) => {
                                     const isItemSelected = isSelected(+row.id);
                                     const labelId = `enhanced-table-${index}`;
-                                    const cells = [
-                                        'depth',
-                                        'cams',
-                                        'weight',
-                                        'Ro',
-                                        'Det',
-                                        'Ea',
-                                        'Er',
-                                        'Lr',
-                                        'Lt',
-                                        'Ra',
-                                        'Rw',
-                                        'S',
-                                        'Sf',
-                                        'secure',
-                                    ] as const
+
                                     // const isTagged = hasTags(row as unknown as StpData)
                                     return (
                                         <TableRow
@@ -184,6 +187,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                             selected={ isItemSelected }
                                             sx={ {
                                                 cursor: 'pointer',
+
                                                 // bgcolor: isTagged ? '#d1e8f8' : '#ffffffDE'
                                             } }
                                         >
@@ -217,7 +221,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                             { emptyRows > 0 && (
                                 <TableRow
                                     style={ {
-                                        height: 53,
+                                        height: 53 * emptyRows,
                                     } }
                                 >
                                     <TableCell colSpan={ 4 } />
@@ -229,24 +233,25 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
 
                 </TableContainer>
-                <Stack direction={ 'row' } justifyContent={ 'space-around' } maxHeight={ 55 }>
+                <Stack direction={ 'row' } maxHeight={ 55 }>
 
 
-                    { (selectedItems.length !== 0 || isFiltersOn) &&
+                    {
+                        // (selectedItems.length !== 0 || isFiltersOn) &&
 
                         <Stack sx={ {
                             bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
-                            justifyContent: 'space-around', color: 'whitesmoke'
+                            justifyContent: 'space-between', color: 'whitesmoke'
                         } }
                             // component={ Paper } elevation={ 2 }
-                            flexGrow={ 1 } direction={ 'row' } alignItems={ 'center' }
+                            flexGrow={ 1 } direction={ 'row' } alignItems={ 'center' } px={ 2 }
                         >
 
 
                             {
-                                selectedItems.length !== 0 &&
+                                // selectedItems.length !== 0 &&
                                 <Box>
-                                    Выбрано для сравнения: { selectedItems.length }
+                                    Выбрано для сравнения: { selectedItems.length } из { sorted.length }
                                 </Box>
                             }
                             { isFiltersOn &&
@@ -254,13 +259,13 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                     Совпадений найдено: { sorted.length }
                                 </Box>
                             }
-                        </Stack> }
-                    <FormControlLabel
+                            <FormControlLabel
 
-                        control={ <Switch checked={ dense } onChange={ handleChangeDense } id='dense_checkbox' /> }
-                        label="Уменьшить отступы"
-                        sx={ { ml: 4, alignContent: 'center' } }
-                    />
+                                control={ <Switch checked={ dense } onChange={ handleChangeDense } id='dense_checkbox' /> }
+                                label="Уменьшить отступы"
+                                sx={ { ml: 4, alignContent: 'center' } }
+                            />
+                        </Stack> }
                     {/* <TablePagination
                         rowsPerPageOptions={ [5, 10, 20, { value: -1, label: 'Все' }] }
                         component="div"

@@ -37,6 +37,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
             <Box component={ Stack }
                 flexGrow={ 0 }
                 maxWidth={ '30%' }
+                pt={ 1 }
             // width={ '25%' }
             >
                 { numSelected > 0 ?
@@ -58,14 +59,14 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
             </Box>
             <Box component={ Stack }
                 direction={ 'row' }
-                flexGrow={ 1 }
+                flexGrow={ 2 }
                 justifyContent={ 'space-between' }
             >
 
 
-                <SelectedTagList { ...filterParams } />
-
                 <PropertySelector filteredCount={ numFiltered } />
+                {/* <SelectedTagList { ...filterParams } /> */ }
+
             </Box>
 
 

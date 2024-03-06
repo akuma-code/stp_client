@@ -11,6 +11,8 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import { _ID } from '../../Helpers/helpersFns';
 import { _EnFieldsStp } from '../../Interfaces/Enums';
 import { Order, StpData } from './StpDataTable';
+import { TfiNewWindow } from "react-icons/tfi";
+import { HelperDialog } from '../UI/HelperDialog';
 interface HeadStpCell {
     label: string;
     id: keyof StpData;
@@ -36,6 +38,13 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     };
     const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth')
     const isFormula = (headCell: HeadStpCell) => headCell.id === 'name'
+    const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea'].includes(headCell.id)
+    const getImgName = (cellId: keyof StpData) => {
+        const names = ['Lt', 'Lr'].includes(cellId) ? 'light'
+            : ['Er,', 'Ea'].includes(cellId) ? 'energy'
+                : ['Det', 'Sf'].includes(cellId) ? 'decibel' : 'light'
+        return names
+    }
     return (
         <TableHead>
             <TableRow>
@@ -51,6 +60,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                 {
                     stp_headCells.map((headCell) => (
                         <TableCell
+                            // colSpan={ 1 }
                             key={ headCell.id }
                             align={ headCell.align
                                 ? headCell.align
@@ -63,12 +73,21 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                             sx={ {
                                 borderBottom: '1px solid black', height: 60, bgcolor: '#93d4ff',
 
+                                width: 10
                             } }
+                            id={ headCell.id }
                         >
-                            <TableSortLabel sx={ { fontSize: 18 } }
+                            <TableSortLabel sx={ {
+                                fontSize: 18,
+                                maxWidth: 150,
+                                // width: 10
+
+
+                            } }
                                 active={ orderBy === headCell.id }
                                 direction={ orderBy === headCell.id ? order : 'asc' }
                                 onClick={ createSortHandler(headCell.id) }
+
                             >
 
 
@@ -81,15 +100,21 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                     <Box
                                     //  sx={ { mx: .5 } }
                                     >
-                                        { notInfo(headCell) &&
-                                            <SvgIcon sx={ { maxHeight: 15 } }>
 
-                                                <FaRegQuestionCircle className='text-blue-600' />
-                                            </SvgIcon>
+                                        {
+                                            hasImage(headCell) ?
+                                                <HelperDialog img_name={ getImgName(headCell.id) } />
+                                                :
+                                                <SvgIcon sx={ { maxHeight: 15 } }>
+                                                    <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-orange-800' : 'text-blue-600' } />
+                                                </SvgIcon>
                                         }
+
                                     </Box>
                                 </Tooltip>
-                                <Box>
+
+                                <Box alignItems={ 'baseline' }>
+
 
                                     { headCell.label }
                                     { orderBy === headCell.id ? (
@@ -98,7 +123,11 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                         >
                                             { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
                                         </Box>
-                                    ) : null }
+                                    ) : null
+                                    }
+                                    {
+
+                                    }
                                 </Box>
 
                             </TableSortLabel>
@@ -110,6 +139,10 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 
+const PicModal = () => {
+
+}
+
 const stp_headCells: readonly HeadStpCell[] = [
     {
         id: 'name',
@@ -117,7 +150,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         disablePadding: true,
         numeric: false,
         desc: "Формула стеклопакета",
-        align: 'left'
+        align: 'center'
     },
     {
         id: 'depth',

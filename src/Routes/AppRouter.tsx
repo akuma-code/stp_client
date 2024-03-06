@@ -8,6 +8,7 @@ import { PrintPage } from "./Pages/PrintPage";
 import { table_data_preset } from "../Components/StpTable/FullTable";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpIdPage } from "./Pages/StpIdPage";
+import { StpInfoPage } from "./Pages/StpInfoPage";
 
 export type StpDataLoad = Omit<StpData, 'id'>
 
@@ -69,6 +70,11 @@ export const appRoutes: RouteObject[] = [
             {
                 path: routePaths.export,
                 element: <PrintPage />
+            },
+            {
+                path: routePaths.stp_info,
+                element: <StpInfoPage />
+
             }
         ]
     }

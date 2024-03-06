@@ -61,8 +61,8 @@ export type SelectorProps = {
 };
 
 export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
-    const [selectors, setSelector] = useState<SelectorProps>({ tags: [], depth: [], cams: [] });
-    const { filterFn } = useAppContext();
+    const { filterFn, filterParams } = useAppContext();
+    const [selectors, setSelector] = useState<SelectorProps>(filterParams);
 
     const handleSelectorChange = useCallback((selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
 
@@ -98,43 +98,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
     const isFilterOff = selectors.cams.length === 0 && selectors.depth.length === 0 && selectors.tags.length === 0
     return (
         <Stack direction={ 'row' } alignContent={ 'baseline' } py={ 1 } justifyContent={ 'space-around' } useFlexGap>
-            <IconButton
-                title='Сбросить фильтры'
-                disabled={ isFilterOff }
-                color='error'
-                sx={ { maxHeight: '3rem', maxWidth: '3rem', my: 1.5, border: `2px solid ${!isFilterOff ? 'red' : 'inherit'} ` } }
 
-                onClick={ handleReset }
-            ><MdFilterListOff />
-            </IconButton>
-            {
-                //__Tags
-            }
-            <FormControl sx={ { m: 1, width: 200 } }>
-                <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
-                <Select
-                    multiple
-                    labelId="multitag-label"
-                    id="multitag"
-                    name='tags-select'
-                    value={ selectors.tags }
-                    onChange={ handleSelectorChange('tags') }
-                    input={ <OutlinedInput label="Свойства ст-та_____" sx={ { fontSize: 12 } } /> }
-                    renderValue={ () => `Найдено: ${filteredCount}` }
-                    // renderValue={ (selected) => selected.map(s => Stp_Tags[s as keyof typeof Stp_Tags]).join(' | ') }
-                    MenuProps={ TagsMenuProps }
-
-                >
-
-                    { tagsArray.map((tag) => (
-                        <MenuItem key={ tag } value={ tag } divider dense>
-                            <Checkbox checked={ selectors.tags.indexOf(tag) > -1 } name={ tag + '_check' } />
-                            <ListItemText primary={ Stp_Tags[tag] } />
-                        </MenuItem>
-                    )) }
-                </Select>
-                <FormHelperText>Выберете нужные свойства</FormHelperText>
-            </FormControl>
             {
                 //*Depths
             }
@@ -194,6 +158,45 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                 <FormHelperText>Укажите, сколько камер</FormHelperText>
             </FormControl>
 
+            <FormControl sx={ { m: 1, width: 200 } }>
+                {                //__Tags
+                }
+                <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
+                <Select
+                    multiple
+                    labelId="multitag-label"
+                    id="multitag"
+                    name='tags-select'
+                    value={ selectors.tags }
+                    onChange={ handleSelectorChange('tags') }
+                    input={ <OutlinedInput label="Свойства ст-та_____" sx={ { fontSize: 12 } } /> }
+                    renderValue={ () => `Найдено: ${filteredCount}` }
+                    // renderValue={ (selected) => selected.map(s => Stp_Tags[s as keyof typeof Stp_Tags]).join(' | ') }
+                    MenuProps={ TagsMenuProps }
+
+                >
+
+                    { tagsArray.map((tag) => (
+                        <MenuItem key={ tag } value={ tag } divider dense>
+                            <Checkbox checked={ selectors.tags.indexOf(tag) > -1 } name={ tag + '_check' } />
+                            <ListItemText primary={ Stp_Tags[tag] } />
+                        </MenuItem>
+                    )) }
+                </Select>
+                <FormHelperText>Выберете нужные свойства</FormHelperText>
+            </FormControl>
+
+
+
+            <IconButton
+                title='Сбросить фильтры'
+                disabled={ isFilterOff }
+                color='error'
+                sx={ { maxHeight: '3rem', maxWidth: '3rem', my: 1.5, border: `2px solid ${!isFilterOff ? 'red' : 'inherit'} ` } }
+
+                onClick={ handleReset }
+            ><MdFilterListOff />
+            </IconButton>
         </Stack>
     );
 }
