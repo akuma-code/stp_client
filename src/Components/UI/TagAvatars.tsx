@@ -21,7 +21,7 @@ export const TagsAvatarGroup = ({ tags }: { tags: StpTags[] }) => {
 
     return (
         <AvatarGroup max={ 3 } sx={ { maxWidth: 80, justifyContent: 'left', p: 0, m: 0 } } component={ Stack }>
-            { tags.map(t =>
+            { tags.sort().map(t =>
                 <Avatar key={ t }
                     sx={ {
                         maxWidth: 22,

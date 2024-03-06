@@ -60,7 +60,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                         indeterminate={ numSelected > 0 && numSelected < rowCount }
                         checked={ rowCount > 0 && numSelected === rowCount }
                         onChange={ onSelectAllClick }
-
+                        aria-labelledby='selected_id'
                         id='selected_id' />
                 </TableCell>
                 {
@@ -156,7 +156,7 @@ const stp_headCells: readonly HeadStpCell[] = [
     {
         id: 'name',
         label: 'Формула',
-        disablePadding: true,
+        disablePadding: false,
         numeric: false,
         desc: "Формула стеклопакета",
         align: 'center',

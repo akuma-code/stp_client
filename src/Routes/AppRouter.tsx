@@ -46,6 +46,7 @@ export const appRoutes: RouteObject[] = [
 
                     return resp
                 },
+                errorElement: <ErrorPage />,
 
             },
             {

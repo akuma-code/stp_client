@@ -1,20 +1,12 @@
 import { Autocomplete, TextField } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useAppContext } from '../../Hooks/useStoresContext';
-import { useToggle } from '../../Hooks/useToggle';
-
-
-
-
-
-
-
 
 export const AcSearch = () => {
     const [value, setValue] = useState<string | null>(null);
     const { query, setQuery, StpStore } = useAppContext();
     const options = StpStore.table.map(stp => stp.name);
-    const [show, control] = useToggle(false)
+
     // const handleInput = useDebounceCallback((event: React.SyntheticEvent<Element, Event>, value: string, reason: AutocompleteInputChangeReason) => setQuery(value), 500)
 
     const selectedOptions = useMemo(() => {
@@ -43,8 +35,6 @@ export const AcSearch = () => {
             renderInput={ (params) => <TextField { ...params }
                 name='search_query'
                 helperText='Начните вводить формулу или выберите стеклопакет для сравнения из таблицы'
-                autoFocus
-
                 size='small'
                 variant='outlined'
                 inputMode='search'

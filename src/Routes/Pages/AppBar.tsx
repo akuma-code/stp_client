@@ -2,16 +2,14 @@ import { Button, ListItem, ListItemIcon, ListItemText, Stack, Toolbar, Typograph
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import { GrTable } from "react-icons/gr";
-import { MdCompare } from "react-icons/md";
-import { Link as RrdLink, useMatches, LinkProps as RouterLinkProps } from 'react-router-dom';
-import { useAppContext } from '../../Hooks/useStoresContext';
-import { routePaths } from '../routePath';
-import { GrInfo } from "react-icons/gr";
 import { forwardRef } from 'react';
+import { GrInfo, GrTable } from "react-icons/gr";
+import { MdCompare } from "react-icons/md";
+import { LinkProps as RouterLinkProps, Link as RrdLink, useMatches } from 'react-router-dom';
+import { routePaths } from '../routePath';
 
 export function AppHeaderBreadcrump() {
-    const { selectedItems } = useAppContext()
+
     // const nav = useMatch(routePaths.export)
     const paths = useMatches()
     const [currentPath] = paths.map(p => p.pathname).slice(1)
@@ -39,7 +37,7 @@ export function AppHeaderBreadcrump() {
                             ?
                             null
                             :
-                            <IconButton disabled={ selectedItems.length === 0 }
+                            <IconButton
                                 edge={ 'start' }
                                 sx={ { mx: 2, display: 'flex', gap: 2, color: 'beige' } }
 
@@ -60,7 +58,13 @@ export function AppHeaderBreadcrump() {
                             </Box>
                         </Button>
                     </Box>
-                    <WarnText />
+                    <Typography
+                        variant='h5'
+                        color={ '#fff' }
+                        textAlign={ 'right' }
+                    >
+                        * В таблице указаны расчетные данные. Получены из калькулятора компании РСК.
+                    </Typography>
                 </Toolbar>
             </AppBar>
         </Box>
@@ -85,7 +89,7 @@ interface ListItemLinkProps {
     to: string;
 }
 
-const MuiLink = forwardRef<HTMLAnchorElement, RouterLinkProps>((itemProps, ref) => <RrdLink ref={ ref } { ...itemProps } />);
+export const MuiLink = forwardRef<HTMLAnchorElement, RouterLinkProps>((itemProps, ref) => <RrdLink ref={ ref } { ...itemProps } />);
 
 function ListItemLink(props: ListItemLinkProps) {
     const { icon, primary, to } = props;
