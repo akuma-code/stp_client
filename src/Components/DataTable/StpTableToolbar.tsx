@@ -56,6 +56,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 flexGrow={ 2 }
                 justifyContent={ 'space-between' }
                 alignItems={ 'center' }
+                pr={ 3 }
             >
 
 
