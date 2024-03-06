@@ -17,6 +17,7 @@ import { StpItem, StpTags } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 
 import { StpTableToolbar } from './StpTableToolbar';
+import { TagsAvatarGroup } from '../UI/TagAvatars';
 
 
 //__ Data Create*/
@@ -204,13 +205,16 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                 scope="row"
                                                 padding="none"
                                                 sx={ { textWrap: 'nowrap' } }
+                                                colSpan={ 1 }
                                             >
                                                 { row.name }
                                             </TableCell>
+                                            <TableCell align='right'>
+                                                <TagsAvatarGroup tags={ row.tags as unknown as StpTags[] } />
+                                            </TableCell>
                                             { cells.map(cell =>
                                                 <TableCell align="center" key={ cell }>{ row[cell] }</TableCell>
-                                            )
-                                            }
+                                            ) }
 
                                         </TableRow>
                                     );

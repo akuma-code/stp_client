@@ -17,7 +17,8 @@ interface HeadStpCell {
     numeric: boolean;
     disablePadding: boolean;
     align?: 'left' | 'center' | 'right';
-    desc?: string
+    desc?: string,
+    colSpan?: number
 
 }
 
@@ -34,8 +35,8 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     const createSortHandler = (property: keyof StpData) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
-    const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth')
-    const isFormula = (headCell: HeadStpCell) => headCell.id === 'name'
+    const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth' && headCell.id !== 'tags')
+    const isFormula = (headCell: HeadStpCell) => headCell.id === 'name' || headCell.id === 'tags'
     const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea', 'Er', 'Rw'].includes(headCell.id)
     const getImgName = (cellId: keyof StpData) => {
 
@@ -65,7 +66,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                 {
                     stp_headCells.map((headCell) => (
                         <TableCell
-                            // colSpan={ 1 }
+                            colSpan={ headCell.colSpan ? headCell.colSpan : 1 }
                             key={ headCell.id }
                             align={ headCell.align
                                 ? headCell.align
@@ -158,7 +159,16 @@ const stp_headCells: readonly HeadStpCell[] = [
         disablePadding: true,
         numeric: false,
         desc: "Формула стеклопакета",
-        align: 'center'
+        align: 'center',
+        colSpan: 1
+    },
+    {
+        id: 'tags',
+        label: 'Тэги',
+        disablePadding: true,
+        numeric: true,
+        align: 'center',
+        desc: "Тэги"
     },
     {
         id: 'depth',
@@ -280,5 +290,6 @@ const stp_headCells: readonly HeadStpCell[] = [
         align: 'center',
         desc: "Класс безопасности"
     },
+
 
 ];
