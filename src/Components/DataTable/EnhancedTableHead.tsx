@@ -90,28 +90,30 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
 
                             >
 
+                                {
+                                    hasImage(headCell) ?
 
-                                <Tooltip
-                                    title={ headCell.desc
-                                        ? headCell.desc
-                                        : headCell.label }
-                                    PopperProps={ { placement: 'top', } }
-                                >
-                                    <Box
-                                    //  sx={ { mx: .5 } }
-                                    >
 
-                                        {
-                                            hasImage(headCell) ?
-                                                <HelperDialog img_name={ getImgName(headCell.id) } />
-                                                :
+                                        <HelperDialog img_name={ getImgName(headCell.id) } tooltip_title={ headCell.desc || "" } />
+                                        :
+                                        <Tooltip
+                                            title={ headCell.desc
+                                                ? headCell.desc
+                                                : headCell.label }
+                                            PopperProps={ { placement: 'top', } }
+                                        >
+                                            <Box
+                                            //  sx={ { mx: .5 } }
+                                            >
+
+
                                                 <SvgIcon sx={ { maxHeight: 15 } }>
                                                     <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-orange-800' : 'text-blue-600' } />
                                                 </SvgIcon>
-                                        }
 
-                                    </Box>
-                                </Tooltip>
+                                            </Box>
+                                        </Tooltip>
+                                }
 
                                 <Box alignItems={ 'baseline' }>
 

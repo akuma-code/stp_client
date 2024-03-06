@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { IconButton, SvgIcon } from '@mui/material';
+import { IconButton, SvgIcon, Tooltip } from '@mui/material';
 import { FaRegQuestionCircle } from 'react-icons/fa';
 import path_decibel from './../../Components/StpTable/StpPreset/images/decibels.jpg'
 import path_energy from './../../Components/StpTable/StpPreset/images/energyCoeefs.jpg'
@@ -15,9 +15,10 @@ import path_light from './../../Components/StpTable/StpPreset/images/lightCoeff.
 
 type HelperDialogProps = {
     img_name: 'light' | 'decibel' | 'energy'
+    tooltip_title: string
 
 }
-export function HelperDialog({ img_name }: HelperDialogProps) {
+export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -36,11 +37,14 @@ export function HelperDialog({ img_name }: HelperDialogProps) {
     }
     return (
         <React.Fragment >
-            <IconButton onClick={ handleClickOpen }>
-                <SvgIcon sx={ { maxHeight: 15 } }>
-                    <FaRegQuestionCircle className={ 'text-orange-800' } />
-                </SvgIcon>
-            </IconButton>
+            <Tooltip title={ tooltip_title + `. Нажмите для дополнительной справки` } PopperProps={ { placement: 'top' } }>
+
+                <IconButton onClick={ handleClickOpen }>
+                    <SvgIcon sx={ { maxHeight: 15 } }>
+                        <FaRegQuestionCircle className={ 'text-orange-800' } />
+                    </SvgIcon>
+                </IconButton>
+            </Tooltip>
             <Dialog autoFocus
                 // fullScreen={ fullScreen }
                 open={ open }
