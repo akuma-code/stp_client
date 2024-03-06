@@ -52,8 +52,8 @@ export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
                 aria-labelledby="responsive-dialog-title"
                 PaperProps={ { elevation: 4 } }
             >
-                <DialogTitle id="responsive-dialog-title">
-                    { "Дополнительная информация по характеристикам стеклопакета" }
+                <DialogTitle id="responsive-dialog-title" textTransform={ 'uppercase' } textAlign={ 'center' }>
+                    { `дополнительная справка` }
                 </DialogTitle>
                 <DialogContent>
                     <img alt='pic' src={ Img_path[img_name] } />
