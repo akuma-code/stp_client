@@ -1,4 +1,4 @@
-import { FormHelperText, IconButton, Stack } from '@mui/material';
+import { Avatar, Box, Chip, FormHelperText, IconButton, Stack } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,13 +11,14 @@ import { MdFilterListOff } from "react-icons/md";
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { Stp_Tags } from '../../Interfaces/Enums';
 import { StpTags } from '../StpTable/TableObjects';
+import { TagAvatarIcon } from '../UI/TagAvatars';
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
 export const TagsMenuProps = {
     PaperProps: {
         style: {
             height: ITEM_HEIGHT * 7 + ITEM_PADDING_TOP,
-            width: 240,
+            width: 280,
         },
     },
 };
@@ -158,7 +159,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                 <FormHelperText>Укажите, сколько камер</FormHelperText>
             </FormControl>
 
-            <FormControl sx={ { m: 1, width: 200 } }>
+            <FormControl sx={ { m: 1, minWidth: 200 } }>
                 {                //__Tags
                 }
                 <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
@@ -169,9 +170,24 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     name='tags-select'
                     value={ selectors.tags }
                     onChange={ handleSelectorChange('tags') }
+                    inputProps={ { flexDirection: 'row', } }
                     input={ <OutlinedInput label="Свойства ст-та_____" sx={ { fontSize: 12 } } /> }
-                    renderValue={ () => `Найдено: ${filteredCount}` }
-                    // renderValue={ (selected) => selected?.map(s => <SvgIcon> { TagAvatarIcon[s as StpTags] }</SvgIcon>).join(", ") }
+                    // renderValue={ () => `Найдено: ${filteredCount}` }
+                    renderValue={ (selected) => {
+
+                        return (
+                            <Box display={ 'flex' } flexDirection={ 'row' } gap={ 1 } flexWrap={ 'nowrap' }>
+                                {
+                                    selected?.map(s =>
+
+                                        <Avatar key={ s } >{ TagAvatarIcon[s as StpTags] }</Avatar>
+
+                                    ) }
+
+
+                            </Box>
+                        )
+                    } }
                     MenuProps={ TagsMenuProps }
 
                 >

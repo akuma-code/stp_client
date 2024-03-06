@@ -108,11 +108,11 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                             PopperProps={ { placement: 'top', } }
                                         >
                                             <Box
-                                            //  sx={ { mx: .5 } }
+
                                             >
                                                 { !isFormula(headCell) &&
 
-                                                    <SvgIcon sx={ { maxHeight: 15 } }>
+                                                    <SvgIcon sx={ { maxHeight: 15 } } >
                                                         <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-orange-800' : 'text-blue-600' } />
                                                     </SvgIcon>
                                                 }

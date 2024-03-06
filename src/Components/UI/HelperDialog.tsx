@@ -41,8 +41,13 @@ export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
         <React.Fragment >
             <Tooltip title={ tooltip_title + `. Нажмите для дополнительной справки` } PopperProps={ { placement: 'top' } }>
 
-                <IconButton onClick={ handleClickOpen }>
-                    <SvgIcon sx={ { maxHeight: 15 } }>
+                <IconButton onClick={ handleClickOpen } edge='start'
+                // sx={ { [`& :hover`]: { bgcolor: 'red' } } }
+                >
+                    <SvgIcon sx={ {
+                        maxHeight: 15,
+                        // [`& :hover`]: { bgcolor: 'red' }
+                    } } >
                         <FaRegQuestionCircle className={ 'text-orange-800' } />
                     </SvgIcon>
                 </IconButton>
