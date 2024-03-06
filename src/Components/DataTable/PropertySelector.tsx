@@ -171,7 +171,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     onChange={ handleSelectorChange('tags') }
                     input={ <OutlinedInput label="Свойства ст-та_____" sx={ { fontSize: 12 } } /> }
                     renderValue={ () => `Найдено: ${filteredCount}` }
-                    // renderValue={ (selected) => selected.map(s => Stp_Tags[s as keyof typeof Stp_Tags]).join(' | ') }
+                    // renderValue={ (selected) => selected?.map(s => <SvgIcon> { TagAvatarIcon[s as StpTags] }</SvgIcon>).join(", ") }
                     MenuProps={ TagsMenuProps }
 
                 >

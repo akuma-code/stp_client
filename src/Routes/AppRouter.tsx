@@ -43,7 +43,7 @@ export const appRoutes: RouteObject[] = [
                     console.count("Data load: ")
                     console.log(data.length)
                     const resp = JSON.stringify(data)
-                    // console.log('data', { data })
+
                     return resp
                 },
 

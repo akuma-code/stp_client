@@ -1,20 +1,26 @@
-import React, { useState, } from 'react';
+import { IconButton, SvgIcon, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { IconButton, SvgIcon, Tooltip } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import React from 'react';
 import { FaRegQuestionCircle } from 'react-icons/fa';
-import path_decibel from './../../Components/StpTable/StpPreset/images/decibels.jpg'
-import path_energy from './../../Components/StpTable/StpPreset/images/energyCoeefs.jpg'
-import path_light from './../../Components/StpTable/StpPreset/images/lightCoeff.jpg'
+import path_decibel from './../../Components/StpTable/StpPreset/images/decibels.jpg';
+import path_energy from './../../Components/StpTable/StpPreset/images/energyCoeefs.jpg';
+import path_light from './../../Components/StpTable/StpPreset/images/lightCoeff.jpg';
 
+
+
+const Img_path = {
+    light: path_light,
+    energy: path_energy,
+    decibel: path_decibel,
+}
 type HelperDialogProps = {
-    img_name: 'light' | 'decibel' | 'energy'
+    img_name: 'light' | 'decibel' | 'energy' | ""
     tooltip_title: string
 
 }
@@ -30,11 +36,7 @@ export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
     const handleClose = () => {
         setOpen(false);
     };
-    const Img_path = {
-        light: path_light,
-        energy: path_energy,
-        decibel: path_decibel,
-    }
+
     return (
         <React.Fragment >
             <Tooltip title={ tooltip_title + `. Нажмите для дополнительной справки` } PopperProps={ { placement: 'top' } }>
@@ -46,7 +48,7 @@ export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
                 </IconButton>
             </Tooltip>
             <Dialog autoFocus
-                // fullScreen={ fullScreen }
+                fullScreen={ fullScreen }
                 open={ open }
                 onClose={ handleClose }
                 aria-labelledby="responsive-dialog-title"
@@ -56,11 +58,11 @@ export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
                     { `дополнительная справка` }
                 </DialogTitle>
                 <DialogContent>
-                    <img alt='pic' src={ Img_path[img_name] } />
+                    { img_name !== "" && <img alt='pic' src={ Img_path[img_name] } /> }
                 </DialogContent>
                 <DialogActions>
 
-                    <Button onClick={ handleClose } autoFocus>
+                    <Button variant={ 'contained' } onClick={ handleClose } autoFocus fullWidth color='info'>
                         Понятно
                     </Button>
                 </DialogActions>

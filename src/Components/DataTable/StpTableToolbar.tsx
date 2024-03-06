@@ -1,11 +1,8 @@
 import { Box, Stack } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
-import { useAppContext } from '../../Hooks/useStoresContext';
 import { AcSearch } from './AcSearch';
 import { PropertySelector } from './PropertySelector';
-import { SelectedTagList } from './SelectedTagList';
 interface TableToolbarProps {
     numSelected: number;
     numFiltered: number
@@ -14,11 +11,6 @@ interface TableToolbarProps {
 
 
 export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps) {
-    const { filterParams } = useAppContext()
-
-    // const [value, setValue] = useState<string | null>("");
-    // const [inputValue, setInputValue] = useState('');
-    // const [filterView, setFilterView] = useState<FilterVariant>(null)
 
 
     return (
@@ -40,20 +32,21 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 pt={ 1 }
             // width={ '25%' }
             >
-                { numSelected > 0 ?
+                {
+                    // numSelected > 0 ?
 
-                    <Typography
-                        // sx={ { flex: '1 1 33%' } }
-                        textAlign={ 'left' }
-                        color="inherit"
-                        variant="body1"
-                        component="div"
-                        id="tableTitle"
+                    //     <Typography
+                    //         // sx={ { flex: '1 1 33%' } }
+                    //         textAlign={ 'left' }
+                    //         color="inherit"
+                    //         variant="body1"
+                    //         component="div"
+                    //         id="tableTitle"
 
-                    >
-                        { numSelected > 0 ? `${numSelected} выбрано для сравнения` : `Выбрать стеклопакет для сравнения (не более 5!)` }
-                    </Typography>
-                    :
+                    //     >
+                    //         { numSelected > 0 ? `${numSelected} выбрано для сравнения` : `Выбрать стеклопакет для сравнения (не более 5!)` }
+                    //     </Typography>
+                    //     :
                     <AcSearch />
                 }
             </Box>

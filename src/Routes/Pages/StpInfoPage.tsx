@@ -9,10 +9,18 @@ export const StpInfoPage: React.FC<InfoPageProps> = (props) => {
 
 
     return (
-        <div className='flex flex-row gap-2'>
-            <img src={ path_decibel } alt='decibels' />
-            <img src={ path_energy } alt='energy' />
-            <img src={ path_light } alt='light' />
+        <div className='flex flex-row gap-2 flex-grow flex-wrap p-4' >
+            <div className='flex-grow'>
+                <img src={ path_decibel } alt='decibels' />
+            </div>
+            <div className='flex-grow'>
+                <img src={ path_energy } alt='energy' />
+            </div>
+            <div className='flex-grow'>
+                <img src={ path_light } alt='light' />
+            </div>
+
+
 
         </div>
     )

@@ -1,4 +1,4 @@
-import { SvgIcon, TextField, Tooltip } from '@mui/material';
+import { SvgIcon, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
@@ -8,11 +8,9 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import * as React from 'react';
 import { FaRegQuestionCircle } from "react-icons/fa";
-import { _ID } from '../../Helpers/helpersFns';
 import { _EnFieldsStp } from '../../Interfaces/Enums';
-import { Order, StpData } from './StpDataTable';
-import { TfiNewWindow } from "react-icons/tfi";
 import { HelperDialog } from '../UI/HelperDialog';
+import { Order, StpData } from './StpDataTable';
 interface HeadStpCell {
     label: string;
     id: keyof StpData;
@@ -38,12 +36,19 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     };
     const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth')
     const isFormula = (headCell: HeadStpCell) => headCell.id === 'name'
-    const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea'].includes(headCell.id)
+    const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea', 'Er'].includes(headCell.id)
     const getImgName = (cellId: keyof StpData) => {
-        const names = ['Lt', 'Lr'].includes(cellId) ? 'light'
-            : ['Er,', 'Ea'].includes(cellId) ? 'energy'
-                : ['Det', 'Sf'].includes(cellId) ? 'decibel' : 'light'
-        return names
+
+        const img_id = {
+            light: ['Lt', 'Lr'],
+            energy: ['Er', 'Ea', 'Det', 'Sf'],
+            decibel: ['Rw']
+        }
+        if (img_id.light.includes(cellId)) return 'light'
+        if (img_id.energy.includes(cellId)) return 'energy'
+        if (img_id.decibel.includes(cellId)) return 'decibel'
+        return ""
+
     }
     return (
         <TableHead>
@@ -105,11 +110,12 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                             <Box
                                             //  sx={ { mx: .5 } }
                                             >
+                                                { !isFormula(headCell) &&
 
-
-                                                <SvgIcon sx={ { maxHeight: 15 } }>
-                                                    <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-orange-800' : 'text-blue-600' } />
-                                                </SvgIcon>
+                                                    <SvgIcon sx={ { maxHeight: 15 } }>
+                                                        <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-orange-800' : 'text-blue-600' } />
+                                                    </SvgIcon>
+                                                }
 
                                             </Box>
                                         </Tooltip>

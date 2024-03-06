@@ -7,19 +7,16 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Stack, TableFooter, alpha } from '@mui/material';
-import { useStpFilter, useCompare, useSortAndFilter } from '../../Hooks/useCompare';
+import { Stack, alpha } from '@mui/material';
+import { useCompare, useStpFilter } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpItem, StpTags } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 
 import { StpTableToolbar } from './StpTableToolbar';
-import { useLoaderData } from 'react-router-dom';
-import { StpDataLoad } from '../../Routes/AppRouter';
 
 
 //__ Data Create*/
@@ -106,14 +103,14 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
         select(newSelected)
     }, [selectedItems, select]);
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
+    // const handleChangePage = (event: unknown, newPage: number) => {
+    //     setPage(newPage);
+    // };
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
+    // const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setRowsPerPage(parseInt(event.target.value, 10));
+    //     setPage(0);
+    // };
 
     const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDense(event.target.checked);
@@ -121,26 +118,26 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
     const isSelected = useCallback((id: number) => selectedItems.indexOf(id) !== -1, [selectedItems]);
     const isFiltersOn = filterParams.cams.length !== 0 || filterParams.depth.length !== 0 || filterParams.tags.length !== 0 || query !== ""
-    const hasTags = (item: StpData) => filterParams.tags.length > 0
-        ? filterParams.tags.every(t => item.tags.includes(t as StpTags))
-        : false
+    // const hasTags = (item: StpData) => filterParams.tags.length > 0
+    //     ? filterParams.tags.every(t => item.tags.includes(t as StpTags))
+    //     : false
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page >= 0
         ? Math.max(0, (1 + page) * RPP - memodata.length)
         : 1;
 
-    const visibleRows = useMemo(
-        () => {
-            // console.log('loading: ', loading)
-            const sliced = sorted.slice(
-                page * RPP,
-                page * RPP + RPP + 1)
-            console.log('sliced', sliced)
-            return sliced as unknown as StpData[]
-        },
-        [RPP, page, sorted]
-    );
+    // const visibleRows = useMemo(
+    //     () => {
+    //         // console.log('loading: ', loading)
+    //         const sliced = sorted.slice(
+    //             page * RPP,
+    //             page * RPP + RPP + 1)
+    //         console.log('sliced', sliced)
+    //         return sliced as unknown as StpData[]
+    //     },
+    //     [RPP, page, sorted]
+    // );
 
     return (
         <Box sx={ { width: '100%', height: '100%' } }>
