@@ -170,7 +170,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     name='tags-select'
                     value={ selectors.tags }
                     onChange={ handleSelectorChange('tags') }
-                    inputProps={ { flexDirection: 'row', } }
+
                     input={ <OutlinedInput label="Свойства ст-та_____" sx={ { fontSize: 12 } } /> }
                     // renderValue={ () => `Найдено: ${filteredCount}` }
                     renderValue={ (selected) => {
