@@ -1,8 +1,9 @@
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, SvgIcon } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import { alpha } from '@mui/material/styles';
 import { AcSearch } from './AcSearch';
 import { PropertySelector } from './PropertySelector';
+import { MemoAttikSvgLogo } from '../UI/Svg/Attik';
 interface TableToolbarProps {
     numSelected: number;
     numFiltered: number
@@ -54,15 +55,15 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 direction={ 'row' }
                 flexGrow={ 2 }
                 justifyContent={ 'space-between' }
+                alignItems={ 'center' }
             >
 
 
                 <PropertySelector filteredCount={ numFiltered } />
                 {/* <SelectedTagList { ...filterParams } /> */ }
 
+                <MemoAttikSvgLogo />
             </Box>
-
-
 
         </Toolbar>
     );

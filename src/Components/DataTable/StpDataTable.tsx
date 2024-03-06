@@ -21,6 +21,7 @@ import { TagsAvatarGroup } from '../UI/TagAvatars';
 import { MdCompare } from 'react-icons/md';
 import { MuiLink } from '../../Routes/Pages/AppBar';
 import { routePaths } from '../../Routes/routePath';
+import { MemoAttikSvgLogo } from '../UI/Svg/Attik';
 
 
 //__ Data Create*/

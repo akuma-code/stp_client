@@ -7,6 +7,7 @@ import { GrInfo, GrTable } from "react-icons/gr";
 import { MdCompare } from "react-icons/md";
 import { LinkProps as RouterLinkProps, Link as RrdLink, useMatches } from 'react-router-dom';
 import { routePaths } from '../routePath';
+import { MemoAttikSvgLogo } from '../../Components/UI/Svg/Attik';
 
 export function AppHeaderBreadcrump() {
 
@@ -65,6 +66,7 @@ export function AppHeaderBreadcrump() {
                     >
                         * В таблице указаны расчетные данные. Получены из калькулятора компании РСК.
                     </Typography>
+
                 </Toolbar>
             </AppBar>
         </Box>
