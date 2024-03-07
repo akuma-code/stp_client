@@ -202,9 +202,9 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                 aria-checked={ isItemSelected }
                                                 tabIndex={ -1 }
                                                 selected={ isItemSelected }
-                                                sx={ { cursor: 'pointer', } }
+
                                             >
-                                                <TableCell padding="checkbox" >
+                                                <TableCell padding="checkbox" onClick={ (event) => handleClick(event, +row.id) } sx={ { cursor: 'pointer', } }>
                                                     <Box component={ Stack } direction={ 'row' } alignItems={ 'center' } spacing={ 0 } gap={ 0 } justifyContent={ 'space-between' }>
 
                                                         { `${index + 1})` }
@@ -224,7 +224,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                     id={ labelId }
                                                     // scope="row"
                                                     padding="none"
-                                                    sx={ { textWrap: 'nowrap' } }
+                                                    sx={ { textWrap: 'nowrap', cursor: 'pointer', } }
                                                     colSpan={ 1 }
                                                 >
                                                     { row.name }

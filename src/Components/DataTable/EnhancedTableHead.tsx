@@ -59,7 +59,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                 <TableCell padding="checkbox" sx={ { bgcolor: '#93d4ff' } } align='center'>
                     <Box component={ Stack } direction={ 'row' } alignItems={ 'center' } spacing={ 0 } gap={ 0 } justifyContent={ 'space-between' }>
 
-                        { `№)` }
+                        { `№` }
                         <Checkbox
                             color="primary"
                             indeterminate={ numSelected > 0 && numSelected < rowCount }
