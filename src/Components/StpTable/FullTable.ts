@@ -40,7 +40,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: "4TopN-14Ar-6(FHcl)",
+        name: "4TopN-14Ar-6FHcl",
         tags: ['soundproof', 'solarproof', 'energy'],
         cams: 1,
         depth: 24,
@@ -59,7 +59,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: "4TopN-16Ar-4(FHcl)",
+        name: "4TopN-16Ar-4FHcl",
         tags: ['solarproof', 'energy'],
         cams: 1,
         depth: 24,
@@ -344,7 +344,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: "4TopN-20Ar-4(FHcl)",
+        name: "4TopN-20Ar-4FHcl",
         tags: ['solarproof', 'energy'],
         cams: 1,
         depth: 28,
@@ -477,7 +477,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: "4TopN-12Ar-4-12-4(FHcl)",
+        name: "4TopN-12Ar-4-12-4FHcl",
         tags: ['solarproof', 'energy'],
         cams: 2,
         depth: 36,
@@ -931,7 +931,7 @@ export const table_data_all: StpItem[] = [
         secure: 'P2A',
     },
     {
-        name: '6TopN-18Ar-4-18-6(FHcl)',
+        name: '6TopN-18Ar-4-18-6FHcl',
         cams: 2,
         depth: 52,
         tags: ['solarproof', 'soundproof', 'energy'],
@@ -986,7 +986,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6TopN-18(TGI)Ar-4-18(TGI)-6',
+        name: '6TopN-18TGIAr-4-18TGI-6',
         cams: 2,
         depth: 52,
         tags: ['energy', 'soundproof'],
@@ -1022,7 +1022,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6TopN-18(TGI)Ar-4-18(TGI)-3.3.1',
+        name: '6TopN-18TGIAr-4-18TGI-3.3.1',
         cams: 2,
         depth: 52,
         tags: ['hitproof', 'soundproof', 'energy'],
@@ -1040,7 +1040,7 @@ export const table_data_all: StpItem[] = [
         secure: "P2A",
     },
     {
-        name: '6TopN-18(TGI)Ar-4-18(TGI)-6(FHcl)',
+        name: '6TopN-18(TGI)Ar-4-18TGI-6FHcl',
         cams: 2,
         depth: 52,
         tags: ['solarproof', 'energy', 'soundproof'],
@@ -1058,7 +1058,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6-18(TGI)-4-18(TGI)Ar-6Эл',
+        name: '6-18TGI-4-18(TGI)Ar-6Эл',
         cams: 2,
         depth: 52,
         tags: ['soundproof', 'multi'],
@@ -1094,7 +1094,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6TopN-16(Ч)Ar-4-20(Ч)-6',
+        name: '6TopN-16(Ч)Ar-4-20Ч-6',
         cams: 2,
         depth: 52,
         tags: ['energy', 'soundproof'],
@@ -1112,7 +1112,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6TopN-16(С)Ar-4-20(С)-6',
+        name: '6TopN-16(С)Ar-4-20С-6',
         cams: 2,
         depth: 52,
         tags: ['energy', 'soundproof'],
@@ -1207,7 +1207,7 @@ export const table_data_all: StpItem[] = [
 
 const table_data_BrGr: StpItem[] = [
     {
-        name: '4TopN-16(TGI)Ar-4(FHbr)',
+        name: '4TopN-16TGIAr-4FHbr',
         tags: ['energy', 'solarproof'],
         cams: 1,
         depth: 24,
@@ -1225,7 +1225,7 @@ const table_data_BrGr: StpItem[] = [
         secure: 'нет'
     },
     {
-        name: '4TopN-16(TGI)Ar-(4FHgr)',
+        name: '4TopN-16TGIAr-4FHgr',
         tags: ['energy', 'solarproof'],
         cams: 2,
         depth: 24,
@@ -1243,7 +1243,7 @@ const table_data_BrGr: StpItem[] = [
         secure: 'нет',
     },
     {
-        name: '4TopN-16Ar-(4FHgr)',
+        name: '4TopN-16Ar-4FHgr',
         tags: ['energy', 'solarproof'],
         cams: 1,
         depth: 24,
@@ -1261,7 +1261,7 @@ const table_data_BrGr: StpItem[] = [
         secure: 'нет'
     },
     {
-        name: '4TopN-16Ar-(4FHbr)',
+        name: '4TopN-16Ar-4FHbr',
         tags: ['energy', 'solarproof'],
         cams: 1,
         depth: 24,
@@ -1279,7 +1279,7 @@ const table_data_BrGr: StpItem[] = [
         secure: 'нет'
     },
     {
-        name: '4TopN-20Ar-(4FHbr)',
+        name: '4TopN-20Ar-4FHbr',
         tags: ['energy', 'solarproof'],
         cams: 1,
         depth: 28,

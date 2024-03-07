@@ -1,13 +1,13 @@
-import { Button, ListItem, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from '@mui/material';
+import { Button, Stack, Toolbar, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import { forwardRef } from 'react';
 import { GrInfo, GrTable } from "react-icons/gr";
 import { MdCompare } from "react-icons/md";
-import { LinkProps as RouterLinkProps, Link as RrdLink, useMatches } from 'react-router-dom';
+import { Link as RrdLink, useMatches } from 'react-router-dom';
 import { routePaths } from '../routePath';
 import { AttikSvgLogo } from '../../Components/UI/Svg/Attik';
+import { MuiLink } from './MuiLink';
 
 export function AppHeaderBreadcrump() {
 
@@ -60,16 +60,28 @@ export function AppHeaderBreadcrump() {
                         </Button>
                     </Box>
                     <Typography
-                        variant='h5'
+                        variant='body1'
                         color={ '#fff' }
                         textAlign={ 'right' }
+                        fontFamily={ 'Fira Code' }
+                        // letterSpacing={ .4 }
+                        // fontWeight={ 'bold' }
+                        textTransform={ 'uppercase' }
+                        maxWidth={ { lg: 500, sm: 300 } }
                     >
-                        * В таблице указаны расчетные данные. Получены из калькулятора компании РСК.
+                        <strong>
+
+                            * В таблице указаны расчетные данные.
+                        </strong>
+                        <br />
+                        <strong>
+                            Получены в калькуляторе компании РСК.
+                        </strong>
                     </Typography>
 
                 </Toolbar>
             </AppBar>
-        </Box>
+        </Box >
     );
 }
 
@@ -84,25 +96,4 @@ const WarnText = () => {
     </Typography>)
 }
 
-
-interface ListItemLinkProps {
-    icon?: React.ReactElement;
-    primary: string;
-    to: string;
-}
-
-export const MuiLink = forwardRef<HTMLAnchorElement, RouterLinkProps>((itemProps, ref) => <RrdLink ref={ ref } { ...itemProps } />);
-
-function ListItemLink(props: ListItemLinkProps) {
-    const { icon, primary, to } = props;
-
-    return (
-        <li>
-            <ListItem component={ MuiLink } to={ to }>
-                { icon ? <ListItemIcon>{ icon }</ListItemIcon> : null }
-                <ListItemText primary={ primary } />
-            </ListItem>
-        </li>
-    );
-}
 

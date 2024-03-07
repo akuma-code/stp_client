@@ -19,7 +19,7 @@ import { EnhancedTableHead } from './EnhancedTableHead';
 import { StpTableToolbar } from './StpTableToolbar';
 import { TagsAvatarGroup } from '../UI/TagAvatars';
 import { MdCompare } from 'react-icons/md';
-import { MuiLink } from '../../Routes/Pages/AppBar';
+import { MuiLink } from '../../Routes/Pages/MuiLink';
 import { routePaths } from '../../Routes/routePath';
 
 
@@ -50,6 +50,7 @@ const cells: (keyof StpData)[] = [
     'secure',
 ] as const
 export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
+    const { select, query, filterParams } = useAppContext()
 
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
@@ -59,10 +60,11 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     const [checkedCells, setCheckedCells] = useState<number[]>([])
     const memodata = preload_data ?? []
 
-    const { select, query, filterParams } = useAppContext()
+
     const filtered = useStpFilter(memodata, query, filterParams)
     const sorted = useCompare(filtered, order, orderBy)
     // const sorted = useSortAndFilter(memodata, order, orderBy, query, filterParams)
+
     // const [data, loading] = useLazyDataLoad(table, order, orderBy, query, filterParams)
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
@@ -152,6 +154,8 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
         // return () => setCheckedCells([])
     }, [checkedCells, select])
     // console.count("RENDER!")
+
+
     return (
         <Suspense fallback={ <div className='text-center'>LOADING</div> }>
             <Box sx={ { width: '100%', height: '100%' } }>
@@ -301,7 +305,11 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     );
 }
 
-
+const DataError = () => {
+    return (
+        <div className='text-center text-xl text-red'>Table data error!!</div>
+    )
+}
 
 /* <TablePagination
                        rowsPerPageOptions={ [5, 10, 20, { value: -1, label: 'Все' }] }
