@@ -2,14 +2,17 @@ import { Paper } from '@mui/material'
 import React, { Suspense, useMemo } from 'react'
 import { StpData, StpDataTable, isJson } from '../../Components/DataTable/StpDataTable'
 import { useLoaderData } from 'react-router-dom'
+import { useAppContext } from '../../Hooks/useStoresContext'
 
 type OverviewProps = object
 
 export const OverView = (props: OverviewProps) => {
-
+    const { StpStore } = useAppContext()
     const data = useLoaderData() as string
     const memodata = useMemo(() => {
         const res: StpData[] = isJson(data) ? JSON.parse(data) : []
+        console.log('res', res.length)
+        StpStore.loadTable(res)
         return res
     }, [data])
 

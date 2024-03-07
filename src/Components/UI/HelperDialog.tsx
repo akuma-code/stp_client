@@ -46,12 +46,9 @@ export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
             >
                 <Tooltip title={ tooltip_title + `. Нажмите для дополнительной справки` } PopperProps={ { placement: 'top' } }>
 
-                    <IconButton onClick={ handleClickOpen } edge='start'
-                    // sx={ { [`& :hover`]: { bgcolor: 'red' } } }
-                    >
+                    <IconButton onClick={ handleClickOpen } edge='start'                    >
                         <SvgIcon sx={ {
                             maxHeight: 15,
-                            // [`& :hover`]: { bgcolor: 'red' }
                         } } >
                             <FaRegQuestionCircle className={ 'text-orange-800' } />
                         </SvgIcon>

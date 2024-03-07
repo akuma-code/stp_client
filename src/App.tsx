@@ -35,7 +35,7 @@ function App() {
       <RouterProvider
         router={ router }
         fallbackElement={
-          <div className="text-4xl text-center">
+          <div className="text-4xl text-center mt-6">
             <strong>App loading.... Be patient</strong>
           </div>
         }

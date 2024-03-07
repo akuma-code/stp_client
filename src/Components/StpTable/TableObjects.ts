@@ -1,5 +1,5 @@
 
-export type StpTags =
+export type StpTag =
     | "multi"
     | "simple"
     | "energy"
@@ -24,7 +24,7 @@ export type StpItem = {
     weight: number
     secure: "P2A" | "нет" | "CM2" | "CM3"
     name: string
-    tags: StpTags[]
+    tags: StpTag[]
 }
 
 export const depths = [
@@ -82,55 +82,6 @@ export const depths = [
 
 
 
-
-const stpNames = [
-    { name: "3.3.1-14Ar-4Эл", tags: ['hitproof', 'soundproof', 'multi'] },
-    { name: "4-16Ar-4Эл", tags: ['multi'] },
-    { name: "4TopN-14Ar-6(FHcl)", tags: ['soundproof', 'solarproof', 'energy'] },
-    { name: "4TopN-16Ar-4(FHcl)", tags: ['solarproof', 'energy'] },
-    { name: "6TopN-10Ar-4.4.1", tags: ['hitproof', 'soundproof', 'energy'] },
-    { name: "4TopN-12Ar-4.4.1", tags: ['hitproof', 'soundproof', 'energy'] },
-    { name: "4TopN-14Ar-3.3.1", tags: ['hitproof', 'soundproof', 'energy'] },
-    { name: "4-16Ar-4Сбр", tags: ['solarproof'] },
-    { name: "4TopN-16-4", tags: ['simple'] },
-    { name: "4-12-4.4.1", tags: ['hitproof', 'soundproof'] },
-    { name: "6-10-4.4.1", tags: ['hitproof', 'soundproof'] },
-    { name: "4-14-3.3.1", tags: ['hitproof', 'soundproof'] },
-    { name: "4-14-6", tags: ['soundproof'] },
-    { name: "4-16-4", tags: ['simple'] },
-    { name: "4-6-4-6-4", tags: ['simple'] },
-    { name: "6-14Ar-4Эл", tags: ['multi', 'soundproof'] },
-    { name: "4-20Ar-4Эл", tags: ['multi',] },
-    { name: "4TopN-20Ar-4(FHcl)", tags: ['solarproof', 'energy'] },
-    { name: "4-20Ar-4Сбр", tags: ['solarproof'] },
-    { name: "4TopN-20-4", tags: ['simple'] },
-    { name: "4-20-4", tags: ['simple'] },
-    { name: "3.3.1-10-4-12Ar-4Эл", tags: ['hitproof', 'soundproof', 'multi'] },
-    { name: "6-10-4-12Ar-4Эл", tags: ['multi', 'soundproof'] },
-    { name: "4-12-4-12Ar-4Эл", tags: ['multi'] },
-    { name: "4TopN-12Ar-4-12-4(FHcl)", tags: ['solarproof', 'energy'] },
-    { name: "6TopN-9Ar-4-9--4.4.1", tags: ['hitproof', 'energy', 'soundproof'] },
-    { name: "4TopN-10Ar-4-10-4.4.1", tags: ['hitproof', 'energy', 'soundproof'] },
-    { name: "4TopN-10ARr-4-12-3.3.1", tags: ['hitproof', 'energy', 'soundproof'] },
-    { name: "4TopN-12Ar-4TopN-12Ar-4", tags: ['energy'] },
-    { name: "4-12-4-12Ar-4Сбр", tags: ['solarproof'] },
-    { name: "6-9-4-9-4.4.1", tags: ['hitproof', 'soundproof'] },
-    { name: "4-10-4-10-4.4.1", tags: ['hitproof', 'soundproof'] },
-    { name: "4-10-4-12-3.3.1", tags: ['hitproof', 'soundproof'] },
-    { name: "4.4.1-24-4.4.1", tags: ['hitproof', 'soundproof'] },
-    { name: "4-12-4-16Ar-4Эл", tags: ['multi'] },
-    { name: "4-14-4-14Ar-4Эл", tags: ['multi'] },
-    { name: "4-14-4-14-4Эл", tags: ['multi'] },
-    { name: "4TopN-12Ar-4-12-4.4.1", tags: ['hitproof', 'soundproof', 'energy'] },
-    { name: "4TopN-12Ar-4-14-3.3.1", tags: ['hitproof', 'soundproof', 'energy'] },
-    { name: "4TopN-14Ar-4TopN-14Ar-4", tags: ['energy'] },
-    { name: "4TopN-12Ar-4-14-6", tags: ['energy', 'soundproof'] },
-    { name: "4TopN-14Ar-4-14-4", tags: ['energy'] },
-    { name: "4-12-4-12-4.4.1", tags: ['hitproof', 'soundproof'] },
-    { name: "4-12-4-12-3.3.1", tags: ['hitproof', 'soundproof'] },
-    { name: "4-14-4-14-4", tags: ['simple'] },
-
-]
 
 // stpNames.map(stp => {
 //     StpItems.map(s => s.name === stp.name ? { ...s, tags: stp.tags } : s)

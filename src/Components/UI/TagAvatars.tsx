@@ -5,8 +5,8 @@ import { HiTrendingUp } from "react-icons/hi";
 import { LiaTemperatureHighSolid } from "react-icons/lia";
 import { PiSidebarSimple } from "react-icons/pi";
 import { Stp_Tags } from "../../Interfaces/Enums";
-import { StpTags } from "../StpTable/TableObjects";
-export const TagAvatarIcon: Record<StpTags, JSX.Element> = {
+import { StpTag } from "../StpTable/TableObjects";
+export const TagAvatarIcon: Record<StpTag, JSX.Element> = {
     simple: <PiSidebarSimple />,
     energy: <LiaTemperatureHighSolid />,
     multi: <GrMultiple />,
@@ -16,8 +16,8 @@ export const TagAvatarIcon: Record<StpTags, JSX.Element> = {
 
 }
 
-export const TagsAvatarGroup = ({ tags, handleTagsClick }: { tags: StpTags[], handleTagsClick?: (tag: StpTags) => void }) => {
-    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => (tag: StpTags) => {
+export const TagsAvatarGroup = ({ tags, handleTagsClick }: { tags: StpTag[], handleTagsClick?: (tag: StpTag) => void }) => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => (tag: StpTag) => {
 
 
 

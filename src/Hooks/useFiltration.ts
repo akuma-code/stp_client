@@ -1,16 +1,16 @@
 import { useCallback, useMemo, useState } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
-import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
+import { StpItem, StpTag } from "../Components/StpTable/TableObjects";
 import { _isArr } from "../Helpers/helpersFns";
 
 export type FiltersParams = {
-    tags: StpTags[],
+    tags: StpTag[],
     depth: number[],
     cams: number[]
 }
-export type ItemFilteringProps = { depth: number, name: string, tags: StpTags[], cams: number, id: number }
+export type ItemFilteringProps = { depth: number, name: string, tags: StpTag[], cams: number, id: number }
 
-const hasTags = (item: StpItem, tags: StpTags[]) => tags.length > 0
+const hasTags = (item: StpItem, tags: StpTag[]) => tags.length > 0
     ? tags.every(t => item.tags.includes(t))
     : false
 
@@ -110,7 +110,7 @@ type FilterByName<T extends keyof FiltersParams> = {
 }
 type FilterByTags<T extends keyof FiltersParams> = {
     type: 'tags',
-    payload: StpTags[]
+    payload: StpTag[]
 }
 type FilterByDepth<T extends keyof FiltersParams> = {
     type: 'depths',

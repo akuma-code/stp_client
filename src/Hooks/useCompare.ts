@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
-import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
+import { StpItem, StpTag } from "../Components/StpTable/TableObjects";
 import { AnyObj } from "../Interfaces/Types";
 import { FiltersParams } from "./useFiltration";
 import { hasCams, hasDepths } from "./useMemoFilter";
@@ -46,7 +46,7 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
     });
     return stabilizedThis.map((el) => el[0]);
 }
-const hasTags = (tags: StpTags[]) => (item: StpItem,) => tags.length > 0
+const hasTags = (tags: StpTag[]) => (item: StpItem,) => tags.length > 0
     ? tags.every(t => item.tags.includes(t))
     : false
 export const _FilterFns = {
@@ -60,7 +60,7 @@ type FilterByName = {
 }
 type FilterByTags = {
     type: 'tags',
-    payload: StpTags[]
+    payload: StpTag[]
 }
 type FilterByDepth = {
     type: 'depth',
@@ -72,7 +72,7 @@ type FilterByCams = {
 }
 
 export type FiltrationType = | FilterByName | FilterByTags | FilterByDepth | FilterByCams
-export type FilterItemParams = { depth: number, name: string, tags: StpTags[], cams: number }
+export type FilterItemParams = { depth: number, name: string, tags: StpTag[], cams: number }
 
 function filtrationReducer<T extends FilterItemParams>(array: T[], filter: FiltrationType) {
     const filterName = (query: string) => array.filter(item => item.name.toLowerCase().includes(query.toLowerCase()))

@@ -147,7 +147,7 @@ export const table_data_all: StpItem[] = [
     },
     {
         name: "4TopN-16-4",
-        tags: ['simple'],
+        tags: ['energy'],
         cams: 1,
         depth: 24,
         Ro: .71,

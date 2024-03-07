@@ -13,7 +13,7 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { Button, Stack, alpha } from '@mui/material';
 import { useCompare, useStpFilter } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
-import { StpItem, StpTags } from '../StpTable/TableObjects';
+import { StpItem, StpTag } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 
 import { StpTableToolbar } from './StpTableToolbar';
@@ -230,7 +230,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                     { row.name }
                                                 </TableCell>
                                                 <TableCell align='right'>
-                                                    <TagsAvatarGroup tags={ row.tags as unknown as StpTags[] }
+                                                    <TagsAvatarGroup tags={ row.tags as unknown as StpTag[] }
                                                     // handleTagsClick={ (t) => filterFn(prev => ({ ...prev, tags: [...prev.tags!, t] })) }
                                                     />
                                                 </TableCell>

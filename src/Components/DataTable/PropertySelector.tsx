@@ -10,7 +10,7 @@ import { useCallback, useState } from 'react';
 import { MdFilterListOff } from "react-icons/md";
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { Stp_Tags } from '../../Interfaces/Enums';
-import { StpTags } from '../StpTable/TableObjects';
+import { StpTag } from '../StpTable/TableObjects';
 import { TagAvatarIcon } from '../UI/TagAvatars';
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -55,7 +55,7 @@ export const tagsArray: (keyof typeof Stp_Tags)[] = [
 
 export type SelectorProps = {
 
-    tags: StpTags[];
+    tags: StpTag[];
     cams: number[];
     depth: number[];
     order?: (keyof SelectorProps)[]
@@ -70,8 +70,8 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
         switch (selectorType) {
             case 'tags': {
                 const { value } = event.target;
-                setSelector(prev => ({ ...prev, tags: value as StpTags[] }))
-                filterFn(prev => ({ ...prev, tags: value as StpTags[] }))
+                setSelector(prev => ({ ...prev, tags: value as StpTag[] }))
+                filterFn(prev => ({ ...prev, tags: value as StpTag[] }))
                 break
             }
             case 'cams': {
@@ -189,7 +189,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                                     selected?.map(s =>
 
                                         <Avatar key={ s } sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
-                                            { TagAvatarIcon[s as StpTags] }
+                                            { TagAvatarIcon[s as StpTag] }
                                             {/* <SvgIcon >                                            </SvgIcon> */ }
                                         </Avatar>
 

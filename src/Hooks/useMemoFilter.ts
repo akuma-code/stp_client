@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
-import { StpItem, StpTags } from "../Components/StpTable/TableObjects";
+import { StpItem, StpTag } from "../Components/StpTable/TableObjects";
 import { _log } from "../Helpers/helpersFns";
-const hasTags = (tags: StpTags[]) => (item: StpItem) => tags.length > 0
+const hasTags = (tags: StpTag[]) => (item: StpItem) => tags.length > 0
     ? tags.every(t => item.tags.includes(t))
     : false
 export const hasCams = (cams: number[]) => <T extends { cams: number }>(item: T) => cams.includes(item.cams)
@@ -19,7 +19,7 @@ export type _FilterFnKeys = keyof typeof _FilterFns
 type FilterPropFn<T> = (itemProp: Partial<T>) => boolean
 
 
-type MFuncArgs = { cams?: number[], depth?: number[], tags?: StpTags[] }
+type MFuncArgs = { cams?: number[], depth?: number[], tags?: StpTag[] }
 export function useMemoFilters<T extends StpData>(items: T[], searchProps: MFuncArgs) {
     const [filterOrder, setFilterOrder] = useState<MFuncArgs>({ ...searchProps })
 
@@ -52,7 +52,7 @@ type r = PropSearch<StpData, 'cams'>
 type FiltersArrayElement = {
     cams?: number[]
     depth?: number[]
-    tags?: StpTags[]
+    tags?: StpTag[]
 }
 const filterProp = <T>(prop: keyof T & string, values: (number)[]) => (item: T) => values.includes(item[prop] as number)
 const ArrayFilter = <T>(items: T[], filter: FiltersArrayElement) => {
@@ -60,7 +60,7 @@ const ArrayFilter = <T>(items: T[], filter: FiltersArrayElement) => {
 
 }
 
-export const ReduceFilter = <T>(searchFilter: { cams: number[], depth: number[], tags: StpTags[] }) => {
+export const ReduceFilter = <T>(searchFilter: { cams: number[], depth: number[], tags: StpTag[] }) => {
 
     let filters: (Partial<typeof searchFilter>)[] = []
 
