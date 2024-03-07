@@ -17,22 +17,29 @@ export const TagAvatarIcon: Record<StpTags, JSX.Element> = {
 
 }
 
-export const TagsAvatarGroup = ({ tags }: { tags: StpTags[] }) => {
+export const TagsAvatarGroup = ({ tags, handleTagsClick }: { tags: StpTags[], handleTagsClick?: (tag: StpTags) => void }) => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => (tag: StpTags) => {
+        console.log('tag', tag)
+        console.log('e', e)
 
+
+        if (handleTagsClick) return handleTagsClick(tag)
+        else return console.log(tag)
+    }
     return (
         <AvatarGroup max={ 3 } sx={ { maxWidth: 80, justifyContent: 'left', p: 0, m: 0 } } component={ Stack }>
             { tags.sort().map(t =>
-                <Avatar key={ t }
+                <Avatar key={ t } variant="circular"
+
                     sx={ {
                         maxWidth: 22,
                         maxHeight: 22,
                         bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
-                        color: 'white',
+                        color: 'whitesmoke',
                         mx: .4
                     } }
                 >
                     <Tooltip title={ Stp_Tags[t] }>
-
                         <SvgIcon sx={ { border: '2px solid #303030' } }>{ TagAvatarIcon[t] }</SvgIcon>
                     </Tooltip>
                 </Avatar>

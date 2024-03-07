@@ -35,11 +35,11 @@ export enum Stp_TypeFields {
     solarproof = "Солнцеотражающий",
 }
 export enum Stp_Tags {
-    multi = "Мультифункциональный",
+    multi = "МультиФункциональный",
     simple = "Простой",
-    energy = "Энергосберегающий",
+    energy = "Теплый",
     soundproof = "Шумоизоляционный",
-    hitproof = "Противоударный",
+    hitproof = "Безопасный",
     solarproof = "Солнцеотражающий",
 }
 

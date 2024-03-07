@@ -18,7 +18,7 @@ function App() {
 
   const [querySearch, setQuery] = useState("")
 
-  const [filters, setFilters] = useState<FiltersParams>({ cams: [], depth: [], tags: [] })
+  const [filters, setFilters] = useState<Partial<FiltersParams>>({ cams: [], depth: [], tags: [] })
   return (
     <AppContext.Provider value={ {
       ...stores,

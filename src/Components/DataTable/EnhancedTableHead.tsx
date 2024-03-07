@@ -1,4 +1,4 @@
-import { SvgIcon, Tooltip } from '@mui/material';
+import { Stack, SvgIcon, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
@@ -54,14 +54,18 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox" sx={ { bgcolor: '#93d4ff' } }>
-                    <Checkbox
-                        color="primary"
-                        indeterminate={ numSelected > 0 && numSelected < rowCount }
-                        checked={ rowCount > 0 && numSelected === rowCount }
-                        onChange={ onSelectAllClick }
-                        aria-labelledby='selected_id'
-                        id='selected_id' />
+                <TableCell padding="checkbox" sx={ { bgcolor: '#93d4ff' } } align='center'>
+                    <Box component={ Stack } direction={ 'row' } alignItems={ 'center' } spacing={ 0 } gap={ 0 } justifyContent={ 'space-between' }>
+
+                        { `№)` }
+                        <Checkbox
+                            color="primary"
+                            indeterminate={ numSelected > 0 && numSelected < rowCount }
+                            checked={ rowCount > 0 && numSelected === rowCount }
+                            onChange={ onSelectAllClick }
+                            aria-labelledby='selected_id'
+                            id='selected_id' />
+                    </Box>
                 </TableCell>
                 {
                     stp_headCells.map((headCell) => (
@@ -77,15 +81,15 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                             padding={ headCell.disablePadding ? 'none' : 'normal' }
                             sortDirection={ orderBy === headCell.id ? order : false }
                             sx={ {
-                                borderBottom: '1px solid black', height: 60, bgcolor: '#93d4ff',
+                                height: 60, bgcolor: '#93d4ff',
 
-                                width: 10
+                                // width: 10
                             } }
                             id={ headCell.id }
                         >
                             <TableSortLabel sx={ {
                                 fontSize: 18,
-                                maxWidth: 150,
+                                // maxWidth: 150,
                                 // width: 10
 
 

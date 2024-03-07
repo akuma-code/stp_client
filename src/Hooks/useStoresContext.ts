@@ -19,8 +19,8 @@ export type AContext = {
     setType?: React.Dispatch<React.SetStateAction<StpTypeProps>>
     selectedTags: string[],
     setTags: React.Dispatch<React.SetStateAction<string[]>>
-    filterParams: FiltersParams
-    filterFn: React.Dispatch<React.SetStateAction<FiltersParams>>
+    filterParams: Partial<FiltersParams>
+    filterFn: React.Dispatch<React.SetStateAction<Partial<FiltersParams>>>
 }
 export const AppContext = createContext<AContext | null>(null)
 

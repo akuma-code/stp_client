@@ -43,10 +43,10 @@ const depthArray = [
 ];
 const camsArray = [1, 2];
 export const tagsArray: (keyof typeof Stp_Tags)[] = [
+    'simple',
     'energy',
     'hitproof',
     'multi',
-    'simple',
     'solarproof',
     'soundproof'
 ] as const;
@@ -63,7 +63,7 @@ export type SelectorProps = {
 
 export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
     const { filterFn, filterParams } = useAppContext();
-    const [selectors, setSelector] = useState<SelectorProps>(filterParams);
+    const [selectors, setSelector] = useState<Partial<SelectorProps>>(filterParams);
 
     const handleSelectorChange = useCallback((selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
 
@@ -96,7 +96,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
         setSelector(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
 
     }
-    const isFilterOff = selectors.cams.length === 0 && selectors.depth.length === 0 && selectors.tags.length === 0
+    const isFilterOff = selectors.cams?.length === 0 && selectors.depth?.length === 0 && selectors.tags?.length === 0
     return (
         <Stack
             direction={ 'row' }
@@ -129,7 +129,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
 
                     { depthArray.map((depth) => (
                         <MenuItem key={ depth } value={ depth } divider dense>
-                            <Checkbox checked={ selectors.depth.indexOf(depth) > -1 } name={ depth + '_checkDepth' } />
+                            <Checkbox checked={ selectors.depth?.includes(depth) } name={ depth + '_checkDepth' } />
                             <ListItemText primary={ `${depth} мм` } />
                         </MenuItem>
 
@@ -158,7 +158,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
 
                     { camsArray.map((cam) => (
                         <MenuItem key={ cam } value={ cam } divider dense>
-                            <Checkbox checked={ selectors.cams.indexOf(cam) > -1 } name={ cam + '_checkCam' } />
+                            <Checkbox checked={ selectors?.cams?.includes(cam) } name={ cam + '_checkCam' } />
                             <ListItemText primary={ camTxt(cam) } />
                         </MenuItem>
                     )) }
@@ -205,7 +205,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
 
                     { tagsArray.map((tag) => (
                         <MenuItem key={ tag } value={ tag } divider dense>
-                            <Checkbox checked={ selectors.tags.indexOf(tag) > -1 } name={ tag + '_check' } />
+                            <Checkbox checked={ selectors?.tags?.includes(tag) } name={ tag + '_check' } />
                             <ListItemText primary={ Stp_Tags[tag] } />
                         </MenuItem>
                     )) }

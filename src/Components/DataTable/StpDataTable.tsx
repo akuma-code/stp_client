@@ -21,6 +21,7 @@ import { TagsAvatarGroup } from '../UI/TagAvatars';
 import { MdCompare } from 'react-icons/md';
 import { MuiLink } from '../../Routes/Pages/MuiLink';
 import { routePaths } from '../../Routes/routePath';
+import { _log } from '../../Helpers/helpersFns';
 
 
 
@@ -50,7 +51,7 @@ const cells: (keyof StpData)[] = [
     'secure',
 ] as const
 export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
-    const { select, query, filterParams } = useAppContext()
+    const { select, query, filterParams, filterFn } = useAppContext()
 
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
@@ -90,10 +91,11 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
     }, [sorted, checkedCells]);
 
-    const handleClick = useCallback((event: React.MouseEvent<unknown>, id: number) => {
+    const handleClick = useCallback((event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
+
         // const store_selectedIndex = selectedItems.indexOf(id);
+        // let newSelected: number[] = [];
         const selectedIdx = checkedCells.indexOf(id);
-        let newSelected: number[] = [];
 
         if (selectedIdx === -1) setCheckedCells(prev => [...prev, id])
         else if (selectedIdx >= 0) setCheckedCells(prev => prev.filter(p => p !== id))
@@ -128,7 +130,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     };
 
     const isSelected = useCallback((id: number) => checkedCells.indexOf(id) !== -1, [checkedCells]);
-    const isFiltersOn = filterParams.cams.length !== 0 || filterParams.depth.length !== 0 || filterParams.tags.length !== 0 || query !== ""
+    const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0 || query !== ""
     // const hasTags = (item: StpData) => filterParams.tags.length > 0
     //     ? filterParams.tags.every(t => item.tags.includes(t as StpTags))
     //     : false
@@ -159,7 +161,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     return (
         <Suspense fallback={ <div className='text-center'>LOADING</div> }>
             <Box sx={ { width: '100%', height: '100%' } }>
-                <Paper sx={ { mb: 2 } } elevation={ 4 }>
+                <Paper sx={ { mb: 2 } } elevation={ 2 }>
 
                     <StpTableToolbar numSelected={ checkedCells.length } numFiltered={ sorted.length } />
 
@@ -195,27 +197,32 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                             <TableRow
                                                 hover
                                                 key={ row.id }
-                                                onClick={ (event) => handleClick(event, +row.id) }
+                                                // onClick={ (event) => handleClick(event, +row.id) }
                                                 role="checkbox"
                                                 aria-checked={ isItemSelected }
                                                 tabIndex={ -1 }
                                                 selected={ isItemSelected }
                                                 sx={ { cursor: 'pointer', } }
                                             >
-                                                <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                        color="primary"
-                                                        checked={ isItemSelected }
-                                                        inputProps={ {
-                                                            'aria-labelledby': labelId,
-                                                        } }
-                                                        id={ labelId }
-                                                    />
+                                                <TableCell padding="checkbox" >
+                                                    <Box component={ Stack } direction={ 'row' } alignItems={ 'center' } spacing={ 0 } gap={ 0 } justifyContent={ 'space-between' }>
+
+                                                        { `${index + 1})` }
+                                                        <Checkbox
+                                                            color="primary"
+                                                            checked={ isItemSelected }
+                                                            inputProps={ {
+                                                                'aria-labelledby': labelId,
+                                                            } }
+                                                            id={ labelId }
+                                                        />
+                                                    </Box>
                                                 </TableCell>
                                                 <TableCell
+                                                    onClick={ (event) => handleClick(event, +row.id) }
                                                     component="th"
                                                     id={ labelId }
-                                                    scope="row"
+                                                    // scope="row"
                                                     padding="none"
                                                     sx={ { textWrap: 'nowrap' } }
                                                     colSpan={ 1 }
@@ -223,11 +230,15 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                     { row.name }
                                                 </TableCell>
                                                 <TableCell align='right'>
-                                                    <TagsAvatarGroup tags={ row.tags as unknown as StpTags[] } />
+                                                    <TagsAvatarGroup tags={ row.tags as unknown as StpTags[] }
+                                                    />
                                                 </TableCell>
-                                                { cells.map(cell =>
-                                                    <TableCell align="center" key={ cell }>{ row[cell] }</TableCell>
-                                                ) }
+                                                {
+                                                    cells.map(cell =>
+
+                                                        <TableCell align="center" key={ cell }>{ row[cell] }</TableCell>
+                                                    )
+                                                }
 
                                             </TableRow>
                                         );
