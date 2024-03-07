@@ -38,7 +38,7 @@ export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
 
 
     const ctx = useContext(CompareContext)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const clickHandler = (item: string) => (_e: React.MouseEvent<HTMLDivElement>) => {
         ctx && ctx.selectItem(item)
         // console.log('clicked', item)
@@ -157,8 +157,7 @@ export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, li
                                 textAlign: 'center',
                                 fontSize: { sm: 12, lg: 15 }
                             } }
-                            secondaryTypographyProps={ { displayPrint: 'none', display: 'none' } }
-                            sx={ {} }
+                            secondaryTypographyProps={ { displayPrint: 'none' } }
                             primary={ item }
 
                         />

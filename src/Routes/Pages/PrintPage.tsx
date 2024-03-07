@@ -18,10 +18,8 @@ export const PrintPage = (props: PrintPageProps) => {
 
 
     return (
-        <Stack gap={ 2 } sx={ {
-            bgcolor: 'beige'
-
-        } }
+        <Stack gap={ 2 }
+            sx={ {} }
             direction={ 'column' }
             justifyContent={ 'start' }
         >

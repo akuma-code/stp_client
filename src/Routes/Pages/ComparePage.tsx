@@ -1,13 +1,14 @@
 import { Button, Icon, Stack } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { TfiControlBackward } from "react-icons/tfi"
-import { Link } from 'react-router-dom'
+import { Link, useRouteLoaderData } from 'react-router-dom'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { routePaths } from '../routePath'
 import { StpCompareItems } from './StpCompareItems'
 import { useReactToPrint } from 'react-to-print'
 import { LuPrinter } from 'react-icons/lu'
 import { ItemsToPrint } from './PrintPage'
+import { useMinMaxProps } from '../../Hooks/useMinMaxProps'
 export type ICompareCtx = {
     selectedItem: null | string
     selectItem: React.Dispatch<React.SetStateAction<string | null>>
@@ -16,6 +17,7 @@ export const CompareContext = React.createContext<ICompareCtx | null>(null)
 
 export const ComparePage = () => {
     const { selectedItems, StpStore } = useAppContext()
+
     const [itemName, setName] = useState<string | null>(null)
     const printRef = useRef(null)
     const handlePrint = useReactToPrint({
@@ -23,7 +25,8 @@ export const ComparePage = () => {
     })
 
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
-
+    const ff = useMinMaxProps(filtered)
+    console.log('ff', ff)
     return (
         <CompareContext.Provider
             value={ {
@@ -36,7 +39,7 @@ export const ComparePage = () => {
                 filtered.length > 0 ?
                     <Stack direction={ 'column' }
                         sx={ { maxHeight: '70vh' } }
-                    // divider={ <Divider flexItem orientation='horizontal' variant='fullWidth' sx={ { borderWidth: 1 } } /> }
+
                     >
                         <Button
                             variant='outlined'
