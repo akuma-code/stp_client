@@ -231,6 +231,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                 </TableCell>
                                                 <TableCell align='right'>
                                                     <TagsAvatarGroup tags={ row.tags as unknown as StpTags[] }
+                                                    // handleTagsClick={ (t) => filterFn(prev => ({ ...prev, tags: [...prev.tags!, t] })) }
                                                     />
                                                 </TableCell>
                                                 {

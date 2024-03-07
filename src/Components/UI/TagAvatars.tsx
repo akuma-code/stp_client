@@ -6,6 +6,7 @@ import { GrMultiple } from "react-icons/gr";
 import { StpTags } from "../StpTable/TableObjects";
 import { Avatar, AvatarGroup, Stack, SvgIcon, Tooltip, alpha } from "@mui/material";
 import { Stp_Tags } from "../../Interfaces/Enums";
+import { _log } from "../../Helpers/helpersFns";
 
 export const TagAvatarIcon: Record<StpTags, JSX.Element> = {
     simple: <PiSidebarSimple />,
@@ -19,8 +20,8 @@ export const TagAvatarIcon: Record<StpTags, JSX.Element> = {
 
 export const TagsAvatarGroup = ({ tags, handleTagsClick }: { tags: StpTags[], handleTagsClick?: (tag: StpTags) => void }) => {
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => (tag: StpTags) => {
-        console.log('tag', tag)
-        console.log('e', e)
+
+
 
 
         if (handleTagsClick) return handleTagsClick(tag)
@@ -30,7 +31,7 @@ export const TagsAvatarGroup = ({ tags, handleTagsClick }: { tags: StpTags[], ha
         <AvatarGroup max={ 3 } sx={ { maxWidth: 80, justifyContent: 'left', p: 0, m: 0 } } component={ Stack }>
             { tags.sort().map(t =>
                 <Avatar key={ t } variant="circular"
-
+                    onClick={ e => handleClick(e)(t) }
                     sx={ {
                         maxWidth: 22,
                         maxHeight: 22,
