@@ -7,10 +7,11 @@ import { StpTags } from "../StpTable/TableObjects";
 import { Avatar, AvatarGroup, Stack, SvgIcon, Tooltip, alpha } from "@mui/material";
 import { Stp_Tags } from "../../Interfaces/Enums";
 import { _log } from "../../Helpers/helpersFns";
-
+import { FaTemperatureLow } from "react-icons/fa6";
+import { LiaTemperatureHighSolid } from "react-icons/lia";
 export const TagAvatarIcon: Record<StpTags, JSX.Element> = {
     simple: <PiSidebarSimple />,
-    energy: <SlEnergy />,
+    energy: <LiaTemperatureHighSolid />,
     multi: <GrMultiple />,
     hitproof: <HiTrendingUp />,
     soundproof: <GiSoundOff />,
@@ -33,8 +34,8 @@ export const TagsAvatarGroup = ({ tags, handleTagsClick }: { tags: StpTags[], ha
                 <Avatar key={ t } variant="circular"
                     onClick={ e => handleClick(e)(t) }
                     sx={ {
-                        maxWidth: 22,
-                        maxHeight: 22,
+                        maxWidth: 23,
+                        maxHeight: 23,
                         bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
                         color: 'whitesmoke',
                         mx: .4

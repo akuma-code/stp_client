@@ -37,17 +37,19 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     };
     const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth' && headCell.id !== 'tags')
     const isFormula = (headCell: HeadStpCell) => headCell.id === 'name' || headCell.id === 'tags'
-    const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea', 'Er', 'Rw'].includes(headCell.id)
+    const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea', 'Er', 'Rw', 'secure'].includes(headCell.id)
     const getImgName = (cellId: keyof StpData) => {
 
         const img_id = {
             light: ['Lt', 'Lr'],
             energy: ['Er', 'Ea', 'Det', 'Sf'],
-            decibel: ['Rw']
+            decibel: ['Rw'],
+            triplex: ['secure']
         }
         if (img_id.light.includes(cellId)) return 'light'
         if (img_id.energy.includes(cellId)) return 'energy'
         if (img_id.decibel.includes(cellId)) return 'decibel'
+        if (img_id.triplex.includes(cellId)) return 'triplex'
         return ""
 
     }
@@ -104,7 +106,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                     hasImage(headCell) ?
 
 
-                                        <HelperDialog img_name={ getImgName(headCell.id) } tooltip_title={ headCell.desc || "" } />
+                                        <HelperDialog img_name={ getImgName(headCell.id) || undefined } tooltip_title={ headCell.desc || "" } />
                                         :
                                         <Tooltip
                                             title={ headCell.desc
@@ -168,7 +170,7 @@ const stp_headCells: readonly HeadStpCell[] = [
     },
     {
         id: 'tags',
-        label: 'Тэги',
+        label: 'Свойства',
         disablePadding: true,
         numeric: true,
         align: 'center',

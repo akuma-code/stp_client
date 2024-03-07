@@ -11,6 +11,7 @@ import { FaRegQuestionCircle } from 'react-icons/fa';
 import path_decibel from './../../Components/StpTable/StpPreset/images/decibels.jpg';
 import path_energy from './../../Components/StpTable/StpPreset/images/energyCoeefs.jpg';
 import path_light from './../../Components/StpTable/StpPreset/images/lightCoeff.jpg';
+import path_triplex from './../../Components/StpTable/StpPreset/images/triplex.jpg'
 
 
 
@@ -18,9 +19,10 @@ const Img_path = {
     light: path_light,
     energy: path_energy,
     decibel: path_decibel,
+    triplex: path_triplex,
 }
 type HelperDialogProps = {
-    img_name: 'light' | 'decibel' | 'energy' | ""
+    img_name: 'light' | 'decibel' | 'energy' | "triplex" | undefined
     tooltip_title: string
 
 }
@@ -67,7 +69,7 @@ export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
                         { `дополнительная справка` }
                     </DialogTitle>
                     <DialogContent>
-                        { img_name !== "" && <img alt='pic' src={ Img_path[img_name] } /> }
+                        { img_name && <img alt='pic' src={ Img_path[img_name] } /> }
                     </DialogContent>
                     <DialogActions>
 
