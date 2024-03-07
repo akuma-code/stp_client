@@ -1,4 +1,4 @@
-import { IconButton, SvgIcon, Tooltip } from '@mui/material';
+import { CircularProgress, IconButton, SvgIcon, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { FaRegQuestionCircle } from 'react-icons/fa';
 import path_decibel from './../../Components/StpTable/StpPreset/images/decibels.jpg';
 import path_energy from './../../Components/StpTable/StpPreset/images/energyCoeefs.jpg';
@@ -39,39 +39,44 @@ export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
 
     return (
         <React.Fragment >
-            <Tooltip title={ tooltip_title + `. Нажмите для дополнительной справки` } PopperProps={ { placement: 'top' } }>
-
-                <IconButton onClick={ handleClickOpen } edge='start'
-                // sx={ { [`& :hover`]: { bgcolor: 'red' } } }
-                >
-                    <SvgIcon sx={ {
-                        maxHeight: 15,
-                        // [`& :hover`]: { bgcolor: 'red' }
-                    } } >
-                        <FaRegQuestionCircle className={ 'text-orange-800' } />
-                    </SvgIcon>
-                </IconButton>
-            </Tooltip>
-            <Dialog autoFocus
-                fullScreen={ fullScreen }
-                open={ open }
-                onClose={ handleClose }
-                aria-labelledby="responsive-dialog-title"
-                PaperProps={ { elevation: 4 } }
+            <Suspense
+                fallback={ <CircularProgress /> }
             >
-                <DialogTitle id="responsive-dialog-title" textTransform={ 'uppercase' } textAlign={ 'center' }>
-                    { `дополнительная справка` }
-                </DialogTitle>
-                <DialogContent>
-                    { img_name !== "" && <img alt='pic' src={ Img_path[img_name] } /> }
-                </DialogContent>
-                <DialogActions>
+                <Tooltip title={ tooltip_title + `. Нажмите для дополнительной справки` } PopperProps={ { placement: 'top' } }>
 
-                    <Button variant={ 'contained' } onClick={ handleClose } autoFocus fullWidth color='info'>
-                        Понятно
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                    <IconButton onClick={ handleClickOpen } edge='start'
+                    // sx={ { [`& :hover`]: { bgcolor: 'red' } } }
+                    >
+                        <SvgIcon sx={ {
+                            maxHeight: 15,
+                            // [`& :hover`]: { bgcolor: 'red' }
+                        } } >
+                            <FaRegQuestionCircle className={ 'text-orange-800' } />
+                        </SvgIcon>
+                    </IconButton>
+                </Tooltip>
+
+                <Dialog autoFocus
+                    fullScreen={ fullScreen }
+                    open={ open }
+                    onClose={ handleClose }
+                    aria-labelledby="responsive-dialog-title"
+                    PaperProps={ { elevation: 4 } }
+                >
+                    <DialogTitle id="responsive-dialog-title" textTransform={ 'uppercase' } textAlign={ 'center' }>
+                        { `дополнительная справка` }
+                    </DialogTitle>
+                    <DialogContent>
+                        { img_name !== "" && <img alt='pic' src={ Img_path[img_name] } /> }
+                    </DialogContent>
+                    <DialogActions>
+
+                        <Button variant={ 'contained' } onClick={ handleClose } autoFocus fullWidth color='info'>
+                            Понятно
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </Suspense>
         </React.Fragment>
     );
 }

@@ -54,7 +54,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox" sx={ { borderBottom: '1px solid black', bgcolor: '#93d4ff' } }>
+                <TableCell padding="checkbox" sx={ { bgcolor: '#93d4ff' } }>
                     <Checkbox
                         color="primary"
                         indeterminate={ numSelected > 0 && numSelected < rowCount }

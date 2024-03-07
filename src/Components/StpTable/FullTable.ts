@@ -1,6 +1,6 @@
 import { StpItem } from "./TableObjects";
 
-export const table_data_preset: StpItem[] = [
+export const table_data_all: StpItem[] = [
     {
         name: "3.3.1-14Ar-4Эл",
         tags: ['hitproof', 'soundproof', 'multi'],
@@ -136,7 +136,7 @@ export const table_data_preset: StpItem[] = [
     },
     {
         name: "4-16Ar-4Сбр",
-        tags: ['solarproof'],
+        tags: ['solarproof', 'multi'],
         cams: 1,
         depth: 24,
         Ro: 0.38,
@@ -364,7 +364,7 @@ export const table_data_preset: StpItem[] = [
     },
     {
         name: "4-20Ar-4Сбр",
-        tags: ['solarproof'],
+        tags: ['solarproof', 'multi'],
         cams: 1,
         depth: 28,
         Ro: .38,
@@ -573,7 +573,7 @@ export const table_data_preset: StpItem[] = [
     },
     {
         name: "4-12-4-12Ar-4Сбр",
-        tags: ['solarproof'],
+        tags: ['solarproof', "multi"],
         cams: 2,
         depth: 36,
         Ro: .56,
@@ -1133,7 +1133,7 @@ export const table_data_preset: StpItem[] = [
         name: '6-18-6-18Ar-4Сбр',
         cams: 2,
         depth: 52,
-        tags: ['energy', 'soundproof'],
+        tags: ['multi', 'soundproof', "solarproof"],
         Ro: .8,
         Rw: 36,
         Lt: 50,
@@ -1205,3 +1205,197 @@ export const table_data_preset: StpItem[] = [
 ]
 
 
+const table_data_BrGr: StpItem[] = [
+    {
+        name: '4TopN-16(TGI)Ar-4(FHbr)',
+        tags: ['energy', 'solarproof'],
+        cams: 1,
+        depth: 24,
+        Ro: 1.1,
+        Rw: 31,
+        Lt: 41,
+        Lr: 18,
+        Ra: 93,
+        Det: 29,
+        Er: 24,
+        Ea: 47,
+        Sf: 36,
+        S: 1.14,
+        weight: 20,
+        secure: 'нет'
+    },
+    {
+        name: '4TopN-16(TGI)Ar-(4FHgr)',
+        tags: ['energy', 'solarproof'],
+        cams: 2,
+        depth: 24,
+        Ro: 1.1,
+        Rw: 31,
+        Lt: 37,
+        Lr: 15,
+        Ra: 97,
+        Det: 27,
+        Er: 21,
+        Ea: 52,
+        Sf: 34,
+        S: 1.09,
+        weight: 20,
+        secure: 'нет',
+    },
+    {
+        name: '4TopN-16Ar-(4FHgr)',
+        tags: ['energy', 'solarproof'],
+        cams: 1,
+        depth: 24,
+        Ro: 1.1,
+        Rw: 31,
+        Lt: 37,
+        Lr: 15,
+        Ra: 97,
+        Det: 27,
+        Er: 21,
+        Ea: 52,
+        Sf: 34,
+        S: 1.14,
+        weight: 20,
+        secure: 'нет'
+    },
+    {
+        name: '4TopN-16Ar-(4FHbr)',
+        tags: ['energy', 'solarproof'],
+        cams: 1,
+        depth: 24,
+        Ro: 1.1,
+        Rw: 31,
+        Lt: 41,
+        Lr: 18,
+        Ra: 93,
+        Det: 29,
+        Er: 24,
+        Ea: 47,
+        Sf: 36,
+        S: 1.14,
+        weight: 20,
+        secure: 'нет'
+    },
+    {
+        name: '4TopN-20Ar-(4FHbr)',
+        tags: ['energy', 'solarproof'],
+        cams: 1,
+        depth: 28,
+        Ro: 1.1,
+        Rw: 31,
+        Lt: 41,
+        Lr: 18,
+        Ra: 93,
+        Det: 29,
+        Er: 24,
+        Ea: 47,
+        Sf: 36,
+        S: 1.14,
+        weight: 20,
+        secure: 'нет'
+    },
+    {
+        name: '4TopN-20Ar-4FHGr',
+        tags: ['energy', 'solarproof'],
+        cams: 1,
+        depth: 28,
+        Ro: 1.1,
+        Rw: 31,
+        Lt: 37,
+        Lr: 15,
+        Ra: 97,
+        Det: 27,
+        Er: 21,
+        Ea: 52,
+        Sf: 34,
+        S: 1.09,
+        weight: 20,
+        secure: 'нет'
+    },
+    {
+        name: '4TopN-12Ar-4-12-4FHbr',
+        tags: ['energy', 'solarproof'],
+        cams: 2,
+        depth: 36,
+        Ro: 1,
+        Rw: 33,
+        Lt: 48,
+        Lr: 20,
+        Ra: 94,
+        Det: 26,
+        Er: 23,
+        Ea: 51,
+        Sf: 33,
+        S: 1.15,
+        weight: 30,
+        secure: 'нет'
+    },
+    {
+        name: '4TopN-12Ar-4-12-4FHgr',
+        tags: ['energy', 'solarproof'],
+        cams: 2,
+        depth: 36,
+        Ro: 1,
+        Rw: 33,
+        Lt: 44,
+        Lr: 17,
+        Ra: 96,
+        Det: 24,
+        Er: 38,
+        Ea: 56,
+        Sf: 31,
+        S: 1.1,
+        weight: 30,
+        secure: 'нет'
+    },
+    {
+        name: '4TopN-12TGI-4-12TGI-4FHbr',
+        tags: ['energy', 'solarproof'],
+        cams: 2,
+        depth: 36,
+        Ro: 1.1,
+        Rw: 33,
+        Lt: 38,
+        Lr: 20,
+        Ra: 94,
+        Det: 26,
+        Er: 38,
+        Ea: 51,
+        Sf: 34,
+        S: 1.12,
+        weight: 30,
+        secure: 'нет'
+    },
+    {
+        name: '4TopN-12TGI-4-12TGI-4FHgr',
+        tags: ['energy', 'solarproof'],
+        cams: 2,
+        depth: 36,
+        Ro: 1.1,
+        Rw: 33,
+        Lt: 34,
+        Lr: 17,
+        Ra: 96,
+        Det: 24,
+        Er: 38,
+        Ea: 56,
+        Sf: 31,
+        S: 1.1,
+        weight: 30,
+        secure: 'нет'
+    },
+
+
+
+
+
+
+]
+
+export function GetStpData(): StpItem[] {
+    const data = table_data_all.concat(table_data_BrGr)
+
+    return data
+}

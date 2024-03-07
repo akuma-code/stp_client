@@ -7,7 +7,7 @@ import { GrInfo, GrTable } from "react-icons/gr";
 import { MdCompare } from "react-icons/md";
 import { LinkProps as RouterLinkProps, Link as RrdLink, useMatches } from 'react-router-dom';
 import { routePaths } from '../routePath';
-import { MemoAttikSvgLogo } from '../../Components/UI/Svg/Attik';
+import { AttikSvgLogo } from '../../Components/UI/Svg/Attik';
 
 export function AppHeaderBreadcrump() {
 

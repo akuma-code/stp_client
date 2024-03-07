@@ -8,7 +8,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 
 import { Button, Stack, alpha } from '@mui/material';
 import { useCompare, useStpFilter } from '../../Hooks/useCompare';
@@ -21,7 +21,7 @@ import { TagsAvatarGroup } from '../UI/TagAvatars';
 import { MdCompare } from 'react-icons/md';
 import { MuiLink } from '../../Routes/Pages/AppBar';
 import { routePaths } from '../../Routes/routePath';
-import { MemoAttikSvgLogo } from '../UI/Svg/Attik';
+
 
 
 //__ Data Create*/
@@ -159,7 +159,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
                     <StpTableToolbar numSelected={ checkedCells.length } numFiltered={ sorted.length } />
 
-                    <TableContainer sx={ { overflowY: 'auto', maxHeight: '74vh', position: 'relative' } } >
+                    <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', position: 'relative' } } >
                         <Table
                             aria-labelledby="tableTitle"
                             size={ dense ? 'small' : 'medium' }

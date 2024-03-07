@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
-import { table_data_preset } from "./Components/StpTable/FullTable";
+import { table_data_all } from "./Components/StpTable/FullTable";
 import { StpStore } from "./Context/StpStore";
 import { FiltersParams } from "./Hooks/useFiltration";
 import { AppContext } from "./Hooks/useStoresContext";
@@ -8,7 +8,7 @@ import { StpTypeProps } from "./Interfaces/Types";
 import { router } from "./Routes/AppRouter";
 
 
-const stores = { StpStore: new StpStore(table_data_preset) }
+const stores = { StpStore: new StpStore(table_data_all) }
 
 
 function App() {

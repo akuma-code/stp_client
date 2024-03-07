@@ -1,4 +1,4 @@
-import { Avatar, Box, Chip, FormHelperText, IconButton, Stack } from '@mui/material';
+import { Avatar, Box, Chip, FormHelperText, IconButton, Stack, SvgIcon } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -98,12 +98,20 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
     }
     const isFilterOff = selectors.cams.length === 0 && selectors.depth.length === 0 && selectors.tags.length === 0
     return (
-        <Stack direction={ 'row' } alignContent={ 'baseline' } py={ 1 } justifyContent={ 'space-around' } useFlexGap>
+        <Stack
+            direction={ 'row' }
+            alignContent={ 'center' }
+            // py={ 1 }
+            justifyContent={ 'space-around' }
+            useFlexGap
+            spacing={ 4 }
+        // columnGap={ 2.5 }
+        >
 
             {
                 //*Depths
             }
-            <FormControl sx={ { m: 1, width: 180 } }>
+            <FormControl sx={ { width: 180 } }>
                 <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
                 <Select
 
@@ -134,7 +142,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             {
                 //*Cams
             }
-            <FormControl sx={ { m: 1, width: 180 } }>
+            <FormControl sx={ { width: 180 } }>
                 <InputLabel id="cams-label">Кол-во камер</InputLabel>
                 <Select
                     multiple
@@ -159,11 +167,11 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                 <FormHelperText>Укажите, сколько камер</FormHelperText>
             </FormControl>
 
-            <FormControl sx={ { m: 1, minWidth: 200 } }>
+            <FormControl sx={ { minWidth: 200, minHeight: 90 } }>
                 {                //__Tags
                 }
                 <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
-                <Select
+                <Select variant='outlined'
                     multiple
                     labelId="multitag-label"
                     id="multitag"
@@ -176,11 +184,14 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     renderValue={ (selected) => {
 
                         return (
-                            <Box display={ 'flex' } flexDirection={ 'row' } gap={ 1 } flexWrap={ 'nowrap' }>
+                            <Box display={ 'flex' } flexDirection={ 'row' } gap={ 1 } flexWrap={ 'nowrap' } margin={ 0 }>
                                 {
                                     selected?.map(s =>
 
-                                        <Avatar key={ s } >{ TagAvatarIcon[s as StpTags] }</Avatar>
+                                        <Avatar key={ s } sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
+                                            { TagAvatarIcon[s as StpTags] }
+                                            {/* <SvgIcon >                                            </SvgIcon> */ }
+                                        </Avatar>
 
                                     ) }
 

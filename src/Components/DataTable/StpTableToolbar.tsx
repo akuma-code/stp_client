@@ -3,7 +3,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { alpha } from '@mui/material/styles';
 import { AcSearch } from './AcSearch';
 import { PropertySelector } from './PropertySelector';
-import { MemoAttikSvgLogo } from '../UI/Svg/Attik';
+import { AttikSvgLogo } from '../UI/Svg/Attik';
 interface TableToolbarProps {
     numSelected: number;
     numFiltered: number
@@ -15,9 +15,9 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
 
     return (
-        <Toolbar component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } columnGap={ 2 }
+        <Toolbar component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } pt={ 2 } spacing={ 4 }
             sx={ {
-                height: 100,
+                height: { md: 100, lg: 120, sm: 70 },
                 pl: { sm: 2 },
                 pr: { xs: 1, sm: 1 },
                 ...(numSelected > 0 && {
@@ -27,10 +27,12 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
         >
 
 
-            <Box component={ Stack }
+            <Box
+                component={ Stack }
                 flexGrow={ 0 }
-                maxWidth={ '30%' }
-                pt={ 1 }
+                flexShrink={ 1 }
+                maxWidth={ 350 }
+                pt={ 0 }
 
             >    <AcSearch />
 
@@ -45,9 +47,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
 
                 <PropertySelector filteredCount={ numFiltered } />
-                {/* <SelectedTagList { ...filterParams } /> */ }
-
-                <MemoAttikSvgLogo />
+                <AttikSvgLogo />
             </Box>
 
         </Toolbar>
