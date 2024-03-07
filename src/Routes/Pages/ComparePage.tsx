@@ -54,7 +54,7 @@ export const ComparePage = () => {
                         />
                     </Stack>
                     :
-                    null
+                    <NothingToCompare />
 
 
             }

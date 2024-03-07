@@ -154,10 +154,6 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 
-const PicModal = () => {
-
-}
-
 const stp_headCells: readonly HeadStpCell[] = [
     {
         id: 'name',
@@ -165,7 +161,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         disablePadding: false,
         numeric: false,
         desc: "Формула стеклопакета",
-        align: 'center',
+        align: 'left',
         colSpan: 1
     },
     {
