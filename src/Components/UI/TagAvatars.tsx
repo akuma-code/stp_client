@@ -1,14 +1,11 @@
-import { GiSoundOff, GiSolarTime } from "react-icons/gi";
-import { SlEnergy } from "react-icons/sl";
-import { HiTrendingUp } from "react-icons/hi";
-import { PiSidebarSimple } from "react-icons/pi";
-import { GrMultiple } from "react-icons/gr";
-import { StpTags } from "../StpTable/TableObjects";
 import { Avatar, AvatarGroup, Stack, SvgIcon, Tooltip, alpha } from "@mui/material";
-import { Stp_Tags } from "../../Interfaces/Enums";
-import { _log } from "../../Helpers/helpersFns";
-import { FaTemperatureLow } from "react-icons/fa6";
+import { GiSolarTime, GiSoundOff } from "react-icons/gi";
+import { GrMultiple } from "react-icons/gr";
+import { HiTrendingUp } from "react-icons/hi";
 import { LiaTemperatureHighSolid } from "react-icons/lia";
+import { PiSidebarSimple } from "react-icons/pi";
+import { Stp_Tags } from "../../Interfaces/Enums";
+import { StpTags } from "../StpTable/TableObjects";
 export const TagAvatarIcon: Record<StpTags, JSX.Element> = {
     simple: <PiSidebarSimple />,
     energy: <LiaTemperatureHighSolid />,
