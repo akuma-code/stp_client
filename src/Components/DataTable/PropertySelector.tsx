@@ -1,4 +1,4 @@
-import { Avatar, Box, Chip, FormHelperText, IconButton, Stack, SvgIcon } from '@mui/material';
+import { Avatar, Box, FormHelperText, IconButton, Stack } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,7 +11,12 @@ import { MdFilterListOff } from "react-icons/md";
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { Stp_Tags } from '../../Interfaces/Enums';
 import { StpTag } from '../StpTable/TableObjects';
+import { MemoAvaS2 } from '../UI/Svg/AvaS2';
+import { MemoAvaS3 } from '../UI/Svg/AvaS3';
 import { TagAvatarIcon } from '../UI/TagAvatars';
+import { useMinMaxProps } from '../../Hooks/useMinMaxProps';
+
+
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
 export const TagsMenuProps = {
@@ -34,7 +39,7 @@ const CamsMenuProps = {
     PaperProps: {
         style: {
             height: ITEM_HEIGHT * 3 + 10,
-            width: 140,
+            width: 130,
         },
     },
 };
@@ -64,7 +69,7 @@ export type SelectorProps = {
 export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
     const { filterFn, filterParams } = useAppContext();
     const [selectors, setSelector] = useState<Partial<SelectorProps>>(filterParams);
-
+    const a = useMinMaxProps([{ cams: 1, depth: 28 }, { cams: 2, depth: 24 }])
     const handleSelectorChange = useCallback((selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
 
         switch (selectorType) {
@@ -142,7 +147,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             {
                 //*Cams
             }
-            <FormControl sx={ { width: 180 } }>
+            <FormControl sx={ { width: 120 } }>
                 <InputLabel id="cams-label">Кол-во камер</InputLabel>
                 <Select
                     multiple
@@ -150,14 +155,31 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     name="cams-selector"
                     value={ selectors.cams }
                     onChange={ handleSelectorChange('cams') }
-                    input={ <OutlinedInput label="Кол-во камер____" sx={ { fontSize: 12 } } /> }
-                    renderValue={ (selected) => selected?.map(s => camTxt(s as number)).join(" | ") || "Ничего не выбрано" }
+                    input={ <OutlinedInput label="Кол-во камер____" sx={ { fontSize: 12, } } /> }
+
+                    renderValue={ (selected) => {
+                        return (
+                            <Box display={ 'flex' } flexDirection={ 'row' } gap={ 1 } flexWrap={ 'nowrap' } justifyContent={ 'center' }>
+                                {
+                                    selected?.map(s =>
+
+                                        <Avatar key={ s } sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
+                                            { s === 1 && <MemoAvaS2 /> }
+                                            { s === 2 && <MemoAvaS3 /> }
+                                        </Avatar>
+
+                                    ) }
+
+
+                            </Box>
+                        )
+                    } }
                     MenuProps={ CamsMenuProps }
 
                 >
 
                     { camsArray.map((cam) => (
-                        <MenuItem key={ cam } value={ cam } divider dense>
+                        <MenuItem key={ cam } value={ cam } divider dense defaultChecked>
                             <Checkbox checked={ selectors?.cams?.includes(cam) } name={ cam + '_checkCam' } />
                             <ListItemText primary={ camTxt(cam) } />
                         </MenuItem>

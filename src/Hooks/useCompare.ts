@@ -19,15 +19,10 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     return 0;
 }
 
+type TCompareItem<Key extends keyof AnyObj> = { [key in Key]: number | string }
+type TCompareFn<Key extends keyof AnyObj> = (a: TCompareItem<Key>, b: typeof a) => number
 
-
-function getComparator<Key extends keyof AnyObj>(
-    order: Order,
-    orderBy: Key,
-): (
-    a: { [key in Key]: number | string },
-    b: { [key in Key]: number | string },
-) => number {
+function getComparator<Key extends keyof AnyObj>(order: Order, orderBy: Key): TCompareFn<Key> {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);
@@ -98,7 +93,7 @@ export function useCompare<T extends AnyObj>(array: T[], order: Order, sort_fiel
 }
 
 type FilterFnOrder = { [Key in keyof StpData]?: (item: Partial<StpData>) => boolean }
-const getKeyValue = <T extends AnyObj>(obj: T) => Object.entries(obj)[0] satisfies [keyof T, T[keyof T]]
+export const getKeyValue = <T extends AnyObj>(obj: T) => Object.entries(obj)[0] satisfies [keyof T, T[keyof T]]
 const getFilters = (restFilters: Partial<FiltersParams>) => Object.entries(restFilters).reduce((acc, [k, v]) => {
     if (Array.isArray(v) && v.length > 0) acc.push({ [k]: _FilterFns[k as keyof typeof _FilterFns](v as any[]) })
     return acc
@@ -107,20 +102,18 @@ const getFilters = (restFilters: Partial<FiltersParams>) => Object.entries(restF
 
 export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
 
-
-
-
-
     const init_items = array.slice() as unknown as StpData[]
+
     const filtered = useMemo(() => {
         const filterOrder = getFilters(restFilters)
+        let result_items = [] as StpData[]
 
         const fnOrder = filterOrder.reduce((acc, curr) => {
             const [_, fn] = getKeyValue(curr)
             acc.push(fn)
             return acc
         }, [] as FilterFnOrder[keyof FilterFnOrder][])
-        let result_items = [] as StpData[]
+
         if (fnOrder.length > 0) {
             const orderFiltered = fnOrder.reduce((res, fn, idx) => {
                 if (idx === 0) {
@@ -131,7 +124,8 @@ export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sor
                 return res.filter(fn!)
             }, [] as StpData[])
             result_items = orderFiltered
-        } else result_items = init_items as unknown as StpData[]
+        }
+        else result_items = init_items as unknown as StpData[]
 
         const filtered_items = [...result_items].filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
         return filtered_items

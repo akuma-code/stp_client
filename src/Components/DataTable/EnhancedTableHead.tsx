@@ -173,20 +173,20 @@ const stp_headCells: readonly HeadStpCell[] = [
         desc: "Тэги"
     },
     {
-        id: 'depth',
-        label: _EnFieldsStp.depth,
-        disablePadding: true,
-        numeric: false,
-        align: 'center',
-        desc: 'Толщина стеклопакета, мм'
-    },
-    {
         id: 'cams',
         label: _EnFieldsStp.cams,
         disablePadding: true,
         numeric: false,
         align: 'center',
         desc: "1 камера = 2 стекла, 2 камеры = 3 стекла"
+    },
+    {
+        id: 'depth',
+        label: _EnFieldsStp.depth,
+        disablePadding: true,
+        numeric: false,
+        align: 'center',
+        desc: 'Толщина стеклопакета, мм'
     },
     {
         id: 'weight',

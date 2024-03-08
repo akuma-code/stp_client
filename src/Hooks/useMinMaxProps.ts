@@ -1,29 +1,15 @@
+import { StpData } from "../Components/DataTable/StpDataTable";
+import { _log } from "../Helpers/helpersFns";
 import { AnyObj } from "../Interfaces/Types";
+import { getKeyValue } from "./useCompare";
 import { useMap } from "./useObjectMap";
+export type _ArraishProp<T> = { [P in keyof T]: T[P][] }
+export function useMinMaxProps<T extends Partial<StpData>>(items: T[]) {
 
-export function useMinMaxProps<T extends { [key: string]: any }>(items: T[]) {
-
-    const num_items = items.map(item => getNumericProps(item))
-    // const nn = num_items.reduce((acc, is, idx) => {
-    //     const arr: number[] = []
-    //     is.forEach((i) => {
-    //         const [key] = Object.keys(i)
+    const a = items.map(arrayProp)
+    // console.log('a', a)
 
 
-    //         const tmp = acc[key][idx]
-    //         console.log('arr', tmp)
-    //         // acc = { ...acc, [key]: [tmp, i[key]] }
-    //     })
-
-
-
-    //     return acc
-    // }, {} as { [Key in keyof T]: number[] })
-
-
-    // console.log('num_items', nn)
-
-    return num_items
 }
 
 
@@ -32,5 +18,25 @@ const getNumericProps = <T extends { [key: string]: any }>(item: T) => {
         if (typeof value === 'number') return { [key]: value }
         else return null
     })
-    return nums.filter(n => !!n) as unknown as { [key: string]: number }[]
+    return nums.filter(Boolean)
 }
+
+const arrayProp = <T extends Partial<StpData>>(item: T, idx?: number) => {
+    const keys = Object.keys(item) as (keyof T)[]
+    const itemArr = keys.map((key) => ({ [key]: [item[key]] }))
+    const result = itemArr.reduce((acc, item, idx) => {
+        const [k, v] = getKeyValue(item)
+        // if (!acc) acc = { [k]: v }
+        acc = { ...acc, [k]: v }
+        // acc[k].push(...v)
+        return acc
+    })
+    let p = {} as T
+    for (let i = 0; i < itemArr.length; i++) {
+        p = { ...p, [i]: itemArr[i] }
+    }
+    // console.log('p', p)
+}
+
+
+

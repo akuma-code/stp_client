@@ -22,6 +22,7 @@ import { MdCompare } from 'react-icons/md';
 import { MuiLink } from '../../Routes/Pages/MuiLink';
 import { routePaths } from '../../Routes/routePath';
 import { _log } from '../../Helpers/helpersFns';
+import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
 
 
 
@@ -36,7 +37,7 @@ export const isJson = (i: any) => JSON.parse(i) ? true : false
 
 const cells: (keyof StpData)[] = [
     'depth',
-    'cams',
+    // 'cams',
     'weight',
     'Ro',
     'Det',
@@ -234,6 +235,12 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                     // handleTagsClick={ (t) => filterFn(prev => ({ ...prev, tags: [...prev.tags!, t] })) }
                                                     />
                                                 </TableCell>
+                                                <TableCell align='center'>
+                                                    { row.cams === 1 && <AvatarS2 /> }
+                                                    { row.cams === 2 && <AvatarS3 /> }
+                                                    {/* <strong>{ row.cams } </strong> */ }
+                                                </TableCell>
+
                                                 {
                                                     cells.map(cell =>
 
