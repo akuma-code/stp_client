@@ -37,7 +37,6 @@ export const isJson = (i: any) => JSON.parse(i) ? true : false
 
 const cells: (keyof StpData)[] = [
     'depth',
-    // 'cams',
     'weight',
     'Ro',
     'Det',
@@ -52,7 +51,7 @@ const cells: (keyof StpData)[] = [
     'secure',
 ] as const
 export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
-    const { select, query, filterParams, filterFn } = useAppContext()
+    const { select, query, filterParams } = useAppContext()
 
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
@@ -65,9 +64,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
     const filtered = useStpFilter(memodata, query, filterParams)
     const sorted = useCompare(filtered, order, orderBy)
-    // const sorted = useSortAndFilter(memodata, order, orderBy, query, filterParams)
 
-    // const [data, loading] = useLazyDataLoad(table, order, orderBy, query, filterParams)
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
         property: keyof StpData,
@@ -94,13 +91,13 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
     const handleClick = useCallback((event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
 
-        // const store_selectedIndex = selectedItems.indexOf(id);
-        // let newSelected: number[] = [];
         const selectedIdx = checkedCells.indexOf(id);
 
         if (selectedIdx === -1) setCheckedCells(prev => [...prev, id])
         else if (selectedIdx >= 0) setCheckedCells(prev => prev.filter(p => p !== id))
         if (checkedCells.length >= 5) setCheckedCells(prev => prev.filter(p => p !== id))
+        // const store_selectedIndex = selectedItems.indexOf(id);
+        // let newSelected: number[] = [];
         // if (store_selectedIndex === -1) {
         //     newSelected = newSelected.concat(selectedItems, id);
         // } else if (store_selectedIndex === 0) {
@@ -132,9 +129,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
     const isSelected = useCallback((id: number) => checkedCells.indexOf(id) !== -1, [checkedCells]);
     const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0 || query !== ""
-    // const hasTags = (item: StpData) => filterParams.tags.length > 0
-    //     ? filterParams.tags.every(t => item.tags.includes(t as StpTags))
-    //     : false
+
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page >= 0
@@ -266,7 +261,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
 
                     </TableContainer>
-                    <Stack direction={ 'row' } maxHeight={ 55 }>
+                    <Stack direction={ 'row' } maxHeight={ 55 } >
 
 
 
