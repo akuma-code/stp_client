@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, useMediaQuery, useTheme } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import { alpha } from '@mui/material/styles';
 import { AttikSvgLogo } from '../UI/Svg/Attik';
@@ -13,8 +13,11 @@ interface TableToolbarProps {
 
 export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps) {
 
-
+    const theme = useTheme();
+    const showToolbar = useMediaQuery(theme.breakpoints.up('md'));
+    console.log('mobile', showToolbar)
     return (
+        showToolbar &&
         <Toolbar component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } pt={ 2 } spacing={ 4 }
             sx={ {
                 height: { md: 100, lg: 120, sm: 70 },
@@ -32,6 +35,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 flexGrow={ 0 }
                 flexShrink={ 1 }
                 maxWidth={ 350 }
+
                 pt={ 0 }
 
             >    <AcSearch />

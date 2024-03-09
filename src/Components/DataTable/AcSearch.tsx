@@ -1,5 +1,4 @@
-import { Autocomplete, TextField, useTheme } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery'
+import { Autocomplete, TextField } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useAppContext } from '../../Hooks/useStoresContext';
 
@@ -7,9 +6,6 @@ export const AcSearch = () => {
     const [value, setValue] = useState<string | null>(null);
     const { query, setQuery, StpStore } = useAppContext();
     const options = StpStore.table.map(stp => stp.name);
-    // const theme = useTheme();
-    // const small = useMediaQuery(theme.breakpoints.down('lg'));
-    // const handleInput = useDebounceCallback((event: React.SyntheticEvent<Element, Event>, value: string, reason: AutocompleteInputChangeReason) => setQuery(value), 500)
 
     const selectedOptions = useMemo(() => {
 

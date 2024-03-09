@@ -6,7 +6,6 @@ import { GrInfo, GrTable } from "react-icons/gr";
 import { MdCompare } from "react-icons/md";
 import { Link as RrdLink, useMatches } from 'react-router-dom';
 import { routePaths } from '../routePath';
-import { AttikSvgLogo } from '../../Components/UI/Svg/Attik';
 import { MuiLink } from './MuiLink';
 
 export function AppHeaderBreadcrump() {
@@ -18,7 +17,10 @@ export function AppHeaderBreadcrump() {
     return (
         <Box sx={ { flexGrow: 1 } } displayPrint={ 'none' }>
             <AppBar position="static" color={ `warning` }>
-                <Toolbar variant='dense' sx={ { width: '100%', justifyContent: 'space-between' } }>
+                <Toolbar variant='dense' sx={ {
+                    width: '100%', justifyContent: 'space-between',
+                    maxHeight: { sm: 100, lg: 300 }
+                } } >
                     <Box component={ Stack } direction={ 'row' } my={ 1 } gap={ 4 }>
 
                         <IconButton
@@ -71,12 +73,10 @@ export function AppHeaderBreadcrump() {
                     >
                         <strong>
 
-                            * В таблице указаны расчетные данные.
+                            * В таблице указаны расчетные данные.<br />  Получены в калькуляторе компании РСК.
                         </strong>
-                        <br />
-                        <strong>
-                            Получены в калькуляторе компании РСК.
-                        </strong>
+
+
                     </Typography>
 
                 </Toolbar>
@@ -84,16 +84,3 @@ export function AppHeaderBreadcrump() {
         </Box >
     );
 }
-
-
-const WarnText = () => {
-    return (<Typography
-        variant='h6'
-        color={ '#fff' }
-        textAlign={ 'right' }
-    >
-        * В таблице указаны расчетные данные. Получены из калькулятора компании РСК.
-    </Typography>)
-}
-
-

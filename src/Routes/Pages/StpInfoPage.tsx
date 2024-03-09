@@ -1,13 +1,13 @@
+import { Container, ImageListItemBar } from '@mui/material'
+import ImageList from '@mui/material/ImageList'
+import ImageListItem from '@mui/material/ImageListItem'
 import React from 'react'
+import { LiaExpandArrowsAltSolid } from "react-icons/lia"
+import { ModalImg } from '../../Components/UI/ModalImg'
 import path_decibel from './../../Components/StpTable/StpPreset/images/decibels.jpg'
 import path_energy from './../../Components/StpTable/StpPreset/images/energyCoeefs.jpg'
 import path_light from './../../Components/StpTable/StpPreset/images/lightCoeff.jpg'
 import path_triplex from './../../Components/StpTable/StpPreset/images/triplex.jpg'
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import { Container, IconButton, ImageListItemBar } from '@mui/material'
-import { LiaExpandArrowsAltSolid } from "react-icons/lia";
-import { HelperDialog } from '../../Components/UI/HelperDialog'
 type InfoPageProps = {}
 
 export const StpInfoPage: React.FC<InfoPageProps> = () => {
@@ -46,6 +46,8 @@ export type PropImageItem = {
     desc?: string
 }
 export const StpImageList: React.FC<ImageListProps> = ({ imgItems, colNumber = 1, rowNumber = 1, width = 500, height = 450, rowHeight = 'auto' }) => {
+
+
     return (
         <ImageList
             sx={ { width, height } }
@@ -69,21 +71,30 @@ export const StpImageList: React.FC<ImageListProps> = ({ imgItems, colNumber = 1
                         />
                         <ImageListItemBar
                             title={ item.desc }
-                            actionIcon={ <IconButton
-                                sx={ { color: 'tomato', bgcolor: 'whitesmoke' } }
-                            >
+                            actionIcon={
+                                <ModalImg
+                                    tooltip_title='Развернуть изображение'
+                                    btn_icon={ <LiaExpandArrowsAltSolid color='black' /> }
 
-
-                                <LiaExpandArrowsAltSolid />
-                            </IconButton>
+                                >
+                                    <img
+                                        src={ `${item.img_src}?w=${600}&h=${800}&fit=crop&auto=format` }
+                                        alt={ item.title }
+                                        loading="lazy"
+                                    />
+                                </ModalImg>
                             }
-                        // actionIcon={ <HelperDialog img_name={ item.title } tooltip_title='' /> }
+
                         />
                     </ImageListItem>
                 )) }
         </ImageList>
     );
 }
+
+
+
+
 function srcset(image_src: string, size: number, rows: number = 1, cols: number = 1) {
     return {
         src: `${image_src}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
@@ -121,6 +132,7 @@ const itemData: PropImageItem[] = [
     },
 ]
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ImgSetOld(): React.ReactNode {
     return <div className='flex flex-row gap-2 flex-grow flex-wrap p-4 max-h-[70vh]'>
         <div className='flex-grow'>

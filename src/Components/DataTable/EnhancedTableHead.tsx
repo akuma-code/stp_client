@@ -35,8 +35,8 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     const createSortHandler = (property: keyof StpData) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
-    const notInfo = (headCell: HeadStpCell) => (headCell.id !== 'name' && headCell.id !== 'depth' && headCell.id !== 'tags')
-    const isFormula = (headCell: HeadStpCell) => headCell.id === 'name' || headCell.id === 'tags'
+
+    const WoIcon = (headCell: HeadStpCell) => ['name', 'tags', 'cams'].includes(headCell.id)
     const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea', 'Er', 'Rw', 'secure'].includes(headCell.id)
     const getImgName = (cellId: keyof StpData) => {
 
@@ -117,7 +117,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                             <Box
 
                                             >
-                                                { !isFormula(headCell) &&
+                                                { !WoIcon(headCell) &&
 
                                                     <SvgIcon sx={ { maxHeight: 15 } } >
                                                         <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-orange-800' : 'text-blue-600' } />
@@ -176,7 +176,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         id: 'cams',
         label: _EnFieldsStp.cams,
         disablePadding: true,
-        numeric: false,
+        numeric: true,
         align: 'center',
         desc: "1 камера = 2 стекла, 2 камеры = 3 стекла"
     },

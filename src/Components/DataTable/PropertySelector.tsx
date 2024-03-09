@@ -1,4 +1,4 @@
-import { Avatar, Box, FormHelperText, IconButton, Stack } from '@mui/material';
+import { Avatar, Box, FormHelperText, IconButton, Stack, } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -14,8 +14,9 @@ import { StpTag } from '../StpTable/TableObjects';
 import { MemoAvaS2 } from '../UI/Svg/AvaS2';
 import { MemoAvaS3 } from '../UI/Svg/AvaS3';
 import { TagAvatarIcon } from '../UI/TagAvatars';
-import { useMinMaxProps } from '../../Hooks/useMinMaxProps';
 
+import { useTheme } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -38,7 +39,7 @@ const DepthMenuProps = {
 const CamsMenuProps = {
     PaperProps: {
         style: {
-            height: ITEM_HEIGHT * 3 + 10,
+            height: ITEM_HEIGHT * 3 + 4,
             width: 130,
         },
     },
@@ -68,8 +69,9 @@ export type SelectorProps = {
 
 export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
     const { filterFn, filterParams } = useAppContext();
-    const [selectors, setSelector] = useState<Partial<SelectorProps>>(filterParams);
-    const a = useMinMaxProps([{ cams: 1, depth: 28 }, { cams: 2, depth: 24 }])
+    const [selectors, setSelector] = useState<Partial<SelectorProps>>({ ...filterParams, cams: [1, 2] });
+    const theme = useTheme();
+    const fullscreen = useMediaQuery(theme.breakpoints.up('md'));
     const handleSelectorChange = useCallback((selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
 
         switch (selectorType) {
@@ -141,13 +143,14 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     )) }
 
                 </Select>
-                <FormHelperText>Выберете толщину</FormHelperText>
+                { fullscreen && <FormHelperText>Выберете толщину</FormHelperText> }
             </FormControl>
 
             {
                 //*Cams
             }
-            <FormControl sx={ { width: 120 } }>
+            <FormControl sx={ { width: 130 } }>
+
                 <InputLabel id="cams-label">Кол-во камер</InputLabel>
                 <Select
                     multiple
@@ -163,7 +166,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                                 {
                                     selected?.map(s =>
 
-                                        <Avatar key={ s } sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
+                                        <Avatar key={ s } sx={ { height: 30, width: 30, bgcolor: '#3d9fe0' } } variant='rounded'>
                                             { s === 1 && <MemoAvaS2 /> }
                                             { s === 2 && <MemoAvaS3 /> }
                                         </Avatar>
@@ -179,14 +182,14 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                 >
 
                     { camsArray.map((cam) => (
-                        <MenuItem key={ cam } value={ cam } divider dense defaultChecked>
+                        <MenuItem key={ cam } value={ cam } divider dense >
                             <Checkbox checked={ selectors?.cams?.includes(cam) } name={ cam + '_checkCam' } />
                             <ListItemText primary={ camTxt(cam) } />
                         </MenuItem>
                     )) }
-
                 </Select>
-                <FormHelperText>Укажите, сколько камер</FormHelperText>
+                { fullscreen && <FormHelperText>Сколько камер?</FormHelperText> }
+
             </FormControl>
 
             <FormControl sx={ { minWidth: 200, minHeight: 90 } }>
@@ -232,7 +235,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                         </MenuItem>
                     )) }
                 </Select>
-                <FormHelperText>Выберете нужные свойства</FormHelperText>
+                { fullscreen && <FormHelperText>Выберете нужные свойства</FormHelperText> }
             </FormControl>
 
 

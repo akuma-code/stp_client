@@ -166,7 +166,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
                     <StpTableToolbar numSelected={ checkedCells.length } numFiltered={ sorted.length } />
 
-                    <TableContainer sx={ { overflowY: 'auto', maxHeight: '73vh', position: 'relative' } } >
+                    <TableContainer sx={ { overflowY: 'auto', maxHeight: '70vh', position: 'relative' } } >
                         <Table
                             aria-labelledby="tableTitle"
                             size={ dense ? 'small' : 'medium' }
@@ -208,7 +208,7 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                 <TableCell padding="checkbox" onClick={ (event) => handleClick(event, +row.id) } sx={ { cursor: 'pointer', } }>
                                                     <Box component={ Stack } direction={ 'row' } alignItems={ 'center' } spacing={ 0 } gap={ 0 } justifyContent={ 'space-between' }>
 
-                                                        { `${index + 1})` }
+                                                        { `${index + 1}.` }
                                                         <Checkbox
                                                             color="primary"
                                                             checked={ isItemSelected }
@@ -235,9 +235,9 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                     // handleTagsClick={ (t) => filterFn(prev => ({ ...prev, tags: [...prev.tags!, t] })) }
                                                     />
                                                 </TableCell>
-                                                <TableCell align='center'>
-                                                    { row.cams === 1 && <AvatarS2 /> }
-                                                    { row.cams === 2 && <AvatarS3 /> }
+                                                <TableCell align='center' sx={ { display: 'flex', justifyContent: 'center' } }>
+                                                    { row.cams === 1 && <AvatarS2 wh={ 34 } /> }
+                                                    { row.cams === 2 && <AvatarS3 wh={ 34 } /> }
                                                     {/* <strong>{ row.cams } </strong> */ }
                                                 </TableCell>
 
