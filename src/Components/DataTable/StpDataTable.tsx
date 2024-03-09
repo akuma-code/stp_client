@@ -161,7 +161,11 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
                     <StpTableToolbar numSelected={ checkedCells.length } numFiltered={ sorted.length } />
 
-                    <TableContainer sx={ { overflowY: 'auto', maxHeight: '70vh', position: 'relative' } } >
+                    <TableContainer sx={ {
+                        overflowY: 'auto',
+                        maxHeight: '70vh',
+                        position: 'relative'
+                    } } >
                         <Table
                             aria-labelledby="tableTitle"
                             size={ dense ? 'small' : 'medium' }
@@ -201,7 +205,12 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
 
                                             >
                                                 <TableCell padding="checkbox" onClick={ (event) => handleClick(event, +row.id) } sx={ { cursor: 'pointer', } }>
-                                                    <Box component={ Stack } direction={ 'row' } alignItems={ 'center' } spacing={ 0 } gap={ 0 } justifyContent={ 'space-between' }>
+                                                    <Box component={ Stack }
+                                                        direction={ 'row' }
+                                                        alignItems={ 'center' }
+                                                        spacing={ 0 }
+                                                        gap={ 0 }
+                                                        justifyContent={ 'space-between' }>
 
                                                         { `${index + 1}.` }
                                                         <Checkbox
