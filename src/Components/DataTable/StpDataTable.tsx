@@ -8,7 +8,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { Suspense, memo, useCallback, useEffect, useState } from 'react';
 
 import { Button, Stack, alpha } from '@mui/material';
 import { useCompare, useStpFilter } from '../../Hooks/useCompare';
@@ -53,7 +53,7 @@ const cells: (keyof StpData)[] = [
     'Sf',
     'secure',
 ] as const
-export function StpDataTable({ preload_data }: { preload_data: StpData[] }) {
+export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ preload_data }) => {
     const { select, query, filterParams, selectedItems } = useAppContext()
 
     const [order, setOrder] = useState<Order>('asc');
@@ -336,7 +336,7 @@ export function StpDataTable({ preload_data }: { preload_data: StpData[] }) {
         </Box>
 
     );
-}
+})
 
 const DataError = () => {
     return (

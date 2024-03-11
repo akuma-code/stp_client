@@ -11,12 +11,14 @@ import { StpIdPage } from "./Pages/StpIdPage";
 import { StpInfoPage } from "./Pages/StpInfoPage";
 import { _log } from "../Helpers/helpersFns";
 import { lazy } from "react";
+import { parse_name } from "../Components/StpTable/FormulaParser";
 
 
 export type StpDataLoad = Omit<StpData, 'id'>
 
 
-
+const n = `4TopN-16Ar-3.3.1`
+parse_name(n)
 
 export const appRoutes: RouteObject[] = [
     {
