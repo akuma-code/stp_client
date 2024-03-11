@@ -9,6 +9,8 @@ import { useReactToPrint } from 'react-to-print'
 import { LuPrinter } from 'react-icons/lu'
 import { ItemsToPrint } from './PrintPage'
 import { useMinMaxProps } from '../../Hooks/useMinMaxProps'
+import { findTags, parse_name } from '../../Components/StpTable/FormulaParser'
+import { _log } from '../../Helpers/helpersFns'
 export type ICompareCtx = {
     selectedItem: null | string
     selectItem: React.Dispatch<React.SetStateAction<string | null>>
@@ -17,8 +19,7 @@ export const CompareContext = React.createContext<ICompareCtx | null>(null)
 
 export const ComparePage = () => {
     const { selectedItems, StpStore } = useAppContext()
-    const data = useLoaderData()
-    console.log('data', data)
+
     const [itemName, setName] = useState<string | null>(null)
     const printRef = useRef(null)
     const handlePrint = useReactToPrint({
@@ -26,7 +27,9 @@ export const ComparePage = () => {
     })
 
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
-
+    const t = filtered.map(f => findTags(f.name))
+    // _log("tags:", t)
+    _log("match: ", filtered.map(f => parse_name(f.name)))
     return (
         <CompareContext.Provider
             value={ {
