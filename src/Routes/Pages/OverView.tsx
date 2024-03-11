@@ -11,10 +11,9 @@ export const OverView = (props: OverviewProps) => {
     const data = useLoaderData() as string
     const memodata = useMemo(() => {
         const res: StpData[] = isJson(data) ? JSON.parse(data) : []
-        console.log('res', res.length)
         StpStore.loadTable(res)
         return res
-    }, [data])
+    }, [StpStore, data])
 
     return (
         <Paper sx={ { pb: 0, m: 1, bgcolor: 'beige', height: '100%' } } elevation={ 4 }>

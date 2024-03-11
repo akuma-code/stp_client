@@ -1,7 +1,7 @@
 import { Button, Icon, Stack } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { TfiControlBackward } from "react-icons/tfi"
-import { Link, useRouteLoaderData } from 'react-router-dom'
+import { Link, useLoaderData, useRouteLoaderData } from 'react-router-dom'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { routePaths } from '../routePath'
 import { StpCompareItems } from './StpCompareItems'
@@ -17,7 +17,8 @@ export const CompareContext = React.createContext<ICompareCtx | null>(null)
 
 export const ComparePage = () => {
     const { selectedItems, StpStore } = useAppContext()
-
+    const data = useLoaderData()
+    console.log('data', data)
     const [itemName, setName] = useState<string | null>(null)
     const printRef = useRef(null)
     const handlePrint = useReactToPrint({
@@ -25,8 +26,7 @@ export const ComparePage = () => {
     })
 
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
-    const ff = useMinMaxProps(filtered)
-    console.log('ff', ff)
+
     return (
         <CompareContext.Provider
             value={ {

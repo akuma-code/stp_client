@@ -15,7 +15,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
     const theme = useTheme();
     const showToolbar = useMediaQuery(theme.breakpoints.up('md'));
-    console.log('mobile', showToolbar)
+
     return (
         showToolbar &&
         <Toolbar component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } pt={ 2 } spacing={ 4 }

@@ -1350,3 +1350,9 @@ export function GetStpData(): StpItem[] {
 
     return data
 }
+
+export async function LazyStpData() {
+    const data = table_data_all.concat(table_data_BrGr)
+
+    return data
+}

@@ -5,10 +5,13 @@ import { OverView } from "./Pages/OverView";
 import { Root } from "./Pages/Root";
 import { routePaths } from "./routePath";
 import { PrintPage } from "./Pages/PrintPage";
-import { GetStpData, table_data_all } from "../Components/StpTable/FullTable";
+import { GetStpData, LazyStpData } from "../Components/StpTable/FullTable";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpIdPage } from "./Pages/StpIdPage";
 import { StpInfoPage } from "./Pages/StpInfoPage";
+import { _log } from "../Helpers/helpersFns";
+import { lazy } from "react";
+
 
 export type StpDataLoad = Omit<StpData, 'id'>
 
@@ -28,14 +31,22 @@ export const appRoutes: RouteObject[] = [
                 element: <OverView />,
                 loader: async ({ request, params }) => {
                     const fetch_data = GetStpData()
+                    const lazy_data = await LazyStpData()
+                    // .then(d=>d.map((item, idx) => ({ ...item, id: idx + 1 })))
+
+                    const data = lazy_data.map((item, idx) => ({ ...item, id: idx + 1 }))
                     // const data: StpData[] = table_data_all.map((item, idx) => ({ ...item, id: idx + 1 }))
-                    const data = fetch_data.map((item, idx) => ({ ...item, id: idx + 1 }))
 
                     console.count("Data load: ")
                     console.log(data.length)
 
                     return JSON.stringify(data)
                 },
+                // action: async ({ request }) => {
+                //     const data = await request.formData()
+                //     _log(data)
+                //     return data
+                // },
                 errorElement: <ErrorPage />,
 
             },
@@ -56,7 +67,17 @@ export const appRoutes: RouteObject[] = [
             },
             {
                 path: routePaths.compare,
-                element: <ComparePage />
+                element: <ComparePage />,
+                // action: async ({ request }) => {
+                //     const data = await request.formData()
+                //     _log(request)
+                //     return data
+                // },
+                // loader: ({ request }) => {
+                //     const data = request.body
+                //     _log("loaderdata: ", data)
+                //     return data
+                // },
             },
             {
                 path: routePaths.export,

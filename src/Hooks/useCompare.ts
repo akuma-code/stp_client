@@ -49,45 +49,32 @@ export const _FilterFns = {
     depth: hasDepths,
     tags: hasTags
 }
-type FilterByName = {
-    type: 'name',
-    payload: string
-}
-type FilterByTags = {
-    type: 'tags',
-    payload: StpTag[]
-}
-type FilterByDepth = {
-    type: 'depth',
-    payload: number
-}
-type FilterByCams = {
-    type: 'cams',
-    payload: number
-}
+// type FilterByName = {
+//     type: 'name',
+//     payload: string
+// }
+// type FilterByTags = {
+//     type: 'tags',
+//     payload: StpTag[]
+// }
+// type FilterByDepth = {
+//     type: 'depth',
+//     payload: number
+// }
+// type FilterByCams = {
+//     type: 'cams',
+//     payload: number
+// }
 
-export type FiltrationType = | FilterByName | FilterByTags | FilterByDepth | FilterByCams
-export type FilterItemParams = { depth: number, name: string, tags: StpTag[], cams: number }
-
-function filtrationReducer<T extends FilterItemParams>(array: T[], filter: FiltrationType) {
-    const filterName = (query: string) => array.filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
-    // const filterTags = (tags: StpTags[]) => tags.length > 0 ? [...array].filter(hasTags(tags)) : [...array]
-    const filterDepth = (depth: number) => array.filter(item => item.depth === depth)
-    const filterCams = (cams: number) => array.filter(item => item.cams === cams)
-    switch (filter.type) {
-        case "name": return filterName(filter.payload)
-        // case "tags": return filterTags(filter.payload)
-        case "depth": return filterDepth(filter.payload)
-        case "cams": return filterCams(filter.payload)
-    }
+// export type FiltrationType = | FilterByName | FilterByTags | FilterByDepth | FilterByCams
+// export type FilterItemParams = { depth: number, name: string, tags: StpTag[], cams: number }
 
 
-}
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useCompare<T extends AnyObj>(array: T[], order: Order, sort_field: any) {
-    const sorted = useMemo(() => stableSort(array, getComparator(order, sort_field)), [order, sort_field, array])
+    const sorted = useMemo(() => stableSort(array, getComparator(order, sort_field)), [array, order, sort_field])
 
     return sorted
 }
@@ -100,48 +87,15 @@ const getFilters = (restFilters: Partial<FiltersParams>) => Object.entries(restF
 }, [] as FilterFnOrder[])
 
 
-export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
 
-    const init_items = array.slice() as unknown as StpData[]
 
-    const filtered = useMemo(() => {
-        const filterOrder = getFilters(restFilters)
-        let result_items = [] as StpData[]
-
-        const fnOrder = filterOrder.reduce((acc, curr) => {
-            const [_, fn] = getKeyValue(curr)
-            acc.push(fn)
-            return acc
-        }, [] as FilterFnOrder[keyof FilterFnOrder][])
-
-        if (fnOrder.length > 0) {
-            const orderFiltered = fnOrder.reduce((res, fn, idx) => {
-                if (idx === 0) {
-                    const firstresult = init_items.filter(fn!)
-                    res.push(...firstresult)
-                    return res
-                }
-                return res.filter(fn!)
-            }, [] as StpData[])
-            result_items = orderFiltered
-        }
-        else result_items = init_items as unknown as StpData[]
-
-        const filtered_items = [...result_items].filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
-        return filtered_items
-
-    }, [init_items, query, restFilters])
-
-    const sorted = useCompare(filtered as StpData[], order, sort_field)
-    return sorted
-}
 export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFilters: Partial<FiltersParams>) {
 
 
 
-
-
     const init_items = array.slice() as unknown as StpData[]
+
+
     const filtered = useMemo(() => {
         const filterOrder = getFilters(restFilters)
 
@@ -170,24 +124,60 @@ export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFi
 
     return filtered
 }
-export function useLazyDataLoad<T extends StpData>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
-    const [isLoading, setIsLoading] = useState(false)
-    const data = useSortAndFilter(array, order, sort_field, query, restFilters)
-    const [loadData, setLoadData] = useState<StpData[]>(data as unknown as StpData[])
-    function load(data: { [x: string]: string | number }[]) {
 
-        const p = new Promise<StpData[]>(() => data)
-        return p
+// export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
 
-    }
+//     const init_items = array.slice() as unknown as StpData[]
 
-    useEffect(() => {
-        setIsLoading(true)
-        load(data).then(d => setLoadData(d))
+//     const filtered = useMemo(() => {
+//         const filterOrder = getFilters(restFilters)
+//         let result_items = [] as StpData[]
 
-    }, [data])
-    return [loadData, isLoading] as const
-}
+//         const fnOrder = filterOrder.reduce((acc, curr) => {
+//             const [_, fn] = getKeyValue(curr)
+//             acc.push(fn)
+//             return acc
+//         }, [] as FilterFnOrder[keyof FilterFnOrder][])
+
+//         if (fnOrder.length > 0) {
+//             const orderFiltered = fnOrder.reduce((res, fn, idx) => {
+//                 if (idx === 0) {
+//                     const firstresult = init_items.filter(fn!)
+//                     res.push(...firstresult)
+//                     return res
+//                 }
+//                 return res.filter(fn!)
+//             }, [] as StpData[])
+//             result_items = orderFiltered
+//         }
+//         else result_items = init_items as unknown as StpData[]
+
+//         const filtered_items = [...result_items].filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
+//         return filtered_items
+
+//     }, [init_items, query, restFilters])
+
+//     const sorted = useCompare(filtered as StpData[], order, sort_field)
+//     return sorted
+// }
+// export function useLazyDataLoad<T extends StpData>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
+//     const [isLoading, setIsLoading] = useState(false)
+//     const data = useSortAndFilter(array, order, sort_field, query, restFilters)
+//     const [loadData, setLoadData] = useState<StpData[]>(data as unknown as StpData[])
+//     function load(data: { [x: string]: string | number }[]) {
+
+//         const p = new Promise<StpData[]>(() => data)
+//         return p
+
+//     }
+
+//     useEffect(() => {
+//         setIsLoading(true)
+//         load(data).then(d => setLoadData(d))
+
+//     }, [data])
+//     return [loadData, isLoading] as const
+// }
 
 // export function useFilterTags<T extends AnyObj>(array: T[], order: Order, sort_field: any, tags: StpTags[], query: string) {
 

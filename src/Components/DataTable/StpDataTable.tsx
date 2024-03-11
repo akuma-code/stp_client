@@ -23,11 +23,14 @@ import { MuiLink } from '../../Routes/Pages/MuiLink';
 import { routePaths } from '../../Routes/routePath';
 import { _log } from '../../Helpers/helpersFns';
 import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
+import { useFetcher, useSubmit } from 'react-router-dom';
 
 
 
 //__ Data Create*/
-
+//TODO: добавить mobx
+//TODO: вынести ряд в отдельный компонент
+//TODO: ??? вынести выделение в action
 
 
 export type StpData = StpItem & { id: number }
@@ -50,20 +53,33 @@ const cells: (keyof StpData)[] = [
     'Sf',
     'secure',
 ] as const
-export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
-    const { select, query, filterParams } = useAppContext()
+export function StpDataTable({ preload_data }: { preload_data: StpData[] }) {
+    const { select, query, filterParams, selectedItems } = useAppContext()
 
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(true);
     const [RPP, setRowsPerPage] = useState(-1);
-    const [checkedCells, setCheckedCells] = useState<number[]>([])
-    const memodata = preload_data ?? []
+    // const submit = useSubmit()
+    // const fetcher = useFetcher()
+    // const [checkedCells, setCheckedCells] = useState<number[]>([])
+    // const memodata = preload_data ?? []
 
 
-    const filtered = useStpFilter(memodata, query, filterParams)
+    const filtered = useStpFilter(preload_data!, query, filterParams)
     const sorted = useCompare(filtered, order, orderBy)
+
+
+    // const submitSelected = () => {
+    //     const data = JSON.stringify(selectedItems)
+    //     fetcher.submit(selectedItems, {
+    //         method: 'POST',
+    //         action: routePaths.compare,
+    //         encType: 'application/x-www-form-urlencoded'
+    //     })
+    //     _log('submited: ', data)
+    // }
 
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
@@ -75,44 +91,30 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     }, [order, orderBy]);
 
     const handleSelectAllClick = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        if (checkedCells.length >= 1) {
-            setCheckedCells([])
+        if (selectedItems.length >= 1) {
+            select([])
             return
         }
         if (event.target.checked) {
             const newSelectedAll = sorted.map((n) => +n.id);
 
-            setCheckedCells(newSelectedAll)
+            select(newSelectedAll)
             return;
         }
-        setCheckedCells([])
+        select([])
 
-    }, [sorted, checkedCells]);
+    }, [select, selectedItems.length, sorted]);
 
     const handleClick = useCallback((event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
 
-        const selectedIdx = checkedCells.indexOf(id);
+        const selectedIdx = selectedItems.indexOf(id);
 
-        if (selectedIdx === -1) setCheckedCells(prev => [...prev, id])
-        else if (selectedIdx >= 0) setCheckedCells(prev => prev.filter(p => p !== id))
-        if (checkedCells.length >= 5) setCheckedCells(prev => prev.filter(p => p !== id))
-        // const store_selectedIndex = selectedItems.indexOf(id);
-        // let newSelected: number[] = [];
-        // if (store_selectedIndex === -1) {
-        //     newSelected = newSelected.concat(selectedItems, id);
-        // } else if (store_selectedIndex === 0) {
-        //     newSelected = newSelected.concat(selectedItems.slice(1));
-        // } else if (store_selectedIndex === selectedItems.length - 1) {
-        //     newSelected = newSelected.concat(selectedItems.slice(0, -1));
-        // } else if (store_selectedIndex > 0) {
-        //     newSelected = newSelected.concat(
-        //         selectedItems.slice(0, store_selectedIndex),
-        //         selectedItems.slice(store_selectedIndex + 1),
-        //     );
-        // }
-        // if (selectedItems.length >= 5) newSelected = newSelected.slice(0, 5)
-        // select(newSelected)
-    }, [checkedCells]);
+        if (selectedIdx === -1) select(prev => [...prev, id])
+        else if (selectedIdx >= 0 && selectedItems.length <= 5) select(prev => prev.filter(p => p !== id))
+        if (selectedItems.length >= 5) select(prev => prev.filter(p => p !== id))
+
+    }, [selectedItems, select]);
+
 
     // const handleChangePage = (event: unknown, newPage: number) => {
     //     setPage(newPage);
@@ -127,13 +129,13 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
         setDense(event.target.checked);
     };
 
-    const isSelected = useCallback((id: number) => checkedCells.indexOf(id) !== -1, [checkedCells]);
+    const isSelected = useCallback((id: number) => selectedItems.indexOf(id) !== -1, [selectedItems]);
     const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0 || query !== ""
 
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page >= 0
-        ? Math.max(0, (1 + page) * RPP - memodata.length)
+        ? Math.max(0, (1 + page) * RPP - preload_data!.length)
         : 1;
 
     // const visibleRows = useMemo(
@@ -147,46 +149,46 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
     //     },
     //     [RPP, page, sorted]
     // );
-    useEffect(() => {
-        select(checkedCells)
-        // return () => setCheckedCells([])
-    }, [checkedCells, select])
+    // useEffect(() => {
+    //     // select(checkedCells)
+    //     // return () => setCheckedCells([])
+    // }, [checkedCells, select])
     // console.count("RENDER!")
 
-
+    console.count("table rendered")
     return (
-        <Suspense fallback={ <div className='text-center'>LOADING</div> }>
-            <Box sx={ { width: '100%', height: '100%' } }>
-                <Paper sx={ { mb: 2 } } elevation={ 2 }>
 
-                    <StpTableToolbar numSelected={ checkedCells.length } numFiltered={ sorted.length } />
+        <Box sx={ { width: '100%', height: '100%' } }>
+            <Paper sx={ { mb: 2 } } elevation={ 2 }>
 
-                    <TableContainer sx={ {
-                        overflowY: 'auto',
-                        maxHeight: '70vh',
-                        position: 'relative'
-                    } } >
-                        <Table
-                            aria-labelledby="tableTitle"
-                            size={ dense ? 'small' : 'medium' }
-                            stickyHeader
-                            padding='normal'
-                            sx={ {
-                                minWidth: 750,
-                                // [`& .MuiTableRow-root .MuiTableCell-head#name`]: { bgcolor: 'red' }
-                            } }
-                        >
-                            <EnhancedTableHead
-                                numSelected={ checkedCells.length }
-                                order={ order }
-                                orderBy={ orderBy }
-                                onSelectAllClick={ handleSelectAllClick }
-                                onRequestSort={ handleRequestSort }
-                                rowCount={ sorted.length }
-                            />
+                <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ sorted.length } />
+
+                <TableContainer sx={ {
+                    overflowY: 'auto',
+                    maxHeight: '70vh',
+                    position: 'relative'
+                } } >
+                    <Table
+                        stickyHeader
+                        aria-labelledby="tableTitle"
+                        size={ dense ? 'small' : 'medium' }
+                        padding='normal'
+                        sx={ {
+                            minWidth: 750,
+                        } }
+                    >
+                        <EnhancedTableHead
+                            numSelected={ selectedItems.length }
+                            rowCount={ sorted.length }
+                            order={ order }
+                            orderBy={ orderBy }
+                            onSelectAllClick={ handleSelectAllClick }
+                            onRequestSort={ handleRequestSort }
+                        />
 
 
-                            <TableBody>
+                        <TableBody>
+                            <Suspense fallback={ <div className='text-center'>LOADING</div> }>
                                 {
                                     sorted.map((row, index) => {
                                         const isItemSelected = isSelected(+row.id);
@@ -204,7 +206,9 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                 selected={ isItemSelected }
 
                                             >
-                                                <TableCell padding="checkbox" onClick={ (event) => handleClick(event, +row.id) } sx={ { cursor: 'pointer', } }>
+                                                <TableCell
+                                                    padding="checkbox"
+                                                    onClick={ (event) => handleClick(event, +row.id) } sx={ { cursor: 'pointer', } }>
                                                     <Box component={ Stack }
                                                         direction={ 'row' }
                                                         alignItems={ 'center' }
@@ -224,12 +228,15 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                                     </Box>
                                                 </TableCell>
                                                 <TableCell
-                                                    onClick={ (event) => handleClick(event, +row.id) }
+                                                    // onClick={ (event) => handleClick(event, +row.id) }
                                                     component="th"
                                                     id={ labelId }
-                                                    // scope="row"
+                                                    scope="row"
                                                     padding="none"
-                                                    sx={ { textWrap: 'nowrap', cursor: 'pointer', } }
+                                                    sx={ {
+                                                        textWrap: 'nowrap',
+                                                        // cursor: 'pointer',
+                                                    } }
                                                     colSpan={ 1 }
                                                 >
                                                     { row.name }
@@ -264,67 +271,70 @@ export function StpDataTable({ preload_data }: { preload_data?: StpData[] }) {
                                         <TableCell colSpan={ 4 } />
                                     </TableRow>
                                 ) }
-                            </TableBody>
-                        </Table>
+                            </Suspense>
+                        </TableBody>
+
+                    </Table>
 
 
 
-                    </TableContainer>
-                    <Stack direction={ 'row' } maxHeight={ 55 } >
+                </TableContainer>
+                <Stack direction={ 'row' } maxHeight={ 55 } >
 
 
 
-                        <Stack sx={ {
-                            bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
-                            justifyContent: 'space-between', color: 'whitesmoke'
-                        } }
-                            // component={ Paper } elevation={ 2 }
-                            flexGrow={ 1 } direction={ 'row' } alignItems={ 'center' } px={ 2 }
+                    <Stack sx={ {
+                        bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
+                        justifyContent: 'space-between', color: 'whitesmoke'
+                    } }
+                        // component={ Paper } elevation={ 2 }
+                        flexGrow={ 1 } direction={ 'row' } alignItems={ 'center' } px={ 2 }
+                    >
+
+                        {
+                            //__FOOTER_________________
+                        }
+                        <Box
+                            flexGrow={ 1 }
+                            gap={ 2 }
+                            component={ Stack }
+                            flexDirection={ 'row' }
+                            alignItems={ 'center' }
+                            p={ 1 }
                         >
+                            Выбрано для сравнения: { selectedItems.length } из { sorted.length }
+                            <Button
+                                color='info'
+                                variant='contained'
+                                startIcon={ <MdCompare /> }
+                                size='small'
+                                sx={ {
+                                    visibility: selectedItems.length > 0 ? 'visible' : 'hidden',
+                                    margin: 'dense'
+                                } }
 
-                            {
-                                //__FOOTER_________________
-                            }
-                            <Box
-                                flexGrow={ 1 }
-                                gap={ 2 }
-                                component={ Stack }
-                                flexDirection={ 'row' }
-                                alignItems={ 'center' }
-                                p={ 1 }
                             >
-                                Выбрано для сравнения: { checkedCells.length } из { sorted.length }
-                                <Button
-                                    color='info'
-                                    variant='contained'
-                                    startIcon={ <MdCompare /> }
-                                    size='small'
-                                    sx={ {
-                                        visibility: checkedCells.length > 0 ? 'visible' : 'hidden',
-                                        margin: 'dense'
-                                    } }
-                                >
-                                    <MuiLink to={ routePaths.compare } title={ 'Сравнить' } >Сравнить</MuiLink>
-                                </Button>
+                                <MuiLink to={ routePaths.compare } title={ 'Сравнить' } >Сравнить</MuiLink>
+                            </Button>
 
+                        </Box>
+                        { isFiltersOn &&
+                            <Box>
+                                Совпадений найдено: { sorted.length }
                             </Box>
-                            { isFiltersOn &&
-                                <Box>
-                                    Совпадений найдено: { sorted.length }
-                                </Box>
-                            }
-                            <FormControlLabel
+                        }
+                        <FormControlLabel
 
-                                control={ <Switch checked={ dense } onChange={ handleChangeDense } id='dense_checkbox' /> }
-                                label="Уменьшить отступы"
-                                sx={ { ml: 4, alignContent: 'center' } }
-                            />
-                        </Stack>
-
+                            control={ <Switch checked={ dense } onChange={ handleChangeDense } id='dense_checkbox' /> }
+                            label="Уменьшить отступы"
+                            sx={ { ml: 4, alignContent: 'center' } }
+                        />
                     </Stack>
-                </Paper>
-            </Box>
-        </Suspense>
+
+                </Stack>
+            </Paper>
+        </Box>
+
     );
 }
 
