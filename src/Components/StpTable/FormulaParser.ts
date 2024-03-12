@@ -4,13 +4,13 @@ import { GlassDescription, StpNamePropertyDescription } from "./TerminsDesc"
 
 console.clear()
 // const regGls = /\d\.\d\.\d|\d+|\w+\b/gu
-export const StpRegExp = /\d\.\d\.\d|\d+|\p{L}+/gu
+export const StpRegExp = /\d\.\d\.\d|\d+|\p{L}+/gui
 const regRam = /\d+|\w+$/g
 export const triplexRegExp = /\d\.\d\.\d/g
-export type Tformula = RegExpMatchArray
+export type Tformula = RegExpMatchArray | null
 
 
-export const parseFormula = (str: string, options = { split: false }) => {
+export const parseStpName = (str: string, options = { split: false }) => {
     const arr = /-/.test(str) ? str.split('-') : str.split(" ")
 
     const re = arr.map((s, idx) => idx % 2 === 0
@@ -40,12 +40,13 @@ export const findTags = (formula: string, tags: StpNameProperties[]) => {
 
 
 
-export const formulaDescriptor = (name_parts: Tformula[]) => {
+export const nameDescriptor = (name_parts: Tformula[]) => {
     const splitted = name_parts.map((p, idx) => {
+        if (!p) return ""
         const [width, prop] = p
         const glstxt = GlassDescription.gls(width)
         const ramtxt = GlassDescription.ramka(width)
-        const propTxt = prop ? StpNamePropertyDescription[prop as StpNameProperties] : ""
+        const propTxt = prop ? StpNamePropertyDescription[prop.toLowerCase() as StpNameProperties] : ""
         if (idx % 2 === 0) {
             return `${glstxt} ${propTxt}`
         }

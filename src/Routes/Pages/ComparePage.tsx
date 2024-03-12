@@ -4,7 +4,7 @@ import { LuPrinter } from 'react-icons/lu'
 import { TfiControlBackward } from "react-icons/tfi"
 import { Link } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'
-import { Tformula, getPropsFromRegExp, parseFormula } from '../../Components/StpTable/FormulaParser'
+import { Tformula, getPropsFromRegExp, parseStpName } from '../../Components/StpTable/FormulaParser'
 import { _log } from '../../Helpers/helpersFns'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { routePaths } from '../routePath'
@@ -25,7 +25,7 @@ export const ComparePage = () => {
     })
 
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
-    const t = filtered.map(f => parseFormula(f.name)) as Tformula[][]
+    const t = filtered.map(f => parseStpName(f.name)) as Tformula[][]
     // _log("parsed:", ...t)
     getPropsFromRegExp(t)
     return (

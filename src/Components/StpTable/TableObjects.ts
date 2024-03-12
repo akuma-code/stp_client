@@ -29,14 +29,15 @@ export type StpItem = {
 
 
 export type StpNameProperties =
-    | 'TopN'
-    | 'Ar'
-    | 'FhCl'
-    | 'FhBr'
-    | 'FhGr'
-    | 'Эл'
-    | 'TGI'
-    | 'Сбр'
+    | 'topn'
+    | 'ar'
+    | 'fhcl'
+    | 'fhbr'
+    | 'fhgr'
+    | 'эл'
+    | 'tgi'
+    | 'tgiar'
+    | 'сбр'
     | 'зак'
 
 

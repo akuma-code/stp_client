@@ -24,6 +24,7 @@ import { routePaths } from '../../Routes/routePath';
 import { _log } from '../../Helpers/helpersFns';
 import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
 import { useFetcher, useSubmit } from 'react-router-dom';
+import { FnameTooltip } from '../UI/FnameTooltip';
 
 
 
@@ -236,10 +237,18 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                                                     sx={ {
                                                         textWrap: 'nowrap',
                                                         // cursor: 'pointer',
+                                                        [`& :hover>.MuiIconButton-root `]: { visibility: 'visible' },
+                                                        [`& .MuiIconButton-root`]: { visibility: 'hidden' },
                                                     } }
                                                     colSpan={ 1 }
                                                 >
-                                                    { row.name }
+                                                    <Box component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } alignItems={ 'center' }>
+
+                                                        { row.name }
+                                                        <FnameTooltip
+                                                            stp_name={ row.name as string }
+                                                        />
+                                                    </Box>
                                                 </TableCell>
                                                 <TableCell align='right'>
                                                     <TagsAvatarGroup tags={ row.tags as unknown as StpTag[] }

@@ -1,4 +1,4 @@
-import { Avatar, IconButton, SxProps, Theme, Tooltip } from '@mui/material';
+import { Avatar, Box, IconButton, SxProps, Theme, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import { BsBootstrapFill } from "react-icons/bs";
 
@@ -19,6 +19,7 @@ export const AvatarButtonTooltip: React.FC<Props> = ({ icon, action, tooltip_tit
             edge='start'
         >
             <Tooltip
+
                 title={ tooltip_title ? tooltip_title : "no title" }
             >
 
