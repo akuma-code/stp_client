@@ -6,6 +6,7 @@ import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
 import { _TerminsDesc } from '../../Components/StpTable/TerminsDesc';
 import { _ID } from '../../Helpers/helpersFns';
 import { CompareContext } from './ComparePage';
+import { StpRegExp, Tformula, formulaDescriptor, parseFormula } from '../../Components/StpTable/FormulaParser';
 
 export type FilteredItemsProps = {
     items: StpData[]
@@ -72,7 +73,7 @@ export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
 
             } }>
             {
-                listOrder.map((item, idx) =>
+                listOrder.map((prop, idx) =>
                     <ListItem
 
                         disablePadding
@@ -101,8 +102,8 @@ export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
                                 displayPrint: 'none',
                             } }
 
-                            primary={ _EnFieldsStp[item] }
-                            secondary={ _TerminsDesc[item as keyof typeof _TerminsDesc] }
+                            primary={ _EnFieldsStp[prop] }
+                            secondary={ _TerminsDesc[prop as keyof typeof _TerminsDesc] }
                         />
 
                     </ListItem>
@@ -121,6 +122,13 @@ type StpItemsListProps = {
 
 export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, listSx }) => {
     const fields = stp_values.map(v => typeof v === 'number' ? v.toString() : v)
+    const stpdesc = (field: string) => {
+        if (!StpRegExp.test(field)) return ""
+        else {
+            const parts = parseFormula(field) as unknown as Tformula[]
+            return formulaDescriptor(parts).join(" ")
+        }
+    }
 
     return (
         <List disablePadding
@@ -157,7 +165,7 @@ export const StpItemList: React.FC<StpItemsListProps> = ({ stp_values, align, li
                                 textAlign: 'center',
                                 fontSize: { sm: 12, lg: 15 }
                             } }
-                            secondaryTypographyProps={ { displayPrint: 'none' } }
+                            secondaryTypographyProps={ { displayPrint: 'none', fontSize: 12 } }
                             primary={ item }
 
                         />

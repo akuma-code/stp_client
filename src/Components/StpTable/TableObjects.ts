@@ -27,6 +27,20 @@ export type StpItem = {
     tags: StpTag[]
 }
 
+
+export type StpNameProperties =
+    | 'TopN'
+    | 'Ar'
+    | 'FhCl'
+    | 'FhBr'
+    | 'FhGr'
+    | 'Эл'
+    | 'TGI'
+    | 'Сбр'
+    | 'зак'
+
+
+
 export const depths = [
     { name: "3.3.1-14Ar-4Эл", depth: 24, Ro: 1.00 },
     { name: "4-16Ar-4Эл", depth: 24, Ro: 1.00 },

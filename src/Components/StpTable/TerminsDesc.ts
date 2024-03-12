@@ -1,4 +1,5 @@
-import { StpItem } from "./TableObjects"
+import { triplexRegExp } from "./FormulaParser"
+import { StpItem, StpNameProperties } from "./TableObjects"
 
 type TerminsDesc = { [Key in keyof StpItem]?: string }
 
@@ -36,5 +37,26 @@ export const _TerminsDesc = {
     cams: '1 камера - 2 стекла, 2 камеры - 3 стекла',
     depth: "Толщина стеклопакета в мм",
     weight: "Вес одного квадратного метра стеклопакета",
+}
+
+export const StpNamePropertyDescription: Record<StpNameProperties, string> = {
+    Ar: 'заполненая Аргоном',
+    FhBr: 'Феникс с зеркальным эффектом и бронзовым оттенком',
+    FhCl: 'Феникс с зеркальным эффектом',
+    FhGr: 'Феникс с зеркальным эффектом и серым оттенком',
+    TGI: 'Пластиковая рамочка',
+    TopN: 'c энергосберегающим напылением',
+    зак: 'Закаленное',
+    Сбр: 'Мультифункиональное, с одной стороны с бронзовым оттенком, а с другой с синим',
+    Эл: 'Мультифункциональное, с синеватым оттенком'
+}
+
+export const GlassDescription = {
+    gls: (w: string | number) => {
+        if (typeof w === 'string' && triplexRegExp.test(w)) return `Триплекс ${w} из двух стекол, проклееный пленкой 1 мм`
+        return `Стекло ${w} мм `
+    },
+    ramka: (w: string | number) => { return `Рамка ${w} мм ` }
+
 }
 

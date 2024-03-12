@@ -1,10 +1,13 @@
 import { _log } from "../../Helpers/helpersFns"
+import { StpNameProperties } from "./TableObjects"
+import { GlassDescription, StpNamePropertyDescription } from "./TerminsDesc"
 
 console.clear()
 // const regGls = /\d\.\d\.\d|\d+|\w+\b/gu
 export const StpRegExp = /\d\.\d\.\d|\d+|\p{L}+/gu
 const regRam = /\d+|\w+$/g
-export type Tformula = [width: string, prop?: string]
+export const triplexRegExp = /\d\.\d\.\d/g
+export type Tformula = RegExpMatchArray
 
 
 export const parseFormula = (str: string, options = { split: false }) => {
@@ -30,67 +33,27 @@ export const getPropsFromRegExp = (parsed_data: Tformula[][]) => {
 
 
 
-const triplex = [`3.3.1`, `4.4.1`]
-const gprops = [
-    'TopN',
-    'Эл',
-    'Сбр',
-    'FhCl',
-    'FhBr',
-    'FhGr',
-    '(зак)',
-    `3.3.1`,
-    `4.4.1`,
-    // 'Ar',
-    // 'TGI',
-    // '(Ч)',
-] as const
-const ramki = [
-    'Ar',
-    'TGI',
-    '(Ч)',
-]
+export const findTags = (formula: string, tags: StpNameProperties[]) => {
 
-type GProp = typeof gprops[number]
-const tagCondition = (tags: GProp[]) => {
-    if (tags.some(t => t === 'TopN')) _log('energy')
-
-}
-
-export const parse_name = (stp_name: string) => {
-
-
-    const tags = gprops.filter(f => stp_name.includes(f))
-    const name_parts = stp_name.split('-').filter(p => triplex.indexOf(p) < 0)
-    const gls = name_parts.filter((n, i) => i % 2 === 0)
-    const numbs = name_parts.map(i => Number(i.match(/\d+/g)))
-    const strs = name_parts.map(i => i.match(StpRegExp))
-    return strs
-    // _log('numbs: ', ...numbs)
-    // _log('strs: ', ...strs)
-    // _log('tags: ', tags)
-}
-
-export const findTags = (formula: string, tags: GProp[] = [...gprops]) => {
-    // _log("match: ", '4.4.1-12-4TopN-14Ar-6FHcl'.match(regNumbers))
     return tags.filter(tag => formula.includes(tag))
 }
 
-const condition = {
+
+
+export const formulaDescriptor = (name_parts: Tformula[]) => {
+    const splitted = name_parts.map((p, idx) => {
+        const [width, prop] = p
+        const glstxt = GlassDescription.gls(width)
+        const ramtxt = GlassDescription.ramka(width)
+        const propTxt = prop ? StpNamePropertyDescription[prop as StpNameProperties] : ""
+        if (idx % 2 === 0) {
+            return `${glstxt} ${propTxt}`
+        }
+        else return `${ramtxt}${propTxt === "" ? "заполненная воздухом" : propTxt}`
+    })
+
+    return splitted
 
 }
 
-const FnamePartDescriptor = (name_part: Tformula) => {
-    const [width, prop] = name_part
 
-
-    const props = {
-        TopN: 'energy',
-        Ar: 'argon'
-    }
-
-    const result = `glass ${width} mm ${prop ? props[prop as keyof typeof props] : ""}`
-    return result
-}
-
-console.log('desc:', FnamePartDescriptor(['6',]))
