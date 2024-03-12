@@ -80,3 +80,17 @@ const condition = {
 
 }
 
+const FnamePartDescriptor = (name_part: Tformula) => {
+    const [width, prop] = name_part
+
+
+    const props = {
+        TopN: 'energy',
+        Ar: 'argon'
+    }
+
+    const result = `glass ${width} mm ${prop ? props[prop as keyof typeof props] : ""}`
+    return result
+}
+
+console.log('desc:', FnamePartDescriptor(['6',]))
