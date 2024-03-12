@@ -1,7 +1,35 @@
 import { _log } from "../../Helpers/helpersFns"
-const hasTriplex = (parts: string[]) => parts.some(name => [`3.3.1`, `4.4.1`].includes(name))
+
 console.clear()
-const regNumbers = /\d[.]\d[.]\d|\d+|\w+/g
+// const regGls = /\d\.\d\.\d|\d+|\w+\b/gu
+export const StpRegExp = /\d\.\d\.\d|\d+|\p{L}+/gu
+const regRam = /\d+|\w+$/g
+export type Tformula = [width: string, prop?: string]
+
+
+export const parseFormula = (str: string, options = { split: false }) => {
+    const arr = /-/.test(str) ? str.split('-') : str.split(" ")
+
+    const re = arr.map((s, idx) => idx % 2 === 0
+        ? s.match(StpRegExp)
+        : s.match(regRam)
+    )
+    if (options.split === true) return re
+
+    const parsed = arr.map(s => s.match(StpRegExp))
+
+    return parsed
+}
+
+export const getPropsFromRegExp = (parsed_data: Tformula[][]) => {
+    const glasses = parsed_data.map(p =>
+        p.filter((_, idx) => idx % 2 === 0))
+    // .map(([w, p]) =>            w))
+    console.log('glasses', glasses)
+}
+
+
+
 const triplex = [`3.3.1`, `4.4.1`]
 const gprops = [
     'TopN',
@@ -36,7 +64,7 @@ export const parse_name = (stp_name: string) => {
     const name_parts = stp_name.split('-').filter(p => triplex.indexOf(p) < 0)
     const gls = name_parts.filter((n, i) => i % 2 === 0)
     const numbs = name_parts.map(i => Number(i.match(/\d+/g)))
-    const strs = name_parts.map(i => i.match(regNumbers))
+    const strs = name_parts.map(i => i.match(StpRegExp))
     return strs
     // _log('numbs: ', ...numbs)
     // _log('strs: ', ...strs)

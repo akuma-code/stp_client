@@ -1,16 +1,14 @@
 import { Button, Icon, Stack } from '@mui/material'
 import React, { useRef, useState } from 'react'
+import { LuPrinter } from 'react-icons/lu'
 import { TfiControlBackward } from "react-icons/tfi"
-import { Link, useLoaderData, useRouteLoaderData } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useReactToPrint } from 'react-to-print'
+import { Tformula, getPropsFromRegExp, parseFormula } from '../../Components/StpTable/FormulaParser'
+import { _log } from '../../Helpers/helpersFns'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { routePaths } from '../routePath'
-import { StpCompareItems } from './StpCompareItems'
-import { useReactToPrint } from 'react-to-print'
-import { LuPrinter } from 'react-icons/lu'
 import { ItemsToPrint } from './PrintPage'
-import { useMinMaxProps } from '../../Hooks/useMinMaxProps'
-import { findTags, parse_name } from '../../Components/StpTable/FormulaParser'
-import { _log } from '../../Helpers/helpersFns'
 export type ICompareCtx = {
     selectedItem: null | string
     selectItem: React.Dispatch<React.SetStateAction<string | null>>
@@ -27,9 +25,9 @@ export const ComparePage = () => {
     })
 
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
-    const t = filtered.map(f => findTags(f.name))
-    // _log("tags:", t)
-    _log("match: ", filtered.map(f => parse_name(f.name)))
+    const t = filtered.map(f => parseFormula(f.name)) as Tformula[][]
+    // _log("parsed:", ...t)
+    getPropsFromRegExp(t)
     return (
         <CompareContext.Provider
             value={ {
