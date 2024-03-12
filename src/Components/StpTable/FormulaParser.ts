@@ -4,7 +4,7 @@ import { GlassDescription, StpNamePropertyDescription } from "./TerminsDesc"
 
 console.clear()
 // const regGls = /\d\.\d\.\d|\d+|\w+\b/gu
-export const StpRegExp = /\d\.\d\.\d|\d+|\p{L}+/gui
+export const StpRegExp = /\d\.\d\.\d|\d+|\(\w+\)|\p{L}+/gui
 const regRam = /\d+|\w+$/g
 export const triplexRegExp = /\d\.\d\.\d/g
 export type Tformula = RegExpMatchArray | null
@@ -43,14 +43,16 @@ export const findTags = (formula: string, tags: StpNameProperties[]) => {
 export const nameDescriptor = (name_parts: Tformula[]) => {
     const splitted = name_parts.map((p, idx) => {
         if (!p) return ""
-        const [width, prop] = p
+        const [width, prop, prop2] = p
         const glstxt = GlassDescription.gls(width)
         const ramtxt = GlassDescription.ramka(width)
-        const propTxt = prop ? StpNamePropertyDescription[prop.toLowerCase() as StpNameProperties] : ""
+        const propTxt1 = prop ? StpNamePropertyDescription[prop.toLowerCase() as StpNameProperties] : ""
+        const propTxt2 = prop2 ? StpNamePropertyDescription[prop2.toLowerCase() as StpNameProperties] : ""
+        const propTxt = [propTxt1, propTxt2].join(" ")
         if (idx % 2 === 0) {
             return `${glstxt} ${propTxt}`
         }
-        else return `${ramtxt}${propTxt === "" ? "заполненная воздухом" : propTxt}`
+        else return `${ramtxt}${propTxt === "" ? "заполненная воздухом" : propTxt1}`
     })
 
     return splitted

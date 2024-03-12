@@ -3,11 +3,11 @@ import { AvatarButtonTooltip } from './AvatarButtonTooltip'
 import { FcInfo } from "react-icons/fc";
 import { nameDescriptor, parseStpName } from '../StpTable/FormulaParser';
 import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { _ID } from '../../Helpers/helpersFns';
+import { _ID, _log } from '../../Helpers/helpersFns';
 type Props = {
     stp_name: string
 }
-
+_log(parseStpName('6TopN(зак)-16Ar-6(зак)-18-6(зак)'))
 export const FnameTooltip: React.FC<Props> = ({ stp_name }) => {
     const [open, setOpen] = useState(false)
     const parsed_name = parseStpName(stp_name)

@@ -938,7 +938,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6TopN-18TGIAr-4-18TGI-6',
+        name: '6TopN-18TgiAr-4-18Tgi-6',
         cams: 2,
         depth: 52,
         tags: ['energy', 'soundproof'],
@@ -956,7 +956,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6TopN-18(TGI)Ar-4TopN-18(TGI)Ar-6',
+        name: '6TopN-18TgiAr-4TopN-18TgiAr-6',
         cams: 2,
         depth: 52,
         tags: ['energy', 'soundproof'],
@@ -974,7 +974,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6TopN-18TGIAr-4-18TGI-3.3.1',
+        name: '6TopN-18TgiAr-4-18Tgi-3.3.1',
         cams: 2,
         depth: 52,
         tags: ['hitproof', 'soundproof', 'energy'],
@@ -992,7 +992,7 @@ export const table_data_all: StpItem[] = [
         secure: "CM2",
     },
     {
-        name: '6TopN-18(TGI)Ar-4-18TGI-6FHcl',
+        name: '6TopN-18TgiAr-4-18Tgi-6FHcl',
         cams: 2,
         depth: 52,
         tags: ['solarproof', 'energy', 'soundproof'],
@@ -1010,7 +1010,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6-18TGI-4-18(TGI)Ar-6Эл',
+        name: '6-18Tgi-4-18TgiAr-6Эл',
         cams: 2,
         depth: 52,
         tags: ['soundproof', 'multi'],
@@ -1028,7 +1028,7 @@ export const table_data_all: StpItem[] = [
         secure: "нет",
     },
     {
-        name: '6-18(TGI)Ar-4TopN-18(TGI)Ar-6Эл',
+        name: '6-18TgiAr-4TopN-18TgiAr-6Эл',
         cams: 2,
         depth: 52,
         tags: ['soundproof', 'multi'],
@@ -1158,7 +1158,7 @@ export const table_data_all: StpItem[] = [
 
 const table_data_BrGr: StpItem[] = [
     {
-        name: '4TopN-16TGIAr-4FHbr',
+        name: '4TopN-16TgiAr-4FHbr',
         tags: ['energy', 'solarproof'],
         cams: 1,
         depth: 24,
@@ -1176,7 +1176,7 @@ const table_data_BrGr: StpItem[] = [
         secure: 'нет'
     },
     {
-        name: '4TopN-16TGIAr-4FHgr',
+        name: '4TopN-16TgiAr-4FHgr',
         tags: ['energy', 'solarproof'],
         cams: 2,
         depth: 24,
@@ -1302,7 +1302,7 @@ const table_data_BrGr: StpItem[] = [
         secure: 'нет'
     },
     {
-        name: '4TopN-12TGI-4-12TGI-4FHbr',
+        name: '4TopN-12Tgi-4-12Tgi-4FHbr',
         tags: ['energy', 'solarproof'],
         cams: 2,
         depth: 36,
@@ -1320,7 +1320,7 @@ const table_data_BrGr: StpItem[] = [
         secure: 'нет'
     },
     {
-        name: '4TopN-12TGI-4-12TGI-4FHgr',
+        name: '4TopN-12Tgi-4-12Tgi-4FHgr',
         tags: ['energy', 'solarproof'],
         cams: 2,
         depth: 36,

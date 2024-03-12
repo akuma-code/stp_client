@@ -17,6 +17,7 @@ export const AvatarButtonTooltip: React.FC<Props> = ({ icon, action, tooltip_tit
         <IconButton
             onClick={ action }
             edge='start'
+            disableRipple
         >
             <Tooltip
 
