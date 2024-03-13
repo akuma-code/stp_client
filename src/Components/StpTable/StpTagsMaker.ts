@@ -1,3 +1,4 @@
+import { _log } from "../../Helpers/helpersFns"
 import { parseStpName } from "./FormulaParser"
 import { StpItem, StpTag } from "./TableObjects"
 
@@ -87,17 +88,13 @@ export const updateTags = (item: StpItem) => {
 
 }
 
-
+export const _evenComparator = (item: any, idx: number) => idx % 2 === 0 ? true : false
+export const _oddComparator = (item: any, idx: number) => idx % 2 === 0 ? false : true
 function getStpNameContent(stp_name: string) {
     const reArray = parseStpName(stp_name)
+    const g = reArray.filter(_evenComparator)
+    const r = reArray.filter(_oddComparator)
+    return [g, r] as const
 
 }
-
-function splitEven<T>(args: T[]) {
-
-    return args.reduce((acc, current, idx) => {
-        const index = idx % 2
-        acc[index] = [...acc[index], current]
-        return acc
-    }, [] as T[][])
-}
+_log(getStpNameContent("4-14-4TopN-16Ar-4.4.1"))
