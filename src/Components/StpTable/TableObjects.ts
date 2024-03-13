@@ -39,6 +39,8 @@ export type StpNameProperties =
     | 'tgiar'
     | 'сбр'
     | 'зак'
+    | 'ч'
+    | 'с'
 
 
 

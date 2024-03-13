@@ -4,7 +4,7 @@ import { GlassDescription, StpNamePropertyDescription } from "./TerminsDesc"
 
 console.clear()
 // const regGls = /\d\.\d\.\d|\d+|\w+\b/gu
-export const StpRegExp = /\d\.\d\.\d|\d+|\(\w+\)|\p{L}+/gui
+export const StpRegExp = /\d\.\d\.\d|\d+|\(\w{1,3}\)|\p{L}+/gui
 const regRam = /\d+|\w+$/g
 export const triplexRegExp = /\d\.\d\.\d/g
 export type Tformula = RegExpMatchArray | null
@@ -52,7 +52,7 @@ export const nameDescriptor = (name_parts: Tformula[]) => {
         if (idx % 2 === 0) {
             return `${glstxt} ${propTxt}`
         }
-        else return `${ramtxt}${propTxt === "" ? "заполненная воздухом" : propTxt1}`
+        else return `${ramtxt}${propTxt === "" ? "" : propTxt1}`
     })
 
     return splitted

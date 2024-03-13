@@ -31,7 +31,7 @@ export const TagsMenuProps = {
 const DepthMenuProps = {
     PaperProps: {
         style: {
-            height: ITEM_HEIGHT * 6 + 5,
+            height: ITEM_HEIGHT * 7 + 7,
             width: 140,
         },
     },
@@ -45,7 +45,7 @@ const CamsMenuProps = {
     },
 };
 const depthArray = [
-    24, 28, 36, 40, 52
+    24, 28, 32, 36, 40, 52
 ];
 const camsArray = [1, 2];
 export const tagsArray: (keyof typeof Stp_Tags)[] = [

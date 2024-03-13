@@ -24,7 +24,8 @@ import { routePaths } from '../../Routes/routePath';
 import { _log } from '../../Helpers/helpersFns';
 import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
 import { useFetcher, useSubmit } from 'react-router-dom';
-import { FnameTooltip } from '../UI/FnameTooltip';
+import { FormulaTTButton } from '../UI/FormulaTooltip';
+
 
 
 
@@ -245,7 +246,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                                                     <Box component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } alignItems={ 'center' }>
 
                                                         { row.name }
-                                                        <FnameTooltip
+                                                        <FormulaTTButton
                                                             stp_name={ row.name as string }
                                                         />
                                                     </Box>
