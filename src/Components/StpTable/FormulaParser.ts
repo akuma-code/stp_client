@@ -10,21 +10,21 @@ export const triplexRegExp = /\d\.\d\.\d/g
 export type Tformula = RegExpMatchArray | null
 
 
-export const parseStpName = (str: string, options = { split: false }) => {
+export const parseStpName = (str: string, options = { split: false }): RegExpMatchArray[] => {
     const arr = /-/.test(str) ? str.split('-') : str.split(" ")
 
     const re = arr.map((s, idx) => idx % 2 === 0
-        ? s.match(StpRegExp)
-        : s.match(regRam)
+        ? s.match(StpRegExp)!
+        : s.match(regRam)!
     )
-    if (options.split === true) return re
+    if (options.split === true && Array.isArray(re)) return re
 
-    const parsed = arr.map(s => s.match(StpRegExp))
+    const parsed = arr.map(s => s.match(StpRegExp)!)
 
     return parsed
 }
 
-export const getPropsFromRegExp = (parsed_data: Tformula[][]) => {
+export const getPropsFromRegExp = (parsed_data: RegExpMatchArray[][]) => {
     const glasses = parsed_data.map(p =>
         p.filter((_, idx) => idx % 2 === 0))
     // .map(([w, p]) =>            w))
@@ -40,7 +40,7 @@ export const findTags = (formula: string, tags: StpNameProperties[]) => {
 
 
 
-export const nameDescriptor = (name_parts: Tformula[]) => {
+export const nameDescriptor = (name_parts: RegExpMatchArray[]) => {
     const splitted = name_parts.map((p, idx) => {
         if (!p) return ""
         const [width, prop, prop2] = p

@@ -25,9 +25,7 @@ export const ComparePage = () => {
     })
 
     const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
-    const t = filtered.map(f => parseStpName(f.name)) as Tformula[][]
-    // _log("parsed:", ...t)
-    getPropsFromRegExp(t)
+
     return (
         <CompareContext.Provider
             value={ {

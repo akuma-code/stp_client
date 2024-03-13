@@ -8,7 +8,7 @@ type TagType = {
 
 const TEnergy: TagType = {
     tag: 'energy',
-    g_prop: ['TopN', 'Эл', 'Сбр',]
+    g_prop: ['TopN']
 }
 const TSolarProof: TagType = {
     tag: 'solarproof',
@@ -60,7 +60,7 @@ export const setupTags = (stp_name: string, options = { showConsole: false }) =>
         return rest
 
     }).filter((s, i) => i % 2 === 0 && s.length > 0).flat(1)
-    const isDiffGlass = glasses.includes('4') && glasses.includes('6')
+    const isDiffGlass = glasses.includes('4') && glasses.includes('6') && glasses.length > 1
 
     const tags = [...tagRecognizer(props), ...tagRecognizer(glasses)]
     if (isDiffGlass === true) {
@@ -84,3 +84,12 @@ export const updateTags = (item: StpItem) => {
     return item
 
 }
+
+
+function getStpNameContent(stp_name: string) {
+    const reArray = parseStpName(stp_name)
+    const filtered = reArray.filter(s => s !== null)
+    console.log('filtered', filtered)
+}
+
+getStpNameContent("())")

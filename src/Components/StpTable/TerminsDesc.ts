@@ -23,16 +23,16 @@ export const _TerminsDesc = {
 }
 
 export const StpNamePropertyDescription: Record<StpNameProperties, string> = {
-    ar: 'камера заполненная аргоном',
+    ar: ', камера заполненна аргоном',
     fhbr: 'Феникс с зеркальным эффектом, бронзовый',
-    fhcl: 'Феникс с зеркальным эффектом, прозрачный',
+    fhcl: 'Феникс с зеркальным эффектом, бесцветный',
     fhgr: 'Феникс с зеркальным эффектом, серый',
-    tgi: 'TGI пластиковая',
+    tgi: ' TGI пластиковая',
     topn: 'c энергосберегающим напылением',
     зак: 'закаленное',
     сбр: 'мультифункиональное, с одной стороны с бронзовым оттенком, с другой с синим',
-    эл: 'мультифункциональное, прозрачное',
-    tgiar: 'TGI пластиковая, заполненная аргоном',
+    эл: 'мультифункциональное, бесцветное',
+    tgiar: ' TGI пластиковая, камера заполненна аргоном',
     ч: 'черного цвета',
     с: "серого цвета",
 
@@ -40,10 +40,10 @@ export const StpNamePropertyDescription: Record<StpNameProperties, string> = {
 
 export const GlassDescription = {
     gls: (w: string | number) => {
-        if (typeof w === 'string' && triplexRegExp.test(w)) return `Триплекс ${w} из двух стекол, проклеенный пленкой 1 мм`
+        if (typeof w === 'string' && triplexRegExp.test(w)) return `Триплекс ${w} из двух стекол, проклеенный 1 слоем пленки`
         return `Стекло ${w} мм `
     },
-    ramka: (w: string | number) => { return `Рамка ${w} мм ` }
+    ramka: (w: string | number) => { return `Рамка ${w} мм` }
 
 }
 
