@@ -48,6 +48,8 @@ const tagRecognizer = (reg_glasses: string[], taglist = TagsTypeList) => {
 
 export const setupTags = (stp_name: string, options = { showConsole: false }) => {
     const parsedArr = parseStpName(stp_name)
+
+
     const glasses = parsedArr.map((res) => {
         if (!res) return ""
         const [g, ...rest] = res
@@ -88,8 +90,14 @@ export const updateTags = (item: StpItem) => {
 
 function getStpNameContent(stp_name: string) {
     const reArray = parseStpName(stp_name)
-    const filtered = reArray.filter(s => s !== null)
-    console.log('filtered', filtered)
+
 }
 
-getStpNameContent("())")
+function splitEven<T>(args: T[]) {
+
+    return args.reduce((acc, current, idx) => {
+        const index = idx % 2
+        acc[index] = [...acc[index], current]
+        return acc
+    }, [] as T[][])
+}

@@ -1,4 +1,5 @@
 import { _log } from "../../Helpers/helpersFns"
+
 import { StpNameProperties } from "./TableObjects"
 import { GlassDescription, StpNamePropertyDescription } from "./TerminsDesc"
 
@@ -42,7 +43,7 @@ export const findTags = (formula: string, tags: StpNameProperties[]) => {
 
 export const nameDescriptor = (name_parts: RegExpMatchArray[]) => {
     const splitted = name_parts.map((p, idx) => {
-        if (!p) return ""
+        // if (!p) return ""
         const [width, prop, prop2] = p
         const glstxt = GlassDescription.gls(width)
         const ramtxt = GlassDescription.ramka(width)
