@@ -21,9 +21,9 @@ import { TagsAvatarGroup } from '../UI/TagAvatars';
 import { MdCompare } from 'react-icons/md';
 import { MuiLink } from '../../Routes/Pages/MuiLink';
 import { routePaths } from '../../Routes/routePath';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { _log } from '../../Helpers/helpersFns';
 import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
-import { useFetcher, useSubmit } from 'react-router-dom';
 import { FormulaTTButton } from '../UI/FormulaTooltip';
 
 
@@ -69,7 +69,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
     // const memodata = preload_data ?? []
 
 
-    const filtered = useStpFilter(preload_data!, query, filterParams)
+    const filtered = useStpFilter(preload_data, query, filterParams)
     const sorted = useCompare(filtered, order, orderBy)
 
 
@@ -189,8 +189,8 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                         />
 
 
-                        <TableBody>
-                            <Suspense fallback={ <div className='text-center'>LOADING</div> }>
+                        <Suspense fallback={ <div className='text-center'>LOADING</div> }>
+                            <TableBody>
                                 {
                                     sorted.map((row, index) => {
                                         const isItemSelected = isSelected(+row.id);
@@ -281,8 +281,8 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                                         <TableCell colSpan={ 4 } />
                                     </TableRow>
                                 ) }
-                            </Suspense>
-                        </TableBody>
+                            </TableBody>
+                        </Suspense>
 
                     </Table>
 
@@ -347,6 +347,8 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
 
     );
 })
+
+StpDataTable.displayName = '____StpTable'
 
 const DataError = () => {
     return (

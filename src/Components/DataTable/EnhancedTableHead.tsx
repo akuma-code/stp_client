@@ -11,6 +11,7 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import { _EnFieldsStp } from '../../Interfaces/Enums';
 import { HelperDialog } from '../UI/HelperDialog';
 import { Order, StpData } from './StpDataTable';
+import { AvatarButtonTooltip } from '../UI/AvatarButtonTooltip';
 interface HeadStpCell {
     label: string;
     id: keyof StpData;
@@ -108,24 +109,35 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
 
                                         <HelperDialog img_name={ getImgName(headCell.id) || undefined } tooltip_title={ headCell.desc || "" } />
                                         :
-                                        <Tooltip
-                                            title={ headCell.desc
+                                        !WoIcon(headCell) &&
+                                        <AvatarButtonTooltip
+                                            icon={ <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-yellow-400' : 'text-blue-600' } /> }
+                                            tooltip_title={ headCell.desc
                                                 ? headCell.desc
                                                 : headCell.label }
-                                            PopperProps={ { placement: 'top', } }
-                                        >
-                                            <Box
+                                            avatarVariant='circular'
+                                            avatarSx={ { maxHeight: 20, maxWidth: 20 } }
+                                            disableRipple
+                                        />
 
-                                            >
-                                                { !WoIcon(headCell) &&
+                                    // <Tooltip
+                                    // title={ headCell.desc
+                                    //     ? headCell.desc
+                                    //     : headCell.label }
+                                    //     PopperProps={ { placement: 'top', } }
+                                    // >
+                                    //     <Box
 
-                                                    <SvgIcon sx={ { maxHeight: 15 } } >
-                                                        <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-orange-800' : 'text-blue-600' } />
-                                                    </SvgIcon>
-                                                }
+                                    //     >
+                                    //         { !WoIcon(headCell) &&
 
-                                            </Box>
-                                        </Tooltip>
+                                    //             <SvgIcon sx={ { maxHeight: 15 } } >
+                                    //                 <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-yellow-400' : 'text-blue-600' } />
+                                    //             </SvgIcon>
+                                    //         }
+
+                                    //     </Box>
+                                    // </Tooltip>
                                 }
 
                                 <Box alignItems={ 'baseline' }>

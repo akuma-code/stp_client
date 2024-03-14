@@ -1681,7 +1681,12 @@ export function GetStpData(): StpItem[] {
 
 export async function LazyStpData() {
     const withTags32mm = table_data_32mm.map(updateTags)
-    const data = table_data_all.concat(table_data_BrGr, withTags32mm)
+    const stp_data: StpItem[] = []
+    const data = await stp_data.concat(
+        table_data_all,
+        table_data_BrGr,
+        withTags32mm)
+    // const data = table_data_all.concat(table_data_BrGr, withTags32mm)
 
 
     return data

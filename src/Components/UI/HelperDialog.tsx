@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton, SvgIcon, Tooltip } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -7,11 +7,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import React, { Suspense } from 'react';
-import { FaRegQuestionCircle } from 'react-icons/fa';
+import { LiaInfoSolid } from 'react-icons/lia';
 import path_decibel from './../../Components/StpTable/StpPreset/images/decibels.jpg';
 import path_energy from './../../Components/StpTable/StpPreset/images/energyCoeefs.jpg';
 import path_light from './../../Components/StpTable/StpPreset/images/lightCoeff.jpg';
-import path_triplex from './../../Components/StpTable/StpPreset/images/triplex.jpg'
+import path_triplex from './../../Components/StpTable/StpPreset/images/triplex.jpg';
+import { AvatarButtonTooltip } from './AvatarButtonTooltip';
 
 
 
@@ -44,16 +45,24 @@ export function HelperDialog({ img_name, tooltip_title }: HelperDialogProps) {
         <Suspense
             fallback={ <CircularProgress /> }
         >
-            <Tooltip title={ ttText } PopperProps={ { placement: 'top' } }>
+            <AvatarButtonTooltip
+                icon={ <LiaInfoSolid className={ 'text-blue-600' } /> }
+                tooltip_title={ ttText }
+                action={ handleClickOpen }
+                avatarVariant='circular'
+                avatarSx={ { width: 20, height: 20 } }
 
+            />
+
+            {/* <Tooltip title={ ttText } PopperProps={ { placement: 'top' } }>
                 <IconButton onClick={ handleClickOpen } edge='start'                    >
                     <SvgIcon sx={ {
                         maxHeight: 15,
                     } } >
-                        <FaRegQuestionCircle className={ 'text-orange-800' } />
+                        <FaRegQuestionCircle className={ 'text-yellow-600' } />
                     </SvgIcon>
                 </IconButton>
-            </Tooltip>
+            </Tooltip> */}
 
             <Dialog autoFocus
                 fullScreen={ fullScreen }

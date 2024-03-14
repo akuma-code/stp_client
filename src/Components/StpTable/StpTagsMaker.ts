@@ -83,18 +83,21 @@ export const updateTags = (item: StpItem) => {
 
     const { name } = item
     const new_tags = setupTags(name)
-    item.tags = new_tags.length === 0 ? ['simple'] : new_tags
+    if (new_tags.length === 0) new_tags.push('simple')
+    item.tags = new_tags
+
+    // item.tags = new_tags.length === 0 ? ['simple'] : new_tags
     return item
 
 }
 
 export const _evenComparator = (item: any, idx: number) => idx % 2 === 0 ? true : false
 export const _oddComparator = (item: any, idx: number) => idx % 2 === 0 ? false : true
-function getStpNameContent(stp_name: string) {
+export function getStpNameContent(stp_name: string): [glass: RegExpMatchArray[], ramki: RegExpMatchArray[]] {
     const reArray = parseStpName(stp_name)
     const g = reArray.filter(_evenComparator)
     const r = reArray.filter(_oddComparator)
     return [g, r] as const
 
 }
-_log(getStpNameContent("4-14-4TopN-16Ar-4.4.1"))
+

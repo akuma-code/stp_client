@@ -1,4 +1,5 @@
 import { triplexRegExp } from "./FormulaParser"
+import { STP } from "./StpFactory/StpFactory"
 import { StpItem, StpNameProperties } from "./TableObjects"
 
 type TerminsDesc = { [Key in keyof StpItem]?: string }
@@ -65,3 +66,5 @@ export const GlassDescription = {
 //     depth: "Толщина - толщина стеклопакета в мм",
 //     weight: "Вес - вес одного квадратного метра стеклопакета",
 // }
+
+
