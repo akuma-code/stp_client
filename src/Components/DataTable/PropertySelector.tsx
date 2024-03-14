@@ -19,11 +19,10 @@ import { useTheme } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 const ITEM_HEIGHT = 45;
-const ITEM_PADDING_TOP = 8;
 export const TagsMenuProps = {
     PaperProps: {
         style: {
-            height: ITEM_HEIGHT * 7 + ITEM_PADDING_TOP,
+            height: ITEM_HEIGHT * 8 + 14,
             width: 280,
         },
     },
@@ -49,12 +48,13 @@ const depthArray = [
 ];
 const camsArray = [1, 2];
 export const tagsArray: (keyof typeof Stp_Tags)[] = [
+    'standart',
     'simple',
     'energy',
     'hitproof',
     'multi',
     'solarproof',
-    'soundproof'
+    'soundproof',
 ] as const;
 
 
@@ -232,6 +232,10 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                         <MenuItem key={ tag } value={ tag } divider dense>
                             <Checkbox checked={ selectors?.tags?.includes(tag) } name={ tag + '_check' } />
                             <ListItemText primary={ Stp_Tags[tag] } />
+                            <Avatar sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
+                                { TagAvatarIcon[tag as StpTag] }
+                                {/* <SvgIcon >                                            </SvgIcon> */ }
+                            </Avatar>
                         </MenuItem>
                     )) }
                 </Select>

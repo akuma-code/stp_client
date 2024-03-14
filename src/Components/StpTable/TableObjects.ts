@@ -6,6 +6,7 @@ export type StpTag =
     | "soundproof"
     | "hitproof"
     | "solarproof"
+    | "standart"
 export type StpItem = {
 
     cams: number

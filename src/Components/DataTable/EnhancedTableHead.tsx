@@ -92,26 +92,19 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                         >
                             <TableSortLabel sx={ {
                                 fontSize: 18,
-                                // maxWidth: 150,
-                                // width: 10
-
-
                             } }
                                 active={ orderBy === headCell.id }
                                 direction={ orderBy === headCell.id ? order : 'asc' }
                                 onClick={ createSortHandler(headCell.id) }
-
                             >
-
                                 {
                                     hasImage(headCell) ?
-
 
                                         <HelperDialog img_name={ getImgName(headCell.id) || undefined } tooltip_title={ headCell.desc || "" } />
                                         :
                                         !WoIcon(headCell) &&
                                         <AvatarButtonTooltip
-                                            icon={ <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-yellow-400' : 'text-blue-600' } /> }
+                                            icon={ <FaRegQuestionCircle className={ 'text-blue-600' } /> }
                                             tooltip_title={ headCell.desc
                                                 ? headCell.desc
                                                 : headCell.label }
@@ -120,24 +113,6 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                             disableRipple
                                         />
 
-                                    // <Tooltip
-                                    // title={ headCell.desc
-                                    //     ? headCell.desc
-                                    //     : headCell.label }
-                                    //     PopperProps={ { placement: 'top', } }
-                                    // >
-                                    //     <Box
-
-                                    //     >
-                                    //         { !WoIcon(headCell) &&
-
-                                    //             <SvgIcon sx={ { maxHeight: 15 } } >
-                                    //                 <FaRegQuestionCircle className={ hasImage(headCell) ? 'text-yellow-400' : 'text-blue-600' } />
-                                    //             </SvgIcon>
-                                    //         }
-
-                                    //     </Box>
-                                    // </Tooltip>
                                 }
 
                                 <Box alignItems={ 'baseline' }>
@@ -152,9 +127,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                                         </Box>
                                     ) : null
                                     }
-                                    {
 
-                                    }
                                 </Box>
 
                             </TableSortLabel>

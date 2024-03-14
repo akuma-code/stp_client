@@ -31,6 +31,17 @@ const TSimple: TagType = {
     tag: 'simple',
     g_prop: []
 }
+const TStandartNames = [
+    "4-16-4",
+    "4TopN-16Ar-4",
+    "4-20-4",
+    "4TopN-20Ar-4",
+    "4-14-4-14-4",
+    "4TopN-14Ar-4-14-4",
+    "4TopN-12Ar-4-14-4",
+    "4TopN-12TgiAr-4-14Tgi-4",
+]
+
 
 export const TagsTypeList = [
     TSolarProof, TEnergy, THitProof, TMulti, TSimple, TSoundProof,
@@ -48,17 +59,16 @@ const tagRecognizer = (reg_glasses: string[], taglist = TagsTypeList) => {
 }
 
 export const setupTags = (stp_name: string, options = { showConsole: false }) => {
-    const parsedArr = parseStpName(stp_name)
 
+    const parsedArr = parseStpName(stp_name)
+    const isStandart = TStandartNames.includes(stp_name)
 
     const glasses = parsedArr.map((res) => {
-        if (!res) return ""
         const [g, ...rest] = res
         return g
     }).filter((s, i) => i % 2 === 0)
 
     const props = parsedArr.map((res) => {
-        if (!res) return []
         const [g, ...rest] = res
         return rest
 
@@ -70,6 +80,8 @@ export const setupTags = (stp_name: string, options = { showConsole: false }) =>
 
         tags.push("soundproof")
     }
+
+    if (isStandart) tags.push('standart')
     if (options.showConsole === true) {
         console.log('props', props)
         console.log('glasses', glasses)
@@ -82,12 +94,13 @@ export const setupTags = (stp_name: string, options = { showConsole: false }) =>
 export const updateTags = (item: StpItem) => {
 
     const { name } = item
-    const new_tags = setupTags(name)
-    if (new_tags.length === 0) new_tags.push('simple')
-    item.tags = new_tags
+
+    const tags = setupTags(name)
+    if (tags.length === 0) tags.push('simple')
+    // item.tags = tags
 
     // item.tags = new_tags.length === 0 ? ['simple'] : new_tags
-    return item
+    return { ...item, tags }
 
 }
 

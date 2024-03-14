@@ -1,7 +1,7 @@
 import { updateTags } from "./StpTagsMaker";
 import { StpItem } from "./TableObjects";
 
-export const table_data_all: StpItem[] = [
+export const table_data_base: StpItem[] = [
     {
         name: "3.3.1-14Ar-4Эл",
         tags: ['hitproof', 'soundproof', 'multi'],
@@ -1674,17 +1674,19 @@ const table_data_32mm: StpItem[] = [
 ]
 
 export function GetStpData(): StpItem[] {
-    const data = table_data_all.concat(table_data_BrGr)
+    const data = table_data_base.concat(table_data_BrGr)
 
     return data
 }
 
 export async function LazyStpData() {
     const withTags32mm = table_data_32mm.map(updateTags)
+    const withTagsBase = table_data_base.map(updateTags)
+    const withTagsBrGr = table_data_BrGr.map(updateTags)
     const stp_data: StpItem[] = []
     const data = await stp_data.concat(
-        table_data_all,
-        table_data_BrGr,
+        withTagsBase,
+        withTagsBrGr,
         withTags32mm)
     // const data = table_data_all.concat(table_data_BrGr, withTags32mm)
 
