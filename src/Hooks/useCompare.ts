@@ -1,14 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpItem, StpTag } from "../Components/StpTable/TableObjects";
-import { AnyObj } from "../Interfaces/Types";
-import { FiltersParams } from "./useFiltration";
-import { hasCams, hasDepths } from "./useMemoFilter";
+import { AnyObj, FiltersParams } from "../Interfaces/Types";
+
+// import { hasCams, hasDepths } from "./useMemoFilter";
 
 type Order = 'asc' | 'desc';
 type TSort = { [key: string]: string | number }
 
-
+const hasTags = (tags: StpTag[]) => (item: StpItem) => tags.length > 0
+    ? tags.every(t => item.tags.includes(t))
+    : false
+export const hasCams = (cams: number[]) => <T extends { cams: number }>(item: T) => cams.includes(item.cams)
+export const hasDepths = (depths: number[]) => <T extends { depth: number }>(item: T) => depths.includes(item.depth)
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -41,38 +45,15 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
     });
     return stabilizedThis.map((el) => el[0]);
 }
-const hasTags = (tags: StpTag[]) => (item: StpItem,) => tags.length > 0
-    ? tags.every(t => item.tags.includes(t))
-    : false
+// const hasTags = (tags: StpTag[]) => (item: StpItem,) => tags.length > 0
+//     ? tags.every(t => item.tags.includes(t))
+//     : false
 export const _FilterFns = {
     cams: hasCams,
     depth: hasDepths,
     tags: hasTags
 }
-// type FilterByName = {
-//     type: 'name',
-//     payload: string
-// }
-// type FilterByTags = {
-//     type: 'tags',
-//     payload: StpTag[]
-// }
-// type FilterByDepth = {
-//     type: 'depth',
-//     payload: number
-// }
-// type FilterByCams = {
-//     type: 'cams',
-//     payload: number
-// }
 
-// export type FiltrationType = | FilterByName | FilterByTags | FilterByDepth | FilterByCams
-// export type FilterItemParams = { depth: number, name: string, tags: StpTag[], cams: number }
-
-
-
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useCompare<T extends AnyObj>(array: T[], order: Order, sort_field: any) {
     const sorted = useMemo(() => stableSort(array, getComparator(order, sort_field)), [array, order, sort_field])
 
@@ -124,6 +105,8 @@ export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFi
 
     return filtered
 }
+
+
 
 // export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
 

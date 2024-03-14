@@ -41,7 +41,8 @@ export const TagsAvatarGroup = ({ tags, handleTagsClick }: { tags: StpTag[], han
                             maxHeight: 23,
                             bgcolor: highLight(t),
                             color: 'whitesmoke',
-                            mx: .4
+                            mx: .4,
+                            '&:hover': { transform: 'scale(1.3)' }
                         } }
                     >
                         { TagAvatarIcon[t] }

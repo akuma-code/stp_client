@@ -1,9 +1,9 @@
-import { createContext } from "react"
+import { createContext, useContext } from "react"
 
-import { useContext } from "react"
+
 import { StpStore } from "../Context/StpStore"
-import { StpTypeProps } from "../Interfaces/Types"
-import { FiltersParams } from "./useFiltration"
+import { FiltersParams, StpTypeProps } from "../Interfaces/Types"
+
 
 
 

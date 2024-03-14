@@ -1,11 +1,11 @@
 import { Box, Stack, useMediaQuery, useTheme } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
-import { alpha } from '@mui/material/styles';
+
 import { AttikSvgLogo } from '../UI/Svg/Attik';
 import { AcSearch } from './AcSearch';
 import { PropertySelector } from './PropertySelector';
 interface TableToolbarProps {
-    numSelected: number;
+    numSelected?: number;
     numFiltered: number
 }
 
@@ -23,9 +23,9 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 height: { md: 100, lg: 120, sm: 70 },
                 pl: { sm: 2 },
                 pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                }),
+                // ...(numSelected > 0 && {
+                //     bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+                // }),
             } }
         >
 
@@ -62,24 +62,4 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
 
 
-
-
-
-
-
-
-// numSelected > 0 ?
-
-//     <Typography
-//         // sx={ { flex: '1 1 33%' } }
-//         textAlign={ 'left' }
-//         color="inherit"
-//         variant="body1"
-//         component="div"
-//         id="tableTitle"
-
-//     >
-//         { numSelected > 0 ? `${numSelected} выбрано для сравнения` : `Выбрать стеклопакет для сравнения (не более 5!)` }
-//     </Typography>
-//     :
 

@@ -11,7 +11,6 @@ import TableRow from '@mui/material/TableRow';
 import React, { Suspense, memo, useCallback, useEffect, useState } from 'react';
 
 import { Button, Stack, alpha } from '@mui/material';
-import { useCompare, useStpFilter } from '../../Hooks/useCompare';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpItem, StpTag } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
@@ -25,6 +24,7 @@ import { routePaths } from '../../Routes/routePath';
 import { _log } from '../../Helpers/helpersFns';
 import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
 import { FormulaTTButton } from '../UI/FormulaTooltip';
+import { useCombineFilterSort } from '../../Hooks/useMemoFilter';
 
 
 
@@ -63,25 +63,8 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(true);
     const [RPP, setRowsPerPage] = useState(-1);
-    // const submit = useSubmit()
-    // const fetcher = useFetcher()
-    // const [checkedCells, setCheckedCells] = useState<number[]>([])
-    // const memodata = preload_data ?? []
+    const sorted = useCombineFilterSort(preload_data, query, filterParams, order, orderBy)
 
-
-    const filtered = useStpFilter(preload_data, query, filterParams)
-    const sorted = useCompare(filtered, order, orderBy)
-
-
-    // const submitSelected = () => {
-    //     const data = JSON.stringify(selectedItems)
-    //     fetcher.submit(selectedItems, {
-    //         method: 'POST',
-    //         action: routePaths.compare,
-    //         encType: 'application/x-www-form-urlencoded'
-    //     })
-    //     _log('submited: ', data)
-    // }
 
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
@@ -107,7 +90,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
 
     }, [select, selectedItems.length, sorted]);
 
-    const handleClick = useCallback((event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
+    const handleClick = (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
 
         const selectedIdx = selectedItems.indexOf(id);
 
@@ -115,7 +98,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
         else if (selectedIdx >= 0 && selectedItems.length <= 5) select(prev => prev.filter(p => p !== id))
         if (selectedItems.length >= 5) select(prev => prev.filter(p => p !== id))
 
-    }, [selectedItems, select]);
+    };
 
 
     // const handleChangePage = (event: unknown, newPage: number) => {
@@ -163,7 +146,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { mb: 2 } } elevation={ 2 }>
 
-                <StpTableToolbar numSelected={ selectedItems.length } numFiltered={ sorted.length } />
+                <StpTableToolbar numFiltered={ sorted.length } />
 
                 <TableContainer sx={ {
                     overflowY: 'auto',
@@ -230,14 +213,12 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                                                     </Box>
                                                 </TableCell>
                                                 <TableCell
-                                                    // onClick={ (event) => handleClick(event, +row.id) }
                                                     component="th"
                                                     id={ labelId }
                                                     scope="row"
                                                     padding="none"
                                                     sx={ {
                                                         textWrap: 'nowrap',
-                                                        // cursor: 'pointer',
                                                         [`& :hover>.MuiIconButton-root `]: { visibility: 'visible' },
                                                         [`& .MuiIconButton-root`]: { visibility: 'hidden' },
                                                     } }
@@ -252,9 +233,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                                                     </Box>
                                                 </TableCell>
                                                 <TableCell align='right'>
-                                                    <TagsAvatarGroup tags={ row.tags as unknown as StpTag[] }
-                                                    // handleTagsClick={ (t) => filterFn(prev => ({ ...prev, tags: [...prev.tags!, t] })) }
-                                                    />
+                                                    <TagsAvatarGroup tags={ row.tags as unknown as StpTag[] } />
                                                 </TableCell>
                                                 <TableCell align='center' sx={ { display: 'flex', justifyContent: 'center' } }>
                                                     { row.cams === 1 && <AvatarS2 wh={ 34 } /> }

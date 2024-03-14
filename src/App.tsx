@@ -2,9 +2,9 @@ import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { table_data_base } from "./Components/StpTable/FullTable";
 import { StpStore } from "./Context/StpStore";
-import { FiltersParams } from "./Hooks/useFiltration";
+
 import { AppContext } from "./Hooks/useStoresContext";
-import { StpTypeProps } from "./Interfaces/Types";
+import { FiltersParams, StpTypeProps } from "./Interfaces/Types";
 import { router } from "./Routes/AppRouter";
 
 

@@ -57,7 +57,10 @@ export const tagsArray: (keyof typeof Stp_Tags)[] = [
     'soundproof',
 ] as const;
 
-
+export const CamsIcon = {
+    '1': <MemoAvaS2 />,
+    '2': <MemoAvaS3 />
+}
 
 export type SelectorProps = {
 
@@ -167,8 +170,9 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                                     selected?.map(s =>
 
                                         <Avatar key={ s } sx={ { height: 30, width: 30, bgcolor: '#3d9fe0' } } variant='rounded'>
-                                            { s === 1 && <MemoAvaS2 /> }
-                                            { s === 2 && <MemoAvaS3 /> }
+                                            {/* { s === 1 && <MemoAvaS2 /> } */ }
+                                            {/* { s === 2 && <MemoAvaS3 /> } */ }
+                                            { CamsIcon[s.toString() as keyof typeof CamsIcon] }
                                         </Avatar>
 
                                     ) }
@@ -212,15 +216,10 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                             <Box display={ 'flex' } flexDirection={ 'row' } gap={ 1 } flexWrap={ 'nowrap' } margin={ 0 }>
                                 {
                                     selected?.map(s =>
-
                                         <Avatar key={ s } sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
                                             { TagAvatarIcon[s as StpTag] }
-                                            {/* <SvgIcon >                                            </SvgIcon> */ }
                                         </Avatar>
-
                                     ) }
-
-
                             </Box>
                         )
                     } }
@@ -234,7 +233,6 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                             <ListItemText primary={ Stp_Tags[tag] } />
                             <Avatar sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
                                 { TagAvatarIcon[tag as StpTag] }
-                                {/* <SvgIcon >                                            </SvgIcon> */ }
                             </Avatar>
                         </MenuItem>
                     )) }
