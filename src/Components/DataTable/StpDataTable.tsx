@@ -8,7 +8,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import React, { Suspense, memo, useCallback, useEffect, useState } from 'react';
+import React, { Suspense, memo, useCallback, useState } from 'react';
 
 import { Button, Stack, alpha } from '@mui/material';
 import { useAppContext } from '../../Hooks/useStoresContext';
@@ -175,91 +175,87 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                         <Suspense fallback={ <div className='text-center'>LOADING</div> }>
                             <TableBody>
                                 {
-                                    sorted.map((row, index) => {
-                                        const isItemSelected = isSelected(+row.id);
-                                        const labelId = `enhanced-table-${index}`;
+                                    sorted.map((row, index) =>
+                                        <TableRow
+                                            hover
+                                            key={ row.id }
+                                            // onClick={ (event) => handleClick(event, +row.id) }
+                                            role="checkbox"
+                                            aria-checked={ isSelected(+row.id) }
+                                            tabIndex={ -1 }
+                                            selected={ isSelected(+row.id) }
 
-                                        // const isTagged = hasTags(row as unknown as StpData)
-                                        return (
-                                            <TableRow
-                                                hover
-                                                key={ row.id }
-                                                // onClick={ (event) => handleClick(event, +row.id) }
-                                                role="checkbox"
-                                                aria-checked={ isItemSelected }
-                                                tabIndex={ -1 }
-                                                selected={ isItemSelected }
+                                        >
+                                            <TableCell
+                                                padding="checkbox"
+                                                onClick={ (event) => handleClick(event, +row.id) } sx={ { cursor: 'pointer', } }>
+                                                <Box component={ Stack }
+                                                    direction={ 'row' }
+                                                    alignItems={ 'center' }
+                                                    spacing={ 0 }
+                                                    gap={ 0 }
+                                                    justifyContent={ 'space-between' }>
 
+                                                    { `${index + 1}.` }
+                                                    <Checkbox
+                                                        color="primary"
+                                                        checked={ isSelected(+row.id) }
+                                                        inputProps={ {
+                                                            'aria-labelledby': `enhanced-table-${index}`,
+                                                        } }
+                                                        id={ `enhanced-table-${index}` }
+                                                    />
+                                                </Box>
+                                            </TableCell>
+                                            <TableCell
+                                                component="th"
+                                                id={ `enhanced-table-${index}` }
+                                                scope="row"
+                                                padding="none"
+                                                sx={ {
+                                                    textWrap: 'nowrap',
+                                                    [`& :hover>.MuiIconButton-root `]: { visibility: 'visible' },
+                                                    [`& .MuiIconButton-root`]: { visibility: 'hidden' },
+                                                } }
+                                                colSpan={ 1 }
                                             >
-                                                <TableCell
-                                                    padding="checkbox"
-                                                    onClick={ (event) => handleClick(event, +row.id) } sx={ { cursor: 'pointer', } }>
-                                                    <Box component={ Stack }
-                                                        direction={ 'row' }
-                                                        alignItems={ 'center' }
-                                                        spacing={ 0 }
-                                                        gap={ 0 }
-                                                        justifyContent={ 'space-between' }>
+                                                <Box component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } alignItems={ 'center' }>
 
-                                                        { `${index + 1}.` }
-                                                        <Checkbox
-                                                            color="primary"
-                                                            checked={ isItemSelected }
-                                                            inputProps={ {
-                                                                'aria-labelledby': labelId,
-                                                            } }
-                                                            id={ labelId }
-                                                        />
-                                                    </Box>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    id={ labelId }
-                                                    scope="row"
-                                                    padding="none"
-                                                    sx={ {
-                                                        textWrap: 'nowrap',
-                                                        [`& :hover>.MuiIconButton-root `]: { visibility: 'visible' },
-                                                        [`& .MuiIconButton-root`]: { visibility: 'hidden' },
-                                                    } }
-                                                    colSpan={ 1 }
-                                                >
-                                                    <Box component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } alignItems={ 'center' }>
+                                                    { row.name }
+                                                    <FormulaTTButton
+                                                        stp_name={ row.name as string }
+                                                    />
+                                                </Box>
+                                            </TableCell>
+                                            <TableCell align='right'>
+                                                <TagsAvatarGroup tags={ row.tags as unknown as StpTag[] } />
+                                            </TableCell>
+                                            <TableCell align='center' sx={ { display: 'flex', justifyContent: 'center' } }>
+                                                { row.cams === 1 && <AvatarS2 wh={ 34 } /> }
+                                                { row.cams === 2 && <AvatarS3 wh={ 34 } /> }
+                                                {/* <strong>{ row.cams } </strong> */ }
+                                            </TableCell>
 
-                                                        { row.name }
-                                                        <FormulaTTButton
-                                                            stp_name={ row.name as string }
-                                                        />
-                                                    </Box>
-                                                </TableCell>
-                                                <TableCell align='right'>
-                                                    <TagsAvatarGroup tags={ row.tags as unknown as StpTag[] } />
-                                                </TableCell>
-                                                <TableCell align='center' sx={ { display: 'flex', justifyContent: 'center' } }>
-                                                    { row.cams === 1 && <AvatarS2 wh={ 34 } /> }
-                                                    { row.cams === 2 && <AvatarS3 wh={ 34 } /> }
-                                                    {/* <strong>{ row.cams } </strong> */ }
-                                                </TableCell>
+                                            {
+                                                cells.map(cell =>
 
-                                                {
-                                                    cells.map(cell =>
+                                                    <TableCell align="center" key={ cell }>{ row[cell] }</TableCell>
+                                                )
+                                            }
 
-                                                        <TableCell align="center" key={ cell }>{ row[cell] }</TableCell>
-                                                    )
-                                                }
-
-                                            </TableRow>
-                                        );
-                                    }) }
-                                { emptyRows > 0 && (
-                                    <TableRow
-                                        style={ {
-                                            height: 53 * emptyRows,
-                                        } }
-                                    >
-                                        <TableCell colSpan={ 4 } />
-                                    </TableRow>
-                                ) }
+                                        </TableRow>)
+                                }
+                                {
+                                    emptyRows > 0 && (
+                                        <TableRow
+                                            style={ {
+                                                height: 53 * emptyRows,
+                                            } }
+                                        >
+                                            <TableCell colSpan={ 4 } />
+                                        </TableRow>
+                                    )
+                                }
                             </TableBody>
                         </Suspense>
 

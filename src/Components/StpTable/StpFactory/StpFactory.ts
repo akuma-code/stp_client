@@ -1,7 +1,7 @@
 import { _log } from "../../../Helpers/helpersFns"
 import { parseStpName, triplexRegExp } from "../FormulaParser"
-import { TagsTypeList } from "../StpTagsMaker"
-import { StpTag } from "../TableObjects"
+import { TStandartNames, TagsTypeList } from "../StpTagsMaker"
+import { StpItem, StpTag } from "../TableObjects"
 export const NumbersWoOne = /\d+(?<!\.1)/g
 export interface StpExemplar {
     name: string
@@ -61,7 +61,11 @@ export class STP implements StpExemplar {
             Ra, Det, Ea, Er, Lr, Lt, Ro, Rw, S, Sf, weight
         }
     }
-
+    public get stpItem(): StpItem {
+        if (!this.params) throw new Error("stp params not found!!")
+        const stp_item: StpItem = { ...this, ...this.params }
+        return stp_item
+    }
 
 }
 
@@ -94,16 +98,14 @@ function computeDepth(formula: string) {
 
 const initTags = (stp_name: string, options = { showConsole: false }) => {
     const parsedArr = parseStpName(stp_name)
-
+    const isStandart = TStandartNames.includes(stp_name)
 
     const glasses = parsedArr.map((res) => {
-        if (!res) return ""
         const [g, ...rest] = res
         return g
     }).filter((s, i) => i % 2 === 0)
 
     const props = parsedArr.map((res) => {
-        if (!res) return []
         const [g, ...rest] = res
         return rest
 
@@ -111,16 +113,23 @@ const initTags = (stp_name: string, options = { showConsole: false }) => {
     const isDiffGlass = glasses.includes('4') && glasses.includes('6') && glasses.length > 1
 
     const tags = [...tagRecognizer(props), ...tagRecognizer(glasses)]
-    if (isDiffGlass === true) {
 
-        tags.push("soundproof")
-    }
+
+
+    //__soundproof    
+    if (isDiffGlass === true && !tags.includes('soundproof')) tags.push("soundproof")
+    //__standart  
+    if (isStandart) tags.push('standart')
+
+
     if (options.showConsole === true) {
         console.log('props', props)
         console.log('glasses', glasses)
-
         console.log('tags', tags)
     }
+
+
+
     return tags
 }
 

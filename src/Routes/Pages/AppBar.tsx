@@ -61,7 +61,7 @@ export function AppHeaderBreadcrump() {
                             </Box>
                         </Button>
                     </Box>
-                    <Typography
+                    {/* <Typography
                         variant='body1'
                         color={ '#fff' }
                         textAlign={ 'right' }
@@ -71,13 +71,13 @@ export function AppHeaderBreadcrump() {
                         textTransform={ 'uppercase' }
                         maxWidth={ { lg: 500, sm: 300 } }
                     >
-                        <strong>
-
-                            * В таблице указаны расчетные данные.<br />  Получены в калькуляторе компании РСК.
-                        </strong>
 
 
-                    </Typography>
+                    </Typography> */}
+                    <strong>
+
+                        * В таблице указаны расчетные данные.<br />  Получены в калькуляторе компании РСК.
+                    </strong>
 
                 </Toolbar>
             </AppBar>
