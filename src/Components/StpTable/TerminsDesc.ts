@@ -1,8 +1,7 @@
 import { triplexRegExp } from "./FormulaParser"
-import { STP } from "./StpFactory/StpFactory"
-import { StpItem, StpNameProperties } from "./TableObjects"
+import { StpNameProperties } from "./TableObjects"
 
-type TerminsDesc = { [Key in keyof StpItem]?: string }
+
 
 
 export const _TerminsDesc = {
@@ -24,7 +23,7 @@ export const _TerminsDesc = {
 }
 
 export const StpNamePropertyDescription: Record<StpNameProperties, string> = {
-    ar: ', камера заполненна аргоном',
+    ar: ', камера заполнена аргоном',
     fhbr: 'Феникс с зеркальным эффектом, бронзовый',
     fhcl: 'Феникс с зеркальным эффектом, бесцветный',
     fhgr: 'Феникс с зеркальным эффектом, серый',

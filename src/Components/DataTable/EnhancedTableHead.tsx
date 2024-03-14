@@ -1,4 +1,4 @@
-import { Stack, SvgIcon, Tooltip } from '@mui/material';
+import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
@@ -9,9 +9,9 @@ import { visuallyHidden } from '@mui/utils';
 import * as React from 'react';
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { _EnFieldsStp } from '../../Interfaces/Enums';
+import { AvatarButtonTooltip } from '../UI/AvatarButtonTooltip';
 import { HelperDialog } from '../UI/HelperDialog';
 import { Order, StpData } from './StpDataTable';
-import { AvatarButtonTooltip } from '../UI/AvatarButtonTooltip';
 interface HeadStpCell {
     label: string;
     id: keyof StpData;
@@ -37,7 +37,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
         onRequestSort(event, property);
     };
 
-    const WoIcon = (headCell: HeadStpCell) => ['name', 'tags', 'cams'].includes(headCell.id)
+    const WoIcon = (headCell: HeadStpCell) => !['name', 'tags', 'cams'].includes(headCell.id)
     const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea', 'Er', 'Rw', 'secure'].includes(headCell.id)
     const getImgName = (cellId: keyof StpData) => {
 
@@ -102,7 +102,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
 
                                         <HelperDialog img_name={ getImgName(headCell.id) || undefined } tooltip_title={ headCell.desc || "" } />
                                         :
-                                        !WoIcon(headCell) &&
+                                        WoIcon(headCell) &&
                                         <AvatarButtonTooltip
                                             icon={ <FaRegQuestionCircle className={ 'text-blue-600' } /> }
                                             tooltip_title={ headCell.desc

@@ -5,6 +5,7 @@ import { FcInfo } from "react-icons/fc";
 import { _ID } from '../../Helpers/helpersFns';
 import { nameDescriptor, parseStpName } from '../StpTable/FormulaParser';
 import { AvatarButtonTooltip } from './AvatarButtonTooltip';
+import { TStandartNames } from '../StpTable/StpTagsMaker';
 
 
 
@@ -24,8 +25,10 @@ export const FormulaTTButton: React.FC<Props> = ({ stp_name }) => {
     const parsed_name = parseStpName(stp_name)
     const info = nameDescriptor(parsed_name).map(s => (<span key={ _ID() + s }>{ s }<br /></span>))
 
-
-
+    const title = <strong>{ stp_name }</strong>
+    const content_text = TStandartNames.includes(stp_name)
+        ? <span>{ info } <br /><strong>Стандартный стеклопакет в компании Аттик </strong>  </span>
+        : <span>{ info }</span>
     return (
         <>
             <AvatarButtonTooltip
@@ -41,10 +44,10 @@ export const FormulaTTButton: React.FC<Props> = ({ stp_name }) => {
                 TransitionComponent={ Transition }
 
             >
-                <DialogTitle textAlign={ 'center' }>{ stp_name }</DialogTitle>
+                <DialogTitle textAlign={ 'center' }>{ title }</DialogTitle>
                 <DialogContent dividers>
-                    <DialogContentText>
-                        { info }
+                    <DialogContentText textAlign={ 'left' }>
+                        { content_text }
 
                     </DialogContentText>
                 </DialogContent>

@@ -1,4 +1,3 @@
-import { _log } from "../../Helpers/helpersFns"
 import { parseStpName } from "./FormulaParser"
 import { StpItem, StpTag } from "./TableObjects"
 
@@ -31,7 +30,7 @@ const TSimple: TagType = {
     tag: 'simple',
     g_prop: []
 }
-const TStandartNames = [
+export const TStandartNames = [
     "4-16-4",
     "4TopN-16Ar-4",
     "4-20-4",
@@ -76,7 +75,7 @@ export const setupTags = (stp_name: string, options = { showConsole: false }) =>
     const isDiffGlass = glasses.includes('4') && glasses.includes('6') && glasses.length > 1
 
     const tags = [...tagRecognizer(props), ...tagRecognizer(glasses)]
-    if (isDiffGlass === true) {
+    if (isDiffGlass === true && !tags.includes('soundproof')) {
 
         tags.push("soundproof")
     }
