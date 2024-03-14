@@ -75,18 +75,23 @@ export const setupTags = (stp_name: string, options = { showConsole: false }) =>
     const isDiffGlass = glasses.includes('4') && glasses.includes('6') && glasses.length > 1
 
     const tags = [...tagRecognizer(props), ...tagRecognizer(glasses)]
-    if (isDiffGlass === true && !tags.includes('soundproof')) {
 
-        tags.push("soundproof")
-    }
 
+
+    //__soundproof    
+    if (isDiffGlass === true && !tags.includes('soundproof')) tags.push("soundproof")
+    //__standart  
     if (isStandart) tags.push('standart')
+
+
     if (options.showConsole === true) {
         console.log('props', props)
         console.log('glasses', glasses)
-
         console.log('tags', tags)
     }
+
+
+
     return tags
 }
 
