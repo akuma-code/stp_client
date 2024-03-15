@@ -1,7 +1,7 @@
 import { Box, Stack, useMediaQuery, useTheme } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 
-import { AttikSvgLogo } from '../UI/Svg/Attik';
+import { Suspense, lazy } from 'react';
 import { AcSearch } from './AcSearch';
 import { PropertySelector } from './PropertySelector';
 interface TableToolbarProps {
@@ -9,7 +9,7 @@ interface TableToolbarProps {
     numFiltered: number
 }
 
-
+const AttikLogo = lazy(() => import('../UI/Svg/Attik'))
 
 export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps) {
 
@@ -18,6 +18,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
     return (
         showToolbar &&
+        // <Suspense fallback={ <div>Load toolbar</div> }>
         <Toolbar component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } pt={ 2 } spacing={ 4 }
             sx={ {
                 height: { md: 100, lg: 120, sm: 70 },
@@ -28,6 +29,8 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 // }),
             } }
         >
+
+
 
 
             <Box
@@ -52,10 +55,10 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
                 <PropertySelector filteredCount={ numFiltered } />
 
-                <AttikSvgLogo />
+                <AttikLogo />
             </Box>
-
         </Toolbar>
+        // </Suspense>
     );
 }
 

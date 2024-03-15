@@ -1,7 +1,8 @@
 import { Paper } from '@mui/material'
-import React, { Suspense, useMemo } from 'react'
-import { StpData, StpDataTable, isJson } from '../../Components/DataTable/StpDataTable'
+import { useMemo } from 'react'
 import { useLoaderData } from 'react-router-dom'
+import { StpData, StpDataTable, isJson } from '../../Components/DataTable/StpDataTable'
+import { SuspenseLoad } from '../../Components/UI/SuspenseLoad'
 import { useAppContext } from '../../Hooks/useStoresContext'
 
 type OverviewProps = object
@@ -17,12 +18,34 @@ export const OverView = (props: OverviewProps) => {
 
     return (
         <Paper sx={ { pb: 0, m: 1, bgcolor: 'beige', height: '100%' } } elevation={ 4 }>
-            <Suspense fallback={
-                <div>LOADING</div>
-            }>
+            <SuspenseLoad             >
 
+                {/* <Profiler id='table' onRender={ onRender }> */ }
+
+                {/* <MemoStpTable preload_data={ memodata } /> */ }
+                {/* </Profiler> */ }
                 <StpDataTable preload_data={ memodata } />
-            </Suspense>
+            </SuspenseLoad>
         </Paper>
     )
+}
+
+const onRender = (
+    id: string,
+    phase: 'mount' | 'update' | "nested-update",
+    actualDuration: number,
+    baseDuration: number,
+    startTime: number,
+    commitTime: number,
+    interactions: Set<{ id: number; name: string; timestamp: number }>
+) => {
+    console.log('Profiler:', {
+        id,
+        phase,
+        actualDuration,
+        baseDuration,
+        startTime,
+        commitTime,
+        interactions,
+    })
 }

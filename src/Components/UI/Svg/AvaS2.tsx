@@ -155,4 +155,5 @@ function AvaS2() {
   );
 }
 
-export const MemoAvaS2 = React.memo(AvaS2);
+const MemoAvaS2 = React.memo(AvaS2);
+export default MemoAvaS2

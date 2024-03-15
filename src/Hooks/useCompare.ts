@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useDeferredValue, useMemo } from "react";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpItem, StpTag } from "../Components/StpTable/TableObjects";
 import { AnyObj, FiltersParams } from "../Interfaces/Types";
+import { _log } from "../Helpers/helpersFns";
 
 // import { hasCams, hasDepths } from "./useMemoFilter";
 
@@ -13,6 +14,9 @@ const hasTags = (tags: StpTag[]) => (item: StpItem) => tags.length > 0
     : false
 export const hasCams = (cams: number[]) => <T extends { cams: number }>(item: T) => cams.includes(item.cams)
 export const hasDepths = (depths: number[]) => <T extends { depth: number }>(item: T) => depths.includes(item.depth)
+
+
+
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -26,7 +30,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 type TCompareItem<Key extends keyof AnyObj> = { [key in Key]: number | string }
 type TCompareFn<Key extends keyof AnyObj> = (a: TCompareItem<Key>, b: typeof a) => number
 
-function getComparator<Key extends keyof AnyObj>(order: Order, orderBy: Key): TCompareFn<Key> {
+export function getComparator<Key extends keyof AnyObj>(order: Order, orderBy: Key): TCompareFn<Key> {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);
@@ -34,7 +38,7 @@ function getComparator<Key extends keyof AnyObj>(order: Order, orderBy: Key): TC
 
 
 
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
+export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
@@ -55,15 +59,18 @@ export const _FilterFns = {
 }
 
 export function useCompare<T extends AnyObj>(array: T[], order: Order, sort_field: any) {
-    console.time("filter")
+    //___useCompare
+    // console.time("filter")
     const sorted = useMemo(() => stableSort(array, getComparator(order, sort_field)), [array, order, sort_field])
-    console.timeEnd('filter')
+    // console.timeEnd('filter')
 
     return sorted
 }
 
 type FilterFnOrder = { [Key in keyof StpData]?: (item: Partial<StpData>) => boolean }
 export const getKeyValue = <T extends AnyObj>(obj: T) => Object.entries(obj)[0] satisfies [keyof T, T[keyof T]]
+
+
 const getFilters = (restFilters: Partial<FiltersParams>) => Object.entries(restFilters).reduce((acc, [k, v]) => {
     if (Array.isArray(v) && v.length > 0) acc.push({ [k]: _FilterFns[k as keyof typeof _FilterFns](v as any[]) })
     return acc
@@ -75,19 +82,19 @@ const getFilters = (restFilters: Partial<FiltersParams>) => Object.entries(restF
 export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFilters: Partial<FiltersParams>) {
 
 
-
+    const { cams, depth, tags } = restFilters
     const init_items = array.slice() as unknown as StpData[]
 
 
     const filtered = useMemo(() => {
-        const filterOrder = getFilters(restFilters)
+        const filterOrder = getFilters({ cams, depth, tags })
+        let result_items = [] as StpData[]
 
         const fnOrder = filterOrder.reduce((acc, curr) => {
             const [_, fn] = getKeyValue(curr)
             acc.push(fn)
             return acc
         }, [] as FilterFnOrder[keyof FilterFnOrder][])
-        let result_items = [] as StpData[]
         if (fnOrder.length > 0) {
             const orderFiltered = fnOrder.reduce((res, fn, idx) => {
                 if (idx === 0) {
@@ -103,7 +110,8 @@ export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFi
         const filtered_items = [...result_items].filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
         return filtered_items
 
-    }, [init_items, query, restFilters])
+    }, [cams, query, depth, init_items, tags])
+    // _log([cams, depth, init_items, query, tags])
     return filtered
 }
 

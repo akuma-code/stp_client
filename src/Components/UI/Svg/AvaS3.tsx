@@ -230,4 +230,5 @@ function AvaS3() {
   );
 }
 
-export const MemoAvaS3 = React.memo(AvaS3);
+const MemoAvaS3 = React.memo(AvaS3);
+export default MemoAvaS3

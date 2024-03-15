@@ -12,23 +12,23 @@ import React, { Suspense, memo, useCallback, useState } from 'react';
 import { Button, Stack, alpha } from '@mui/material';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpItem } from '../StpTable/TableObjects';
-import { EnhancedTableHead } from './EnhancedTableHead';
+import { EnhancedTableHead, StpTableHeader } from './EnhancedTableHead';
 
 import { StpTableToolbar } from './StpTableToolbar';
 import { MdCompare } from 'react-icons/md';
-import { MuiLink } from '../../Routes/Pages/MuiLink';
+import { MuiLink, MuiNavLink } from '../../Routes/Pages/MuiLink';
 import { routePaths } from '../../Routes/routePath';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { _log } from '../../Helpers/helpersFns';
 import { useCombineFilterSort } from '../../Hooks/useMemoFilter';
 import { StpTableRow } from './StpTableRow';
+import { SuspenseLoad } from '../UI/SuspenseLoad';
 
 
 
 
 //__ Data Create*/
 //TODO: добавить mobx
-//TODO: вынести ряд в отдельный компонент
 //TODO: ??? вынести выделение в action
 
 
@@ -38,9 +38,9 @@ export type Order = 'asc' | 'desc';
 export const isJson = (i: any) => JSON.parse(i) ? true : false
 
 
-export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ preload_data }) => {
-    const { select, query, filterParams, selectedItems } = useAppContext()
-
+export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_data }) => {
+    const { query, filterParams, } = useAppContext()
+    const [selectedItems, select] = useState<number[]>([])
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
     const [page, setPage] = useState(0);
@@ -97,7 +97,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
         setDense(event.target.checked);
     };
 
-    const isSelected = useCallback((id: number) => selectedItems.indexOf(id) !== -1, [selectedItems]);
+    const isSelected = useCallback((id: number) => selectedItems.includes(id), [selectedItems]);
     const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0 || query !== ""
 
 
@@ -124,7 +124,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
 
 
 
-    // console.count("RENDER!")
+    console.count("RENDER!")
     return (
 
         <Box sx={ { width: '100%', height: '100%' } }>
@@ -132,6 +132,9 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
 
                 <StpTableToolbar numFiltered={ sorted.length } />
 
+                {/* <SuspenseLoad
+                // fallback={ <div className='text-center'>Table is LOADING</div> }
+                > */}
                 <TableContainer sx={ {
                     overflowY: 'auto',
                     maxHeight: '70vh',
@@ -146,7 +149,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                             minWidth: 750,
                         } }
                     >
-                        <EnhancedTableHead
+                        <StpTableHeader
                             numSelected={ selectedItems.length }
                             rowCount={ sorted.length }
                             order={ order }
@@ -156,37 +159,39 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                         />
 
 
-                        <Suspense fallback={ <div className='text-center'>Table is LOADING</div> }>
-                            <TableBody>
-                                {
-                                    sorted.map((row, index) =>
-                                        <StpTableRow
-                                            key={ row.name }
-                                            row_number={ index }
-                                            row_data={ row }
-                                            handleClick={ handleClick }
-                                            isSelected={ isSelected }
-                                        />
-                                    ) }
-                                {
-                                    emptyRows > 0 && (
-                                        <TableRow
-                                            style={ {
-                                                height: 53 * emptyRows,
-                                            } }
-                                        >
-                                            <TableCell colSpan={ 4 } />
-                                        </TableRow>
-                                    )
-                                }
-                            </TableBody>
-                        </Suspense>
+                        {/* <Suspense fallback={ <div className='text-center'>Table is LOADING</div> }> */ }
+                        <TableBody>
 
+                            {
+                                sorted.map((row, index) =>
+                                    <StpTableRow
+                                        key={ row.name }
+                                        row_number={ index }
+                                        row_data={ row }
+                                        handleClick={ handleClick }
+                                        isSelected={ isSelected }
+                                    />
+                                ) }
+
+                            {
+                                emptyRows > 0 && (
+                                    <TableRow
+                                        style={ {
+                                            height: 53 * emptyRows,
+                                        } }
+                                    >
+                                        <TableCell colSpan={ 4 } />
+                                    </TableRow>
+                                )
+                            }
+                        </TableBody>
+                        {/* </Suspense> */ }
                     </Table>
 
 
 
                 </TableContainer>
+
                 <Stack direction={ 'row' } maxHeight={ 55 } >
 
 
@@ -213,7 +218,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                             Выбрано для сравнения: { selectedItems.length } из { sorted.length }
                             <Button
                                 color='info'
-                                variant='contained'
+                                variant='text'
                                 startIcon={ <MdCompare /> }
                                 size='small'
                                 sx={ {
@@ -222,7 +227,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                                 } }
 
                             >
-                                <MuiLink to={ routePaths.compare } title={ 'Сравнить' } >Сравнить</MuiLink>
+                                <MuiNavLink to={ routePaths.compare } title={ 'Сравнить' } >Сравнить</MuiNavLink>
                             </Button>
 
                         </Box>
@@ -240,13 +245,17 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                     </Stack>
 
                 </Stack>
+                {/* </SuspenseLoad> */ }
             </Paper>
         </Box>
 
     );
-})
+}
 
 StpDataTable.displayName = '____StpTable'
+export const MemoStpTable = memo(({ preload_data }: { preload_data: StpData[] }) => StpDataTable({ preload_data }))
+
+
 
 const DataError = () => {
     return (

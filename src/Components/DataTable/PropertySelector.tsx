@@ -6,17 +6,22 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useCallback, useState } from 'react';
+import { lazy, useCallback, useState } from 'react';
 import { MdFilterListOff } from "react-icons/md";
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { Stp_Tags } from '../../Interfaces/Enums';
 import { StpTag } from '../StpTable/TableObjects';
-import { MemoAvaS2 } from '../UI/Svg/AvaS2';
-import { MemoAvaS3 } from '../UI/Svg/AvaS3';
-import { TagAvatarIcon } from '../UI/TagAvatars';
-
+// import MemoAvaS2 from '../UI/Svg/AvaS2';
+// import MemoAvaS3  from '../UI/Svg/AvaS3';
 import { useTheme } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery'
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { TagAvatarIcon } from '../UI/TagAvatars';
+const Cam1 = lazy(() => import('../UI/Svg/AvaS2'))
+const Cam2 = lazy(() => import('../UI/Svg/AvaS3'))
+
+
+
+
 
 const ITEM_HEIGHT = 45;
 export const TagsMenuProps = {
@@ -57,10 +62,10 @@ export const tagsArray: (keyof typeof Stp_Tags)[] = [
     'soundproof',
 ] as const;
 
-export const CamsIcon = {
-    '1': <MemoAvaS2 />,
-    '2': <MemoAvaS3 />
-}
+// export const CamsIcon = {
+//     '1': <MemoAvaS2 />,
+//     '2': <MemoAvaS3 />
+// }
 
 export type SelectorProps = {
 
@@ -75,6 +80,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
     const [selectors, setSelector] = useState<Partial<SelectorProps>>({ ...filterParams, cams: [1, 2] });
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.up('md'));
+
     const handleSelectorChange = useCallback((selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
 
         switch (selectorType) {
@@ -117,7 +123,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             spacing={ 4 }
         // columnGap={ 2.5 }
         >
-
+            {/* <SuspenseLoad> */ }
             {
                 //*Depths
             }
@@ -131,7 +137,6 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     value={ selectors.depth }
                     onChange={ handleSelectorChange('depth') }
                     input={ <OutlinedInput label="Толщина ст-та____" id='multitag2' sx={ { fontSize: 12 } } /> }
-
                     renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || '' }
                     MenuProps={ DepthMenuProps }
 
@@ -150,7 +155,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             </FormControl>
 
             {
-                //*Cams
+                //__Cams
             }
             <FormControl sx={ { width: 130 } }>
 
@@ -170,9 +175,9 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                                     selected?.map(s =>
 
                                         <Avatar key={ s } sx={ { height: 30, width: 30, bgcolor: '#3d9fe0' } } variant='rounded'>
-                                            {/* { s === 1 && <MemoAvaS2 /> } */ }
-                                            {/* { s === 2 && <MemoAvaS3 /> } */ }
-                                            { CamsIcon[s.toString() as keyof typeof CamsIcon] }
+                                            { s === 1 && <Cam1 /> }
+                                            { s === 2 && <Cam2 /> }
+                                            {/* { CamsIcon[s.toString() as keyof typeof CamsIcon] } */ }
                                         </Avatar>
 
                                     ) }
@@ -192,6 +197,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                         </MenuItem>
                     )) }
                 </Select>
+
                 { fullscreen && <FormHelperText>Сколько камер?</FormHelperText> }
 
             </FormControl>
@@ -251,6 +257,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                 onClick={ handleReset }
             ><MdFilterListOff />
             </IconButton>
+            {/* </SuspenseLoad> */ }
         </Stack>
     );
 }

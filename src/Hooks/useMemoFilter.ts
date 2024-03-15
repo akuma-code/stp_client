@@ -1,6 +1,6 @@
 import { Order } from "../Components/DataTable/StpDataTable";
 import { AnyObj, FiltersParams } from "../Interfaces/Types";
-import { useCompare, useStpFilter } from "./useCompare";
+import { getComparator, stableSort, useCompare, useStpFilter } from "./useCompare";
 
 
 
@@ -8,6 +8,7 @@ import { useCompare, useStpFilter } from "./useCompare";
 
 export function useCombineFilterSort<T extends AnyObj>(array: T[], query: string, restFilters: Partial<FiltersParams>, order: Order, sort_field: any) {
     const filtered = useStpFilter(array, query, restFilters)
-    const sorted = useCompare(filtered, order, sort_field)
-    return sorted
+    // const sorted = useCompare(filtered, order, sort_field)
+    const _sorted = stableSort<T>(filtered as unknown as T[], getComparator(order, sort_field))
+    return _sorted
 }

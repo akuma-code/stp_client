@@ -7,13 +7,14 @@ export const AcSearch = () => {
     const { query, setQuery, StpStore } = useAppContext();
     const options = StpStore.table.map(stp => stp.name);
 
+    console.time('search')
     const selectedOptions = useMemo(() => {
 
         if (!value) return options;
         const selectedOpts = options.filter(o => o.includes(query));
         return selectedOpts;
-    }, [options, query, value]);
-
+    }, [query, options, value]);
+    console.timeEnd('search',)
 
 
     return (

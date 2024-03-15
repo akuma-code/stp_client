@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
-import * as React from 'react';
+import React, { Suspense } from 'react';
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { _EnFieldsStp } from '../../Interfaces/Enums';
 import { AvatarButtonTooltip } from '../UI/AvatarButtonTooltip';
@@ -31,6 +31,21 @@ interface EnhancedTableProps {
     orderBy: string;
     rowCount: number;
 }
+const getImgName = (cellId: keyof StpData) => {
+
+    const img_id = {
+        light: ['Lt', 'Lr'],
+        energy: ['Er', 'Ea', 'Det', 'Sf'],
+        decibel: ['Rw'],
+        triplex: ['secure']
+    }
+    if (img_id.light.includes(cellId)) return 'light'
+    if (img_id.energy.includes(cellId)) return 'energy'
+    if (img_id.decibel.includes(cellId)) return 'decibel'
+    if (img_id.triplex.includes(cellId)) return 'triplex'
+    return ""
+
+}
 export function EnhancedTableHead(props: EnhancedTableProps) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property: keyof StpData) => (event: React.MouseEvent<unknown>) => {
@@ -39,22 +54,11 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
 
     const WoIcon = (headCell: HeadStpCell) => !['name', 'tags', 'cams'].includes(headCell.id)
     const hasImage = (headCell: HeadStpCell) => ['Lt', 'Lr', 'Det', 'Sf', 'Er,', 'Ea', 'Er', 'Rw', 'secure'].includes(headCell.id)
-    const getImgName = (cellId: keyof StpData) => {
 
-        const img_id = {
-            light: ['Lt', 'Lr'],
-            energy: ['Er', 'Ea', 'Det', 'Sf'],
-            decibel: ['Rw'],
-            triplex: ['secure']
-        }
-        if (img_id.light.includes(cellId)) return 'light'
-        if (img_id.energy.includes(cellId)) return 'energy'
-        if (img_id.decibel.includes(cellId)) return 'decibel'
-        if (img_id.triplex.includes(cellId)) return 'triplex'
-        return ""
-
-    }
     return (
+        // <Suspense fallback={ <div>LOAD</div> }>
+
+
         <TableHead>
             <TableRow>
                 <TableCell padding="checkbox" sx={ { bgcolor: '#93d4ff' } } align='center'>
@@ -135,9 +139,12 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                     )) }
             </TableRow>
         </TableHead>
+        // </Suspense>
     );
 }
 
+export const StpTableHeader = React.memo((props: EnhancedTableProps) => EnhancedTableHead(props))
+StpTableHeader.displayName = ' ___TableHeader'
 
 const stp_headCells: readonly HeadStpCell[] = [
     {

@@ -2,9 +2,9 @@ import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Stack } from '@mui/material';
-import { StpTag } from '../StpTable/TableObjects';
+import { StpItem, StpTag } from '../StpTable/TableObjects';
 import { TagsAvatarGroup } from '../UI/TagAvatars';
 import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
 import { FormulaTTButton } from '../UI/FormulaTooltip';
@@ -32,9 +32,15 @@ export type StpRowProps = {
     handleClick: (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => void;
 };
 
-export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, isSelected, row_data }) => {
+export const StpTableRow: React.FC<StpRowProps> = React.memo(({ handleClick, row_number, isSelected, row_data }) => {
+    const numericData = useCallback((key: keyof StpData) => row_data[key], [row_data])
 
 
+    const NumericCells = useMemo(() => {
+
+        const cells = stpFields.map(cell => <TableCell align="center" key={ cell }>{ numericData(cell) }</TableCell>)
+        return cells
+    }, [numericData])
     return (
         <TableRow
             hover
@@ -48,7 +54,7 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, is
         >
             <TableCell
                 padding="checkbox"
-                onClick={ (event) => handleClick(event, +row_data.id) } sx={ { cursor: 'pointer', } }>
+                onClick={ (event) => handleClick(event, row_data.id) } sx={ { cursor: 'pointer', } }>
                 <Box component={ Stack }
                     direction={ 'row' }
                     alignItems={ 'center' }
@@ -61,14 +67,14 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, is
                         color="primary"
                         checked={ isSelected(+row_data.id) }
                         inputProps={ {
-                            'aria-labelledby': `enhanced-table-${row_number}`,
+                            'aria-labelledby': `enhanced-table-${row_number}-check`,
                         } }
-                        id={ `enhanced-table-${row_number}` } />
+                        id={ `enhanced-table-${row_number}-check` } />
                 </Box>
             </TableCell>
             <TableCell
                 component="th"
-                id={ `enhanced-table-${row_number}` }
+                id={ `enhanced-table-${row_number}-name` }
                 scope="row"
                 padding="none"
                 sx={ {
@@ -76,13 +82,12 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, is
                     [`& :hover>.MuiIconButton-root `]: { visibility: 'visible' },
                     [`& .MuiIconButton-root`]: { visibility: 'hidden' },
                 } }
-                colSpan={ 1 }
+
             >
                 <Box component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } alignItems={ 'center' }>
 
                     { row_data.name }
-                    <FormulaTTButton
-                        stp_name={ row_data.name as string } />
+                    <FormulaTTButton stp_name={ row_data.name as string } />
                 </Box>
             </TableCell>
             <TableCell align='right'>
@@ -94,13 +99,18 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, is
                 {/* <strong>{ row_data.cams } </strong> */ }
             </TableCell>
 
+            { NumericCells }
             {
-                stpFields.map(cell =>
-                    <TableCell align="center" key={ cell }>{ row_data[cell] }</TableCell>
-                ) }
+                // stpFields.map(cell =>
+                // <TableCell align="center" key={ cell }>{ row_data[cell] }</TableCell>
+
+                // ) 
+            }
 
         </TableRow>
     )
-}
+})
 
-StpTableRow.displayName = '__StpItem_Row'
+
+
+StpTableRow.displayName = '__Row_StpData'

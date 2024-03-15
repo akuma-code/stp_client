@@ -88,6 +88,6 @@ export function AttikLogoSvgr(props: Props) {
   );
 }
 
-export const AttikSvgLogo = React.memo(AttikLogoSvgr);
-
+const AttikSvgLogo = React.memo(AttikLogoSvgr);
+export default AttikSvgLogo
 

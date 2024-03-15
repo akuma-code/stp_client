@@ -1,7 +1,7 @@
 import { Container, ImageListItemBar } from '@mui/material'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
-import React from 'react'
+import React, { lazy } from 'react'
 import { LiaExpandArrowsAltSolid } from "react-icons/lia"
 import { ModalImg } from '../../Components/UI/ModalImg'
 import path_decibel from './../../Components/StpTable/StpPreset/images/decibels.jpg'
