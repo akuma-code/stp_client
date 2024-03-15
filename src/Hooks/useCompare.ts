@@ -55,7 +55,9 @@ export const _FilterFns = {
 }
 
 export function useCompare<T extends AnyObj>(array: T[], order: Order, sort_field: any) {
+    console.time("filter")
     const sorted = useMemo(() => stableSort(array, getComparator(order, sort_field)), [array, order, sort_field])
+    console.timeEnd('filter')
 
     return sorted
 }
@@ -102,7 +104,6 @@ export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFi
         return filtered_items
 
     }, [init_items, query, restFilters])
-
     return filtered
 }
 

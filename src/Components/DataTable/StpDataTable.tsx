@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Paper from '@mui/material/Paper';
 import Switch from '@mui/material/Switch';
@@ -12,19 +11,17 @@ import React, { Suspense, memo, useCallback, useState } from 'react';
 
 import { Button, Stack, alpha } from '@mui/material';
 import { useAppContext } from '../../Hooks/useStoresContext';
-import { StpItem, StpTag } from '../StpTable/TableObjects';
+import { StpItem } from '../StpTable/TableObjects';
 import { EnhancedTableHead } from './EnhancedTableHead';
 
 import { StpTableToolbar } from './StpTableToolbar';
-import { TagsAvatarGroup } from '../UI/TagAvatars';
 import { MdCompare } from 'react-icons/md';
 import { MuiLink } from '../../Routes/Pages/MuiLink';
 import { routePaths } from '../../Routes/routePath';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { _log } from '../../Helpers/helpersFns';
-import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
-import { FormulaTTButton } from '../UI/FormulaTooltip';
 import { useCombineFilterSort } from '../../Hooks/useMemoFilter';
+import { StpTableRow } from './StpTableRow';
 
 
 
@@ -40,21 +37,7 @@ export type Order = 'asc' | 'desc';
 
 export const isJson = (i: any) => JSON.parse(i) ? true : false
 
-const cells: (keyof StpData)[] = [
-    'depth',
-    'weight',
-    'Ro',
-    'Det',
-    'Ea',
-    'Er',
-    'Lr',
-    'Lt',
-    'Ra',
-    'Rw',
-    'S',
-    'Sf',
-    'secure',
-] as const
+
 export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ preload_data }) => {
     const { select, query, filterParams, selectedItems } = useAppContext()
 
@@ -63,7 +46,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(true);
     const [RPP, setRowsPerPage] = useState(-1);
-    const sorted = useCombineFilterSort(preload_data, query, filterParams, order, orderBy)
+    const sorted = useCombineFilterSort(preload_data, query, filterParams, order, orderBy) as unknown as StpData[]
 
 
     const handleRequestSort = useCallback((
@@ -138,9 +121,10 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
     //     // select(checkedCells)
     //     // return () => setCheckedCells([])
     // }, [checkedCells, select])
-    // console.count("RENDER!")
 
-    console.count("table rendered")
+
+
+    // console.count("RENDER!")
     return (
 
         <Box sx={ { width: '100%', height: '100%' } }>
@@ -172,79 +156,18 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = memo(({ prelo
                         />
 
 
-                        <Suspense fallback={ <div className='text-center'>LOADING</div> }>
+                        <Suspense fallback={ <div className='text-center'>Table is LOADING</div> }>
                             <TableBody>
                                 {
                                     sorted.map((row, index) =>
-                                        <TableRow
-                                            hover
-                                            key={ row.id }
-                                            // onClick={ (event) => handleClick(event, +row.id) }
-                                            role="checkbox"
-                                            aria-checked={ isSelected(+row.id) }
-                                            tabIndex={ -1 }
-                                            selected={ isSelected(+row.id) }
-
-                                        >
-                                            <TableCell
-                                                padding="checkbox"
-                                                onClick={ (event) => handleClick(event, +row.id) } sx={ { cursor: 'pointer', } }>
-                                                <Box component={ Stack }
-                                                    direction={ 'row' }
-                                                    alignItems={ 'center' }
-                                                    spacing={ 0 }
-                                                    gap={ 0 }
-                                                    justifyContent={ 'space-between' }>
-
-                                                    { `${index + 1}.` }
-                                                    <Checkbox
-                                                        color="primary"
-                                                        checked={ isSelected(+row.id) }
-                                                        inputProps={ {
-                                                            'aria-labelledby': `enhanced-table-${index}`,
-                                                        } }
-                                                        id={ `enhanced-table-${index}` }
-                                                    />
-                                                </Box>
-                                            </TableCell>
-                                            <TableCell
-                                                component="th"
-                                                id={ `enhanced-table-${index}` }
-                                                scope="row"
-                                                padding="none"
-                                                sx={ {
-                                                    textWrap: 'nowrap',
-                                                    [`& :hover>.MuiIconButton-root `]: { visibility: 'visible' },
-                                                    [`& .MuiIconButton-root`]: { visibility: 'hidden' },
-                                                } }
-                                                colSpan={ 1 }
-                                            >
-                                                <Box component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } alignItems={ 'center' }>
-
-                                                    { row.name }
-                                                    <FormulaTTButton
-                                                        stp_name={ row.name as string }
-                                                    />
-                                                </Box>
-                                            </TableCell>
-                                            <TableCell align='right'>
-                                                <TagsAvatarGroup tags={ row.tags as unknown as StpTag[] } />
-                                            </TableCell>
-                                            <TableCell align='center' sx={ { display: 'flex', justifyContent: 'center' } }>
-                                                { row.cams === 1 && <AvatarS2 wh={ 34 } /> }
-                                                { row.cams === 2 && <AvatarS3 wh={ 34 } /> }
-                                                {/* <strong>{ row.cams } </strong> */ }
-                                            </TableCell>
-
-                                            {
-                                                cells.map(cell =>
-
-                                                    <TableCell align="center" key={ cell }>{ row[cell] }</TableCell>
-                                                )
-                                            }
-
-                                        </TableRow>)
-                                }
+                                        <StpTableRow
+                                            key={ row.name }
+                                            row_number={ index }
+                                            row_data={ row }
+                                            handleClick={ handleClick }
+                                            isSelected={ isSelected }
+                                        />
+                                    ) }
                                 {
                                     emptyRows > 0 && (
                                         <TableRow
@@ -331,15 +254,3 @@ const DataError = () => {
     )
 }
 
-/* <TablePagination
-                       rowsPerPageOptions={ [5, 10, 20, { value: -1, label: 'Все' }] }
-                       component="div"
-                       count={ sorted.length }
-                       rowsPerPage={ RPP }
-                       page={ page }
-                       onPageChange={ handleChangePage }
-                       onRowsPerPageChange={ handleChangeRowsPerPage }
-                       id='rows_per_page_id'
-                       labelRowsPerPage='Показывать количество строчек на странице: '
-                       labelDisplayedRows={ ({ from, to, count }) => `${from} – ${to} из ${count !== -1 ? count : `more than ${to}`}` }
-                   /> */

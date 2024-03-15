@@ -30,7 +30,7 @@ export const appRoutes: RouteObject[] = [
                 index: true,
                 element: <OverView />,
                 loader: async ({ request, params }) => {
-                    const fetch_data = GetStpData()
+                    // const fetch_data = GetStpData()
                     const lazy_data = await LazyStpData()
                     // .then(d=>d.map((item, idx) => ({ ...item, id: idx + 1 })))
 
