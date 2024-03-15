@@ -5,12 +5,13 @@ import { OverView } from "./Pages/OverView";
 import { Root } from "./Pages/Root";
 import { routePaths } from "./routePath";
 import { PrintPage } from "./Pages/PrintPage";
-import { GetStpData, LazyStpData } from "../Components/StpTable/FullTable";
+import PromisedStpData, { GetStpData, LazyStpData } from "../Components/StpTable/FullTable";
 import { StpData } from "../Components/DataTable/StpDataTable";
 import { StpIdPage } from "./Pages/StpIdPage";
 import { StpInfoPage } from "./Pages/StpInfoPage";
 import { _log } from "../Helpers/helpersFns";
 import { lazy } from "react";
+
 
 
 
@@ -32,7 +33,10 @@ export const appRoutes: RouteObject[] = [
                 loader: async ({ request, params }) => {
                     // const fetch_data = GetStpData()
                     const lazy_data = await LazyStpData()
-                    // .then(d=>d.map((item, idx) => ({ ...item, id: idx + 1 })))
+                    const l2 = PromisedStpData()
+                    l2.then(data => data.map((item, idx) => ({ ...item, id: idx + 1 })))
+                    l2.finally(() => console.log('l2', l2))
+
 
                     const data = lazy_data.map((item, idx) => ({ ...item, id: idx + 1 }))
                     // const data: StpData[] = table_data_all.map((item, idx) => ({ ...item, id: idx + 1 }))

@@ -39,8 +39,8 @@ export const isJson = (i: any) => JSON.parse(i) ? true : false
 
 
 export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_data }) => {
-    const { query, filterParams, } = useAppContext()
-    const [selectedItems, select] = useState<number[]>([])
+    const { query, filterParams, select, selectedItems } = useAppContext()
+    // const [selectedItems, select] = useState<number[]>([])
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
     const [page, setPage] = useState(0);
@@ -218,7 +218,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
                             Выбрано для сравнения: { selectedItems.length } из { sorted.length }
                             <Button
                                 color='info'
-                                variant='text'
+                                variant='contained'
                                 startIcon={ <MdCompare /> }
                                 size='small'
                                 sx={ {

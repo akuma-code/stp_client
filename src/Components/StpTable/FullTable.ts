@@ -1,3 +1,4 @@
+import { _log } from "../../Helpers/helpersFns";
 import { updateTags } from "./StpTagsMaker";
 import { StpItem } from "./TableObjects";
 
@@ -1693,3 +1694,15 @@ export async function LazyStpData() {
 
     return data
 }
+
+
+export const PromisedStpData = async () => {
+    const p = new Promise<StpItem[]>(function P(resolve, reject) {
+        resolve(LazyStpData())
+        reject((error: unknown) => _log(error))
+    })
+    const d = await p;
+    return d;
+}
+
+export default PromisedStpData

@@ -39,7 +39,7 @@ export const AcSearch = () => {
                 inputMode='search'
                 margin='dense'
                 label="Формула стеклопакета"
-                fullWidth={ false } />
+            />
             }
         />);
 };
