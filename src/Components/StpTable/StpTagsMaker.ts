@@ -1,3 +1,4 @@
+import { StpData } from "../StpTableView/StpDataTable"
 import { parseStpName } from "./FormulaParser"
 import { StpItem, StpTag } from "./TableObjects"
 
@@ -63,12 +64,12 @@ export const setupTags = (stp_name: string, options = { showConsole: false }) =>
     const isStandart = TStandartNames.includes(stp_name)
 
     const glasses = parsedArr.map((res) => {
-        const [g, ...rest] = res
+        const [g,] = res
         return g
     }).filter((s, i) => i % 2 === 0)
 
     const props = parsedArr.map((res) => {
-        const [g, ...rest] = res
+        const [, ...rest] = res
         return rest
 
     }).filter((s, i) => i % 2 === 0 && s.length > 0).flat(1)
@@ -101,13 +102,23 @@ export const updateTags = (item: StpItem) => {
 
     const tags = setupTags(name)
     if (tags.length === 0) tags.push('simple')
-    // item.tags = tags
-
-    // item.tags = new_tags.length === 0 ? ['simple'] : new_tags
     return { ...item, tags }
 
 }
+function setupStpIdAndTags(item: StpItem) {
+    const { name } = item
+    const stp_tags = setupTags(name)
+    if (stp_tags.length === 0) stp_tags.push('simple')
+    return { ...item, tags: stp_tags }
+}
+export function setupStpArray(...args: StpItem[][]) {
 
+    const withTags = args.flat(1).map(setupStpIdAndTags)
+
+    const withIds = withTags.map((item, idx) => ({ ...item, id: idx + 1 }))
+
+    return withIds satisfies StpData[]
+}
 export const _evenComparator = (item: any, idx: number) => idx % 2 === 0 ? true : false
 export const _oddComparator = (item: any, idx: number) => idx % 2 === 0 ? false : true
 export function getStpNameContent(stp_name: string): [glass: RegExpMatchArray[], ramki: RegExpMatchArray[]] {

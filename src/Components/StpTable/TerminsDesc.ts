@@ -32,7 +32,7 @@ export const StpNamePropertyDescription: Record<StpNameProperties, string> = {
     зак: 'закаленное',
     сбр: 'мультифункиональное, с одной стороны с бронзовым оттенком, с другой с синим',
     эл: 'мультифункциональное, бесцветное',
-    tgiar: ' TGI пластиковая, камера заполненна аргоном',
+    tgiar: ' TGI пластиковая, камера заполнена аргоном',
     ч: 'черного цвета',
     с: "серого цвета",
 
@@ -40,7 +40,7 @@ export const StpNamePropertyDescription: Record<StpNameProperties, string> = {
 
 export const GlassDescription = {
     gls: (w: string | number) => {
-        if (typeof w === 'string' && triplexRegExp.test(w)) return `Триплекс ${w} из двух стекол, проклеенный 1 слоем пленки`
+        if (typeof w === 'string' && triplexRegExp.test(w)) return `Триплекс ${w} из двух стекол, проклеенный пленкой в 1 слой`
         return `Стекло ${w} мм `
     },
     ramka: (w: string | number) => { return `Рамка ${w} мм` }

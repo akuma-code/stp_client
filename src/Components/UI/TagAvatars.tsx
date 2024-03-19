@@ -1,13 +1,14 @@
-import { Avatar, AvatarGroup, Stack, SvgIcon, Tooltip, alpha } from "@mui/material";
+import { Avatar, AvatarGroup, Stack, Tooltip } from "@mui/material";
+import React from "react";
 import { GiSolarTime, GiSoundOff } from "react-icons/gi";
 import { GrMultiple } from "react-icons/gr";
 import { HiTrendingUp } from "react-icons/hi";
 import { LiaTemperatureHighSolid } from "react-icons/lia";
 import { PiSidebarSimple } from "react-icons/pi";
 import { TbCircleLetterA } from "react-icons/tb";
+import { _ID } from "../../Helpers/helpersFns";
 import { Stp_Tags } from "../../Interfaces/Enums";
 import { StpTag } from "../StpTable/TableObjects";
-import { _ID } from "../../Helpers/helpersFns";
 export const TagAvatarIcon: Record<StpTag, JSX.Element> = {
     simple: <PiSidebarSimple className="text-xl" />,
     energy: <LiaTemperatureHighSolid className="text-xl" />,
@@ -21,7 +22,8 @@ export const TagAvatarIcon: Record<StpTag, JSX.Element> = {
 const isStandart = (t: StpTag) => t === 'standart'
 
 const highLight = (t: StpTag) => isStandart(t) ? 'red' : '#1267cfc2'
-export const TagsAvatarGroup = ({ tags, handleTagsClick }: { tags: StpTag[], handleTagsClick?: (tag: StpTag) => void }) => {
+type TagsGroupProps = { tags: StpTag[], handleTagsClick?: (tag: StpTag) => void }
+export const TagsAvatarGroup = React.memo(({ tags, handleTagsClick }: TagsGroupProps) => {
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => (tag: StpTag) => {
 
         if (handleTagsClick) return handleTagsClick(tag)
@@ -52,4 +54,6 @@ export const TagsAvatarGroup = ({ tags, handleTagsClick }: { tags: StpTag[], han
             ) }
         </AvatarGroup>
     )
-}
+})
+
+TagsAvatarGroup.displayName = "_TagsGroup"

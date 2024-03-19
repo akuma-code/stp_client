@@ -1,12 +1,12 @@
 import { Paper } from '@mui/material'
 import { useMemo } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import { StpData, StpDataTable, isJson } from '../../Components/StpTableView/StpDataTable'
+import { StpData, StpDataTable } from '../../Components/StpTableView/StpDataTable'
 import { SuspenseLoad } from '../../Components/UI/SuspenseLoad'
 import { useAppContext } from '../../Hooks/useStoresContext'
 
 type OverviewProps = object
-
+const isJson = (i: any) => JSON.parse(i) ? true : false
 export const OverView = (props: OverviewProps) => {
     const { StpStore } = useAppContext()
     const data = useLoaderData() as string

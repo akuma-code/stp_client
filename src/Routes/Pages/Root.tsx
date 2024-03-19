@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react"
 import { Outlet } from "react-router-dom"
-import { AppHeaderBreadcrump, AppToolbarHeader } from "./AppBar"
+import { AppToolbarHeader } from "./AppBar"
 
 type RootProps = object & PropsWithChildren
 

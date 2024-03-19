@@ -32,14 +32,14 @@ export const appRoutes: RouteObject[] = [
                 element: <OverView />,
                 loader: async ({ request, params }) => {
                     // const fetch_data = GetStpData()
+                    // const l2 = PromisedStpData()
+                    // l2.then(data => data.map((item, idx) => ({ ...item, id: idx + 1 })))
+
+
+
                     const lazy_data = await LazyStpData()
-                    const l2 = PromisedStpData()
-                    l2.then(data => data.map((item, idx) => ({ ...item, id: idx + 1 })))
-                    l2.finally(() => console.log('l2', l2))
-
-
                     const data = lazy_data.map((item, idx) => ({ ...item, id: idx + 1 }))
-                    // const data: StpData[] = table_data_all.map((item, idx) => ({ ...item, id: idx + 1 }))
+
 
                     console.count("Data load: ")
                     console.log(data.length)

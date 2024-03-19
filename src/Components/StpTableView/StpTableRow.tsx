@@ -9,6 +9,7 @@ import { TagsAvatarGroup } from '../UI/TagAvatars';
 import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
 import { FormulaTTButton } from '../UI/FormulaTooltip';
 import { StpData, } from './StpDataTable';
+import { SuspenseLoad } from '../UI/SuspenseLoad';
 
 export const stpFields: (keyof StpData)[] = [
     'depth',
@@ -28,13 +29,14 @@ export const stpFields: (keyof StpData)[] = [
 export type StpRowProps = {
     row_data: StpData;
     row_number: number;
-    isSelected: (id: number) => boolean;
+    // isSelected: (id: number) => boolean;
     handleClick: (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => void;
+    isSelected: boolean
 };
 
-export const StpTableRow: React.FC<StpRowProps> = React.memo(({ handleClick, row_number, isSelected, row_data }) => {
+export const StpTableRow: React.FC<StpRowProps> = React.memo(({ handleClick, row_number, row_data, isSelected = false }) => {
     const numericData = useCallback((key: keyof StpData) => row_data[key], [row_data])
-
+    // const selectedRow = isSelected(row_data.id)
 
     const NumericCells = useMemo(() => {
 
@@ -42,19 +44,23 @@ export const StpTableRow: React.FC<StpRowProps> = React.memo(({ handleClick, row
         return cells
     }, [numericData])
     return (
+
+
         <TableRow
             hover
             key={ row_data.id }
             // onClick={ (event) => handleClick(event, +row_data.id) }
             role="checkbox"
-            aria-checked={ isSelected(+row_data.id) }
+            aria-checked={ isSelected }
             tabIndex={ -1 }
-            selected={ isSelected(+row_data.id) }
+            selected={ isSelected }
 
         >
+
             <TableCell
                 padding="checkbox"
-                onClick={ (event) => handleClick(event, row_data.id) } sx={ { cursor: 'pointer', } }>
+                onClick={ (event) => handleClick(event, row_data.id) }
+                sx={ { cursor: 'pointer', } }>
                 <Box component={ Stack }
                     direction={ 'row' }
                     alignItems={ 'center' }
@@ -65,7 +71,7 @@ export const StpTableRow: React.FC<StpRowProps> = React.memo(({ handleClick, row
                     { `${row_number + 1}.` }
                     <Checkbox
                         color="primary"
-                        checked={ isSelected(+row_data.id) }
+                        checked={ isSelected }
                         inputProps={ {
                             'aria-labelledby': `enhanced-table-${row_number}-check`,
                         } }
@@ -106,6 +112,7 @@ export const StpTableRow: React.FC<StpRowProps> = React.memo(({ handleClick, row
 
                 // ) 
             }
+
 
         </TableRow>
     )

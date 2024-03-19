@@ -35,10 +35,11 @@ import { SuspenseLoad } from '../UI/SuspenseLoad';
 export type StpData = StpItem & { id: number }
 export type Order = 'asc' | 'desc';
 
-export const isJson = (i: any) => JSON.parse(i) ? true : false
+
 
 
 export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_data }) => {
+    console.time('renderTime:')
     const { query, filterParams, select, selectedItems } = useAppContext()
     // const [selectedItems, select] = useState<number[]>([])
     const [order, setOrder] = useState<Order>('asc');
@@ -123,8 +124,8 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
     // }, [checkedCells, select])
 
 
-
     console.count("RENDER!")
+    console.timeEnd("renderTime:")
     return (
 
         <Box sx={ { width: '100%', height: '100%' } }>
@@ -169,7 +170,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
                                         row_number={ index }
                                         row_data={ row }
                                         handleClick={ handleClick }
-                                        isSelected={ isSelected }
+                                        isSelected={ isSelected(row.id) }
                                     />
                                 ) }
 
