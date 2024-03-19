@@ -1,5 +1,5 @@
 import { AnyObj } from '../Interfaces/Types';
-import { Order } from '../Components/DataTable/StpDataTable';
+import { Order } from '../Components/StpTableView/StpDataTable';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {

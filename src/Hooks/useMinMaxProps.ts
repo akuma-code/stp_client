@@ -1,4 +1,4 @@
-import { StpData } from "../Components/DataTable/StpDataTable";
+import { StpData } from "../Components/StpTableView/StpDataTable";
 import { _log } from "../Helpers/helpersFns";
 import { AnyObj } from "../Interfaces/Types";
 import { getKeyValue } from "./useCompare";

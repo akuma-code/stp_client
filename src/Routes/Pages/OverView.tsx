@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material'
 import { useMemo } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import { StpData, StpDataTable, isJson } from '../../Components/DataTable/StpDataTable'
+import { StpData, StpDataTable, isJson } from '../../Components/StpTableView/StpDataTable'
 import { SuspenseLoad } from '../../Components/UI/SuspenseLoad'
 import { useAppContext } from '../../Hooks/useStoresContext'
 

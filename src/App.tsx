@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
-import { table_data_base } from "./Components/StpTable/FullTable";
+import { table_data_base } from "./Components/StpTable/Data/data_base";
 import { StpStore } from "./Context/StpStore";
 
 import { AppContext } from "./Hooks/useStoresContext";

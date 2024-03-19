@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemText, Stack } from '@mui/material';
 import { useContext } from 'react';
-import { StpData } from '../../Components/DataTable/StpDataTable';
+import { StpData } from '../../Components/StpTableView/StpDataTable';
 import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
 
 import { _TerminsDesc } from '../../Components/StpTable/TerminsDesc';

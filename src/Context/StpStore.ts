@@ -1,4 +1,4 @@
-import { StpData } from "../Components/DataTable/StpDataTable";
+import { StpData } from "../Components/StpTableView/StpDataTable";
 import { StpItem } from "../Components/StpTable/TableObjects";
 
 export class StpStore {

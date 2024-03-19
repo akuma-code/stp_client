@@ -1,4 +1,4 @@
-import { Order } from "../Components/DataTable/StpDataTable";
+import { Order } from "../Components/StpTableView/StpDataTable";
 import { AnyObj, FiltersParams } from "../Interfaces/Types";
 import { getComparator, stableSort, useCompare, useStpFilter } from "./useCompare";
 

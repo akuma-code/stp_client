@@ -1,5 +1,5 @@
 import { useDeferredValue, useMemo } from "react";
-import { StpData } from "../Components/DataTable/StpDataTable";
+import { StpData } from "../Components/StpTableView/StpDataTable";
 import { StpItem, StpTag } from "../Components/StpTable/TableObjects";
 import { AnyObj, FiltersParams } from "../Interfaces/Types";
 import { _log } from "../Helpers/helpersFns";
