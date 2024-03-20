@@ -33,19 +33,19 @@ export const OverView = (props: OverviewProps) => {
 
     return (
         <Paper sx={ { pb: 0, m: 1, bgcolor: 'beige', height: '100%' } } elevation={ 4 }>
-            <SuspenseLoad loadText='Данные загружаются...'>
-                {
-                    // ss.isLoading ?
-                    //     <Loading text='Данные загружаются...' />
-                    //     :
-                    //     ss.isError ?
+            {/* <SuspenseLoad loadText='Данные загружаются...'> */ }
+            {
+                ss.isLoading ?
+                    <Loading text='Данные загружаются...' />
+                    :
+                    ss.isError ?
 
-                    //         <MemoStpTable preload_data={ memodata } />
-                    //         :
-                    // <MemoStpTable preload_data={ filtered } />
-                }
-                <MemoStpTable preload_data={ filtered } />
-            </SuspenseLoad>
+                        <MemoStpTable preload_data={ memodata } />
+                        :
+                        <MemoStpTable preload_data={ filtered } />
+            }
+            {/* <MemoStpTable preload_data={ filtered } /> */ }
+            {/* </SuspenseLoad> */ }
         </Paper>
     )
 }

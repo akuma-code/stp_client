@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AxiosHeaders } from 'axios'
+import type { AxiosHeaders, AxiosHeaderValue } from 'axios'
 import Cookies from 'js-cookie'
 
 const host = process.env.REACT_APP_HOST_URL
@@ -11,7 +11,7 @@ const $api = axios.create({
         port: 3128,
     },
     withCredentials: false,
-
+    headers: { Authorization: true, getAuthorization: 'true', set: (`Cashe-Control: public, max-age=0`) }
 })
 const headerInterceptor = (config: { headers: AxiosHeaders }) => {
     config.headers.set('Access-Control-Request-Headers', '*')

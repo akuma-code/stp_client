@@ -1,6 +1,6 @@
 import { QueryMeta, UseQueryOptions, useQuery } from "react-query";
 import { api } from "../HTTP/mainApi";
-import { apiRoute } from "../Routes/routePath";
+import { apiRoute, proxyRoute } from "../Routes/routePath";
 import { STP } from "../Components/StpTable/StpFactory/StpFactory";
 import { StpItem } from "../Components/StpTable/TableObjects";
 
@@ -29,7 +29,7 @@ export const useFetch = <T>(
 
     const query = useQuery<T, Error, T, QueryKeyT>(
         [url!, params],
-        ({ queryKey, meta }) => fetcher<T>({ queryKey, meta }),
+        ({ queryKey, meta, pageParam }) => fetcher<T>({ queryKey, meta }),
         {
             enabled: !!url,
             ...config,
@@ -40,9 +40,9 @@ export const useFetch = <T>(
 };
 
 export function useQueryFetch() {
-    const ss = useFetch<SSResponse>(apiRoute.stp_db)
+    const ss = useFetch<SSResponse>(proxyRoute(apiRoute.stp_db))
     const { data, error, isError, isLoading } = ss
-    if (isError) console.log('error while fetching', error)
+    if (isError) console.log('error while fetching', error.message)
     let stp: StpItem[] = []
     if (data) {
         stp = data.stps.map(dataExtractor)
