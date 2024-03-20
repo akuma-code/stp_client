@@ -108,13 +108,15 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
                 { row_data.cams === 2 && <AvatarS3 wh={ 34 } /> }
                 {/* <strong>{ row_data.cams } </strong> */ }
             </TableCell>
-
-            { NumericCells }
+            {/* <MemedCells cell={ row_data } /> */ }
             {
-                // stpFields.map(cell =>
-                // <TableCell align="center" key={ cell }>{ row_data[cell] }</TableCell>
+                // NumericCells
+            }
+            {
+                stpFields.map(cell =>
+                    <TableCell align="center" component={ 'td' } key={ cell }>{ row_data[cell] }</TableCell>
 
-                // ) 
+                )
             }
 
 
@@ -122,6 +124,13 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
     )
 }
 
+const MemedCells = React.memo(({ cell }: { cell: StpData }) => {
 
+    return (
+        <React.Fragment>
+            { stpFields.map(field => <TableCell align="center" key={ field }>{ cell[field] }</TableCell>) }
+        </React.Fragment>
+    )
+})
 
 StpTableRow.displayName = '__Row_StpData'
