@@ -5,16 +5,16 @@ import Cookies from 'js-cookie'
 const host = process.env.REACT_APP_HOST_URL
 const $api = axios.create({
     baseURL: host,
-    proxy: {
-        protocol: 'https',
-        host: '192.168.0.250',
-        port: 3128,
-    },
+    // proxy: {
+    //     protocol: 'https',
+    //     host: '192.168.0.250',
+    //     port: 3128,
+    // },
     withCredentials: false,
     headers: { Authorization: true, getAuthorization: 'true', set: (`Cashe-Control: public, max-age=0`) }
 })
 const headerInterceptor = (config: { headers: AxiosHeaders }) => {
-    config.headers.set('Access-Control-Request-Headers', '*')
+    config.headers.set('C', '*')
     // config.headers.set('Origin', 'http://localhost:3000')
 
     return config
