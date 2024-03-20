@@ -4,12 +4,21 @@ import { table_data_base } from "./Components/StpTable/Data/data_base";
 import { StpStore } from "./Context/StpStore";
 
 import { AppContext } from "./Hooks/useStoresContext";
-import { FiltersParams, StpTypeProps } from "./Interfaces/Types";
+import { FiltersParams, } from "./Interfaces/Types";
 import { router } from "./Routes/AppRouter";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 
 const stores = { StpStore: new StpStore(table_data_base) }
-
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+      keepPreviousData: true
+    }
+  }
+})
 
 function App() {
   const [selected, setSelected] = useState<number[]>([])
@@ -20,6 +29,8 @@ function App() {
 
   const [filters, setFilters] = useState<Partial<FiltersParams>>({ cams: [], depth: [], tags: [] })
   return (
+
+
     <AppContext.Provider value={ {
       ...stores,
       selectedItems: selected,
@@ -30,19 +41,22 @@ function App() {
       setQuery: setQuery,
       selectedTags: tags, setTags,
       filterParams: filters, filterFn: setFilters
-    } }>
+    } }
+    >
+      <QueryClientProvider client={ queryClient }>
 
-      <RouterProvider
-        router={ router }
-        fallbackElement={
-          <div className="text-4xl text-center mt-6">
-            <strong>App loading.... Be patient</strong>
-          </div>
-        }
+        <RouterProvider
+          router={ router }
+          fallbackElement={
+            <div className="text-4xl text-center mt-6">
+              <strong>App loading.... Be patient</strong>
+            </div>
+          }
 
-      />
+        />
 
 
+      </QueryClientProvider>
     </AppContext.Provider>
   );
 }

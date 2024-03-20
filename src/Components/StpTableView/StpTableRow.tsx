@@ -10,6 +10,7 @@ import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
 import { FormulaTTButton } from '../UI/FormulaTooltip';
 import { StpData, } from './StpDataTable';
 import { SuspenseLoad } from '../UI/SuspenseLoad';
+import { _ID } from '../../Helpers/helpersFns';
 
 export const stpFields: (keyof StpData)[] = [
     'depth',
@@ -34,7 +35,10 @@ export type StpRowProps = {
     isSelected: boolean
 };
 
-export const StpTableRow: React.FC<StpRowProps> = React.memo(({ handleClick, row_number, row_data, isSelected = false }) => {
+export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, row_data, isSelected = false }) => {
+
+
+
     const numericData = useCallback((key: keyof StpData) => row_data[key], [row_data])
     // const selectedRow = isSelected(row_data.id)
 
@@ -116,7 +120,7 @@ export const StpTableRow: React.FC<StpRowProps> = React.memo(({ handleClick, row
 
         </TableRow>
     )
-})
+}
 
 
 

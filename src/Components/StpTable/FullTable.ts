@@ -4,6 +4,7 @@ import { StpItem } from "./TableObjects";
 import { table_data_base } from "./Data/data_base";
 import { table_data_BrGr } from "./Data/data_Fenix";
 import { table_data_32mm } from "./Data/data_32mm";
+import { apiRoute, proxyRoute } from "../../Routes/routePath";
 
 export function GetStpData(): StpItem[] {
     const data = table_data_base.concat(table_data_BrGr)
@@ -32,13 +33,8 @@ export async function LazyStpData() {
 }
 
 
-export const PromisedStpData = async () => {
-    const p = new Promise<StpItem[]>(function P(resolve, reject) {
-        resolve(LazyStpData())
-        reject((error: unknown) => _log(error))
-    })
-    const d = await p;
-    return d;
-}
+export const getDataFromSpreadsheet = async () => {
 
-export default PromisedStpData
+    const ss_url = proxyRoute(apiRoute.stp_db)
+
+}

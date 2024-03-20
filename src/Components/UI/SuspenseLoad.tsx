@@ -17,7 +17,7 @@ export const SuspenseLoad: React.FC<SLProps> = ({ children, loadText }) => {
 type LoadingProps = {
     text?: string
 }
-const Loading = ({ text }: LoadingProps) => {
+export const Loading = ({ text }: LoadingProps) => {
     return <Stack justifyContent={ 'center' } height={ '100%' }>
         <Box textAlign={ 'center' }>{ text ?? 'Идет загрузка данных...' }</Box>
         <LinearProgress color='info' sx={ { width: '100%', height: 10 } } />

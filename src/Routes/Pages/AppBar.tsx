@@ -13,7 +13,7 @@ export function AppHeaderBreadcrump() {
     // const nav = useMatch(routePaths.export)
     const paths = useMatches()
     const [currentPath] = paths.map(p => p.pathname).slice(1)
-
+    const host = process.env.REACT_APP_HOST_URL
     return (
         <Box sx={ { flexGrow: 1 } } displayPrint={ 'none' }>
             <AppBar position="static" color={ `warning` }>
@@ -61,22 +61,11 @@ export function AppHeaderBreadcrump() {
                             </Box>
                         </Button>
                     </Box>
-                    {/* <Typography
-                        variant='body1'
-                        color={ '#fff' }
-                        textAlign={ 'right' }
-                        fontFamily={ 'Fira Code' }
-                        // letterSpacing={ .4 }
-                        // fontWeight={ 'bold' }
-                        textTransform={ 'uppercase' }
-                        maxWidth={ { lg: 500, sm: 300 } }
-                    >
-
-
-                    </Typography> */}
+                    <small> { host } </small>
                     <strong>
 
-                        * В таблице указаны расчетные данные.<br />  Получены в калькуляторе компании РСК.
+                        * В таблице указаны расчетные данные.<br />
+                        Получены в калькуляторе компании РСК.
                     </strong>
 
                 </Toolbar>

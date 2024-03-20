@@ -41,7 +41,7 @@ export enum Stp_Tags {
     soundproof = "Шумоизоляционный",
     hitproof = "Безопасный",
     solarproof = "Солнцеотражающий",
-    standart = "Стандарт Аттик"
+    standart = "Стандартный"
 }
 
 export type Stp_Key = keyof typeof _EnFieldsStp

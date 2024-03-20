@@ -23,6 +23,7 @@ import { _log } from '../../Helpers/helpersFns';
 import { useCombineFilterSort } from '../../Hooks/useMemoFilter';
 import { StpTableRow } from './StpTableRow';
 import { SuspenseLoad } from '../UI/SuspenseLoad';
+import { useCompare } from '../../Hooks/useCompare';
 
 
 
@@ -40,15 +41,15 @@ export type Order = 'asc' | 'desc';
 
 export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_data }) => {
     console.time('renderTime:')
-    const { query, filterParams, select, selectedItems } = useAppContext()
+    const { filterParams, select, selectedItems } = useAppContext()
     // const [selectedItems, select] = useState<number[]>([])
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(true);
     const [RPP, setRowsPerPage] = useState(-1);
-    const sorted = useCombineFilterSort(preload_data, query, filterParams, order, orderBy) as unknown as StpData[]
-
+    // const sorted = useCombineFilterSort(preload_data, query, filterParams, order, orderBy) as unknown as StpData[]
+    const sorted = useCompare(preload_data, order, orderBy)
 
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
@@ -99,7 +100,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
     };
 
     const isSelected = useCallback((id: number) => selectedItems.includes(id), [selectedItems]);
-    const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0 || query !== ""
+    const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0
 
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -168,9 +169,9 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
                                     <StpTableRow
                                         key={ row.name }
                                         row_number={ index }
-                                        row_data={ row }
+                                        row_data={ row as unknown as StpData }
                                         handleClick={ handleClick }
-                                        isSelected={ isSelected(row.id) }
+                                        isSelected={ isSelected(+row.id) }
                                     />
                                 ) }
 
@@ -233,9 +234,9 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
 
                         </Box>
                         { isFiltersOn &&
-                            <Box>
-                                Совпадений найдено: { sorted.length }
-                            </Box>
+                            ` Совпадений найдено: ${sorted.length}`
+                            // <Box>
+                            // </Box>
                         }
                         <FormControlLabel
 
@@ -255,7 +256,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
 
 StpDataTable.displayName = '____StpTable'
 export const MemoStpTable = memo(({ preload_data }: { preload_data: StpData[] }) => StpDataTable({ preload_data }))
-
+MemoStpTable.displayName = "___MemoizedDataTable"
 
 
 const DataError = () => {

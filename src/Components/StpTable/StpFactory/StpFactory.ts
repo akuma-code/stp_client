@@ -43,7 +43,7 @@ export class STP implements StpExemplar {
     name: string
     cams: number
     depth: number
-    tags: StpTag[]
+    tags: StpTag[] = []
     secure: "P2A" | "нет" | "CM2" | "CM3"
     params?: StpParams
     constructor(formula: string) {
@@ -63,7 +63,8 @@ export class STP implements StpExemplar {
     }
     public get stpItem(): StpItem {
         if (!this.params) throw new Error("stp params not found!!")
-        const stp_item: StpItem = { ...this, ...this.params }
+        const { cams, depth, name, tags, secure } = this
+        const stp_item: StpItem = { cams, depth, name, tags, secure, ...this.params }
         return stp_item
     }
 
@@ -80,7 +81,7 @@ export class STP implements StpExemplar {
 function computeCams(name: string) {
     const splitName = name.split('-')
     const camCount = splitName.length === 3 ? 1 : splitName.length === 5 ? 2 : 0
-    if (camCount < 1) throw new Error("Error with stp formula")
+    if (camCount < 1) throw new Error(`Error with stp formula - ${name}`)
     return camCount
 }
 function computeSecure(name: string) {
@@ -101,12 +102,12 @@ const initTags = (stp_name: string, options = { showConsole: false }) => {
     const isStandart = TStandartNames.includes(stp_name)
 
     const glasses = parsedArr.map((res) => {
-        const [g, ...rest] = res
+        const [g,] = res
         return g
     }).filter((s, i) => i % 2 === 0)
 
     const props = parsedArr.map((res) => {
-        const [g, ...rest] = res
+        const [, ...rest] = res
         return rest
 
     }).filter((s, i) => i % 2 === 0 && s.length > 0).flat(1)
@@ -120,7 +121,7 @@ const initTags = (stp_name: string, options = { showConsole: false }) => {
     if (isDiffGlass === true && !tags.includes('soundproof')) tags.push("soundproof")
     //__standart  
     if (isStandart) tags.push('standart')
-
+    if (tags.length === 0) tags.push('simple')
 
     if (options.showConsole === true) {
         console.log('props', props)

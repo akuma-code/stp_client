@@ -5,7 +5,7 @@ import { OverView } from "./Pages/OverView";
 import { Root } from "./Pages/Root";
 import { routePaths } from "./routePath";
 import { PrintPage } from "./Pages/PrintPage";
-import PromisedStpData, { GetStpData, LazyStpData } from "../Components/StpTable/FullTable";
+import { GetStpData, LazyStpData } from "../Components/StpTable/FullTable";
 import { StpData } from "../Components/StpTableView/StpDataTable";
 import { StpIdPage } from "./Pages/StpIdPage";
 import { StpInfoPage } from "./Pages/StpInfoPage";
