@@ -1,9 +1,11 @@
-import { QueryMeta, UseQueryOptions, useQuery } from "react-query";
+import { QueryMeta, UseQueryOptions, UseQueryResult, useQuery } from "react-query";
 import { api } from "../HTTP/mainApi";
 import { apiRoute, proxyRoute } from "../Routes/routePath";
 import { STP } from "../Components/StpTable/StpFactory/StpFactory";
 import { StpItem } from "../Components/StpTable/TableObjects";
-
+import stpMap from "../Components/StpTable/Data/data_spreadsheet";
+import { _log } from "../Helpers/helpersFns";
+_log(stpMap.size)
 
 export type SSResponse = {
     stps: [string, ...number[]][]
@@ -21,7 +23,9 @@ export const fetcher = <T>({ queryKey, pageParam }: IFetcherParams): Promise<T> 
         .get<T>(url, { params: { ...params, pageParam } })
         .then((res) => res.data);
 };
-export const useFetch = <T>(
+
+type FetchFnType = <T>(url: string | null, params?: object, config?: UseQueryOptions<T, Error, T, QueryKeyT>) => UseQueryResult<T, Error>
+export const useFetch: FetchFnType = <T>(
     url: string | null,
     params?: object,
     config?: UseQueryOptions<T, Error, T, QueryKeyT>
@@ -40,9 +44,9 @@ export const useFetch = <T>(
 };
 
 export function useQueryFetch() {
-    const ss = useFetch<SSResponse>(proxyRoute(apiRoute.stp_db))
-    const { data, error, isError, isLoading } = ss
-    if (isError) console.log('error while fetching', error.message)
+    const { data, error, isError, isLoading } = useFetch<SSResponse>(proxyRoute(apiRoute.stp_db))
+
+    if (isError) console.log('error while fetching', error)
     let stp: StpItem[] = []
     if (data) {
         stp = data.stps.map(dataExtractor)

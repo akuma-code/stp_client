@@ -1,16 +1,14 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
+import { LazyStpData } from "../Components/StpTable/FullTable";
+import { StpData } from "../Components/StpTableView/StpDataTable";
 import { ComparePage } from "./Pages/ComparePage";
 import { ErrorPage } from "./Pages/ErrorPage";
 import { OverView } from "./Pages/OverView";
-import { Root } from "./Pages/Root";
-import { routePaths } from "./routePath";
 import { PrintPage } from "./Pages/PrintPage";
-import { GetStpData, LazyStpData } from "../Components/StpTable/FullTable";
-import { StpData } from "../Components/StpTableView/StpDataTable";
+import { Root } from "./Pages/Root";
 import { StpIdPage } from "./Pages/StpIdPage";
 import { StpInfoPage } from "./Pages/StpInfoPage";
-import { _log } from "../Helpers/helpersFns";
-import { lazy } from "react";
+import { routePaths } from "./routePath";
 
 
 
