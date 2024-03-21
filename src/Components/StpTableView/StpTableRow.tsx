@@ -41,14 +41,24 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
     const endSign = useCallback((key: keyof StpData) => key === 'weight' ? ' кг/кв.м' : key === 'depth' ? ' мм' : "", [])
     const numericData = useCallback((key: keyof StpData) => row_data[key], [row_data])
     // const selectedRow = isSelected(row_data.id)
-
+    const clickCell = useCallback((e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => handleClick(e, row_data.id), [handleClick, row_data.id])
     const NumericCells = useMemo(() => {
 
 
 
-        const cells = stpFields.map(cell => <TableCell align="center" key={ cell }>{ numericData(cell) }{ endSign(cell) }</TableCell>)
+        const cells = () =>
+            <React.Fragment>
+
+                {
+                    stpFields.map(cell =>
+                        <TableCell align="center" key={ cell }>
+                            { numericData(cell) }{ endSign(cell) }
+                        </TableCell>
+                    ) }
+            </React.Fragment>
+
         return cells
-    }, [numericData])
+    }, [endSign, numericData])
     return (
 
 
@@ -65,7 +75,7 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
 
             <TableCell
                 padding="checkbox"
-                onClick={ (event) => handleClick(event, row_data.id) }
+                onClick={ clickCell }
                 sx={ { cursor: 'pointer', } }>
                 <Box component={ Stack }
                     direction={ 'row' }
@@ -114,11 +124,12 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
             {
                 // NumericCells
             }
+            <NumericCells />
             {
-                stpFields.map(cell =>
-                    <TableCell align="center" component={ 'td' } key={ cell }>{ row_data[cell] }{ endSign(cell) }</TableCell>
+                // stpFields.map(cell =>
+                //     <TableCell align="center" component={ 'td' } key={ cell }>{ row_data[cell] }{ endSign(cell) }</TableCell>
 
-                )
+                // )
             }
 
 

@@ -42,9 +42,12 @@ export const useFetch: FetchFnType = <T>(
 
     return query;
 };
+type QueryFetchOptions = {
+    forbid_fetch?: boolean
 
-export function useQueryFetch() {
-    const { data, error, isError, isLoading } = useFetch<SSResponse>(proxyRoute(apiRoute.stp_db))
+}
+export function useQueryFetch(url: string | null = proxyRoute(apiRoute.stp_db)) {
+    const { data, error, isError, isLoading } = useFetch<SSResponse>(url)
 
     if (isError) console.log('error while fetching', error)
     let stp: StpItem[] = []

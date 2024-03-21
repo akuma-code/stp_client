@@ -2,18 +2,19 @@ import { Paper } from '@mui/material'
 import { useMemo } from 'react'
 import { useLoaderData } from 'react-router-dom'
 import { MemoStpTable, StpData } from '../../Components/StpTableView/StpDataTable'
-import { Loading, SuspenseLoad } from '../../Components/UI/SuspenseLoad'
-import { _ID } from '../../Helpers/helpersFns'
+import { SuspenseLoad } from '../../Components/UI/SuspenseLoad'
 import { useStpFilter } from '../../Hooks/useCompare'
 import { useQueryFetch } from '../../Hooks/useQueryFetch'
 import { useAppContext } from '../../Hooks/useStoresContext'
+import { useIdSelector } from '../../Hooks/useIdSelector'
 
-type OverviewProps = object
+
 const isJson = (i: any) => JSON.parse(i) ? true : false
-export const OverView = (props: OverviewProps) => {
+export const OverView = () => {
     const { StpStore, query, filterParams } = useAppContext()
-    const data = useLoaderData() as string
-    const { error, isError, isLoading, stp } = useQueryFetch()
+    const [selected, action] = useIdSelector()
+    const string_data = useLoaderData() as string
+    const { error, isError, isLoading, stp } = useQueryFetch(null)
 
     // const ssd = stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
     // console.log('ss', ss)
@@ -22,13 +23,11 @@ export const OverView = (props: OverviewProps) => {
     const memodata = useMemo(() => {
         // const ssdata = ss.stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
 
-        const res: StpData[] = isJson(data) ? JSON.parse(data) : []
+        const res: StpData[] = isJson(string_data) ? JSON.parse(string_data) : []
         StpStore.loadTable(res)
         return StpStore.table
-    }, [StpStore, data])
-    // useEffect(() => {
-    //     if (ss.isError) alert("Data fetching error, loaded backuped data")
-    // }, [ss.isError])
+    }, [StpStore, string_data])
+
     const filtered = useStpFilter(memodata, query, filterParams)
 
     return (
@@ -46,12 +45,30 @@ export const OverView = (props: OverviewProps) => {
                 //     :
                 <SuspenseLoad loadText='Данные загружаются...'>
 
-                    <MemoStpTable preload_data={ filtered } />
+                    <MemoStpTable
+                        items={ filtered }
+                        selectedItems={ selected }
+                        selectorActions={ action }
+                    />
                 </SuspenseLoad>
             }
         </Paper>
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const onRender = (
     id: string,

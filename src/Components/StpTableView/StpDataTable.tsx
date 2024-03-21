@@ -24,6 +24,7 @@ import { useCombineFilterSort } from '../../Hooks/useMemoFilter';
 import { StpTableRow } from './StpTableRow';
 import { SuspenseLoad } from '../UI/SuspenseLoad';
 import { useCompare } from '../../Hooks/useCompare';
+import { SelectorActions } from '../../Hooks/useIdSelector';
 
 
 
@@ -38,19 +39,24 @@ export type Order = 'asc' | 'desc';
 
 
 
-
-export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_data }) => {
+type StpTableProps = {
+    items: StpData[]
+    selectedItems: number[]
+    selectorActions: SelectorActions
+}
+export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, selectorActions }) => {
     console.time('renderTime:')
-    const { filterParams, select, selectedItems } = useAppContext()
+    const { filterParams } = useAppContext()
+    const { clear, isSelected, remove, select } = selectorActions
     // const [selectedItems, select] = useState<number[]>([])
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(true);
     const [RPP, setRowsPerPage] = useState(-1);
-    // const sorted = useCombineFilterSort(preload_data, query, filterParams, order, orderBy) as unknown as StpData[]
-    const sorted = useCompare(preload_data, order, orderBy)
+    // const sorted = useCombineFilterSort(items, query, filterParams, order, orderBy) as unknown as StpData[]
 
+    const sorted = useCompare(items, order, orderBy)
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
         property: keyof StpData,
@@ -62,7 +68,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
 
     const handleSelectAllClick = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         if (selectedItems.length >= 1) {
-            select([])
+            clear()
             return
         }
         if (event.target.checked) {
@@ -71,19 +77,19 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
             select(newSelectedAll)
             return;
         }
-        select([])
+        clear()
 
-    }, [select, selectedItems.length, sorted]);
+    }, [clear, select, selectedItems.length, sorted]);
 
-    const handleClick = (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
+    const handleClick = useCallback((event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
 
         const selectedIdx = selectedItems.indexOf(id);
 
-        if (selectedIdx === -1) select(prev => [...prev, id])
-        else if (selectedIdx >= 0 && selectedItems.length <= 5) select(prev => prev.filter(p => p !== id))
-        if (selectedItems.length >= 5) select(prev => prev.filter(p => p !== id))
+        if (selectedIdx === -1) select(id)
+        else if (selectedIdx >= 0 && selectedItems.length <= 5) remove(id)
+        if (selectedItems.length >= 5) remove(id)
 
-    };
+    }, [remove, select, selectedItems]);
 
 
     // const handleChangePage = (event: unknown, newPage: number) => {
@@ -99,13 +105,13 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
         setDense(event.target.checked);
     };
 
-    const isSelected = useCallback((id: number) => selectedItems.includes(id), [selectedItems]);
+    // const isSelected = useCallback((id: number) => selectedItems.includes(id), [selectedItems]);
     const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0
 
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page >= 0
-        ? Math.max(0, (1 + page) * RPP - preload_data!.length)
+        ? Math.max(0, (1 + page) * RPP - items!.length)
         : 1;
 
     // const visibleRows = useMemo(
@@ -134,9 +140,6 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
 
                 <StpTableToolbar numFiltered={ sorted.length } />
 
-                {/* <SuspenseLoad
-                // fallback={ <div className='text-center'>Table is LOADING</div> }
-                > */}
                 <TableContainer sx={ {
                     overflowY: 'auto',
                     maxHeight: '70vh',
@@ -255,7 +258,7 @@ export const StpDataTable: React.FC<{ preload_data: StpData[] }> = ({ preload_da
 }
 
 StpDataTable.displayName = '____StpTable'
-export const MemoStpTable = memo(({ preload_data }: { preload_data: StpData[] }) => StpDataTable({ preload_data }))
+export const MemoStpTable = memo(({ items, selectorActions, selectedItems }: StpTableProps) => StpDataTable({ items, selectorActions, selectedItems }))
 MemoStpTable.displayName = "___MemoizedDataTable"
 
 
