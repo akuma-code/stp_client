@@ -8,11 +8,11 @@ const host = process.env.REACT_APP_HOST_URL
 const $api = axios.create({
     baseURL: host,
     withCredentials: false,
-    proxy: {
-        protocol: 'http',
-        host: '192.168.0.250',
-        port: 3128,
-    },
+    // proxy: {
+    //     protocol: 'http',
+    //     host: 'https://thingproxy.freeboard.io/fetch/',
+    //     port: 3128,
+    // },
 
 
 })

@@ -1,12 +1,13 @@
 import { Paper } from '@mui/material'
 import { useMemo } from 'react'
-import { useLoaderData } from 'react-router-dom'
+import { Outlet, useLoaderData } from 'react-router-dom'
 import { MemoStpTable, StpData } from '../../Components/StpTableView/StpDataTable'
 import { SuspenseLoad } from '../../Components/UI/SuspenseLoad'
 import { useStpFilter } from '../../Hooks/useCompare'
 import { useQueryFetch } from '../../Hooks/useQueryFetch'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { useIdSelector } from '../../Hooks/useIdSelector'
+import { apiRoute } from '../routePath'
 
 
 const isJson = (i: any) => JSON.parse(i) ? true : false
@@ -14,7 +15,7 @@ export const OverView = () => {
     const { StpStore, query, filterParams } = useAppContext()
     const [selected, action] = useIdSelector()
     const string_data = useLoaderData() as string
-    const { error, isError, isLoading, stp } = useQueryFetch(null)
+    const { error, isError, isLoading, stp } = useQueryFetch(apiRoute.stp_db)
 
     // const ssd = stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
     // console.log('ss', ss)
@@ -50,6 +51,7 @@ export const OverView = () => {
                         selectedItems={ selected }
                         selectorActions={ action }
                     />
+                    <Outlet />
                 </SuspenseLoad>
             }
         </Paper>

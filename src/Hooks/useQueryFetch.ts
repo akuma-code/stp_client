@@ -49,6 +49,7 @@ type QueryFetchOptions = {
 export function useQueryFetch(url: string | null = proxyRoute(apiRoute.stp_db)) {
     const { data, error, isError, isLoading } = useFetch<SSResponse>(url)
 
+
     if (isError) console.log('error while fetching', error)
     let stp: StpItem[] = []
     if (data) {
@@ -59,13 +60,14 @@ export function useQueryFetch(url: string | null = proxyRoute(apiRoute.stp_db)) 
     return { stp, error, isError, isLoading }
 
 }
-type FetchedDataItem = readonly [string, ...number[]]
+type FetchedDataItem = readonly [string, ...Array<number>]
 export const dataExtractor = (fetched_data: FetchedDataItem) => {
     const [name, ...restProps] = fetched_data
     const stp = new STP(name)
     // console.log('stp', name)
 
     const [Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight] = restProps
+
     stp.initParams(Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight)
     return stp.stpItem
 }
