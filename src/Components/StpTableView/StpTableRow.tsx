@@ -38,13 +38,15 @@ export type StpRowProps = {
 export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, row_data, isSelected = false }) => {
 
 
-
+    const endSign = useCallback((key: keyof StpData) => key === 'weight' ? ' кг/кв.м' : key === 'depth' ? ' мм' : "", [])
     const numericData = useCallback((key: keyof StpData) => row_data[key], [row_data])
     // const selectedRow = isSelected(row_data.id)
 
     const NumericCells = useMemo(() => {
 
-        const cells = stpFields.map(cell => <TableCell align="center" key={ cell }>{ numericData(cell) }</TableCell>)
+
+
+        const cells = stpFields.map(cell => <TableCell align="center" key={ cell }>{ numericData(cell) }{ endSign(cell) }</TableCell>)
         return cells
     }, [numericData])
     return (
@@ -114,7 +116,7 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
             }
             {
                 stpFields.map(cell =>
-                    <TableCell align="center" component={ 'td' } key={ cell }>{ row_data[cell] }</TableCell>
+                    <TableCell align="center" component={ 'td' } key={ cell }>{ row_data[cell] }{ endSign(cell) }</TableCell>
 
                 )
             }

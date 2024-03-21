@@ -56,12 +56,12 @@ export function useQueryFetch() {
     return { stp, error, isError, isLoading }
 
 }
-
-export const dataExtractor = (fetched_data: [string, ...number[]]) => {
+type FetchedDataItem = readonly [string, ...number[]]
+export const dataExtractor = (fetched_data: FetchedDataItem) => {
     const [name, ...restProps] = fetched_data
     const stp = new STP(name)
     // console.log('stp', name)
-    const numeric = restProps.map(p => p)
+
     const [Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight] = restProps
     stp.initParams(Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight)
     return stp.stpItem

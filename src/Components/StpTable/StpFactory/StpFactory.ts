@@ -56,7 +56,7 @@ export class STP implements StpExemplar {
     }
 
     public initParams(...init: TParams) {
-        const [Ra, Det, Ea, Er, Lr, Lt, Ro, Rw, S, Sf, weight] = init
+        const [Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight] = init
         this.params = {
             Ra, Det, Ea, Er, Lr, Lt, Ro, Rw, S, Sf, weight
         }

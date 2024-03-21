@@ -1,6 +1,6 @@
 import { StpData } from "../../StpTableView/StpDataTable";
 
-const stpdata: [string, ...number[]][] = [
+const stpdata: readonly [string, ...number[]][] = [
     [
         "4TopN-16Ar-4",
         0.9,

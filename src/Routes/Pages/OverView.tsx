@@ -1,22 +1,22 @@
-import { CircularProgress, Paper } from '@mui/material'
-import { useEffect, useMemo } from 'react'
+import { Paper } from '@mui/material'
+import { useMemo } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import { MemoStpTable, StpData, StpDataTable } from '../../Components/StpTableView/StpDataTable'
+import { MemoStpTable, StpData } from '../../Components/StpTableView/StpDataTable'
 import { Loading, SuspenseLoad } from '../../Components/UI/SuspenseLoad'
-import { useAppContext } from '../../Hooks/useStoresContext'
-import { useQueryFetch } from '../../Hooks/useQueryFetch'
 import { _ID } from '../../Helpers/helpersFns'
 import { useStpFilter } from '../../Hooks/useCompare'
+import { useQueryFetch } from '../../Hooks/useQueryFetch'
+import { useAppContext } from '../../Hooks/useStoresContext'
 
 type OverviewProps = object
 const isJson = (i: any) => JSON.parse(i) ? true : false
 export const OverView = (props: OverviewProps) => {
-
+    const { StpStore, query, filterParams } = useAppContext()
     const data = useLoaderData() as string
     const { error, isError, isLoading, stp } = useQueryFetch()
-    const ssd = stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
+
+    // const ssd = stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
     // console.log('ss', ss)
-    const { StpStore, query, filterParams } = useAppContext()
 
 
     const memodata = useMemo(() => {
@@ -35,16 +35,19 @@ export const OverView = (props: OverviewProps) => {
         <Paper sx={ { pb: 0, m: 1, bgcolor: 'beige', height: '100%' } } elevation={ 4 }>
 
             {
-                isLoading
-                    ?
-                    <Loading text='Данные загружаются...' />
-                    :
-                    isError
-                        ?
+                // isLoading
+                //     ?
+                //     <Loading text='Данные загружаются...' />
+                //     :
+                // isError
+                //     ?
 
-                        <MemoStpTable preload_data={ memodata } />
-                        :
-                        <MemoStpTable preload_data={ filtered } />
+                //     <MemoStpTable preload_data={ memodata } />
+                //     :
+                <SuspenseLoad loadText='Данные загружаются...'>
+
+                    <MemoStpTable preload_data={ filtered } />
+                </SuspenseLoad>
             }
         </Paper>
     )

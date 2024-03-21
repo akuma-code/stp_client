@@ -41,7 +41,7 @@ export const appRoutes: RouteObject[] = [
 
                     console.count("Data load: ")
                     console.log(data.length)
-
+                    console.log('data', data[0])
                     return JSON.stringify(data)
                 },
                 // action: async ({ request }) => {

@@ -1,6 +1,6 @@
-type FetchedData = [name: string, ...values: number[]]
+type FetchedData = readonly [string, number, number, number, number, number, number, number, number, number, number, number]
 
-const stpBackup: FetchedData[] = [
+export const stpBackup: FetchedData[] = [
     [
         "4TopN-16Ar-4",
         0.9,
@@ -1797,6 +1797,6 @@ const stpBackup: FetchedData[] = [
 
 
 const stpMap = new Map()
-const addToMap = ([key, ...values]: [key: string, ...values: number[]]) => stpMap.set(key, values)
-stpBackup.map(addToMap)
+// const addToMap = ([key, ...values]: [key: string, ...values: number[]]) => stpMap.set(key, values)
+// stpBackup.map(addToMap)
 export default stpMap
