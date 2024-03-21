@@ -6,6 +6,7 @@ import { table_data_BrGr } from "./Data/data_Fenix";
 import { table_data_32mm } from "./Data/data_32mm";
 import { apiRoute, proxyRoute } from "../../Routes/routePath";
 import stpdata from "./Data/data_last";
+import { dataExtractor } from "../../Hooks/useQueryFetch";
 
 export function GetStpData(): StpItem[] {
     const data = table_data_base.concat(table_data_BrGr)
@@ -31,7 +32,7 @@ export async function LazyStpData() {
         table_data_32mm,
     )
 
-    const last = stpdata
+    const last = stpdata.map(dataExtractor)
     return last
 }
 

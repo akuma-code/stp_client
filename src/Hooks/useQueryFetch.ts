@@ -57,7 +57,7 @@ export function useQueryFetch() {
 
 }
 
-const dataExtractor = (fetched_data: [string, ...number[]]) => {
+export const dataExtractor = (fetched_data: [string, ...number[]]) => {
     const [name, ...restProps] = fetched_data
     const stp = new STP(name)
     // console.log('stp', name)

@@ -13,8 +13,8 @@ const isJson = (i: any) => JSON.parse(i) ? true : false
 export const OverView = (props: OverviewProps) => {
 
     const data = useLoaderData() as string
-    const ss = useQueryFetch()
-    const ssd = ss.stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
+    const { error, isError, isLoading, stp } = useQueryFetch()
+    const ssd = stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
     // console.log('ss', ss)
     const { StpStore, query, filterParams } = useAppContext()
 
@@ -35,11 +35,11 @@ export const OverView = (props: OverviewProps) => {
         <Paper sx={ { pb: 0, m: 1, bgcolor: 'beige', height: '100%' } } elevation={ 4 }>
 
             {
-                ss.isLoading
+                isLoading
                     ?
                     <Loading text='Данные загружаются...' />
                     :
-                    ss.isError
+                    isError
                         ?
 
                         <MemoStpTable preload_data={ memodata } />

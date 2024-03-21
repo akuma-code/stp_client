@@ -61,8 +61,8 @@ export function AppHeaderBreadcrump() {
                             </Box>
                         </Button>
                     </Box>
-                    <small> { host } </small>
-                    <strong>
+                    <small> { host === 'http://localhost:3000' && host } </small>
+                    <strong className='text-md text-wrap'>
 
                         * В таблице указаны расчетные данные.<br />
                         Получены в калькуляторе компании РСК.
