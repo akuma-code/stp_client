@@ -1,11 +1,9 @@
-import { QueryMeta, UseQueryOptions, UseQueryResult, useQuery } from "react-query";
-import { api } from "../HTTP/mainApi";
-import { apiRoute, proxyRoute } from "../Routes/routePath";
+import { QueryMeta, UseQueryOptions, UseQueryResult, useQuery } from 'react-query';
 import { STP } from "../Components/StpTable/StpFactory/StpFactory";
 import { StpItem } from "../Components/StpTable/TableObjects";
-import stpMap from "../Components/StpTable/Data/data_spreadsheet";
-import { _log } from "../Helpers/helpersFns";
-_log(stpMap.size)
+import { api } from "../HTTP/mainApi";
+import { apiRoute, proxyRoute } from "../Routes/routePath";
+// _log(stpMap.size)
 
 export type SSResponse = {
     stps: [string, ...number[]][]

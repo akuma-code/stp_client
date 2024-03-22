@@ -41,7 +41,6 @@ export const appRoutes: RouteObject[] = [
 
                     console.count("Data load: ")
                     console.log(data.length)
-                    console.log('data', data[0])
                     return JSON.stringify(data)
                 },
                 // action: async ({ request }) => {
@@ -53,21 +52,7 @@ export const appRoutes: RouteObject[] = [
 
 
             },
-            {
-                path: routePaths.stp_id,
-                element: <StpIdPage />,
-                loader: ({ request, params }) => {
-                    // console.log('request', request)
-                    const id = params.id ? +params.id : -1
-                    // const item =
-                    // console.log('params', { id })
-                    return { id }
-                },
-                // lazy () {
-                //     const { table_data_preset } = await import('./../Components/StpTable/FullTable')
-                //     return PrintPage
-                // },
-            },
+
             {
                 path: routePaths.compare,
                 element: <ComparePage />,

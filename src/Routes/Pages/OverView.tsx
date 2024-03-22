@@ -7,7 +7,7 @@ import { useStpFilter } from '../../Hooks/useCompare'
 import { useQueryFetch } from '../../Hooks/useQueryFetch'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { useIdSelector } from '../../Hooks/useIdSelector'
-import { apiRoute } from '../routePath'
+import { apiRoute, proxyRoute } from '../routePath'
 
 
 const isJson = (i: any) => JSON.parse(i) ? true : false
@@ -15,8 +15,8 @@ export const OverView = () => {
     const { StpStore, query, filterParams } = useAppContext()
     const [selected, action] = useIdSelector()
     const string_data = useLoaderData() as string
-    const { error, isError, isLoading, stp } = useQueryFetch(apiRoute.stp_db)
-
+    const { error, isError, isLoading, stp } = useQueryFetch(proxyRoute(apiRoute.stp_db))
+    console.log('stp: ', stp.length)
     // const ssd = stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
     // console.log('ss', ss)
 
@@ -25,8 +25,9 @@ export const OverView = () => {
         // const ssdata = ss.stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
 
         const res: StpData[] = isJson(string_data) ? JSON.parse(string_data) : []
+
         StpStore.loadTable(res)
-        return StpStore.table
+        return res
     }, [StpStore, string_data])
 
     const filtered = useStpFilter(memodata, query, filterParams)
