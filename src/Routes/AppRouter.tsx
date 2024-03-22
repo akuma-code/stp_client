@@ -1,4 +1,4 @@
-import { RouteObject, createBrowserRouter } from "react-router-dom";
+import { RouteObject, createBrowserRouter, redirect } from "react-router-dom";
 import { LazyStpData } from "../Components/StpTable/FullTable";
 import { StpData } from "../Components/StpTableView/StpDataTable";
 import { ComparePage } from "./Pages/ComparePage";
@@ -23,10 +23,11 @@ export const appRoutes: RouteObject[] = [
         element: <Root />,
         id: 'root',
         errorElement: <ErrorPage />,
-
+        action: () => redirect(routePaths.table, 200),
         children: [
             {
                 index: true,
+                path: routePaths.table,
                 element: <OverView />,
                 loader: async ({ request, params }) => {
                     // const fetch_data = GetStpData()
@@ -91,8 +92,10 @@ export const appRoutes: RouteObject[] = [
                 element: <StpInfoPage />
 
             }
-        ]
-    }
+        ],
+
+    },
+
 ]
 
 

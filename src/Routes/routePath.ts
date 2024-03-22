@@ -1,7 +1,7 @@
-export const proxyRoute = (route: string) => `https://thingproxy.freeboard.io/fetch/${route}` as const
+export const proxyRoute = (route: string) => `http://thingproxy.freeboard.io/fetch/${route}` as const
 export const routePaths = {
     root: '/' as const,
-    table: '/table' as const,
+    table: 'table' as const,
     stp_data: '/data' as const,
     stp_info: '/data/info' as const,
     stp_info_id: '/:info_id' as const,
