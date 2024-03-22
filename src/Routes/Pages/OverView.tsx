@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material'
+import { Button, Paper } from '@mui/material'
 import { useMemo } from 'react'
 import { Outlet, useLoaderData } from 'react-router-dom'
 import { MemoStpTable, StpData } from '../../Components/StpTableView/StpDataTable'
@@ -8,6 +8,7 @@ import { useQueryFetch } from '../../Hooks/useQueryFetch'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { useIdSelector } from '../../Hooks/useIdSelector'
 import { apiRoute, proxyRoute } from '../routePath'
+import { toast } from 'react-toastify'
 
 
 const isJson = (i: any) => JSON.parse(i) ? true : false
@@ -15,6 +16,7 @@ export const OverView = () => {
     const { StpStore, query, filterParams } = useAppContext()
     const [selected, action] = useIdSelector()
     const string_data = useLoaderData() as string
+
     // const { error, isError, isLoading, stp } = useQueryFetch(proxyRoute(apiRoute.stp_db))
 
     // const ssd = stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
@@ -26,6 +28,7 @@ export const OverView = () => {
 
         const res: StpData[] = isJson(string_data) ? JSON.parse(string_data) : []
         StpStore.loadTable(res)
+
         return StpStore.table
     }, [StpStore, string_data])
 
@@ -44,15 +47,17 @@ export const OverView = () => {
 
                 //     <MemoStpTable preload_data={ memodata } />
                 //     :
-                <SuspenseLoad loadText='Данные загружаются...'>
+                <>
 
-                    <MemoStpTable
-                        items={ filtered }
-                        selectedItems={ selected }
-                        selectorActions={ action }
-                    />
-                    <Outlet />
-                </SuspenseLoad>
+                    <SuspenseLoad loadText='Данные загружаются...'>
+                        <MemoStpTable
+                            items={ filtered }
+                            selectedItems={ selected }
+                            selectorActions={ action }
+                        />
+                        <Outlet />
+                    </SuspenseLoad>
+                </>
             }
         </Paper>
     )
