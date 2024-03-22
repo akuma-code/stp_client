@@ -37,7 +37,12 @@ import { SelectorActions } from '../../Hooks/useIdSelector';
 export type StpData = StpItem & { id: number }
 export type Order = 'asc' | 'desc';
 
-
+export type StpViewOptions = {
+    order: Order
+    orderBy: keyof StpData
+    dense: boolean
+    RPP: number
+}
 
 type StpTableProps = {
     items: StpData[]
@@ -258,7 +263,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
 }
 
 StpDataTable.displayName = '____StpTable'
-export const MemoStpTable = memo(({ items, selectorActions, selectedItems }: StpTableProps) => StpDataTable({ items, selectorActions, selectedItems }))
+export const MemoStpTable = memo((props: StpTableProps) => StpDataTable(props))
 MemoStpTable.displayName = "___MemoizedDataTable"
 
 
