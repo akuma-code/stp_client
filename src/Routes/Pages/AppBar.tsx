@@ -16,7 +16,7 @@ export function AppHeaderBreadcrump() {
     const paths = useMatches()
     const [currentPath] = paths.map(p => p.pathname).slice(1)
     const host = process.env.REACT_APP_HOST_URL
-    const notify = () => toast.success(`test`, {
+    const notify = () => toast.success(host, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
