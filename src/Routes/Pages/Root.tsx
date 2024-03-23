@@ -5,8 +5,16 @@ import { useQuery } from "react-query"
 import { apiRoute, proxyRoute } from "../routePath"
 import { LazyStpData } from "../../Components/StpTable/FullTable"
 import { Bounce, ToastContainer } from "react-toastify"
+import { Box } from "@mui/system"
+import { AppBar, BottomNavigation, Paper, Toolbar } from "@mui/material"
 
 type RootProps = PropsWithChildren
+
+
+function FooterText() {
+    return (<strong className="text-center my-auto">Sticky footer</strong>);
+}
+
 
 export const Root: React.FC<RootProps> = () => {
 
@@ -15,10 +23,20 @@ export const Root: React.FC<RootProps> = () => {
 
 
     return (
-        <div className="max-w-full">
+        <div className="pb-0">
 
 
             <AppToolbarHeader />
+
+            <Outlet />
+            <>
+                <AppBar position="fixed" sx={ { bottom: 10, top: 'auto', height: 40 } } >
+                    <Toolbar>
+                        <FooterText />
+                    </Toolbar>
+                </AppBar>
+                <Toolbar />
+            </>
             <ToastContainer position="top-center"
                 autoClose={ 5000 }
                 hideProgressBar={ false }
@@ -30,7 +48,6 @@ export const Root: React.FC<RootProps> = () => {
                 pauseOnHover
                 theme="light"
                 transition={ Bounce } />
-            <Outlet />
         </div>
     )
 }

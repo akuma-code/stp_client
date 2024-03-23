@@ -28,13 +28,17 @@ export function AppHeaderBreadcrump() {
         transition: Bounce,
     });
     return (
-        <Box sx={ { flexGrow: 1 } } displayPrint={ 'none' }>
-            <AppBar position="static" color={ `warning` }>
+        <Box displayPrint={ 'none' } >
+            <AppBar position="fixed" color={ `warning` } sx={ {
+                // height: { sm: 80, md: 100 },
+                maxHeight: 100
+            } }>
                 <Toolbar variant='dense' sx={ {
-                    width: '100%', justifyContent: 'space-between',
-                    maxHeight: { sm: 100, lg: 300 }
+                    width: '100%',
+                    justifyContent: 'space-between',
+
                 } } >
-                    <Box component={ Stack } direction={ 'row' } my={ 1 } gap={ 4 }>
+                    <Box component={ Stack } direction={ 'row' } my={ 0 } gap={ 4 }>
 
                         <IconButton
                             edge={ 'start' }
@@ -83,6 +87,7 @@ export function AppHeaderBreadcrump() {
 
                 </Toolbar>
             </AppBar>
+            <Toolbar variant='dense' />
         </Box >
     );
 }

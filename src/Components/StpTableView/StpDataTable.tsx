@@ -137,7 +137,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
     return (
 
         <Box sx={ { width: '100%', height: '100%' } }>
-            <Paper sx={ { mb: 2 } } elevation={ 2 }>
+            <Paper sx={ { mb: 1 } } elevation={ 2 }>
 
                 <StpTableToolbar numFiltered={ sorted.length } />
 
@@ -196,64 +196,21 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                         </TableBody>
                         {/* </Suspense> */ }
                     </Table>
-
-
-
                 </TableContainer>
 
-                <Stack direction={ 'row' } maxHeight={ 55 } >
+                {/* <Stack direction={ 'row' } maxHeight={ 55 } > */ }
+
+                <StpTableFooter
+                    dense={ dense }
+                    NumSelected={ selectedItems.length }
+                    NumFiltered={ sorted.length }
+                    isFiltersOn={ isFiltersOn }
+                    toggleDense={ handleChangeDense }
+                />
 
 
 
-                    <Stack sx={ {
-                        bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
-                        justifyContent: 'space-between', color: 'whitesmoke'
-                    } }
-                        // component={ Paper } elevation={ 2 }
-                        flexGrow={ 1 } direction={ 'row' } alignItems={ 'center' } px={ 2 }
-                    >
-
-                        {
-                            //__FOOTER_________________
-                        }
-                        <Box
-                            flexGrow={ 1 }
-                            gap={ 2 }
-                            component={ Stack }
-                            flexDirection={ 'row' }
-                            alignItems={ 'center' }
-                            p={ 1 }
-                        >
-                            Выбрано для сравнения: { selectedItems.length } из { sorted.length }
-                            <Button
-                                color='info'
-                                variant='contained'
-                                startIcon={ <MdCompare /> }
-                                size='small'
-                                sx={ {
-                                    visibility: selectedItems.length > 0 ? 'visible' : 'hidden',
-                                    margin: 'dense'
-                                } }
-
-                            >
-                                <MuiNavLink to={ routePaths.compare } title={ 'Сравнить' } >Сравнить</MuiNavLink>
-                            </Button>
-
-                        </Box>
-                        { isFiltersOn &&
-                            ` Совпадений найдено: ${sorted.length}`
-                            // <Box>
-                            // </Box>
-                        }
-                        <FormControlLabel
-
-                            control={ <Switch checked={ dense } onChange={ handleChangeDense } id='dense_checkbox' /> }
-                            label="Уменьшить отступы"
-                            sx={ { ml: 4, alignContent: 'center' } }
-                        />
-                    </Stack>
-
-                </Stack>
+                {/* </Stack> */ }
                 {/* </SuspenseLoad> */ }
             </Paper>
         </Box>
@@ -266,9 +223,57 @@ export const MemoStpTable = memo((props: StpTableProps) => StpDataTable(props))
 MemoStpTable.displayName = "___MemoizedDataTable"
 
 
-const DataError = () => {
+function StpTableFooter(props: {
+    NumSelected: number,
+    NumFiltered: number,
+    isFiltersOn: boolean,
+    dense: boolean,
+    toggleDense: (event: React.ChangeEvent<HTMLInputElement>) => void
+}) {
+    const { NumFiltered, NumSelected, dense, toggleDense, isFiltersOn } = props
+
     return (
-        <div className='text-center text-xl text-red'>Table data error!!</div>
-    )
+        <Stack sx={ {
+            bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
+            color: 'whitesmoke',
+            justifyContent: 'space-between',
+        } }
+            flexGrow={ 1 } direction={ 'row' } alignItems={ 'center' } px={ 2 }
+        >
+            <Box
+                flexGrow={ 1 }
+                gap={ 2 }
+                component={ Stack }
+                flexDirection={ 'row' }
+                alignItems={ 'center' }
+                p={ 0 }
+            >
+                Выбрано для сравнения: { NumSelected } из { NumFiltered }
+                <Button
+                    color='info'
+                    variant='contained'
+                    startIcon={ <MdCompare /> }
+                    size='small'
+                    sx={ {
+                        visibility: NumSelected > 0 ? 'visible' : 'hidden',
+                        margin: 'dense'
+                    } }
+
+                >
+                    <MuiNavLink to={ routePaths.compare } title={ 'Сравнить' }>Сравнить</MuiNavLink>
+                </Button>
+
+            </Box>
+            { isFiltersOn &&
+                ` Совпадений найдено: ${NumFiltered}`
+                // <Box>
+                // </Box>
+            }
+            <FormControlLabel
+
+                control={ <Switch checked={ dense } onChange={ toggleDense } id='dense_checkbox' /> }
+                label="Уменьшить отступы"
+                sx={ { ml: 4, alignContent: 'center' } } />
+        </Stack>)
 }
 
