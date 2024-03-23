@@ -7,7 +7,7 @@ import { table_data_32mm } from "./Data/data_32mm";
 import { apiRoute, proxyRoute } from "../../Routes/routePath";
 
 import { dataExtractor } from "../../Hooks/useQueryFetch";
-import { stpBackup } from "./Data/data_spreadsheet";
+import { FetchedData, stpBackup_128 } from "./Data/data_spreadsheet";
 
 export function GetStpData(): StpItem[] {
     const data = table_data_base.concat(table_data_BrGr)
@@ -33,7 +33,7 @@ export async function LazyStpData() {
         table_data_32mm,
     )
 
-    const last = stpBackup.map(dataExtractor)
+    const last = stpBackup_128.map(i => dataExtractor<FetchedData>(i))
     return last
 }
 

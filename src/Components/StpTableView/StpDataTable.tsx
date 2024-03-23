@@ -7,24 +7,21 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import React, { Suspense, memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 
 import { Button, Stack, alpha } from '@mui/material';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpItem } from '../StpTable/TableObjects';
-import { EnhancedTableHead, StpTableHeader } from './EnhancedTableHead';
+import { StpTableHeader } from './EnhancedTableHead';
 
-import { StpTableToolbar } from './StpTableToolbar';
 import { MdCompare } from 'react-icons/md';
-import { MuiLink, MuiNavLink } from '../../Routes/Pages/MuiLink';
+import { MuiNavLink } from '../../Routes/Pages/MuiLink';
 import { routePaths } from '../../Routes/routePath';
+import { StpTableToolbar } from './StpTableToolbar';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { _log } from '../../Helpers/helpersFns';
-import { useCombineFilterSort } from '../../Hooks/useMemoFilter';
-import { StpTableRow } from './StpTableRow';
-import { SuspenseLoad } from '../UI/SuspenseLoad';
 import { useCompare } from '../../Hooks/useCompare';
 import { SelectorActions } from '../../Hooks/useIdSelector';
+import { StpTableRow } from './StpTableRow';
 
 
 
@@ -51,7 +48,7 @@ type StpTableProps = {
 }
 export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, selectorActions }) => {
     console.time('renderTime:')
-    const { filterParams } = useAppContext()
+    const { filterParams, select: s } = useAppContext()
     const { clear, isSelected, remove, select } = selectorActions
     // const [selectedItems, select] = useState<number[]>([])
     const [order, setOrder] = useState<Order>('asc');
@@ -130,10 +127,9 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
     //     },
     //     [RPP, page, sorted]
     // );
-    // useEffect(() => {
-    //     // select(checkedCells)
-    //     // return () => setCheckedCells([])
-    // }, [checkedCells, select])
+    useEffect(() => {
+        s(selectedItems)
+    }, [s, selectedItems])
 
 
     console.count("RENDER!")
@@ -149,6 +145,8 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                     overflowY: 'auto',
                     maxHeight: '70vh',
                     position: 'relative'
+
+
                 } } >
                     <Table
                         stickyHeader
@@ -157,6 +155,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                         padding='normal'
                         sx={ {
                             minWidth: 750,
+
                         } }
                     >
                         <StpTableHeader

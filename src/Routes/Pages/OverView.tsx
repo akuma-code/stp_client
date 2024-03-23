@@ -29,7 +29,7 @@ export const OverView = () => {
         const res: StpData[] = isJson(string_data) ? JSON.parse(string_data) : []
         StpStore.loadTable(res)
 
-        return StpStore.table
+        return res
     }, [StpStore, string_data])
 
     const filtered = useStpFilter(memodata, query, filterParams)
@@ -49,13 +49,13 @@ export const OverView = () => {
                 //     :
                 <>
 
-                    <SuspenseLoad loadText='Данные загружаются...'>
+                    <SuspenseLoad loadText='Данные по стеклопакетам загружаются...'>
                         <MemoStpTable
                             items={ filtered }
                             selectedItems={ selected }
                             selectorActions={ action }
                         />
-                        <Outlet />
+
                     </SuspenseLoad>
                 </>
             }
