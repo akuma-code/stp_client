@@ -1,10 +1,10 @@
-import React, { PropsWithChildren } from "react"
+import React, { PropsWithChildren, useEffect } from "react"
 import { Outlet } from "react-router-dom"
 import { AppHeaderBreadcrump, AppToolbarHeader } from "./AppBar"
 import { useQuery } from "react-query"
 import { apiRoute, proxyRoute } from "../routePath"
 import { LazyStpData } from "../../Components/StpTable/FullTable"
-import { Bounce, ToastContainer } from "react-toastify"
+import { Bounce, ToastContainer, toast } from "react-toastify"
 import { Box } from "@mui/system"
 import { AppBar, BottomNavigation, Container, Paper, Toolbar } from "@mui/material"
 
@@ -18,10 +18,22 @@ function FooterText() {
 
 export const Root: React.FC<RootProps> = () => {
 
-    const { data, isLoadingError, error, isError } = useQuery('saved_stp_data', LazyStpData)
+    const { data, isLoadingError, error, isError, isSuccess } = useQuery('saved_stp_data', LazyStpData)
     // const [tab, save] = useLs<{ version: string }>('tab_vers')
-
-
+    const notify = () => toast.success(`data loaded: ${data?.length}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+    });
+    useEffect(() => {
+        if (isSuccess) notify()
+    })
     return (
 
 
