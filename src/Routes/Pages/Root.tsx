@@ -6,7 +6,7 @@ import { apiRoute, proxyRoute } from "../routePath"
 import { LazyStpData } from "../../Components/StpTable/FullTable"
 import { Bounce, ToastContainer } from "react-toastify"
 import { Box } from "@mui/system"
-import { AppBar, BottomNavigation, Paper, Toolbar } from "@mui/material"
+import { AppBar, BottomNavigation, Container, Paper, Toolbar } from "@mui/material"
 
 type RootProps = PropsWithChildren
 
@@ -23,20 +23,20 @@ export const Root: React.FC<RootProps> = () => {
 
 
     return (
-        <div className="pb-0">
 
 
+        <>
             <AppToolbarHeader />
 
+
+
             <Outlet />
-            <>
-                <AppBar position="fixed" sx={ { bottom: 10, top: 'auto', height: 40 } } >
-                    <Toolbar>
-                        <FooterText />
-                    </Toolbar>
-                </AppBar>
-                <Toolbar />
-            </>
+            <AppBar position="fixed" sx={ { bottom: 10, top: 'auto', height: 40 } } >
+                <Toolbar>
+                    <FooterText />
+                </Toolbar>
+            </AppBar>
+            <Toolbar />
             <ToastContainer position="top-center"
                 autoClose={ 5000 }
                 hideProgressBar={ false }
@@ -48,7 +48,7 @@ export const Root: React.FC<RootProps> = () => {
                 pauseOnHover
                 theme="light"
                 transition={ Bounce } />
-        </div>
+        </>
     )
 }
 

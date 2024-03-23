@@ -8,6 +8,7 @@ import { PrintPage } from "./Pages/PrintPage";
 import { Root } from "./Pages/Root";
 import { StpInfoPage } from "./Pages/StpInfoPage";
 import { routePaths } from "./routePath";
+import { TabPage } from "./Pages/Tabs/TabPage";
 
 
 
@@ -38,6 +39,10 @@ export const appRoutes: RouteObject[] = [
                 errorElement: <ErrorPage />,
 
 
+            },
+            {
+                path: routePaths.tabs,
+                element: <TabPage />
             },
 
             {
