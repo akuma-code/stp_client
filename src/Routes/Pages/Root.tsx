@@ -4,6 +4,7 @@ import { AppHeaderBreadcrump, AppToolbarHeader } from "./AppBar"
 import { useQuery } from "react-query"
 import { apiRoute, proxyRoute } from "../routePath"
 import { LazyStpData } from "../../Components/StpTable/FullTable"
+import { Bounce, ToastContainer } from "react-toastify"
 
 type RootProps = PropsWithChildren
 
@@ -18,10 +19,21 @@ export const Root: React.FC<RootProps> = () => {
 
 
             <AppToolbarHeader />
+            <ToastContainer position="top-center"
+                autoClose={ 5000 }
+                hideProgressBar={ false }
+                newestOnTop
+                closeOnClick
+                rtl={ false }
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={ Bounce } />
             <Outlet />
         </div>
     )
 }
 
-//TODO: переделать маршрутизацию
+//TODO: переделать маршрутизацию на табы
 //TODO: настроить инфинит квери

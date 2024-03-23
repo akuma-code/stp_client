@@ -8,12 +8,25 @@ import { MdCompare } from "react-icons/md";
 import { Link as RrdLink, useMatches } from 'react-router-dom';
 import { routePaths } from '../routePath';
 import { MuiLink } from './MuiLink';
+import { Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export function AppHeaderBreadcrump() {
 
     // const nav = useMatch(routePaths.export)
     const paths = useMatches()
     const [currentPath] = paths.map(p => p.pathname).slice(1)
     const host = process.env.REACT_APP_HOST_URL
+    const notify = () => toast.success(host, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+    });
     return (
         <Box sx={ { flexGrow: 1 } } displayPrint={ 'none' }>
             <AppBar position="static" color={ `warning` }>
@@ -61,7 +74,7 @@ export function AppHeaderBreadcrump() {
                             </Box>
                         </Button>
                     </Box>
-                    <small> { host === 'http://localhost:3000' && host } </small>
+                    <small onClick={ notify }> { host === 'http://localhost:3000' && host } </small>
                     <strong className='text-md text-wrap'>
 
                         * В таблице указаны расчетные данные.<br />
