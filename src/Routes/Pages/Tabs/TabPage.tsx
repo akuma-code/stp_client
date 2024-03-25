@@ -1,29 +1,54 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useEffect, useMemo } from 'react'
 import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useInfiniteQuery, useQuery } from 'react-query';
+import { GetPartialStpDataPromise, GetStpDataPromise, LazyStpData } from '../../../Components/StpTable/FullTable';
+import { MemoStpTable, StpData } from '../../../Components/StpTableView/StpDataTable';
+import { useIdSelector } from '../../../Hooks/useIdSelector';
+import { SuspenseLoad } from '../../../Components/UI/SuspenseLoad';
+import { useAppContext } from '../../../Hooks/useStoresContext';
+import { useStpFilter } from '../../../Hooks/useCompare';
+import { ComparePage } from '../ComparePage';
+import { _log } from '../../../Helpers/helpersFns';
 type TabPageProps = PropsWithChildren & {
 
 }
 
 export const TabPage: React.FC<TabPageProps> = (props) => {
+    const {
+        data,
+
+    } = useQuery('saved_stp_data', GetStpDataPromise,)
+    const {
+        data: data2,
+
+    } = useInfiniteQuery('saved_stp_data_cursor', ({ pageParam }) => GetPartialStpDataPromise({ itemsCount: pageParam }), {
+        getNextPageParam: (last, pages) => last.nextCursor
+    })
+
+    _log(data2?.pages)
+    const { StpStore, query, filterParams } = useAppContext()
+    // const filtered = useStpFilter(data, query, filterParams)
+    const [selected, action] = useIdSelector()
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
+
     return (
         <Box sx={ { bgcolor: 'background.paper' } }>
-            <AppBar position="static" color='warning'>
+            <AppBar position="static" color='info'>
                 <Tabs
                     value={ value }
                     onChange={ handleChange }
                     indicatorColor="primary"
                     textColor="primary"
-                    variant="fullWidth"
+                    variant="standard"
                     sx={ { [`& .MuiTab-root`]: { fontWeight: 'bolder' } } }
 
                 >
@@ -33,13 +58,22 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
                 </Tabs>
             </AppBar >
             <React.Fragment
-            // onChangeIndex={handleChangeIndex}wwwwwwwwwwwwww
+
             >
                 <TabPanel value={ value } index={ 0 } >
-                    Item One
+                    <SuspenseLoad loadText='data loading...'>
+                        { data &&
+                            <MemoStpTable
+
+                                items={ data }
+                                selectedItems={ selected }
+                                selectorActions={ action }
+                            />
+                        }
+                    </SuspenseLoad>
                 </TabPanel>
                 <TabPanel value={ value } index={ 1 } >
-                    Item Two
+                    <ComparePage />
                 </TabPanel>
                 <TabPanel value={ value } index={ 2 } >
                     Item Three
@@ -68,8 +102,8 @@ function TabPanel(props: TabPanelProps) {
             { ...other }
         >
             { value === index && (
-                <Box sx={ { p: 3 } }>
-                    <Typography>{ children }</Typography>
+                <Box sx={ { p: 1 } }>
+                    { children }
                 </Box>
             ) }
         </div>

@@ -8,11 +8,28 @@ import { apiRoute, proxyRoute } from "../../Routes/routePath";
 
 import { dataExtractor } from "../../Hooks/useQueryFetch";
 import { FetchedData, stpBackup_128 } from "./Data/data_spreadsheet";
+import { StpData } from "../StpTableView/StpDataTable";
 
-export function GetStpData(): StpItem[] {
-    const data = table_data_base.concat(table_data_BrGr)
+export async function GetStpDataPromise() {
+    const stps = stpBackup_128.map(i => dataExtractor<FetchedData>(i))
+    const stpdata: StpData[] = stps.map((item, idx) => ({ ...item, id: idx + 1 }))
 
-    return data
+    return stpdata
+}
+export async function GetPartialStpDataPromise({ itemsCount = 30 }) {
+    let cursor = 0
+    let nextCursor = cursor + itemsCount
+    const stps = stpBackup_128.map(i => dataExtractor<FetchedData>(i))
+    const stpdata: StpData[] = stps.map((item, idx) => ({ ...item, id: idx + 1 }))
+    const s_data = (s: number, e: number) => {
+        const sliced = stpdata.slice(s, e)
+        const c = cursor
+        const nextC = c + itemsCount
+        return { data: sliced, cursor: c, nextCursor: nextC }
+    }
+    return s_data(cursor, nextCursor)
+    // const sliced = stpdata.slice(cursor, nextCursor)
+    // return { data: sliced, nextCursor }
 }
 
 export async function LazyStpData() {

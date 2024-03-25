@@ -27,7 +27,7 @@ export const appRoutes: RouteObject[] = [
         children: [
             {
                 index: true,
-                element: <OverView />,
+                element: <TabPage />,
                 loader: async ({ request, params }) => {
                     const lazy_data = await LazyStpData()
                     const data = lazy_data.map((item, idx) => ({ ...item, id: idx + 1 }))

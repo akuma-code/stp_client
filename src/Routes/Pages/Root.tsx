@@ -20,20 +20,20 @@ export const Root: React.FC<RootProps> = () => {
 
     const { data, isLoadingError, error, isError, isSuccess } = useQuery('saved_stp_data', LazyStpData)
     // const [tab, save] = useLs<{ version: string }>('tab_vers')
-    const notify = () => toast.success(`data loaded: ${data?.length}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-    });
     useEffect(() => {
+        const notify = () => toast.success<string>(`Данные загружены успешно, элементов: ${data?.length}`, {
+            // position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
         if (isSuccess) notify()
-    })
+    }, [data?.length, isSuccess])
     return (
 
 
@@ -43,14 +43,15 @@ export const Root: React.FC<RootProps> = () => {
 
 
             <Outlet />
-            <AppBar position="fixed" sx={ { bottom: 10, top: 'auto', height: 40 } } >
+            {/* <AppBar position="fixed" sx={ { bottom: 10, top: 'auto', height: 40 } } >
                 <Toolbar>
                     <FooterText />
                 </Toolbar>
             </AppBar>
-            <Toolbar />
-            <ToastContainer position="top-center"
-                autoClose={ 5000 }
+            <Toolbar /> */}
+            <ToastContainer
+                position="top-left"
+                autoClose={ 3000 }
                 hideProgressBar={ false }
                 newestOnTop
                 closeOnClick
