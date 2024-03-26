@@ -10,3 +10,9 @@ export type FiltersParams = {
     depth: number[],
     cams: number[]
 }
+
+export type CursorRespone<T, C = number> = {
+    data: T
+    prevCursor?: C
+    nextCursor?: C
+}

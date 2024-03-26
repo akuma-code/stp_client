@@ -22,7 +22,7 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
     // const { data, } = useQuery({ queryKey: ['saved_stp_data'], queryFn: GetStpDataPromise },)
     const [p, setPage] = useState(0)
 
-    const { data, fetchNextPage, isFetchingNextPage, fetchPreviousPage, hasNextPage, isSuccess } = useLoadMore()
+    const queryContext = useLoadMore()
 
     // const {
     //     data: list,
@@ -48,13 +48,15 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
 
     const handleNext = () => {
         setPage(prev => prev + 1)
-        fetchNextPage()
+        queryContext.fetchNextPage()
     }
     const handlePrev = () => {
         setPage(prev => Math.max(0, 0))
-        fetchPreviousPage()
+        queryContext.fetchPreviousPage()
     }
-    console.log('list', data.pages)
+
+    const current_page = useMemo(() => queryContext?.data?.pages[p]?.data || [], [p, queryContext?.data?.pages])
+    console.log('list', queryContext.data)
     return (
         <Box sx={ { bgcolor: 'background.paper' } }>
             <AppBar position="static" color='info'>
@@ -78,7 +80,7 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
                     >load first page
                     </Button>
                     <Button
-                        disabled={ !hasNextPage || isFetchingNextPage }
+                        disabled={ !queryContext.hasNextPage || queryContext.isFetchingNextPage }
                         onClick={ handleNext }
                     >LoadNext { p + 1 }
                     </Button>
@@ -88,11 +90,12 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
                 <TabPanel value={ value } index={ 0 } >
                     <SuspenseLoad loadText='data loading...'>
                         {
-                            data && data.pages &&
+                            queryContext.isSuccess &&
+
 
                             <MemoStpTable
                                 key={ _ID() }
-                                items={ data.pages.map((page: { data: StpData[] }) => page.data) }
+                                items={ current_page }
                                 selectedItems={ selected }
                                 selectorActions={ action }
                             />
