@@ -47,13 +47,13 @@ type StpTableProps = {
     selectorActions: SelectorActions
 }
 export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, selectorActions }) => {
-    console.time('renderTime:')
+    // console.time('renderTime:')
     const { filterParams, select: s } = useAppContext()
     const { clear, isSelected, remove, select } = selectorActions
     // const [selectedItems, select] = useState<number[]>([])
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const [dense, setDense] = useState(true);
     const [RPP, setRowsPerPage] = useState(-1);
     // const sorted = useCombineFilterSort(items, query, filterParams, order, orderBy) as unknown as StpData[]
@@ -119,21 +119,22 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
     const visibleRows = useMemo(
         () => {
             // console.log('loading: ', loading)
-            const sliced = sorted.slice(
+            const sliced = items.slice(
                 page * RPP,
                 page * RPP + RPP + 1)
-            console.log('sliced', sliced)
+            // console.log('sliced', sliced)
+
             return sliced as unknown as StpData[]
         },
-        [RPP, page, sorted]
+        [RPP, items, page]
     );
     useEffect(() => {
         s(selectedItems)
     }, [s, selectedItems])
 
 
-    console.count("RENDER!")
-    console.timeEnd("renderTime:")
+    // console.count("RENDER!")
+    // console.timeEnd("renderTime:")
     return (
 
         <Box sx={ { width: '100%', height: '100%' } }>
@@ -172,7 +173,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                         <TableBody>
 
                             {
-                                visibleRows.map((row, index) =>
+                                sorted.map((row, index) =>
                                     <StpTableRow
                                         key={ row.name }
                                         row_number={ index }
@@ -203,7 +204,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                 <StpTableFooter
                     dense={ dense }
                     NumSelected={ selectedItems.length }
-                    NumFiltered={ visibleRows.length }
+                    NumFiltered={ sorted.length }
                     isFiltersOn={ isFiltersOn }
                     toggleDense={ handleChangeDense }
                     page={ page }
@@ -298,7 +299,7 @@ function StpTableFooter(props: {
                 onRowsPerPageChange={ handleChangeRowsPerPage }
 
             /> */}
-            <Pagination count={ NumFiltered } page={ page } onChange={ handleChangePage } />
+            {/* <Pagination count={ NumFiltered } page={ page } onChange={ handleChangePage } /> */ }
         </Stack>)
 }
 

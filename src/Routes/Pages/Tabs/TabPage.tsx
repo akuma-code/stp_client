@@ -1,36 +1,41 @@
-import React, { PropsWithChildren, useEffect, useMemo } from 'react'
-import { useTheme } from '@mui/material/styles';
+import { Button, ButtonGroup } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useInfiniteQuery, useQuery } from 'react-query';
-import { GetPartialStpDataPromise, GetStpDataPromise, LazyStpData } from '../../../Components/StpTable/FullTable';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import { useTheme } from '@mui/material/styles';
+import React, { PropsWithChildren, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { GetStpDataPromise } from '../../../Components/StpTable/FullTable';
 import { MemoStpTable, StpData } from '../../../Components/StpTableView/StpDataTable';
-import { useIdSelector } from '../../../Hooks/useIdSelector';
 import { SuspenseLoad } from '../../../Components/UI/SuspenseLoad';
+import { useIdSelector } from '../../../Hooks/useIdSelector';
+import { useInfiniteLoad, useLoadMore } from "../../../Hooks/useInfiniteLoad";
 import { useAppContext } from '../../../Hooks/useStoresContext';
-import { useStpFilter } from '../../../Hooks/useCompare';
 import { ComparePage } from '../ComparePage';
-import { _log } from '../../../Helpers/helpersFns';
+import { _ID } from '../../../Helpers/helpersFns';
 type TabPageProps = PropsWithChildren & {
 
 }
 
 export const TabPage: React.FC<TabPageProps> = (props) => {
-    const {
-        data,
+    // const { data, } = useQuery({ queryKey: ['saved_stp_data'], queryFn: GetStpDataPromise },)
+    const [p, setPage] = useState(0)
 
-    } = useQuery('saved_stp_data', GetStpDataPromise,)
-    const {
-        data: data2,
+    const { data, fetchNextPage, isFetchingNextPage, fetchPreviousPage, hasNextPage, isSuccess } = useLoadMore()
 
-    } = useInfiniteQuery('saved_stp_data_cursor', ({ pageParam }) => GetPartialStpDataPromise({ itemsCount: pageParam }), {
-        getNextPageParam: (last, pages) => last.nextCursor
-    })
+    // const {
+    //     data: list,
+    //     fetchNextPage, fetchPreviousPage
+    // } = useInfiniteQuery('saved_stp_data_cursor',
+    //     ({ pageParam }) => GetPartialStpDataPromise({ itemsCount: pageParam }),
+    //     {
+    //         getNextPageParam: (last, pages) => last.nextCursor ?? false,
+    //         getPreviousPageParam: (prev) => prev.prevCursor ?? false
+    //     })
+    // const adata = data ? StpApiFetch(data) : StpApiFetch([])
 
-    _log(data2?.pages)
+    // console.log('adata', adata(3, 10))
     const { StpStore, query, filterParams } = useAppContext()
     // const filtered = useStpFilter(data, query, filterParams)
     const [selected, action] = useIdSelector()
@@ -40,6 +45,16 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
         setValue(newValue);
     };
 
+
+    const handleNext = () => {
+        setPage(prev => prev + 1)
+        fetchNextPage()
+    }
+    const handlePrev = () => {
+        setPage(prev => Math.max(0, 0))
+        fetchPreviousPage()
+    }
+    console.log('list', data.pages)
     return (
         <Box sx={ { bgcolor: 'background.paper' } }>
             <AppBar position="static" color='info'>
@@ -56,19 +71,33 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
                     <Tab label="Сравнить" { ...a11yProps(1) } />
 
                 </Tabs>
-            </AppBar >
-            <React.Fragment
+                <ButtonGroup orientation='horizontal'>
 
-            >
+                    <Button
+                        onClick={ handlePrev }
+                    >load first page
+                    </Button>
+                    <Button
+                        disabled={ !hasNextPage || isFetchingNextPage }
+                        onClick={ handleNext }
+                    >LoadNext { p + 1 }
+                    </Button>
+                </ButtonGroup>
+            </AppBar >
+            <React.Fragment>
                 <TabPanel value={ value } index={ 0 } >
                     <SuspenseLoad loadText='data loading...'>
-                        { data &&
-                            <MemoStpTable
+                        {
+                            data && data.data &&
 
-                                items={ data }
+                            <MemoStpTable
+                                key={ _ID() }
+                                items={ data.pages.map((page: { data: StpData[] }) => page.data) }
                                 selectedItems={ selected }
                                 selectorActions={ action }
                             />
+
+
                         }
                     </SuspenseLoad>
                 </TabPanel>
@@ -76,7 +105,7 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
                     <ComparePage />
                 </TabPanel>
                 <TabPanel value={ value } index={ 2 } >
-                    Item Three
+
                 </TabPanel>
             </React.Fragment>
         </Box>

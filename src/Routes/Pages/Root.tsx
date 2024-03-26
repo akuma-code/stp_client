@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useEffect } from "react"
 import { Outlet } from "react-router-dom"
 import { AppHeaderBreadcrump, AppToolbarHeader } from "./AppBar"
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
 import { apiRoute, proxyRoute } from "../routePath"
 import { LazyStpData } from "../../Components/StpTable/FullTable"
 import { Bounce, ToastContainer, toast } from "react-toastify"
@@ -18,10 +18,10 @@ function FooterText() {
 
 export const Root: React.FC<RootProps> = () => {
 
-    const { data, isLoadingError, error, isError, isSuccess } = useQuery('saved_stp_data', LazyStpData)
+    // const { data, isLoadingError, error, isError, isSuccess } = useQuery('saved_stp_data', LazyStpData)
     // const [tab, save] = useLs<{ version: string }>('tab_vers')
     useEffect(() => {
-        const notify = () => toast.success<string>(`Данные загружены успешно, элементов: ${data?.length}`, {
+        const notify = () => toast.success<string>(`Данные загружены успешно`, {
             // position: "bottom-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -32,8 +32,10 @@ export const Root: React.FC<RootProps> = () => {
             theme: "light",
             transition: Bounce,
         });
-        if (isSuccess) notify()
-    }, [data?.length, isSuccess])
+        //     if (isSuccess) notify()
+        // 
+    }, []
+    )
     return (
 
 

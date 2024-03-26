@@ -2,23 +2,24 @@ import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { table_data_base } from "./Components/StpTable/Data/data_base";
 import { StpStore } from "./Context/StpStore";
-import { QueryClient, QueryClientProvider, useQuery, } from "react-query";
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { QueryClient, QueryClientProvider, useQuery, } from "@tanstack/react-query";
+
 import { AppContext } from "./Hooks/useStoresContext";
 import { FiltersParams, } from "./Interfaces/Types";
 import { router } from "./Routes/AppRouter";
 import { apiRoute, proxyRoute, routePaths } from "./Routes/routePath";
 import { AppToolbarHeader } from "./Routes/Pages/AppBar";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 
 const stores = { StpStore: new StpStore(table_data_base) }
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
-      keepPreviousData: true,
-      cacheTime: 1000 * 60 * 60 * 12,
+
+
 
     },
   },
@@ -49,7 +50,7 @@ function App() {
       filterFn: setFilters
     } }
     >
-      <QueryClientProvider client={ queryClient } contextSharing>
+      <QueryClientProvider client={ queryClient } >
 
         <RouterProvider
           router={ router }
@@ -61,7 +62,7 @@ function App() {
 
         />
 
-        <ReactQueryDevtools initialIsOpen={ false } position="bottom-left" />
+        <ReactQueryDevtools initialIsOpen={ false } position="bottom" />
       </QueryClientProvider>
     </AppContext.Provider>
   );

@@ -1,23 +1,28 @@
-import { QueryMeta, UseQueryOptions, UseQueryResult, useQuery } from "react-query";
-import { api } from "../HTTP/mainApi";
-import { apiRoute, proxyRoute } from "../Routes/routePath";
+import { QueryMeta, UseQueryOptions, UseQueryResult, useQuery } from "@tanstack/react-query";
 import { STP } from "../Components/StpTable/StpFactory/StpFactory";
 import { StpItem } from "../Components/StpTable/TableObjects";
-import stpMap, { FetchedData } from "../Components/StpTable/Data/data_spreadsheet";
-import { _isArr, _log } from "../Helpers/helpersFns";
-_log(stpMap.size)
+import { api } from "../HTTP/mainApi";
+import { _isArr } from "../Helpers/helpersFns";
+import { apiRoute, proxyRoute } from "../Routes/routePath";
+
 
 export type SSResponse = {
     stps: [string, ...number[]][]
     fields: string[]
 }
-type QueryKeyT = [string, object | undefined];
+export type QueryKeyT = [string, object | undefined];
 type IFetcherParams = {
     queryKey: QueryKeyT
     pageParam?: object,
     meta?: QueryMeta
 }
-export const fetcher = <T>({ queryKey, pageParam }: IFetcherParams): Promise<T> => {
+export interface GetInfiniteRowsInterface<T> {
+    nextCursor?: number;
+    prevCursor?: number;
+    data: T;
+
+}
+export const fetcher = <T>({ queryKey, pageParam }: IFetcherParams) => {
     const [url, params] = queryKey;
     return api
         .get<T>(url, { params: { ...params, pageParam } })
@@ -32,9 +37,9 @@ export const useFetch: FetchFnType = <T>(
 ) => {
 
     const query = useQuery<T, Error, T, QueryKeyT>(
-        [url!, params],
-        ({ queryKey, meta, pageParam }) => fetcher<T>({ queryKey, meta }),
         {
+            queryKey: [url!, params],
+            queryFn: ({ queryKey, meta }) => fetcher<T>({ queryKey, meta }),
             enabled: !!url,
             ...config,
         }
@@ -46,7 +51,7 @@ type QueryFetchOptions = {
     forbid_fetch?: boolean
 
 }
-export function useQueryFetch(url: string | null = proxyRoute(apiRoute.stp_db)) {
+export function useQueryGoogleFetch(url: string | null = proxyRoute(apiRoute.stp_db)) {
     const { data, error, isError, isLoading } = useFetch<SSResponse>(url)
 
 
@@ -54,7 +59,7 @@ export function useQueryFetch(url: string | null = proxyRoute(apiRoute.stp_db)) 
     let stp: StpItem[] = []
     if (data) {
         if (data.stps.length !== 12) return []
-        stp = data.stps.map(s => dataExtractor(s)!)
+        stp = data.stps.map(s => dataExtractor(s as TStpData)!)
         // console.log('query stp', stp)
     }
 
@@ -81,7 +86,7 @@ export const isValidFetchedData = <T extends TStpData>(data: unknown): data is T
         return false
     }
 }
-export const dataExtractor = <T extends Array<any>>(fetched_data: T) => {
+export const dataExtractor = <T extends TStpData>(fetched_data: T) => {
 
     const [name, ...restProps] = fetched_data
     const [Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight] = restProps
@@ -93,3 +98,4 @@ export const dataExtractor = <T extends Array<any>>(fetched_data: T) => {
     return stp.stpItem
 
 }
+
