@@ -88,7 +88,7 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
                 <TabPanel value={ value } index={ 0 } >
                     <SuspenseLoad loadText='data loading...'>
                         {
-                            data && data.data &&
+                            data && data.pages &&
 
                             <MemoStpTable
                                 key={ _ID() }
