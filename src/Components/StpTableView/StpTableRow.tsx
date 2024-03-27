@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { TableCellProps } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import React, { useCallback, useMemo } from 'react';
 import { Stack } from '@mui/material';
@@ -35,30 +35,45 @@ export type StpRowProps = {
     isSelected: boolean
 };
 
+
+function NameCell(props: { name: string }) {
+    return (<Box component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } alignItems={ 'center' }>
+
+        { props.name }
+        <FormulaTTButton stp_name={ (props.name as string) } />
+    </Box>);
+}
+
+
 export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, row_data, isSelected = false }) => {
 
 
     const endSign = useCallback((key: keyof StpData) => key === 'weight' ? ' кг/кв.м' : key === 'depth' ? ' мм' : "", [])
     const numericData = useCallback((key: keyof StpData) => row_data[key], [row_data])
     // const selectedRow = isSelected(row_data.id)
-    const clickCell = useCallback((e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => handleClick(e, row_data.id), [handleClick, row_data.id])
-    const NumericCells = useMemo(() => {
+    const clickCell = useCallback((e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) =>
+        handleClick(e, row_data.id), [handleClick, row_data.id])
 
+    // const NumericCells = useMemo(() => {
+    //     const cells = () =>
+    //         <React.Fragment>
 
+    //             {
+    //                 stpFields.map(cell =>
+    //                     // <TableCell align="center" key={ cell }>
+    //                     //     { numericData(cell) }{ endSign(cell) }
+    //                     // </TableCell>
 
-        const cells = () =>
-            <React.Fragment>
+    //                     <DataCell key={ cell }
+    //                         primary={ numericData(cell) }
+    //                         secondary={ endSign(cell) }
+    //                         cellProps={ { align: 'center' } }
+    //                     />
+    //                 ) }
+    //         </React.Fragment>
 
-                {
-                    stpFields.map(cell =>
-                        <TableCell align="center" key={ cell }>
-                            { numericData(cell) }{ endSign(cell) }
-                        </TableCell>
-                    ) }
-            </React.Fragment>
-
-        return cells
-    }, [endSign, numericData])
+    //     return cells
+    // }, [endSign, numericData])
     return (
 
 
@@ -94,6 +109,29 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
                         id={ `enhanced-table-${row_number}-check` } />
                 </Box>
             </TableCell>
+            {/* <DataCell
+                primary={ <Box
+                    component={ Stack }
+                    direction={ 'row' }
+                    justifyContent={ 'space-between' }
+                    alignItems={ 'center' }
+                    width={ '100%' }
+                    sx={ {
+                        [`& .MuiIconButton-root`]: { visibility: 'hidden' },
+                        [`& :hover>.MuiIconButton-root `]: { visibility: 'visible' },
+                    } }
+                >
+
+                    { row_data.name }
+                    <FormulaTTButton stp_name={ row_data.name as string } />
+                </Box> }
+                // secondary={ <FormulaTTButton stp_name={ row_data.name as string } /> }
+                cellProps={ {
+                    padding: 'none',
+                    align: 'justify',
+
+                } }
+            /> */}
             <TableCell
                 component="th"
                 id={ `enhanced-table-${row_number}-name` }
@@ -106,25 +144,41 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
                 } }
 
             >
-                <Box component={ Stack } direction={ 'row' } justifyContent={ 'space-between' } alignItems={ 'center' }>
 
-                    { row_data.name }
-                    <FormulaTTButton stp_name={ row_data.name as string } />
-                </Box>
+                <NameCell name={ row_data.name } />
             </TableCell>
             <TableCell align='right'>
                 <TagsAvatarGroup tags={ row_data.tags as unknown as StpTag[] } />
             </TableCell>
             <TableCell align='center' sx={ { display: 'flex', justifyContent: 'center' } }>
-                { row_data.cams === 1 && <AvatarS2 wh={ 34 } /> }
-                { row_data.cams === 2 && <AvatarS3 wh={ 34 } /> }
-                {/* <strong>{ row_data.cams } </strong> */ }
+                {
+                    row_data.cams === 1
+                        ? <AvatarS2 wh={ 34 } />
+                        : row_data.cams === 2
+                            ? <AvatarS3 wh={ 34 } />
+                            : null
+                }
             </TableCell>
             {/* <MemedCells cell={ row_data } /> */ }
             {
                 // NumericCells
             }
-            <NumericCells />
+            <React.Fragment>
+
+                {
+                    stpFields.map(cell =>
+                        // <TableCell align="center" key={ cell }>
+                        //     { numericData(cell) }{ endSign(cell) }
+                        // </TableCell>
+
+                        <DataCell key={ cell }
+                            primary={ numericData(cell) }
+                            secondary={ endSign(cell) }
+                            cellProps={ { align: 'center' } }
+                        />
+                    ) }
+            </React.Fragment>
+            {/* <NumericCells /> */ }
             {
                 // stpFields.map(cell =>
                 //     <TableCell align="center" component={ 'td' } key={ cell }>{ row_data[cell] }{ endSign(cell) }</TableCell>
@@ -147,3 +201,24 @@ const MemedCells = React.memo(({ cell }: { cell: StpData }) => {
 })
 
 StpTableRow.displayName = '__Row_StpData'
+type DataCellProps = {
+    primary: React.ReactNode
+    secondary?: React.ReactNode
+    action?: (...args: any) => void
+    cellProps?: TableCellProps
+}
+
+const DataCell: React.FC<DataCellProps> = ({ primary, secondary, action, cellProps }) => {
+
+    const handleClick = () => {
+        action && action()
+    }
+    return (
+        <TableCell onClick={ handleClick } align={ cellProps?.align ? cellProps.align : 'center' } >
+            <Stack direction={ 'row' } justifyContent={ 'space-between' }>
+
+                { primary }
+                { secondary ? secondary : null }
+            </Stack>
+        </TableCell>)
+}

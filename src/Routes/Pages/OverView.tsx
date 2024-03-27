@@ -1,13 +1,16 @@
-import { Paper } from '@mui/material'
-import { useEffect, useMemo } from 'react'
+
+import { Button, Paper } from '@mui/material'
+import { useMemo } from 'react'
 import { Outlet, useLoaderData } from 'react-router-dom'
 import { MemoStpTable, StpData } from '../../Components/StpTableView/StpDataTable'
 import { SuspenseLoad } from '../../Components/UI/SuspenseLoad'
 import { useStpFilter } from '../../Hooks/useCompare'
-import { useQueryFetch } from '../../Hooks/useQueryFetch'
+import { useQueryGoogleFetch } from '../../Hooks/useQueryFetch'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { useIdSelector } from '../../Hooks/useIdSelector'
 import { apiRoute, proxyRoute } from '../routePath'
+
+import { toast } from 'react-toastify'
 
 
 const isJson = (i: any) => JSON.parse(i) ? true : false
@@ -15,8 +18,9 @@ export const OverView = () => {
     const { StpStore, query, filterParams, select } = useAppContext()
     const [selected, action] = useIdSelector()
     const string_data = useLoaderData() as string
-    const { error, isError, isLoading, stp } = useQueryFetch(proxyRoute(apiRoute.stp_db))
-    console.log('stp: ', stp.length)
+
+    // const { error, isError, isLoading, stp } = useQueryFetch(proxyRoute(apiRoute.stp_db))
+
     // const ssd = stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
     // console.log('ss', ss)
 
@@ -27,6 +31,8 @@ export const OverView = () => {
         const res: StpData[] = isJson(string_data) ? JSON.parse(string_data) : []
 
         StpStore.loadTable(res)
+
+
         return res
     }, [StpStore, string_data])
 
@@ -47,15 +53,17 @@ export const OverView = () => {
 
                 //     <MemoStpTable preload_data={ memodata } />
                 //     :
-                <SuspenseLoad loadText='Данные загружаются...'>
+                <>
 
-                    <MemoStpTable
-                        items={ filtered }
-                        selectedItems={ selected }
-                        selectorActions={ action }
-                    />
-                    <Outlet />
-                </SuspenseLoad>
+                    <SuspenseLoad loadText='Данные по стеклопакетам загружаются...'>
+                        <MemoStpTable
+                            items={ filtered }
+                            selectedItems={ selected }
+                            selectorActions={ action }
+                        />
+
+                    </SuspenseLoad>
+                </>
             }
         </Paper>
     )

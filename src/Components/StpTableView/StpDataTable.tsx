@@ -1,13 +1,12 @@
 import Box from '@mui/material/Box';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Paper from '@mui/material/Paper';
-import Switch from '@mui/material/Switch';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import React, { memo, useCallback, useState } from 'react';
+
+import React, { memo, useCallback, useEffect, useState } from 'react';
 
 import { Button, Stack, alpha } from '@mui/material';
 import { useAppContext } from '../../Hooks/useStoresContext';
@@ -34,7 +33,12 @@ import { StpTableRow } from './StpTableRow';
 export type StpData = StpItem & { id: number }
 export type Order = 'asc' | 'desc';
 
-
+export type StpViewOptions = {
+    order: Order
+    orderBy: keyof StpData
+    dense: boolean
+    RPP: number
+}
 
 type StpTableProps = {
     items: StpData[]
@@ -42,18 +46,18 @@ type StpTableProps = {
     selectorActions: SelectorActions
 }
 export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, selectorActions }) => {
-    console.time('renderTime:')
-    const { filterParams } = useAppContext()
+    const { filterParams, select: s } = useAppContext()
     const { clear, isSelected, remove, select } = selectorActions
-    // const [selectedItems, select] = useState<number[]>([])
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
-    const [page, setPage] = useState(0);
-    const [dense, setDense] = useState(true);
-    const [RPP, setRowsPerPage] = useState(-1);
+    const sorted = useCompare(items, order, orderBy)
+    // console.time('renderTime:')
+    // const [selectedItems, select] = useState<number[]>([])
+    // const [page, setPage] = useState(1);
+    // const [dense, setDense] = useState(true);
+    // const [RPP, setRowsPerPage] = useState(-1);
     // const sorted = useCombineFilterSort(items, query, filterParams, order, orderBy) as unknown as StpData[]
 
-    const sorted = useCompare(items, order, orderBy)
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
         property: keyof StpData,
@@ -88,7 +92,11 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
 
     }, [remove, select, selectedItems]);
 
+    useEffect(() => {
+        s(selectedItems)
+    }, [s, selectedItems])
 
+    const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0
     // const handleChangePage = (event: unknown, newPage: number) => {
     //     setPage(newPage);
     // };
@@ -98,42 +106,38 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
     //     setPage(0);
     // };
 
-    const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDense(event.target.checked);
-    };
+    // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setDense(event.target.checked);
+    // };
 
     // const isSelected = useCallback((id: number) => selectedItems.includes(id), [selectedItems]);
-    const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0
 
 
     // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page >= 0
-        ? Math.max(0, (1 + page) * RPP - items!.length)
-        : 1;
+    // const emptyRows = page >= 0
+    //     ? Math.max(0, (1 + page) * RPP - items!.length)
+    //     : 1;
 
     // const visibleRows = useMemo(
     //     () => {
     //         // console.log('loading: ', loading)
-    //         const sliced = sorted.slice(
+    //         const sliced = items.slice(
     //             page * RPP,
     //             page * RPP + RPP + 1)
-    //         console.log('sliced', sliced)
+    //         // console.log('sliced', sliced)
+
     //         return sliced as unknown as StpData[]
     //     },
-    //     [RPP, page, sorted]
+    //     [RPP, items, page]
     // );
-    // useEffect(() => {
-    //     // select(checkedCells)
-    //     // return () => setCheckedCells([])
-    // }, [checkedCells, select])
 
 
-    console.count("RENDER!")
-    console.timeEnd("renderTime:")
+    // console.count("RENDER!")
+    // console.timeEnd("renderTime:")
     return (
 
         <Box sx={ { width: '100%', height: '100%' } }>
-            <Paper sx={ { mb: 2 } } elevation={ 2 }>
+            <Paper sx={ { mb: 1 } } elevation={ 2 }>
 
                 <StpTableToolbar numFiltered={ sorted.length } />
 
@@ -141,14 +145,17 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                     overflowY: 'auto',
                     maxHeight: '70vh',
                     position: 'relative'
+
+
                 } } >
                     <Table
                         stickyHeader
                         aria-labelledby="tableTitle"
-                        size={ dense ? 'small' : 'medium' }
+                        size={ 'small' }
                         padding='normal'
                         sx={ {
                             minWidth: 750,
+
                         } }
                     >
                         <StpTableHeader
@@ -161,7 +168,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                         />
 
 
-                        {/* <Suspense fallback={ <div className='text-center'>Table is LOADING</div> }> */ }
+
                         <TableBody>
 
                             {
@@ -175,79 +182,18 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                                     />
                                 ) }
 
-                            {
-                                emptyRows > 0 && (
-                                    <TableRow
-                                        style={ {
-                                            height: 53 * emptyRows,
-                                        } }
-                                    >
-                                        <TableCell colSpan={ 4 } />
-                                    </TableRow>
-                                )
-                            }
                         </TableBody>
-                        {/* </Suspense> */ }
                     </Table>
-
-
-
                 </TableContainer>
 
-                <Stack direction={ 'row' } maxHeight={ 55 } >
 
+                <StpTableFooter
+                    dense={ true }
+                    NumSelected={ selectedItems.length }
+                    NumFiltered={ sorted.length }
+                    isFiltersOn={ isFiltersOn }
+                />
 
-
-                    <Stack sx={ {
-                        bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
-                        justifyContent: 'space-between', color: 'whitesmoke'
-                    } }
-                        // component={ Paper } elevation={ 2 }
-                        flexGrow={ 1 } direction={ 'row' } alignItems={ 'center' } px={ 2 }
-                    >
-
-                        {
-                            //__FOOTER_________________
-                        }
-                        <Box
-                            flexGrow={ 1 }
-                            gap={ 2 }
-                            component={ Stack }
-                            flexDirection={ 'row' }
-                            alignItems={ 'center' }
-                            p={ 1 }
-                        >
-                            Выбрано для сравнения: { selectedItems.length } из { sorted.length }
-                            <Button
-                                color='info'
-                                variant='contained'
-                                startIcon={ <MdCompare /> }
-                                size='small'
-                                sx={ {
-                                    visibility: selectedItems.length > 0 ? 'visible' : 'hidden',
-                                    margin: 'dense'
-                                } }
-
-                            >
-                                <MuiNavLink to={ routePaths.compare } title={ 'Сравнить' } >Сравнить</MuiNavLink>
-                            </Button>
-
-                        </Box>
-                        { isFiltersOn &&
-                            ` Совпадений найдено: ${sorted.length}`
-                            // <Box>
-                            // </Box>
-                        }
-                        <FormControlLabel
-
-                            control={ <Switch checked={ dense } onChange={ handleChangeDense } id='dense_checkbox' /> }
-                            label="Уменьшить отступы"
-                            sx={ { ml: 4, alignContent: 'center' } }
-                        />
-                    </Stack>
-
-                </Stack>
-                {/* </SuspenseLoad> */ }
             </Paper>
         </Box>
 
@@ -255,13 +201,94 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
 }
 
 StpDataTable.displayName = '____StpTable'
-export const MemoStpTable = memo(({ items, selectorActions, selectedItems }: StpTableProps) => StpDataTable({ items, selectorActions, selectedItems }))
+export const MemoStpTable = memo((props: StpTableProps) => StpDataTable(props))
 MemoStpTable.displayName = "___MemoizedDataTable"
 
 
-const DataError = () => {
+function EmptyRowsPlaceholder(props: { emptyRows: number }): React.ReactNode {
+    return props.emptyRows > 0 && (
+        <TableRow
+            style={ {
+                height: 53 * props.emptyRows,
+            } }
+        >
+            <TableCell colSpan={ 4 } />
+        </TableRow>
+    );
+}
+
+function StpTableFooter(props: {
+    NumSelected: number,
+    NumFiltered: number,
+    isFiltersOn: boolean,
+    dense?: boolean,
+    page?: number,
+    rows_per_page?: number,
+    handleChangePage?: (event: unknown, newPage: number) => void
+    handleChangeRowsPerPage?: (event: React.ChangeEvent<HTMLInputElement>) => void
+    toggleDense?: (event: React.ChangeEvent<HTMLInputElement>) => void
+}) {
+    const { NumFiltered, NumSelected, isFiltersOn, ...rest } = props
+    // const handleChangePage = (event: unknown, newPage: number) => {
+    //         setPage(newPage);
+    //     };
+
+    //     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //         setRowsPerPage(parseInt(event.target.value, 10));
+    //         setPage(0);
+    //     };
     return (
-        <div className='text-center text-xl text-red'>Table data error!!</div>
-    )
+        <Stack sx={ {
+            bgcolor: (theme) => alpha(theme.palette.primary.main, .7),
+            color: 'whitesmoke',
+            justifyContent: 'space-between',
+        } }
+            flexGrow={ 1 } direction={ 'row' } alignItems={ 'center' } px={ 2 }
+        >
+            <Box
+                flexGrow={ 1 }
+                gap={ 2 }
+                component={ Stack }
+                flexDirection={ 'row' }
+                alignItems={ 'center' }
+                p={ 1 }
+            >
+                Выбрано для сравнения: { NumSelected } из { NumFiltered }
+                <Button
+                    color='info'
+                    variant='contained'
+                    startIcon={ <MdCompare /> }
+                    size='small'
+                    sx={ {
+                        visibility: NumSelected > 0 ? 'visible' : 'hidden',
+                        margin: 'dense'
+                    } }
+
+                >
+                    <MuiNavLink to={ routePaths.compare } title={ 'Сравнить выбранные стеклопакеты' }>Сравнить</MuiNavLink>
+                </Button>
+
+            </Box>
+            { isFiltersOn &&
+                ` Совпадений найдено: ${NumFiltered}`
+                // <Box>
+                // </Box>
+            }
+            {/* <FormControlLabel
+
+                control={ <Switch checked={ dense } onChange={ toggleDense } id='dense_checkbox' /> }
+                label="Уменьшить отступы"
+                sx={ { ml: 4, alignContent: 'center' } } /> */}
+            {/* <TablePagination
+                component="div"
+                count={ NumFiltered }
+                page={ page }
+                onPageChange={ handleChangePage }
+                rowsPerPage={ rows_per_page }
+                onRowsPerPageChange={ handleChangeRowsPerPage }
+
+            /> */}
+            {/* <Pagination count={ NumFiltered } page={ page } onChange={ handleChangePage } /> */ }
+        </Stack>)
 }
 

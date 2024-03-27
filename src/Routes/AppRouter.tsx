@@ -1,14 +1,14 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 import { LazyStpData } from "../Components/StpTable/FullTable";
-import { StpData } from "../Components/StpTableView/StpDataTable";
+import { StpData, StpDataTable } from "../Components/StpTableView/StpDataTable";
 import { ComparePage } from "./Pages/ComparePage";
 import { ErrorPage } from "./Pages/ErrorPage";
 import { OverView } from "./Pages/OverView";
 import { PrintPage } from "./Pages/PrintPage";
 import { Root } from "./Pages/Root";
-import { StpIdPage } from "./Pages/StpIdPage";
 import { StpInfoPage } from "./Pages/StpInfoPage";
 import { routePaths } from "./routePath";
+import { TabPage } from "./Pages/Tabs/TabPage";
 
 
 
@@ -26,46 +26,43 @@ export const appRoutes: RouteObject[] = [
 
         children: [
             {
-                index: true,
-                element: <OverView />,
+                path: routePaths.root,
+                // index: true,
+                element: <TabPage />,
                 loader: async ({ request, params }) => {
-                    // const fetch_data = GetStpData()
-                    // const l2 = PromisedStpData()
-                    // l2.then(data => data.map((item, idx) => ({ ...item, id: idx + 1 })))
-
-
-
                     const lazy_data = await LazyStpData()
                     const data = lazy_data.map((item, idx) => ({ ...item, id: idx + 1 }))
-
-
                     console.count("Data load: ")
                     console.log(data.length)
                     return JSON.stringify(data)
                 },
-                // action: async ({ request }) => {
-                //     const data = await request.formData()
-                //     _log(data)
-                //     return data
-                // },
                 errorElement: <ErrorPage />,
+                children: [
+                    {
+                        path: routePaths.table,
+
+                    },
+                    {
+                        path: routePaths.compare,
+                        element: <ComparePage />
+                    },
+                ]
 
 
             },
 
             {
+                path: routePaths.tabs,
+                element: <TabPage />,
+                children: [
+
+                ],
+            },
+
+            {
                 path: routePaths.compare,
                 element: <ComparePage />,
-                // action: async ({ request }) => {
-                //     const data = await request.formData()
-                //     _log(request)
-                //     return data
-                // },
-                // loader: ({ request }) => {
-                //     const data = request.body
-                //     _log("loaderdata: ", data)
-                //     return data
-                // },
+
             },
             {
                 path: routePaths.export,
@@ -76,8 +73,10 @@ export const appRoutes: RouteObject[] = [
                 element: <StpInfoPage />
 
             }
-        ]
-    }
+        ],
+
+    },
+
 ]
 
 

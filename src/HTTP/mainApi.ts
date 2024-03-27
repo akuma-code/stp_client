@@ -31,7 +31,11 @@ const headerInterceptor = (config: { headers: AxiosHeaders }) => {
 
     return config
 }
-$axios.interceptors.request.use(headerInterceptor, (e) => _log("error: ", e))
+
+
+$api.interceptors.request.use(headerInterceptor, (e) => _log("error: ", e))
+
+
 export const api = {
     get: async <T>(url: string, params?: object) =>
         await $axios.get<T>(url, {
