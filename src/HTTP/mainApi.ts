@@ -5,7 +5,7 @@ import { _log } from '../Helpers/helpersFns';
 
 const host = process.env.REACT_APP_HOST_URL
 
-const $api = axios.create({
+const $axios = axios.create({
     baseURL: host,
     withCredentials: false,
     // proxy: {
@@ -16,50 +16,61 @@ const $api = axios.create({
 
 
 })
-$api.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+$axios.defaults.headers.common['Access-Control-Allow-Origin'] = host
+$axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET, OPTIONS, POST'
+$axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept'
 
 
 const headerInterceptor = (config: { headers: AxiosHeaders }) => {
-    config.headers.set('Access-Control-Allow-Origin', '*')
+    config.headers.set('Access-Control-Allow-Origin', host)
+    // config.headers.set('Access-Control-Content-Type', 'application/json, text/plain, */*')
+    config.headers.authorization = `Bearer ${Cookies.get('token') || ""}`
+    // config.headers.set('Origin', host)
     // config.headers.set('Origin', )
-    _log("config", config)
+    _log("config interceptor: ", config)
 
     return config
 }
+
+
 $api.interceptors.request.use(headerInterceptor, (e) => _log("error: ", e))
 
 
 export const api = {
     get: async <T>(url: string, params?: object) =>
-        await $api.get<T>(url, {
+        await $axios.get<T>(url, {
             headers: {
                 token: Cookies.get('token'),
                 'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS, POST'
+
+
+
             },
             withCredentials: false,
             ...params,
         }),
     post: async <T>(url: string, data: any) => {
-        return await $api.post<T>(url, data, {
+        return await $axios.post<T>(url, data, {
             headers: {
                 token: Cookies.get('token'),
             },
         });
     },
     patch: async<T>(url: string, data: any) =>
-        await $api.patch<T>(url, data, {
+        await $axios.patch<T>(url, data, {
             headers: {
                 token: Cookies.get('token'),
             },
         }),
     delete: async <T>(url: string) =>
-        await $api.delete<T>(url, {
+        await $axios.delete<T>(url, {
             headers: {
                 token: Cookies.get('token'),
             },
         }),
     head: async <T>(url: string) => {
-        await $api.head<T>(url, {
+        await $axios.head<T>(url, {
 
         })
     }

@@ -50,6 +50,7 @@ export const appRoutes: RouteObject[] = [
 
 
             },
+
             {
                 path: routePaths.tabs,
                 element: <TabPage />,

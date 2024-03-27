@@ -1,3 +1,4 @@
+
 import { Button, Paper } from '@mui/material'
 import { useMemo } from 'react'
 import { Outlet, useLoaderData } from 'react-router-dom'
@@ -8,12 +9,13 @@ import { useQueryGoogleFetch } from '../../Hooks/useQueryFetch'
 import { useAppContext } from '../../Hooks/useStoresContext'
 import { useIdSelector } from '../../Hooks/useIdSelector'
 import { apiRoute, proxyRoute } from '../routePath'
+
 import { toast } from 'react-toastify'
 
 
 const isJson = (i: any) => JSON.parse(i) ? true : false
 export const OverView = () => {
-    const { StpStore, query, filterParams } = useAppContext()
+    const { StpStore, query, filterParams, select } = useAppContext()
     const [selected, action] = useIdSelector()
     const string_data = useLoaderData() as string
 
@@ -27,13 +29,17 @@ export const OverView = () => {
         // const ssdata = ss.stp.map((item, idx) => ({ ...item, id: idx + 1, uid: _ID() }))
 
         const res: StpData[] = isJson(string_data) ? JSON.parse(string_data) : []
+
         StpStore.loadTable(res)
+
 
         return res
     }, [StpStore, string_data])
 
     const filtered = useStpFilter(memodata, query, filterParams)
-
+    useEffect(() => {
+        select(selected)
+    }, [select, selected])
     return (
         <Paper sx={ { pb: 0, m: 1, bgcolor: 'beige', height: '100%' } } elevation={ 4 }>
 
