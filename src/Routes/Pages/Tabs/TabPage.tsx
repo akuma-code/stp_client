@@ -70,27 +70,28 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
     // console.log('list', queryContext.data)
     return (
         <Box sx={ { bgcolor: 'background.paper' } }>
-            <AppBar position="static" color='info' >
-                <Stack direction={ 'row' } justifyContent={ 'space-evenly' }>
+            <SuspenseLoad loadText={ 'Данные загружаются, статус загрузки: ' + queryAll.status }>
+                <AppBar position="static" color='info' >
+                    <Stack direction={ 'row' } justifyContent={ 'space-evenly' }>
 
-                    <Tabs
-                        value={ value }
-                        onChange={ handleChange }
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="standard"
-                        sx={ { [`& .MuiTab-root`]: { fontWeight: 'bolder' } } }
+                        <Tabs
+                            value={ value }
+                            onChange={ handleChange }
+                            indicatorColor="primary"
+                            textColor="primary"
+                            variant="standard"
+                            sx={ { [`& .MuiTab-root`]: { fontWeight: 'bolder' } } }
 
-                    >
-                        <Tab label="Таблица" value={ 0 } icon={ <SvgIcon sx={ { fontSize: 20 } }><GrTable /> </SvgIcon> } iconPosition='start'
-                        //  { ...a11yProps(0) }
-                        />
-                        <Tab label="Сравнить" value={ 1 } icon={ <SvgIcon sx={ { fontSize: 20 } }><MdCompare /> </SvgIcon> } iconPosition='start'
-                        //  { ...a11yProps(1) }
-                        />
+                        >
+                            <Tab label="Таблица" value={ 0 } icon={ <SvgIcon sx={ { fontSize: 20 } }><GrTable /> </SvgIcon> } iconPosition='start'
+                            //  { ...a11yProps(0) }
+                            />
+                            <Tab label="Сравнить" value={ 1 } icon={ <SvgIcon sx={ { fontSize: 20 } }><MdCompare /> </SvgIcon> } iconPosition='start'
+                            //  { ...a11yProps(1) }
+                            />
 
-                    </Tabs>
-                    {/* <ButtonGroup orientation='horizontal' variant='contained' size='small'>
+                        </Tabs>
+                        {/* <ButtonGroup orientation='horizontal' variant='contained' size='small'>
 
                         <Button
                             onClick={ handlePrev }
@@ -111,11 +112,10 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
                             }
                         </Button>
                     </ButtonGroup> */}
-                </Stack>
-            </AppBar >
-            <React.Fragment>
+                    </Stack>
+                </AppBar >
+                <React.Fragment>
 
-                <SuspenseLoad loadText={ 'Данные загружаются, статус загрузки: ' + queryAll.status }>
                     <TabPanel value={ value } index={ 0 } >
                         {
 
@@ -134,14 +134,14 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
 
                         }
                     </TabPanel>
-                </SuspenseLoad>
-                <TabPanel value={ value } index={ 1 } >
-                    <ComparePage />
-                </TabPanel>
-                <TabPanel value={ value } index={ 2 } >
+                    <TabPanel value={ value } index={ 1 } >
+                        <ComparePage />
+                    </TabPanel>
+                    <TabPanel value={ value } index={ 2 } >
 
-                </TabPanel>
-            </React.Fragment>
+                    </TabPanel>
+                </React.Fragment>
+            </SuspenseLoad>
         </Box>
     )
 }
