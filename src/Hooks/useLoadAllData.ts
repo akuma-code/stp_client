@@ -8,7 +8,7 @@ export const useLoadAllData = () => {
     const context = useQuery({
         queryKey: ['load_stp_all'] as const,
         queryFn: () => getAllTableData(),
-        gcTime: 60 * 60 * 1000,
+        gcTime: 1000,
         select: data => data.map((s, i) => ({ ...s, id: i + 1 })) as StpData[]
     });
     return context;

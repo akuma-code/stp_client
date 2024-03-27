@@ -16,6 +16,7 @@ import { useLoadAllData } from "../../../Hooks/useLoadAllData";
 import { useAppContext } from '../../../Hooks/useStoresContext';
 import { routePaths } from '../../routePath';
 import { ComparePage } from '../ComparePage';
+import { useStpFilter } from '../../../Hooks/useCompare';
 type TabPageProps = PropsWithChildren & {
 
 }
@@ -63,11 +64,8 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
     //     return arr?.flat()
     // }, [queryContext?.data?.pages])
 
-    const alldata = useMemo(() => {
 
-        if (queryAll.isSuccess) return queryAll.data
-        else return []
-    }, [queryAll])
+    const filtered = useStpFilter(queryAll.data, query, filterParams)
     // const isDisabled = () => queryContext.status === 'pending'
     // console.log('list', queryContext.data)
     return (
@@ -127,7 +125,7 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
 
                                 <MemoStpTable
                                     key={ _ID() }
-                                    items={ queryAll.data }
+                                    items={ filtered }
                                     selectedItems={ selected }
                                     selectorActions={ action }
                                 />

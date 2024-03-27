@@ -79,11 +79,11 @@ const getFilters = (restFilters: Partial<FiltersParams>) => Object.entries(restF
 
 
 
-export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFilters: Partial<FiltersParams>) {
+export function useStpFilter<T extends AnyObj>(array: T[] | undefined, query: string, restFilters: Partial<FiltersParams>) {
 
 
     const { cams, depth, tags } = restFilters
-    const init_items = array.slice() as unknown as StpData[]
+    const init_items = array ? array.slice() as unknown as StpData[] : []
 
 
     const filtered = useMemo(() => {
