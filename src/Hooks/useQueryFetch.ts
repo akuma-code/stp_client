@@ -29,9 +29,8 @@ export const useFetch: FetchFnType = <T>(
     config?: UseQueryOptions<T, Error, T, QueryKeyT>
 ) => {
 
-    const query = useQuery<T, Error, T, QueryKeyT>(
-        [url!, params],
-        ({ queryKey, meta, pageParam }) => fetcher<T>({ queryKey, meta }),
+    const query = useQuery([url!, params] as const,
+        ({ queryKey }) => fetcher<T>({ queryKey }),
         {
             enabled: !!url,
             ...config,
