@@ -40,7 +40,7 @@ export const api = {
     get: async <T>(url: string, params?: object) =>
         await $axios.get<T>(url, {
             headers: {
-                token: Cookies.get('token'),
+                // token: Cookies.get('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, OPTIONS, POST'
 
