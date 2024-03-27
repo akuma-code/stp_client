@@ -1,15 +1,13 @@
 import Box from '@mui/material/Box';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Paper from '@mui/material/Paper';
-import Switch from '@mui/material/Switch';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 
-import { Button, Pagination, Stack, TablePagination, alpha } from '@mui/material';
+import { Button, Stack, alpha } from '@mui/material';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { StpItem } from '../StpTable/TableObjects';
 import { StpTableHeader } from './EnhancedTableHead';
@@ -47,18 +45,18 @@ type StpTableProps = {
     selectorActions: SelectorActions
 }
 export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, selectorActions }) => {
-    // console.time('renderTime:')
     const { filterParams, select: s } = useAppContext()
     const { clear, isSelected, remove, select } = selectorActions
-    // const [selectedItems, select] = useState<number[]>([])
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
-    const [page, setPage] = useState(1);
-    const [dense, setDense] = useState(true);
-    const [RPP, setRowsPerPage] = useState(-1);
+    const sorted = useCompare(items, order, orderBy)
+    // console.time('renderTime:')
+    // const [selectedItems, select] = useState<number[]>([])
+    // const [page, setPage] = useState(1);
+    // const [dense, setDense] = useState(true);
+    // const [RPP, setRowsPerPage] = useState(-1);
     // const sorted = useCombineFilterSort(items, query, filterParams, order, orderBy) as unknown as StpData[]
 
-    const sorted = useCompare(items, order, orderBy)
     const handleRequestSort = useCallback((
         event: React.MouseEvent<unknown>,
         property: keyof StpData,
@@ -93,44 +91,44 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
 
     }, [remove, select, selectedItems]);
 
-
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDense(event.target.checked);
-    };
-
-    // const isSelected = useCallback((id: number) => selectedItems.includes(id), [selectedItems]);
-    const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0
-
-
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page >= 0
-        ? Math.max(0, (1 + page) * RPP - items!.length)
-        : 1;
-
-    const visibleRows = useMemo(
-        () => {
-            // console.log('loading: ', loading)
-            const sliced = items.slice(
-                page * RPP,
-                page * RPP + RPP + 1)
-            // console.log('sliced', sliced)
-
-            return sliced as unknown as StpData[]
-        },
-        [RPP, items, page]
-    );
     useEffect(() => {
         s(selectedItems)
     }, [s, selectedItems])
+
+    const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0
+    // const handleChangePage = (event: unknown, newPage: number) => {
+    //     setPage(newPage);
+    // };
+
+    // const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setRowsPerPage(parseInt(event.target.value, 10));
+    //     setPage(0);
+    // };
+
+    // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setDense(event.target.checked);
+    // };
+
+    // const isSelected = useCallback((id: number) => selectedItems.includes(id), [selectedItems]);
+
+
+    // Avoid a layout jump when reaching the last page with empty rows.
+    // const emptyRows = page >= 0
+    //     ? Math.max(0, (1 + page) * RPP - items!.length)
+    //     : 1;
+
+    // const visibleRows = useMemo(
+    //     () => {
+    //         // console.log('loading: ', loading)
+    //         const sliced = items.slice(
+    //             page * RPP,
+    //             page * RPP + RPP + 1)
+    //         // console.log('sliced', sliced)
+
+    //         return sliced as unknown as StpData[]
+    //     },
+    //     [RPP, items, page]
+    // );
 
 
     // console.count("RENDER!")
@@ -152,7 +150,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                     <Table
                         stickyHeader
                         aria-labelledby="tableTitle"
-                        size={ dense ? 'small' : 'medium' }
+                        size={ 'small' }
                         padding='normal'
                         sx={ {
                             minWidth: 750,
@@ -169,7 +167,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                         />
 
 
-                        {/* <Suspense fallback={ <div className='text-center'>Table is LOADING</div> }> */ }
+
                         <TableBody>
 
                             {
@@ -183,40 +181,18 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                                     />
                                 ) }
 
-                            {
-                                emptyRows > 0 && (
-                                    <TableRow
-                                        style={ {
-                                            height: 53 * emptyRows,
-                                        } }
-                                    >
-                                        <TableCell colSpan={ 4 } />
-                                    </TableRow>
-                                )
-                            }
                         </TableBody>
-                        {/* </Suspense> */ }
                     </Table>
                 </TableContainer>
 
-                {/* <Stack direction={ 'row' } maxHeight={ 55 } > */ }
 
                 <StpTableFooter
-                    dense={ dense }
+                    dense={ true }
                     NumSelected={ selectedItems.length }
                     NumFiltered={ sorted.length }
                     isFiltersOn={ isFiltersOn }
-                    toggleDense={ handleChangeDense }
-                    page={ page }
-                    rows_per_page={ RPP }
-                    handleChangePage={ handleChangePage }
-                    handleChangeRowsPerPage={ handleChangeRowsPerPage }
                 />
 
-
-
-                {/* </Stack> */ }
-                {/* </SuspenseLoad> */ }
             </Paper>
         </Box>
 
@@ -228,18 +204,30 @@ export const MemoStpTable = memo((props: StpTableProps) => StpDataTable(props))
 MemoStpTable.displayName = "___MemoizedDataTable"
 
 
+function EmptyRowsPlaceholder(props: { emptyRows: number }): React.ReactNode {
+    return props.emptyRows > 0 && (
+        <TableRow
+            style={ {
+                height: 53 * props.emptyRows,
+            } }
+        >
+            <TableCell colSpan={ 4 } />
+        </TableRow>
+    );
+}
+
 function StpTableFooter(props: {
     NumSelected: number,
     NumFiltered: number,
     isFiltersOn: boolean,
-    dense: boolean,
-    page: number,
-    rows_per_page: number,
-    handleChangePage: (event: unknown, newPage: number) => void
-    handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void
-    toggleDense: (event: React.ChangeEvent<HTMLInputElement>) => void
+    dense?: boolean,
+    page?: number,
+    rows_per_page?: number,
+    handleChangePage?: (event: unknown, newPage: number) => void
+    handleChangeRowsPerPage?: (event: React.ChangeEvent<HTMLInputElement>) => void
+    toggleDense?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) {
-    const { NumFiltered, NumSelected, dense, toggleDense, isFiltersOn, handleChangePage, handleChangeRowsPerPage, page, rows_per_page } = props
+    const { NumFiltered, NumSelected, isFiltersOn, ...rest } = props
     // const handleChangePage = (event: unknown, newPage: number) => {
     //         setPage(newPage);
     //     };
@@ -262,7 +250,7 @@ function StpTableFooter(props: {
                 component={ Stack }
                 flexDirection={ 'row' }
                 alignItems={ 'center' }
-                p={ 0 }
+                p={ 1 }
             >
                 Выбрано для сравнения: { NumSelected } из { NumFiltered }
                 <Button
@@ -276,7 +264,7 @@ function StpTableFooter(props: {
                     } }
 
                 >
-                    <MuiNavLink to={ routePaths.compare } title={ 'Сравнить' }>Сравнить</MuiNavLink>
+                    <MuiNavLink to={ routePaths.compare } title={ 'Сравнить выбранные стеклопакеты' }>Сравнить</MuiNavLink>
                 </Button>
 
             </Box>
@@ -285,11 +273,11 @@ function StpTableFooter(props: {
                 // <Box>
                 // </Box>
             }
-            <FormControlLabel
+            {/* <FormControlLabel
 
                 control={ <Switch checked={ dense } onChange={ toggleDense } id='dense_checkbox' /> }
                 label="Уменьшить отступы"
-                sx={ { ml: 4, alignContent: 'center' } } />
+                sx={ { ml: 4, alignContent: 'center' } } /> */}
             {/* <TablePagination
                 component="div"
                 count={ NumFiltered }

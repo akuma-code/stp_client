@@ -24,15 +24,17 @@ export const useInfiniteLoad = (queryKey: QueryKeyT) => {
     return context;
 };
 type StpDataResponsePromise = CursorRespone<StpData[]>
-export const useLoadMore = (rpp = 20) => {
+export const useLoadMore = (rpp = 50) => {
     const context = useInfiniteQuery(
         {
-            queryKey: ['load_stp', rpp],
-            queryFn: ({ queryKey, pageParam = 0 }) => getDataFromSpreadsheet({ pageParam }),
+            queryKey: ['load_stp', rpp] as const,
+            queryFn: ({ queryKey, pageParam = 0 }) => getDataFromSpreadsheet({ pageParam, count: rpp }),
             initialPageParam: 0,
-            getNextPageParam: (last) => last.nextCursor ?? -1,
-            getPreviousPageParam: (prev) => prev.prevCursor ?? 0,
-        }, queryClient
+            getNextPageParam: (last) => last.nextCursor ?? false,
+            getPreviousPageParam: (prev) => prev.prevCursor ?? false,
+
+        },
+        queryClient
 
     );
 
@@ -49,7 +51,8 @@ export const useLoadMore = (rpp = 20) => {
 //     getPreviousPageParam: (prev) => prev.prevCursor ?? 0,
 //     maxPages: 5
 // })
-export const getDataFromSpreadsheet = async ({ pageParam, count = 40, _cursor }: { pageParam?: number, count?: number, _cursor?: number }): Promise<StpDataResponsePromise> => {
+type FetchCursorData = { pageParam?: number, count?: number, _cursor?: number }
+export const getDataFromSpreadsheet = async ({ pageParam, count = 40, _cursor }: FetchCursorData): Promise<{ prevCursor: number; nextCursor: number; data: StpData[]; }> => {
     // const count = 15
     // const Counter = _cursor ? pageParam ? _cursor : _cursor : pageParam
     const _C = pageParam

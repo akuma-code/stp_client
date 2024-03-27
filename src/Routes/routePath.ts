@@ -7,7 +7,7 @@ export const routePaths = {
     stp_info: '/data/info' as const,
     stp_info_id: '/:info_id' as const,
     stp_id: 'table/:id' as const,
-    compare: '/compare' as const,
+    compare: 'compare' as const,
     export: '/export' as const,
 }
 

@@ -1,6 +1,6 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 import { LazyStpData } from "../Components/StpTable/FullTable";
-import { StpData } from "../Components/StpTableView/StpDataTable";
+import { StpData, StpDataTable } from "../Components/StpTableView/StpDataTable";
 import { ComparePage } from "./Pages/ComparePage";
 import { ErrorPage } from "./Pages/ErrorPage";
 import { OverView } from "./Pages/OverView";
@@ -26,7 +26,8 @@ export const appRoutes: RouteObject[] = [
 
         children: [
             {
-                index: true,
+                path: routePaths.root,
+                // index: true,
                 element: <TabPage />,
                 loader: async ({ request, params }) => {
                     const lazy_data = await LazyStpData()
@@ -35,14 +36,26 @@ export const appRoutes: RouteObject[] = [
                     console.log(data.length)
                     return JSON.stringify(data)
                 },
-
                 errorElement: <ErrorPage />,
+                children: [
+                    {
+                        path: routePaths.table,
+
+                    },
+                    {
+                        path: routePaths.compare,
+                        element: <ComparePage />
+                    },
+                ]
 
 
             },
             {
                 path: routePaths.tabs,
-                element: <TabPage />
+                element: <TabPage />,
+                children: [
+
+                ],
             },
 
             {
