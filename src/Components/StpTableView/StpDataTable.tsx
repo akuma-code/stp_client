@@ -21,6 +21,7 @@ import { StpTableToolbar } from './StpTableToolbar';
 import { useCompare } from '../../Hooks/useCompare';
 import { SelectorActions } from '../../Hooks/useIdSelector';
 import { StpTableRow } from './StpTableRow';
+import { SuspenseLoad } from '../UI/SuspenseLoad';
 
 
 
@@ -138,8 +139,10 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
 
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { mb: 1 } } elevation={ 2 }>
+                <SuspenseLoad>
 
-                <StpTableToolbar numFiltered={ sorted.length } />
+                    <StpTableToolbar numFiltered={ sorted.length } />
+                </SuspenseLoad>
 
                 <TableContainer sx={ {
                     overflowY: 'auto',

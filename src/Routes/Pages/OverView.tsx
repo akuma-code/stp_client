@@ -1,16 +1,13 @@
 
-import { Button, Paper } from '@mui/material'
-import { useMemo } from 'react'
-import { Outlet, useLoaderData } from 'react-router-dom'
+import { Paper } from '@mui/material'
+import { useEffect, useMemo } from 'react'
+import { useLoaderData } from 'react-router-dom'
 import { MemoStpTable, StpData } from '../../Components/StpTableView/StpDataTable'
 import { SuspenseLoad } from '../../Components/UI/SuspenseLoad'
 import { useStpFilter } from '../../Hooks/useCompare'
-import { useQueryGoogleFetch } from '../../Hooks/useQueryFetch'
-import { useAppContext } from '../../Hooks/useStoresContext'
 import { useIdSelector } from '../../Hooks/useIdSelector'
-import { apiRoute, proxyRoute } from '../routePath'
+import { useAppContext } from '../../Hooks/useStoresContext'
 
-import { toast } from 'react-toastify'
 
 
 const isJson = (i: any) => JSON.parse(i) ? true : false

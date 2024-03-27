@@ -12,6 +12,7 @@ import { _EnFieldsStp } from '../../Interfaces/Enums';
 import { AvatarButtonTooltip } from '../UI/AvatarButtonTooltip';
 import { HelperDialog } from '../UI/HelperDialog';
 import { Order, StpData } from './StpDataTable';
+import { SuspenseLoad } from '../UI/SuspenseLoad';
 interface HeadStpCell {
     label: string;
     id: keyof StpData;
@@ -74,70 +75,75 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                             id='selected_id' />
                     </Box>
                 </TableCell>
-                {
-                    stp_headCells.map((headCell) => (
-                        <TableCell
-                            colSpan={ headCell.colSpan ? headCell.colSpan : 1 }
-                            key={ headCell.id }
-                            align={ headCell.align
-                                ? headCell.align
-                                : headCell.numeric
-                                    ? 'right'
-                                    : 'center'
-                            }
-                            padding={ headCell.disablePadding ? 'none' : 'normal' }
-                            sortDirection={ orderBy === headCell.id ? order : false }
-                            sx={ {
-                                height: 60, bgcolor: '#93d4ff',
-
-                                // width: 10
-                            } }
-                            id={ headCell.id }
-                        >
-                            <TableSortLabel sx={ {
-                                fontSize: 18,
-                            } }
-                                active={ orderBy === headCell.id }
-                                direction={ orderBy === headCell.id ? order : 'asc' }
-                                onClick={ createSortHandler(headCell.id) }
-
-                            >
-                                {
-                                    hasImage(headCell) ?
-
-                                        <HelperDialog img_name={ getImgName(headCell.id) || undefined } tooltip_title={ headCell.desc || "" } />
-                                        :
-                                        WoIcon(headCell) &&
-                                        <AvatarButtonTooltip
-                                            icon={ <FaRegQuestionCircle className={ 'text-blue-600' } /> }
-                                            tooltip_title={ headCell.desc
-                                                ? headCell.desc
-                                                : headCell.label }
-                                            avatarVariant='circular'
-                                            avatarSx={ { maxHeight: 20, maxWidth: 20 } }
-                                            disableRipple
-                                        />
-
+                <SuspenseLoad loadText='header loading'>
+                    {
+                        stp_headCells.map((headCell) => (
+                            <TableCell
+                                colSpan={ headCell.colSpan ? headCell.colSpan : 1 }
+                                key={ headCell.id }
+                                align={ headCell.align
+                                    ? headCell.align
+                                    : headCell.numeric
+                                        ? 'right'
+                                        : 'center'
                                 }
+                                padding={ headCell.disablePadding ? 'none' : 'normal' }
+                                sortDirection={ orderBy === headCell.id ? order : false }
+                                sx={ {
+                                    height: 60, bgcolor: '#93d4ff',
 
-                                <Box alignItems={ 'baseline' }>
+                                    // width: 10
+                                } }
+                                id={ headCell.id }
+                            >
 
+                                <TableSortLabel sx={ {
+                                    fontSize: 18,
+                                } }
+                                    active={ orderBy === headCell.id }
+                                    direction={ orderBy === headCell.id ? order : 'asc' }
+                                    onClick={ createSortHandler(headCell.id) }
 
-                                    { headCell.label }
-                                    { orderBy === headCell.id ? (
-                                        <Box component="span"
-                                            sx={ { ...visuallyHidden } }
-                                        >
-                                            { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
-                                        </Box>
-                                    ) : null
+                                >
+
+                                    {
+                                        hasImage(headCell) ?
+
+                                            <HelperDialog img_name={ getImgName(headCell.id) || undefined } tooltip_title={ headCell.desc || "" } />
+                                            :
+                                            WoIcon(headCell) &&
+                                            <AvatarButtonTooltip
+                                                icon={ <FaRegQuestionCircle className={ 'text-blue-600' } /> }
+                                                tooltip_title={ headCell.desc
+                                                    ? headCell.desc
+                                                    : headCell.label }
+                                                avatarVariant='circular'
+                                                avatarSx={ { maxHeight: 20, maxWidth: 20 } }
+                                                disableRipple
+                                            />
+
                                     }
 
-                                </Box>
 
-                            </TableSortLabel>
-                        </TableCell>
-                    )) }
+                                    <Box alignItems={ 'baseline' }>
+
+
+                                        { headCell.label }
+                                        { orderBy === headCell.id ? (
+                                            <Box component="span"
+                                                sx={ { ...visuallyHidden } }
+                                            >
+                                                { order === 'desc' ? 'sorted descending' : 'sorted ascending' }
+                                            </Box>
+                                        ) : null
+                                        }
+
+                                    </Box>
+
+                                </TableSortLabel>
+                            </TableCell>
+                        )) }
+                </SuspenseLoad>
             </TableRow>
         </TableHead>
         // </Suspense>

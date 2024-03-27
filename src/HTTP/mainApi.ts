@@ -33,7 +33,7 @@ const headerInterceptor = (config: { headers: AxiosHeaders }) => {
 }
 
 
-$api.interceptors.request.use(headerInterceptor, (e) => _log("error: ", e))
+$axios.interceptors.request.use(headerInterceptor, (e) => _log("error: ", e))
 
 
 export const api = {

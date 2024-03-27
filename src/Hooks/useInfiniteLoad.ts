@@ -5,7 +5,7 @@ import { StpData } from "../Components/StpTableView/StpDataTable";
 import { _log } from "../Helpers/helpersFns";
 import { queryClient } from "../App";
 import { GetStpDataPromise } from "../Components/StpTable/FullTable";
-import { UseInfiniteQueryResult, useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { UseInfiniteQueryResult, useInfiniteQuery } from "@tanstack/react-query";
 import { CursorRespone } from "../Interfaces/Types";
 
 
@@ -38,11 +38,9 @@ export const useLoadMore = (rpp = 50) => {
 
     );
 
-    console.log('context', context.data)
+    // console.log('context', context.data)
     return context
 }
-
-
 // const context = useInfiniteQuery<GetInfiniteRowsInterface<StpData[]>, Error, any, any, number>({
 //     queryKey: ['load_more', undefined],
 //     queryFn: ({ queryKey, pageParam }) => getDataFromSpreadsheet({ pageParam }),
@@ -74,3 +72,4 @@ export const getDataFromSpreadsheet = async ({ pageParam, count = 40, _cursor }:
 
 
 }
+

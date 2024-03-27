@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, CircularProgress, Stack, SvgIcon } from '@mui/material';
+import { Button, ButtonGroup, CircularProgress, LinearProgress, Stack, SvgIcon } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -8,10 +8,11 @@ import { GrTable } from 'react-icons/gr';
 import { MdCompare } from 'react-icons/md';
 import { matchPath, redirect, useLocation } from 'react-router-dom';
 import { MemoStpTable } from '../../../Components/StpTableView/StpDataTable';
-import { SuspenseLoad } from '../../../Components/UI/SuspenseLoad';
+import { Loading, SuspenseLoad } from '../../../Components/UI/SuspenseLoad';
 import { _ID, _log } from '../../../Helpers/helpersFns';
 import { useIdSelector } from '../../../Hooks/useIdSelector';
 import { useLoadMore } from "../../../Hooks/useInfiniteLoad";
+import { useLoadAllData } from "../../../Hooks/useLoadAllData";
 import { useAppContext } from '../../../Hooks/useStoresContext';
 import { routePaths } from '../../routePath';
 import { ComparePage } from '../ComparePage';
@@ -26,18 +27,17 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
     ]);
     const currentTab = routeMatch?.pattern?.path || "table";
     // const { data, } = useQuery({ queryKey: ['saved_stp_data'], queryFn: GetStpDataPromise },)
+    const { StpStore, query, filterParams } = useAppContext()
     const [p, setPage] = useState(0)
 
-    const queryContext = useLoadMore()
+    // const queryContext = useLoadMore()
+    const queryAll = useLoadAllData()
 
-
-    const { StpStore, query, filterParams } = useAppContext()
     // const filtered = useStpFilter(data, query, filterParams)
     const [selected, action] = useIdSelector()
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-
         setValue(newValue);
     };
     const handleChangeRoute = (event: React.SyntheticEvent, newValue: string) => {
@@ -46,25 +46,29 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
     };
 
 
-    const handleNext = () => {
-        if (queryContext.hasNextPage) {
-            setPage(prev => prev + 1)
-            queryContext.fetchNextPage()
-        }
-        else _log("This is last page")
-    }
-    const handlePrev = () => {
-        setPage(0)
-        queryContext.fetchPreviousPage()
-    }
+    // const handleNext = () => {
+    //     if (queryContext.hasNextPage) {
+    //         setPage(prev => prev + 1)
+    //         queryContext.fetchNextPage()
+    //     }
+    //     else _log("This is last page")
+    // }
+    // const handlePrev = () => {
+    //     setPage(0)
+    //     queryContext.fetchPreviousPage()
+    // }
 
-    const current_page = useMemo(() => {
-        const arr = queryContext?.data?.pages.map(p => p.data)
-        return arr?.flat()
+    // const current_page = useMemo(() => {
+    //     const arr = queryContext?.data?.pages.map(p => p.data)
+    //     return arr?.flat()
+    // }, [queryContext?.data?.pages])
 
+    const alldata = useMemo(() => {
 
-    }, [queryContext?.data?.pages])
-    const isDisabled = () => queryContext.status === 'pending'
+        if (queryAll.isSuccess) return queryAll.data
+        else return []
+    }, [queryAll])
+    // const isDisabled = () => queryContext.status === 'pending'
     // console.log('list', queryContext.data)
     return (
         <Box sx={ { bgcolor: 'background.paper' } }>
@@ -88,7 +92,7 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
                         />
 
                     </Tabs>
-                    <ButtonGroup orientation='horizontal' variant='contained' size='small'>
+                    {/* <ButtonGroup orientation='horizontal' variant='contained' size='small'>
 
                         <Button
                             onClick={ handlePrev }
@@ -108,24 +112,27 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
                                         `Load Next`
                             }
                         </Button>
-                    </ButtonGroup>
+                    </ButtonGroup> */}
                 </Stack>
             </AppBar >
             <React.Fragment>
 
-                <SuspenseLoad loadText='data loading...'>
+                <SuspenseLoad loadText={ 'Данные загружаются, статус загрузки: ' + queryAll.status }>
                     <TabPanel value={ value } index={ 0 } >
                         {
-                            current_page &&
+
+                            // queryAll.isFetching ? <CircularProgress /> :
+                            queryAll.status === 'success' ?
 
 
-                            <MemoStpTable
-                                key={ _ID() }
-                                items={ current_page }
-                                selectedItems={ selected }
-                                selectorActions={ action }
-                            />
-
+                                <MemoStpTable
+                                    key={ _ID() }
+                                    items={ queryAll.data }
+                                    selectedItems={ selected }
+                                    selectorActions={ action }
+                                />
+                                :
+                                <Loading text={ 'статус загрузки: ' + queryAll.status } />
 
                         }
                     </TabPanel>
