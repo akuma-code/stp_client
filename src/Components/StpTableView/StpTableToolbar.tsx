@@ -4,6 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { Suspense, lazy } from 'react';
 import { AcSearch } from './AcSearch';
 import { PropertySelector } from './PropertySelector';
+import { SuspenseLoad } from '../UI/SuspenseLoad';
 interface TableToolbarProps {
     numSelected?: number;
     numFiltered: number
@@ -32,31 +33,33 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
 
 
+            <SuspenseLoad loadText='tooltip loading'>
+                <Box
+                    component={ Stack }
+                    flexGrow={ 0 }
+                    flexShrink={ 1 }
+                    maxWidth={ 350 }
 
-            <Box
-                component={ Stack }
-                flexGrow={ 0 }
-                flexShrink={ 1 }
-                maxWidth={ 350 }
+                    pt={ 0 }
 
-                pt={ 0 }
+                >    <AcSearch />
 
-            >    <AcSearch />
-
-            </Box>
-            <Box component={ Stack }
-                direction={ 'row' }
-                flexGrow={ 2 }
-                justifyContent={ 'space-between' }
-                alignItems={ 'center' }
-                pr={ 3 }
-            >
+                </Box>
+                <Box component={ Stack }
+                    direction={ 'row' }
+                    flexGrow={ 2 }
+                    justifyContent={ 'space-between' }
+                    alignItems={ 'center' }
+                    pr={ 3 }
+                >
 
 
-                <PropertySelector filteredCount={ numFiltered } />
 
-                <AttikLogo />
-            </Box>
+                    <PropertySelector filteredCount={ numFiltered } />
+
+                    <AttikLogo />
+                </Box>
+            </SuspenseLoad>
         </Toolbar>
         // </Suspense>
     );

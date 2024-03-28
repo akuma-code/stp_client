@@ -16,13 +16,13 @@ export const stpFields: (keyof StpData)[] = [
     'depth',
     'weight',
     'Ro',
+    'Rw',
     'Det',
     'Ea',
     'Er',
     'Lr',
     'Lt',
     'Ra',
-    'Rw',
     'S',
     'Sf',
     'secure',
@@ -54,33 +54,12 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
     const clickCell = useCallback((e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) =>
         handleClick(e, row_data.id), [handleClick, row_data.id])
 
-    // const NumericCells = useMemo(() => {
-    //     const cells = () =>
-    //         <React.Fragment>
-
-    //             {
-    //                 stpFields.map(cell =>
-    //                     // <TableCell align="center" key={ cell }>
-    //                     //     { numericData(cell) }{ endSign(cell) }
-    //                     // </TableCell>
-
-    //                     <DataCell key={ cell }
-    //                         primary={ numericData(cell) }
-    //                         secondary={ endSign(cell) }
-    //                         cellProps={ { align: 'center' } }
-    //                     />
-    //                 ) }
-    //         </React.Fragment>
-
-    //     return cells
-    // }, [endSign, numericData])
     return (
 
 
         <TableRow
             hover
             key={ row_data.id }
-            // onClick={ (event) => handleClick(event, +row_data.id) }
             role="checkbox"
             aria-checked={ isSelected }
             tabIndex={ -1 }
@@ -109,29 +88,7 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
                         id={ `enhanced-table-${row_number}-check` } />
                 </Box>
             </TableCell>
-            {/* <DataCell
-                primary={ <Box
-                    component={ Stack }
-                    direction={ 'row' }
-                    justifyContent={ 'space-between' }
-                    alignItems={ 'center' }
-                    width={ '100%' }
-                    sx={ {
-                        [`& .MuiIconButton-root`]: { visibility: 'hidden' },
-                        [`& :hover>.MuiIconButton-root `]: { visibility: 'visible' },
-                    } }
-                >
 
-                    { row_data.name }
-                    <FormulaTTButton stp_name={ row_data.name as string } />
-                </Box> }
-                // secondary={ <FormulaTTButton stp_name={ row_data.name as string } /> }
-                cellProps={ {
-                    padding: 'none',
-                    align: 'justify',
-
-                } }
-            /> */}
             <TableCell
                 component="th"
                 id={ `enhanced-table-${row_number}-name` }
@@ -174,7 +131,7 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
                         <DataCell key={ cell }
                             primary={ numericData(cell) }
                             secondary={ endSign(cell) }
-                            cellProps={ { align: 'center' } }
+                            cellProps={ { align: 'right' } }
                         />
                     ) }
             </React.Fragment>
@@ -195,7 +152,7 @@ const MemedCells = React.memo(({ cell }: { cell: StpData }) => {
 
     return (
         <React.Fragment>
-            { stpFields.map(field => <TableCell align="center" key={ field }>{ cell[field] }</TableCell>) }
+            { stpFields.map(field => <TableCell align="right" key={ field }>{ cell[field] }</TableCell>) }
         </React.Fragment>
     )
 })
@@ -214,7 +171,7 @@ const DataCell: React.FC<DataCellProps> = ({ primary, secondary, action, cellPro
         action && action()
     }
     return (
-        <TableCell onClick={ handleClick } align={ cellProps?.align ? cellProps.align : 'center' } >
+        <TableCell onClick={ handleClick } align={ cellProps?.align ? cellProps.align : 'right' } >
             <Stack direction={ 'row' } justifyContent={ 'space-between' }>
 
                 { primary }

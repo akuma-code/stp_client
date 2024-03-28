@@ -1,12 +1,8 @@
 import React, { PropsWithChildren, useEffect } from "react"
-import { Outlet } from "react-router-dom"
-import { AppHeaderBreadcrump, AppToolbarHeader } from "./AppBar"
-import { useQuery } from "@tanstack/react-query"
-import { apiRoute, proxyRoute } from "../routePath"
-import { LazyStpData } from "../../Components/StpTable/FullTable"
+import { Outlet, useNavigate } from "react-router-dom"
 import { Bounce, ToastContainer, toast } from "react-toastify"
-import { Box } from "@mui/system"
-import { AppBar, BottomNavigation, Container, Paper, Toolbar } from "@mui/material"
+import { routePaths } from "../routePath"
+import { MuiLink } from "./MuiLink"
 
 type RootProps = PropsWithChildren
 
@@ -17,7 +13,7 @@ function FooterText() {
 
 
 export const Root: React.FC<RootProps> = () => {
-
+    const nav = useNavigate()
     // const { data, isLoadingError, error, isError, isSuccess } = useQuery('saved_stp_data', LazyStpData)
     // const [tab, save] = useLs<{ version: string }>('tab_vers')
     useEffect(() => {
@@ -36,12 +32,16 @@ export const Root: React.FC<RootProps> = () => {
         // 
     }, []
     )
+    useEffect(() => {
+        nav(routePaths.tabs, { replace: true })
+
+    }, [])
     return (
 
 
         <>
-            <AppToolbarHeader />
-
+            {/* <AppToolbarHeader /> */ }
+            <MuiLink to={ routePaths.tabs }>Table</MuiLink>
 
 
             <Outlet />
@@ -53,7 +53,7 @@ export const Root: React.FC<RootProps> = () => {
             <Toolbar /> */}
             <ToastContainer
                 position="top-left"
-                autoClose={ 3000 }
+                autoClose={ 1000 }
                 hideProgressBar={ false }
                 newestOnTop
                 closeOnClick

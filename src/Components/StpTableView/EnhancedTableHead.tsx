@@ -204,6 +204,14 @@ const stp_headCells: readonly HeadStpCell[] = [
         desc: _EnFieldsStp.Ro
     },
     {
+        id: 'Rw',
+        label: 'Rw',
+        disablePadding: true,
+        numeric: true,
+        align: 'center',
+        desc: _EnFieldsStp.Rw
+    },
+    {
         id: 'Det',
         label: 'Det',
         disablePadding: true,
@@ -252,14 +260,7 @@ const stp_headCells: readonly HeadStpCell[] = [
         desc: _EnFieldsStp.Ra
     },
 
-    {
-        id: 'Rw',
-        label: 'Rw',
-        disablePadding: true,
-        numeric: true,
-        align: 'center',
-        desc: _EnFieldsStp.Rw
-    },
+
     {
         id: 'S',
         label: 'S',

@@ -97,7 +97,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
         s(selectedItems)
     }, [s, selectedItems])
 
-    const isFiltersOn = filterParams.cams?.length !== 0 || filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0
+    const isFiltersOn = filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0
     // const handleChangePage = (event: unknown, newPage: number) => {
     //     setPage(newPage);
     // };
@@ -257,7 +257,7 @@ function StpTableFooter(props: {
                 p={ 1 }
             >
                 Выбрано для сравнения: { NumSelected } из { NumFiltered }
-                <Button
+                {/* <Button
                     color='info'
                     variant='contained'
                     startIcon={ <MdCompare /> }
@@ -269,29 +269,12 @@ function StpTableFooter(props: {
 
                 >
                     <MuiNavLink to={ routePaths.compare } title={ 'Сравнить выбранные стеклопакеты' }>Сравнить</MuiNavLink>
-                </Button>
+                </Button> */}
 
             </Box>
-            { isFiltersOn &&
-                ` Совпадений найдено: ${NumFiltered}`
-                // <Box>
-                // </Box>
-            }
-            {/* <FormControlLabel
+            { isFiltersOn && ` Совпадений найдено: ${NumFiltered}` }
 
-                control={ <Switch checked={ dense } onChange={ toggleDense } id='dense_checkbox' /> }
-                label="Уменьшить отступы"
-                sx={ { ml: 4, alignContent: 'center' } } /> */}
-            {/* <TablePagination
-                component="div"
-                count={ NumFiltered }
-                page={ page }
-                onPageChange={ handleChangePage }
-                rowsPerPage={ rows_per_page }
-                onRowsPerPageChange={ handleChangeRowsPerPage }
-
-            /> */}
-            {/* <Pagination count={ NumFiltered } page={ page } onChange={ handleChangePage } /> */ }
-        </Stack>)
+        </Stack>
+    )
 }
 

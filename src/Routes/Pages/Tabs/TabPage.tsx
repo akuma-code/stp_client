@@ -1,13 +1,13 @@
-import { Button, ButtonGroup, CircularProgress, LinearProgress, Stack, SvgIcon } from '@mui/material';
+import { Button, ButtonGroup, CircularProgress, LinearProgress, Paper, Stack, SvgIcon, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import React, { PropsWithChildren, useMemo, useState } from 'react';
+import React, { PropsWithChildren, Suspense, useMemo, useState } from 'react';
 import { GrTable } from 'react-icons/gr';
 import { MdCompare } from 'react-icons/md';
-import { matchPath, redirect, useLocation } from 'react-router-dom';
-import { MemoStpTable } from '../../../Components/StpTableView/StpDataTable';
+import { Link, Outlet, redirect, useLocation, useNavigate } from 'react-router-dom';
+import { MemoStpTable, StpDataTable } from '../../../Components/StpTableView/StpDataTable';
 import { Loading, SuspenseLoad } from '../../../Components/UI/SuspenseLoad';
 import { _ID, _log } from '../../../Helpers/helpersFns';
 import { useIdSelector } from '../../../Hooks/useIdSelector';
@@ -17,104 +17,91 @@ import { useAppContext } from '../../../Hooks/useStoresContext';
 import { routePaths } from '../../routePath';
 import { ComparePage } from '../ComparePage';
 import { useStpFilter } from '../../../Hooks/useCompare';
+import { useRouteMatch } from '../../../Hooks/useRouteMatch';
+import { MuiLink } from '../MuiLink';
+import { TabRouterPanel } from './TabRouterPanel';
+import TabContainer from './TabContainer';
+import { FilterDrawer } from '../../../Components/UI/SideDrower/DrawerFilter';
 type TabPageProps = PropsWithChildren & {
 
 }
-
-export const TabPage: React.FC<TabPageProps> = (props) => {
-    const routeMatch = useRouteMatch([
-        routePaths.compare,
-        routePaths.table,
-    ]);
-    const currentTab = routeMatch?.pattern?.path || "table";
-    // const { data, } = useQuery({ queryKey: ['saved_stp_data'], queryFn: GetStpDataPromise },)
-    const { StpStore, query, filterParams } = useAppContext()
-    const [p, setPage] = useState(0)
-
-    // const queryContext = useLoadMore()
+const TabIcon = React.memo(() => <SvgIcon sx={ { fontSize: 20 } }><GrTable /> </SvgIcon>)
+TabIcon.displayName = '*TabIcon'
+const CompIcon = React.memo(() => <SvgIcon sx={ { fontSize: 20 } }><MdCompare /> </SvgIcon>)
+CompIcon.displayName = '*CompareIcon'
+//__TABPAGE____
+export const TabPage: React.FC<TabPageProps> = () => {
+    const { query, filterParams } = useAppContext()
     const queryAll = useLoadAllData()
-
-    // const filtered = useStpFilter(data, query, filterParams)
     const [selected, action] = useIdSelector()
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
-    };
-    const handleChangeRoute = (event: React.SyntheticEvent, newValue: string) => {
-        redirect(newValue)
-
-    };
-
-
-    // const handleNext = () => {
-    //     if (queryContext.hasNextPage) {
-    //         setPage(prev => prev + 1)
-    //         queryContext.fetchNextPage()
-    //     }
-    //     else _log("This is last page")
-    // }
-    // const handlePrev = () => {
-    //     setPage(0)
-    //     queryContext.fetchPreviousPage()
-    // }
-
-    // const current_page = useMemo(() => {
-    //     const arr = queryContext?.data?.pages.map(p => p.data)
-    //     return arr?.flat()
-    // }, [queryContext?.data?.pages])
-
-
+    const [value, setValue] = React.useState<number>(0);
     const filtered = useStpFilter(queryAll.data, query, filterParams)
-    // const isDisabled = () => queryContext.status === 'pending'
-    // console.log('list', queryContext.data)
+    const handleChange = (event: React.SyntheticEvent, new_index: number) => {
+        setValue(new_index);
+    };
+
+
+
     return (
-        <Box sx={ { bgcolor: 'background.paper' } }>
-            <SuspenseLoad loadText={ 'Данные загружаются, статус загрузки: ' + queryAll.status }>
-                <AppBar position="static" color='info' >
-                    <Stack direction={ 'row' } justifyContent={ 'space-evenly' }>
+        <Box sx={ { bgcolor: 'background.paper' } } component={ Paper } elevation={ 2 }>
+            <AppBar position="static" color='info' >
 
-                        <Tabs
-                            value={ value }
-                            onChange={ handleChange }
-                            indicatorColor="primary"
-                            textColor="primary"
-                            variant="standard"
-                            sx={ { [`& .MuiTab-root`]: { fontWeight: 'bolder' } } }
+                <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'baseline' } spacing={ 3 }>
+                    <FilterDrawer />
+                    <Tabs
+                        value={ value }
+                        onChange={ handleChange }
+                        indicatorColor="primary"
+                        textColor="inherit"
+                        variant="standard"
 
-                        >
-                            <Tab label="Таблица" value={ 0 } icon={ <SvgIcon sx={ { fontSize: 20 } }><GrTable /> </SvgIcon> } iconPosition='start'
-                            //  { ...a11yProps(0) }
-                            />
-                            <Tab label="Сравнить" value={ 1 } icon={ <SvgIcon sx={ { fontSize: 20 } }><MdCompare /> </SvgIcon> } iconPosition='start'
-                            //  { ...a11yProps(1) }
-                            />
+                        sx={ { [`& .MuiTab-root`]: { fontWeight: 'bolder' } } }
 
-                        </Tabs>
-                        {/* <ButtonGroup orientation='horizontal' variant='contained' size='small'>
+                    >
+                        <Tab
+                            label="Таблица"
+                            value={ 0 }
+                            icon={ <TabIcon /> }
+                            iconPosition='start' />
 
-                        <Button
-                            onClick={ handlePrev }
-                        >load first page
-                        </Button>
-                        <Button
-                            disabled={ isDisabled() }
-                            onClick={ handleNext }
-                        >
-                            {
-                                queryContext.isLoading
-                                    ?
-                                    <CircularProgress color='primary' variant={ 'indeterminate' } />
-                                    :
-                                    queryContext.isFetchingNextPage ?
-                                        `is loading next...` :
-                                        `Load Next`
-                            }
-                        </Button>
-                    </ButtonGroup> */}
-                    </Stack>
-                </AppBar >
-                <React.Fragment>
+
+                        <Tab
+                            label="Сравнить"
+                            value={ 1 }
+                            icon={ <CompIcon /> }
+                            iconPosition='start'
+                            disabled={ selected.length === 0 }
+                        />
+
+
+                    </Tabs>
+
+
+                </Stack>
+            </AppBar >
+
+
+            <Suspense fallback={ <Loading /> }>
+
+                <TabPanel index={ 0 } value={ value }>
+                    { queryAll.isSuccess &&
+                        <StpDataTable
+                            items={ filtered }
+                            selectedItems={ selected }
+                            selectorActions={ action }
+                        />
+                    }
+                </TabPanel>
+            </Suspense>
+            <Suspense fallback={ <Loading /> }>
+
+                <TabPanel index={ 1 } value={ value }
+                >
+                    <ComparePage />
+
+                </TabPanel>
+            </Suspense>
+            {/* <React.Fragment>
 
                     <TabPanel value={ value } index={ 0 } >
                         {
@@ -134,14 +121,12 @@ export const TabPage: React.FC<TabPageProps> = (props) => {
 
                         }
                     </TabPanel>
-                    <TabPanel value={ value } index={ 1 } >
-                        <ComparePage />
-                    </TabPanel>
+                    
                     <TabPanel value={ value } index={ 2 } >
 
                     </TabPanel>
-                </React.Fragment>
-            </SuspenseLoad>
+                </React.Fragment> */}
+
         </Box>
     )
 }
@@ -175,48 +160,4 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-type TabRouterPanelProps = {
-    children?: React.ReactNode;
 
-    value: string;
-    path: string
-}
-function TabRouterPanel(props: TabRouterPanelProps) {
-    const { children, path, value } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={ value !== path }
-            id={ `full-width-tabpanel-${path}` }
-            aria-labelledby={ `full-width-tab-${path}` }
-
-        >
-            { value === path && (
-                <Box sx={ { p: 1 } }>
-                    { children }
-                </Box>
-            ) }
-        </div>
-    );
-}
-
-function a11yProps(index: number) {
-    return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
-    };
-}
-function useRouteMatch(patterns: readonly string[]) {
-    const { pathname } = useLocation();
-
-    for (let i = 0; i < patterns.length; i += 1) {
-        const pattern = patterns[i];
-        const possibleMatch = matchPath(pattern, pathname);
-        if (possibleMatch !== null) {
-            return possibleMatch;
-        }
-    }
-
-    return null;
-}

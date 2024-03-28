@@ -17,7 +17,7 @@ export const ErrorPage = () => {
                 color={ '#e61818' }
                 bgcolor={ '#382303' }
             >
-                <Link to={ '/' } className='flex gap-2'>        <strong> Back </strong> <RiArrowGoBackFill /> </Link>
+                <Link to={ '/tabs' } className='flex gap-2'>        <strong> Back </strong> <RiArrowGoBackFill /> </Link>
 
 
             </Stack>

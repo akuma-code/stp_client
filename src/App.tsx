@@ -5,11 +5,14 @@ import { StpStore } from "./Context/StpStore";
 import { QueryClient, QueryClientProvider, useQuery, } from "@tanstack/react-query";
 
 import { AppContext } from "./Hooks/useStoresContext";
+import { FilterContext } from "./Hooks/useFilterContext";
 import { FiltersParams, } from "./Interfaces/Types";
 import { router } from "./Routes/AppRouter";
 import { apiRoute, proxyRoute, routePaths } from "./Routes/routePath";
 import { AppToolbarHeader } from "./Routes/Pages/AppBar";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { FilterStore } from "./Context/Stores/FiltrationStore";
+
 
 
 const stores = { StpStore: new StpStore(table_data_base) }
@@ -51,18 +54,21 @@ function App() {
     } }
     >
       <QueryClientProvider client={ queryClient } >
+        <FilterContext.Provider value={ new FilterStore() }>
 
-        <RouterProvider
-          router={ router }
-          fallbackElement={
-            <div className="text-4xl text-center mt-6">
-              <strong>App loading.... Be patient</strong>
-            </div>
-          }
+          {/* <AppToolbarHeader /> */ }
+          <RouterProvider
+            router={ router }
+            fallbackElement={
+              <div className="text-4xl text-center mt-6">
+                <strong>App loading.... Be patient</strong>
+              </div>
+            }
 
-        />
+          />
 
-        <ReactQueryDevtools initialIsOpen={ false } position="bottom" />
+          <ReactQueryDevtools initialIsOpen={ false } position="bottom" />
+        </FilterContext.Provider>
       </QueryClientProvider>
     </AppContext.Provider>
   );
