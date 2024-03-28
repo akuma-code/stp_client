@@ -1,8 +1,7 @@
-import { action, makeAutoObservable, makeObservable, observable } from "mobx"
+import { action, makeAutoObservable, observable } from "mobx"
 import { StpTag } from "../../Components/StpTable/TableObjects"
-import { _isArr, _log } from "../../Helpers/helpersFns"
+import { _isArr } from "../../Helpers/helpersFns"
 import { AnyObj, FiltersParams } from "../../Interfaces/Types"
-import { StpData } from "../../Components/StpTableView/StpDataTable"
 
 
 type FilterCams = {
@@ -18,26 +17,19 @@ type FilterTags = {
     value: FiltersParams['tags']
 }
 type FilterRecord = | FilterTags | FilterCams | FilterDepth
-export class FilterStore implements FiltersParams {
-    cams: number[]
-    tags: StpTag[]
-    depth: number[]
-    setCams: (cams: number[]) => void
+export class FilterStore {
+    cams: number[] = []
+    tags: StpTag[] = []
+    depth: number[] = []
+    // setCams: (cams: number[]) => void
     constructor() {
-        this.cams = []
-        this.tags = []
-        this.depth = []
-        this.setCams = (value: number[]) => this.cams = value
-        makeObservable(this, {
-            setFilter: action,
-            cams: observable,
-            tags: observable,
-            depth: observable,
-            clearFilter: action,
-            setCams: action,
-            setDepth: action,
-            setTags: action,
-        },
+        // this.cams = []
+        // this.tags = []
+        // this.depth = []
+        // this.setCams = (value: number[]) => this.cams = value
+        makeAutoObservable(
+            this,
+            {},
             { name: 'FilterContext' })
     }
 
@@ -54,15 +46,24 @@ export class FilterStore implements FiltersParams {
         this.setFilter({ key, value: [] })
     }
 
-    // setCams(value: number[]) {
+    // set cams(value: number[]) {
     //     this.cams = value
     // }
-    setDepth(value: number[]) {
-        this.depth = value
-    }
-    setTags(value: StpTag[]) {
-        this.tags = value
-    }
+    // set depth(value: number[]) {
+    //     this.depth = value
+    // }
+    // set tags(value: StpTag[]) {
+    //     this.tags = value
+    // }
+    // get cams() {
+    //     return this.cams
+    // }
+    // get depth() {
+    //     return this.depth
+    // }
+    // get tags() {
+    //     return this.tags
+    // }
 
 }
 

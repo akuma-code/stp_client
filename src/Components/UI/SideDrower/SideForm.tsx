@@ -4,10 +4,11 @@ import { comparator } from '../../../Context/Stores/FiltrationStore'
 import { StpData } from '../../StpTableView/StpDataTable'
 import { useFilterContext } from '../../../Hooks/useFilterContext'
 import { observer } from 'mobx-react-lite'
+import { useAppContext } from '../../../Hooks/useStoresContext'
 
 const SideForm = observer(() => {
-    const { depth, cams, tags, setCams, } = useFilterContext()
-
+    const { depth, cams, tags } = useFilterContext()
+    const { FilterStore } = useAppContext()
     const searchCams = comparator<StpData>('cams', 2)
 
     return (
@@ -19,21 +20,21 @@ const SideForm = observer(() => {
                     multiple
                     labelId="depth-label"
                     name='depth-selector'
-                    value={ depth }
+                    value={ cams }
                     fullWidth
-                    onChange={ (e) => depth.push(+e.target.value) }
+                    onChange={ (e, v) => FilterStore.cams = [+e.target.value] }
                     // onChange={ handleSelectorChange('depth') }
                     input={ <OutlinedInput label="Толщина ст-та____" id='multitag2' sx={ { fontSize: 12 } } /> }
-                // renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || '' }
+                    renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || [1, 2] }
                 // MenuProps={ DepthMenuProps }
 
                 >
 
                     {
-                        [24, 28].map((depth) => (
+                        camsArray.map((depth) => (
                             <MenuItem key={ depth } value={ depth } divider dense>
                                 {/* <Checkbox checked={ selectors.depth?.includes(depth) } name={ depth + '_checkDepth' } /> */ }
-                                <ListItemText primary={ `${depth} мм` } />
+                                <ListItemText primary={ depth } />
                             </MenuItem>
 
                         )) }
@@ -45,3 +46,7 @@ const SideForm = observer(() => {
 })
 SideForm.displayName = "__SideForm"
 export default SideForm
+const depthArray = [
+    24, 28, 32, 36, 40, 52
+] as const
+const camsArray = [1, 2] as const

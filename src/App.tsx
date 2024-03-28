@@ -12,10 +12,14 @@ import { apiRoute, proxyRoute, routePaths } from "./Routes/routePath";
 import { AppToolbarHeader } from "./Routes/Pages/AppBar";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { FilterStore } from "./Context/Stores/FiltrationStore";
+import { configure } from "mobx";
 
 
-
-const stores = { StpStore: new StpStore(table_data_base) }
+configure({
+  useProxies: "always",
+  enforceActions: 'observed'
+});
+const stores = { StpStore: new StpStore(table_data_base), FilterStore: new FilterStore() }
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

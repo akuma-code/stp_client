@@ -3,12 +3,14 @@ import { createContext, useContext } from "react"
 
 import { StpStore } from "../Context/StpStore"
 import { FiltersParams, StpTypeProps } from "../Interfaces/Types"
+import { FilterStore } from "../Context/Stores/FiltrationStore"
 
 
 
 
 export type AContext = {
     StpStore: StpStore
+    FilterStore: FilterStore
     selectedItems: number[]
     select: React.Dispatch<React.SetStateAction<number[]>>
     filteredItemsCount: number

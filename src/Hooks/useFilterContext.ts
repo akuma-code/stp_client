@@ -1,8 +1,9 @@
 import { createContext, useContext } from "react";
 import { FilterStore } from "../Context/Stores/FiltrationStore";
+import { FiltersParams } from "../Interfaces/Types";
 
 
-export const FilterContext = createContext<FilterStore | null>(null);
+export const FilterContext = createContext<FiltersParams | null>(null);
 export const useFilterContext = () => {
     const context = useContext(FilterContext);
     if (!context) {

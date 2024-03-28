@@ -18,7 +18,7 @@ type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 export const FilterDrawer = observer(() => {
     const [show, control] = useToggle()
-    const { cams, depth, tags } = useFilterContext()
+
 
     const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
         if (
