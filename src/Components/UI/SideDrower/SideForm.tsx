@@ -1,16 +1,13 @@
-import { Checkbox, ListItemText, MenuItem, OutlinedInput, Paper, Select } from '@mui/material'
-import React from 'react'
-import { comparator } from '../../../Context/Stores/FiltrationStore'
-import { StpData } from '../../StpTableView/StpDataTable'
-import { useFilterContext } from '../../../Hooks/useFilterContext'
+import { ListItemText, MenuItem, OutlinedInput, Paper, Select } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useAppContext } from '../../../Hooks/useStoresContext'
+import { useFilterContext } from '../../../Hooks/useFilterContext'
+import { useEffect } from 'react'
 
 const SideForm = observer(() => {
-    const { depth, cams, tags } = useFilterContext()
-    const { FilterStore } = useAppContext()
-    const searchCams = comparator<StpData>('cams', 2)
+    const { filters } = useFilterContext()
 
+
+    useEffect(() => { return () => filters.clearFilter('cams') }, [])
     return (
         <Paper elevation={ 3 } sx={ { width: 240, p: 1 } }>
 
@@ -20,12 +17,12 @@ const SideForm = observer(() => {
                     multiple
                     labelId="depth-label"
                     name='depth-selector'
-                    value={ cams }
+                    value={ filters.cams }
                     fullWidth
-                    onChange={ (e, v) => FilterStore.cams = [+e.target.value] }
+                    onChange={ (e, v) => filters.setCams(+e.target.value) }
                     // onChange={ handleSelectorChange('depth') }
                     input={ <OutlinedInput label="Толщина ст-та____" id='multitag2' sx={ { fontSize: 12 } } /> }
-                    renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || [1, 2] }
+                // renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || [1, 2] }
                 // MenuProps={ DepthMenuProps }
 
                 >

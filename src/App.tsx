@@ -58,7 +58,7 @@ function App() {
     } }
     >
       <QueryClientProvider client={ queryClient } >
-        <FilterContext.Provider value={ new FilterStore() }>
+        <FilterContext.Provider value={ { filters: new FilterStore() } }>
 
           {/* <AppToolbarHeader /> */ }
           <RouterProvider

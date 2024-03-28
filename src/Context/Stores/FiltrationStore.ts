@@ -46,9 +46,9 @@ export class FilterStore {
         this.setFilter({ key, value: [] })
     }
 
-    // set cams(value: number[]) {
-    //     this.cams = value
-    // }
+    setCams(value: number) {
+        this.cams = [...this.cams, value]
+    }
     // set depth(value: number[]) {
     //     this.depth = value
     // }
