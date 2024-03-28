@@ -1,6 +1,6 @@
 import { action, makeAutoObservable, observable } from "mobx"
 import { StpTag } from "../../Components/StpTable/TableObjects"
-import { _isArr } from "../../Helpers/helpersFns"
+import { _isArr, _log } from "../../Helpers/helpersFns"
 import { AnyObj, FiltersParams } from "../../Interfaces/Types"
 
 
@@ -19,7 +19,7 @@ type FilterTags = {
 type FilterRecord = | FilterTags | FilterCams | FilterDepth
 export class FilterStore {
     cams: number[] = []
-    tags: StpTag[] = []
+    tags: StpTag[] = ['energy', "hitproof"]
     depth: number[] = []
     // setCams: (cams: number[]) => void
     constructor() {
@@ -45,7 +45,15 @@ export class FilterStore {
     public clearFilter(key: FilterRecord['key']) {
         this.setFilter({ key, value: [] })
     }
+    compareTag() {
+        const tagreg = {
+            simple: /simple/g,
+            standart: /standart/g
+        }
 
+        const tagstr = this.tags.join("")
+        _log("has simple", tagreg.simple.test(tagstr))
+    }
     setCams(value: number) {
         this.cams = [...this.cams, value]
     }

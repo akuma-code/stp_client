@@ -6,8 +6,8 @@ import { useEffect } from 'react'
 const SideForm = observer(() => {
     const { filters } = useFilterContext()
 
-
-    useEffect(() => { return () => filters.clearFilter('cams') }, [])
+    filters.compareTag()
+    // useEffect(() => { return () => filters.clearFilter('cams') }, [])
     return (
         <Paper elevation={ 3 } sx={ { width: 240, p: 1 } }>
 
