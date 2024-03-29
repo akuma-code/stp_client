@@ -33,33 +33,33 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
 
 
-            <SuspenseLoad loadText='tooltip loading'>
-                <Box
-                    component={ Stack }
-                    flexGrow={ 0 }
-                    flexShrink={ 1 }
-                    maxWidth={ 350 }
 
-                    pt={ 0 }
+            <Box
+                component={ Stack }
+                flexGrow={ 0 }
+                flexShrink={ 1 }
+                maxWidth={ 350 }
 
-                >    <AcSearch />
+                pt={ 0 }
 
-                </Box>
-                <Box component={ Stack }
-                    direction={ 'row' }
-                    flexGrow={ 2 }
-                    justifyContent={ 'space-between' }
-                    alignItems={ 'center' }
-                    pr={ 3 }
-                >
+            >    <AcSearch />
 
+            </Box>
+            <Box component={ Stack }
+                direction={ 'row' }
+                flexGrow={ 2 }
+                justifyContent={ 'space-between' }
+                alignItems={ 'center' }
+                pr={ 3 }
+            >
 
+                <SuspenseLoad loadText='tooltip loading'>
 
                     <PropertySelector filteredCount={ numFiltered } />
 
                     <AttikLogo />
-                </Box>
-            </SuspenseLoad>
+                </SuspenseLoad>
+            </Box>
         </Toolbar>
         // </Suspense>
     );

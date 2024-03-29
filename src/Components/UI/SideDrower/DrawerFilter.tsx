@@ -12,6 +12,7 @@ import { useToggle } from '../../../Hooks/useToggle';
 import SideForm from './SideForm';
 import { observer } from 'mobx-react-lite';
 import { useFilterContext } from '../../../Hooks/useFilterContext';
+import { BsFillFilterSquareFill } from 'react-icons/bs';
 
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
@@ -35,7 +36,13 @@ export const FilterDrawer = observer(() => {
         <div>
 
             <React.Fragment >
-                <Button onClick={ toggleDrawer } variant='contained' color='primary'>Filters</Button>
+                <Button onClick={ toggleDrawer }
+                    variant='outlined'
+                    color={ 'secondary' }
+                    startIcon={ <BsFillFilterSquareFill /> }
+                >
+                    Включить фильтры
+                </Button>
                 <Drawer
                     anchor={ 'left' }
                     open={ show }
