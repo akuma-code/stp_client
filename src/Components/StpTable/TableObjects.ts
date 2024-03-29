@@ -42,7 +42,13 @@ export type StpNameProperties =
     | 'ч'
     | 'с'
 
-
+export function isTag<T = unknown>(item: T): item is T {
+    const tags = ["multi", "simple", "energy", "soundproof", "hitproof", "solarproof", "standart"]
+    if (typeof item === 'string') {
+        return tags.includes(item)
+    }
+    else return false
+}
 
 
 

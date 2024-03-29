@@ -36,3 +36,35 @@ export const AvatarS3 = ({ wh }: { wh?: number }) => {
         </Suspense>
     )
 }
+
+type CamAvatarProps = {
+    wh?: string | number
+    cam_count: 1 | 2
+
+}
+export const CamAvatar: React.FC<CamAvatarProps> = ({ wh, cam_count }) => {
+
+    const icon = cam_count === 1 ? <Cam1 /> : cam_count === 2 ? <Cam2 /> : null
+
+    return (
+        <Suspense fallback={
+            <CircularProgress variant='indeterminate' color='info' />
+        }>
+
+            <Tooltip title='2 камеры (3 стекла)'>
+                <Avatar sx={ {
+                    width: wh || '1em',
+                    height: wh || '1em',
+                    bgcolor: '#4382cf',
+                    '&:hover': { transform: 'scale(1.5)' },
+                } }
+                    variant='rounded'
+                    alt='2 cam'>
+                    <SvgIcon>
+                        { icon }
+                    </SvgIcon>
+                </Avatar>
+            </Tooltip>
+        </Suspense>
+    )
+}
