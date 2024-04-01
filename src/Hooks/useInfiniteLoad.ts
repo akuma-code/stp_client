@@ -1,26 +1,27 @@
 
-import { GetInfiniteRowsInterface, QueryKeyT, dataExtractor } from "./useQueryFetch";
 import { FetchedData, stpBackup_128 } from "../Components/StpTable/Data/data_spreadsheet";
 import { StpData } from "../Components/StpTableView/StpDataTable";
-import { _log } from "../Helpers/helpersFns";
-import { queryClient } from "../App";
-import { GetStpDataPromise } from "../Components/StpTable/FullTable";
-import { UseInfiniteQueryResult, useInfiniteQuery } from "@tanstack/react-query";
+import { QueryKeyT, dataExtractor } from "./useQueryFetch";
+
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { queryClient } from "..";
 import { CursorRespone } from "../Interfaces/Types";
 
 
 export const useInfiniteLoad = (queryKey: QueryKeyT) => {
     // const { data } = useFetch<SSResponse>(proxyRoute(apiRoute.stp_db))
-    const context = useInfiniteQuery<GetInfiniteRowsInterface<StpData[]>, Error, GetInfiniteRowsInterface<StpData[]>, QueryKeyT, number>(
-        {
-            queryKey: queryKey,
-            queryFn: ({ queryKey, pageParam = 0 }) => getDataFromSpreadsheet({ pageParam }),
-            initialPageParam: 0,
-            getNextPageParam: (last) => last.nextCursor ?? -1,
-            getPreviousPageParam: (prev) => prev.prevCursor ?? 0,
-        }, queryClient
+    const context = useInfiniteQuery
+        // <GetInfiniteRowsInterface<StpData[]>, Error, GetInfiniteRowsInterface<StpData[]>, QueryKeyT, number>
+        (
+            {
+                queryKey: queryKey,
+                queryFn: ({ queryKey, pageParam = 0 }) => getDataFromSpreadsheet({ pageParam }),
+                initialPageParam: 0,
+                getNextPageParam: (last) => last.nextCursor ?? -1,
+                getPreviousPageParam: (prev) => prev.prevCursor ?? 0,
+            }, queryClient
 
-    );
+        );
     return context;
 };
 type StpDataResponsePromise = CursorRespone<StpData[]>

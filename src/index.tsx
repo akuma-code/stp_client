@@ -5,14 +5,32 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from "./Theme";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+
+
+
+    },
+  },
+
+})
+
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={ theme }>
-      <CssBaseline enableColorScheme />
-      <App />
+      <QueryClientProvider client={ queryClient } >
+
+        <CssBaseline enableColorScheme />
+        <App />
+      </QueryClientProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

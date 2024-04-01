@@ -15,6 +15,7 @@ import { FilterStore } from '../../../Context/Stores/FiltrationStore'
 import { TagAvatarIcon } from '../TagAvatars'
 import { Stp_Tags } from '../../../Interfaces/Enums'
 import { toJS } from 'mobx'
+import { CamsSpeedDial } from './QuickFilters'
 const depthArray = [
     24, 28, 32, 36, 40, 52
 ] as const
@@ -122,10 +123,11 @@ const SideForm = observer(() => {
                             cams={ filters.cams }
                             handleChange={ handleChange }
                         />
+                        <CamsSpeedDial />
                     </>
                     <>
                         <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
-                        < SelectDepth
+                        <SelectDepth
                             depths={ filters.depth }
                             handleChange={ handleChange }
                         />
@@ -147,6 +149,7 @@ const SideForm = observer(() => {
                         Применить
                     </Button>
                 </Stack>
+                <Divider />
             </Form>
         </Paper>
     )

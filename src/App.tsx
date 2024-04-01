@@ -20,18 +20,18 @@ configure({
   enforceActions: 'observed'
 });
 const stores = { StpStore: new StpStore(table_data_base), FilterStore: new FilterStore() }
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      refetchOnWindowFocus: false,
+// export const queryClient = new QueryClient({
+//   defaultOptions: {
+//     queries: {
+//       retry: false,
+//       refetchOnWindowFocus: false,
 
 
 
-    },
-  },
+//     },
+//   },
 
-})
+// })
 
 function App() {
   const [selected, setSelected] = useState<number[]>([])
@@ -57,23 +57,21 @@ function App() {
       filterFn: setFilters
     } }
     >
-      <QueryClientProvider client={ queryClient } >
-        <FilterContext.Provider value={ { filters: new FilterStore() } }>
 
-          {/* <AppToolbarHeader /> */ }
-          <RouterProvider
-            router={ router }
-            fallbackElement={
-              <div className="text-4xl text-center mt-6">
-                <strong>App loading.... Be patient</strong>
-              </div>
-            }
+      <FilterContext.Provider value={ { filters: new FilterStore() } }>
 
-          />
+        <RouterProvider
+          router={ router }
+          fallbackElement={
+            <div className="text-4xl text-center mt-6">
+              <strong>App loading.... Be patient</strong>
+            </div>
+          }
 
-          <ReactQueryDevtools initialIsOpen={ false } position="bottom" />
-        </FilterContext.Provider>
-      </QueryClientProvider>
+        />
+
+        <ReactQueryDevtools initialIsOpen={ false } position="bottom" />
+      </FilterContext.Provider>
     </AppContext.Provider>
   );
 }
