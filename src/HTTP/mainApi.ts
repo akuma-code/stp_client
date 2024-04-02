@@ -27,8 +27,8 @@ const headerInterceptor = (config: { headers: AxiosHeaders }) => {
     config.headers.authorization = `Bearer ${Cookies.get('token') || ""}`
     // config.headers.set('Origin', host)
     // config.headers.set('Origin', )
-    _log("config interceptor: ", config)
 
+    console.log('config: ', config)
     return config
 }
 

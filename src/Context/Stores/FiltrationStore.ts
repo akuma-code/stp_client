@@ -74,7 +74,13 @@ export class FilterStore {
         this.tags = _isArr(value) ? value : [...this.tags, value]
     }
     applyFilters<T extends StpData>(items: T[]) {
-        return filterPipe(items, this)
+        try {
+            return filterPipe(items, this)
+
+        } catch (error) {
+            console.error(error, this)
+            return items
+        }
     }
 
 }

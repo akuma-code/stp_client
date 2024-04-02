@@ -1,4 +1,4 @@
-import { RouteObject, createBrowserRouter } from "react-router-dom";
+import { RouteObject, createBrowserRouter, json } from "react-router-dom";
 import { LazyStpData } from "../Components/StpTable/FullTable";
 import { StpData, StpDataTable } from "../Components/StpTableView/StpDataTable";
 import { ComparePage } from "./Pages/ComparePage";
@@ -76,10 +76,10 @@ export const appRoutes: RouteObject[] = [
             const fd = await request.formData()
             // _log(request)
 
-            const a = Array.from(fd)
+
             const o = Object.fromEntries(fd) as unknown as { cams: string, tags: string, depth: string }
-            _log(o.cams)
-            return o
+            console.log('fd: ', o)
+            return json(o)
         },
         errorElement: <ErrorPage />,
         children: [
