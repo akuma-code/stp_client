@@ -72,14 +72,14 @@ export const appRoutes: RouteObject[] = [
             console.log(data.length)
             return data
         },
-        action: async ({ request, params }) => {
+        action: async ({ request, params, context }) => {
             const fd = await request.formData()
             // _log(request)
 
 
-            const o = Object.fromEntries(fd) as unknown as { cams: string, tags: string, depth: string }
-            console.log('fd: ', o)
-            return json(o)
+            const o = Object.fromEntries(fd)
+
+            return o
         },
         errorElement: <ErrorPage />,
         children: [

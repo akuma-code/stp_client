@@ -89,18 +89,10 @@ const SideForm = observer(() => {
     const handleSubmit = async () => {
         const { cams, tags, depth } = filters
         const fd = new FormData()
-        const selected_filters = ([cams, depth, tags] as const).filter(f => f.length > 0)
-        const _selected = [
-            cams, tags, depth
-        ]
-        // _selected.filter(i => i.length > 0)
-        // .sort((a, b) => b.toLocaleString().localeCompare(a.toLocaleString()))
-        // .map(i => i.join("-"))
 
-        // _log(_selected)
-        await fd.set('filters', JSON.stringify(filters))
+        fd.set('filters', JSON.stringify({ cams, tags, depth }))
+        await fetcher.submit(fd,)
 
-        return fd
 
 
     }
@@ -118,8 +110,8 @@ const SideForm = observer(() => {
             <fetcher.Form
                 id='ff'
                 name='ff'
-                method='post'
-                // target='tabs'
+
+                target='form'
                 onSubmit={ handleSubmit }
             >
                 <Stack direction={ 'column' }
