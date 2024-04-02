@@ -6,7 +6,7 @@ import { _log } from '../../../Helpers/helpersFns'
 import { FiltersParams } from '../../../Interfaces/Types'
 import { StpTag, isTag } from '../../StpTable/TableObjects'
 import { AvatarS2, AvatarS3, CamAvatar } from '../CamsAvatars'
-import { Form } from 'react-router-dom'
+import { Form, useFetcher } from 'react-router-dom'
 import { TbFilterCheck } from 'react-icons/tb'
 import { _pathToUrl } from '../../../Helpers/urlpath'
 import { URL } from 'url'
@@ -16,6 +16,7 @@ import { TagAvatarIcon } from '../TagAvatars'
 import { Stp_Tags } from '../../../Interfaces/Enums'
 import { toJS } from 'mobx'
 import { CamsSpeedDial } from './QuickFilters'
+import { AcSearch } from '../../StpTableView/AcSearch'
 const depthArray = [
     24, 28, 32, 36, 40, 52
 ] as const
@@ -62,6 +63,7 @@ const tagsAvatarGroup = (selected: StpTag[]) => {
 
 const SideForm = observer(() => {
     const { filters } = useFilterContext()
+    const fetcher = useFetcher()
     const handleChange: FiltrationChangeHandler = (selector) => (e, child) => {
         const { value } = e.target
         if (typeof value === 'string') return _log(value)
@@ -84,19 +86,21 @@ const SideForm = observer(() => {
         }
 
     }
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const { cams, tags, depth } = filters
         const fd = new FormData()
         const selected_filters = ([cams, depth, tags] as const).filter(f => f.length > 0)
         const _selected = [
             cams, tags, depth
-        ].filter(i => i.length > 0)
-            .sort((a, b) => b.toLocaleString().localeCompare(a.toLocaleString()))
-            .map(i => i.join("-"))
+        ]
+        // _selected.filter(i => i.length > 0)
+        // .sort((a, b) => b.toLocaleString().localeCompare(a.toLocaleString()))
+        // .map(i => i.join("-"))
 
-        _log(_selected)
+        // _log(_selected)
+        await fd.set('filters', JSON.stringify(filters))
 
-        // selected_filters.forEach(f=>fd.set(, JSON.stringify(f)))
+        return fd
 
 
     }
@@ -110,7 +114,12 @@ const SideForm = observer(() => {
         <Paper elevation={ 3 } sx={ { width: 290, p: 2 } } >
             <Typography variant='h5' fontSize={ 19 } textAlign={ 'center' } py={ 1 }>Отфильтровать данные</Typography>
             <Divider flexItem sx={ { my: 1 } } />
-            <Form id='side-filter-form'
+            <AcSearch />
+            <fetcher.Form
+                id='ff'
+                name='ff'
+                method='post'
+                // target='tabs'
                 onSubmit={ handleSubmit }
             >
                 <Stack direction={ 'column' }
@@ -150,20 +159,24 @@ const SideForm = observer(() => {
                     </Button>
                 </Stack>
                 <Divider />
-            </Form>
+            </fetcher.Form>
         </Paper>
     )
 })
 SideForm.displayName = "__SideForm"
 export default SideForm
 
+
+
+
 function SelectTags({ tags, handleChange }: { tags: FilterStore['tags'], handleChange: FiltrationChangeHandler }) {
     return <Select
+
         variant='filled'
         multiple
         labelId="multitag-label"
         id="multitag"
-        name='tags-selector'
+        name='tags'
         value={ tags }
         onChange={ handleChange('tags') }
         input={ <OutlinedInput sx={ { fontSize: 12 } } /> }
@@ -187,7 +200,7 @@ function SelectDepth({ depths, handleChange }: { depths: FilterStore['depth'], h
 
         multiple
         labelId="depth-label"
-        name='depth-selector'
+        name='depth'
         value={ depths }
         onChange={ handleChange('depth') }
         input={ <OutlinedInput sx={ { fontSize: 12 } } /> }
@@ -213,7 +226,7 @@ function SelectCams({ cams, handleChange }: { cams: number[], handleChange: Filt
         fullWidth
         labelId="cams-label"
 
-        name='cams-selector'
+        name='cams'
         value={ cams }
         onChange={ handleChange('cams') }
         input={ <OutlinedInput id='multitag2' sx={ { fontSize: 12 } } /> }
@@ -244,3 +257,5 @@ function SelectCams({ cams, handleChange }: { cams: number[], handleChange: Filt
 
     </Select>
 }
+
+

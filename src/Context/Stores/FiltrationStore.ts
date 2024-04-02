@@ -2,8 +2,11 @@ import { action, makeAutoObservable, observable } from "mobx"
 import { StpTag } from "../../Components/StpTable/TableObjects"
 import { _isArr, _log } from "../../Helpers/helpersFns"
 import { AnyObj, FiltersParams } from "../../Interfaces/Types"
+import { StpData } from "../../Components/StpTableView/StpDataTable"
 
+type PropFilter = { cams: number[], depth: number[], tags: StpTag[] }
 
+type SelectorFilter = { cams?: number[] } | { depth?: number[] } | { tags?: StpTag[] }
 type FilterCams = {
     key: 'cams'
     value: FiltersParams['cams']
@@ -34,6 +37,7 @@ export class FilterStore {
     }
 
     public setFilter({ key, value }: FilterRecord) {
+
         switch (key) {
             case "cams": { this.cams = value; break }
             case "tags": { this.tags = value; break }
@@ -45,7 +49,7 @@ export class FilterStore {
     public clearFilter(key: FilterRecord['key']) {
         this.setFilter({ key, value: [] })
     }
-    compareTag() {
+    private compareTag() {
         const tagRegExp: Record<StpTag, RegExp> = {
             simple: /simple/g,
             standart: /standart/g,
@@ -69,21 +73,31 @@ export class FilterStore {
     setTags(value: StpTag[] | StpTag) {
         this.tags = _isArr(value) ? value : [...this.tags, value]
     }
-
-    // set depth(value: number[]) {
-    //     this.depth = value
-    // }
-    // get cams() {
-    //     return this.cams
-    // }
-    // get tags() {
-    //     return this.tags
-    // }
+    applyFilters<T extends StpData>(items: T[]) {
+        return filterPipe(items, this)
+    }
 
 }
 
 
+export function filterPipe<T extends StpData>(items: T[], prop_filters: PropFilter) {
+    const _cams = checkNumericProp('cams', prop_filters.cams)
+    const _depth = checkNumericProp('depth', prop_filters.depth)
+    const _tags = checkTags(prop_filters.tags)
+    return items
+        .filter(_tags)
+        .filter(_cams)
+        .filter(_depth)
+}
 
+function checkTags(filter_tags: StpTag[]) {
+    if (filter_tags.length === 0) return (item: StpData) => true
+    return (item: StpData) => filter_tags.every(t => item.tags.includes(t))
+}
+function checkNumericProp<T = StpData>(filter_prop: keyof T, filter_arr: unknown[]) {
+    if (filter_arr.length === 0) return (item: T) => true
+    return (item: T) => filter_arr.includes(item[filter_prop])
+}
 
 
 

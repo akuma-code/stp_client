@@ -10,6 +10,9 @@ import { StpInfoPage } from "./Pages/StpInfoPage";
 import { routePaths } from "./routePath";
 import { TabPage } from "./Pages/Tabs/TabPage";
 import TabContainer from "./Pages/Tabs/TabContainer";
+import { _log } from "../Helpers/helpersFns";
+import { StpTag } from "../Components/StpTable/TableObjects";
+
 
 
 
@@ -54,20 +57,36 @@ export const appRoutes: RouteObject[] = [
     },
     {
         path: routePaths.tabs,
-        // index: true,
         element: <TabPage />,
         loader: async ({ request, params }) => {
+            const url = new URL(request.url)
+            const c = url.searchParams.getAll('cams')
+            const d = url.searchParams.getAll('depth')
+            const t = url.searchParams.getAll('tags')
+            // _log("search: ", c, d, t)
+
+
             const lazy_data = await LazyStpData()
             const data = lazy_data.map((item, idx) => ({ ...item, id: idx + 1 }))
             console.count("Data load: ")
             console.log(data.length)
-            return JSON.stringify(data)
+            return data
+        },
+        action: async ({ request, params }) => {
+            const fd = await request.formData()
+            // _log(request)
+
+            const a = Array.from(fd)
+            const o = Object.fromEntries(fd) as unknown as { cams: string, tags: string, depth: string }
+            _log(o.cams)
+            return o
         },
         errorElement: <ErrorPage />,
         children: [
             {
                 path: routePaths.table,
-                element: <TabContainer />
+                element: <TabContainer />,
+
             },
             {
                 path: routePaths.compare,

@@ -1,27 +1,22 @@
-import { Button, ButtonGroup, CircularProgress, LinearProgress, Paper, Stack, SvgIcon, Typography } from '@mui/material';
+import { Stack, SvgIcon } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import React, { PropsWithChildren, Suspense, useMemo, useState } from 'react';
+import React, { PropsWithChildren, Suspense, useEffect } from 'react';
 import { GrTable } from 'react-icons/gr';
 import { MdCompare } from 'react-icons/md';
-import { Link, Outlet, redirect, useLocation, useNavigate } from 'react-router-dom';
-import { MemoStpTable, StpDataTable } from '../../../Components/StpTableView/StpDataTable';
-import { Loading, SuspenseLoad } from '../../../Components/UI/SuspenseLoad';
-import { _ID, _log } from '../../../Helpers/helpersFns';
+import { StpDataTable } from '../../../Components/StpTableView/StpDataTable';
+import { FilterDrawer } from '../../../Components/UI/SideDrower/DrawerFilter';
+import { Loading } from '../../../Components/UI/SuspenseLoad';
+import { useStpFilter } from '../../../Hooks/useCompare';
+import { useFilterContext } from '../../../Hooks/useFilterContext';
 import { useIdSelector } from '../../../Hooks/useIdSelector';
-import { useLoadMore } from "../../../Hooks/useInfiniteLoad";
 import { useLoadAllData } from "../../../Hooks/useLoadAllData";
 import { useAppContext } from '../../../Hooks/useStoresContext';
-import { routePaths } from '../../routePath';
 import { ComparePage } from '../ComparePage';
-import { useStpFilter } from '../../../Hooks/useCompare';
-import { useRouteMatch } from '../../../Hooks/useRouteMatch';
-import { MuiLink } from '../MuiLink';
-import { TabRouterPanel } from './TabRouterPanel';
-import TabContainer from './TabContainer';
-import { FilterDrawer } from '../../../Components/UI/SideDrower/DrawerFilter';
+import { _log } from '../../../Helpers/helpersFns';
+import { observer } from 'mobx-react-lite';
 type TabPageProps = PropsWithChildren & {
 
 }
@@ -30,9 +25,10 @@ TabIcon.displayName = '*TabIcon'
 const CompIcon = React.memo(() => <SvgIcon sx={ { fontSize: 20 } }><MdCompare /> </SvgIcon>)
 CompIcon.displayName = '*CompareIcon'
 //__TABPAGE____
-export const TabPage: React.FC<TabPageProps> = () => {
-    const { query, filterParams } = useAppContext()
+export const TabPage: React.FC<TabPageProps> = observer(() => {
     const queryAll = useLoadAllData()
+    const { query, filterParams } = useAppContext()
+    const { filters } = useFilterContext()
     const [selected, action] = useIdSelector()
     const [value, setValue] = React.useState<number>(0);
     const filtered = useStpFilter(queryAll.data, query, filterParams)
@@ -40,13 +36,16 @@ export const TabPage: React.FC<TabPageProps> = () => {
         setValue(new_index);
     };
 
-
+    // useEffect(() => {
+    //     const filtered = filters.filterItems(queryAll.data ?? [])
+    //     _log("ctx_filtered: ", filtered.length)
+    // }, [filters.cams, filters.depth, filters.tags, queryAll.data])
 
     return (
-        <Box sx={ { bgcolor: 'background.paper' } } component={ Paper } elevation={ 2 }>
+        <Box sx={ { bgcolor: 'background.paper' } }>
             <AppBar position="static" color='info' >
 
-                <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'baseline' } spacing={ 3 }>
+                <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'baseline' } spacing={ 8 }>
                     <FilterDrawer />
                     <Tabs
                         value={ value }
@@ -55,14 +54,19 @@ export const TabPage: React.FC<TabPageProps> = () => {
                         textColor="inherit"
                         variant="standard"
 
-                        sx={ { [`& .MuiTab-root`]: { fontWeight: 'bolder' } } }
+                        sx={ {
+                            pl: 10,
+                            [`& .MuiTab-root`]: { fontWeight: 'bolder' }
+                        } }
 
                     >
                         <Tab
                             label="Таблица"
                             value={ 0 }
                             icon={ <TabIcon /> }
-                            iconPosition='start' />
+                            iconPosition='start'
+                            sx={ { pl: 4 } }
+                        />
 
 
                         <Tab
@@ -81,9 +85,9 @@ export const TabPage: React.FC<TabPageProps> = () => {
             </AppBar >
 
 
-            <Suspense fallback={ <Loading /> }>
 
-                <TabPanel index={ 0 } value={ value }>
+            <TabPanel index={ 0 } value={ value }>
+                <Suspense fallback={ <Loading /> }>
                     { queryAll.isSuccess &&
                         <StpDataTable
                             items={ filtered }
@@ -91,16 +95,15 @@ export const TabPage: React.FC<TabPageProps> = () => {
                             selectorActions={ action }
                         />
                     }
-                </TabPanel>
-            </Suspense>
-            <Suspense fallback={ <Loading /> }>
+                </Suspense>
+            </TabPanel>
+            <TabPanel index={ 1 } value={ value }                >
+                <Suspense fallback={ <Loading /> }>
 
-                <TabPanel index={ 1 } value={ value }
-                >
                     <ComparePage />
 
-                </TabPanel>
-            </Suspense>
+                </Suspense>
+            </TabPanel>
             {/* <React.Fragment>
 
                     <TabPanel value={ value } index={ 0 } >
@@ -129,8 +132,8 @@ export const TabPage: React.FC<TabPageProps> = () => {
 
         </Box>
     )
-}
-
+})
+TabPage.displayName = '__TabPage'
 interface TabPanelProps {
     children?: React.ReactNode;
 
