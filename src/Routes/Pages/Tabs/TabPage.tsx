@@ -31,11 +31,11 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
     const { query } = useAppContext()
     const { filters } = useFilterContext()
     // const [selected, action] = useIdSelector()
-    const [value, setValue] = React.useState<number>(0);
+    const [current, setCurrent] = React.useState<number>(0);
     // const filtered = useStpFilter(queryAll.data, query, filterParams)
     const qf = useQueryFiltersLoader(filters, query)
     const handleChange = (event: React.SyntheticEvent, new_index: number) => {
-        setValue(new_index);
+        setCurrent(new_index);
     };
 
     // useEffect(() => {
@@ -50,7 +50,7 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
                 <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'baseline' } spacing={ 8 }>
                     <FilterDrawer />
                     <Tabs
-                        value={ value }
+                        value={ current }
                         onChange={ handleChange }
                         indicatorColor="primary"
                         textColor="inherit"
@@ -88,20 +88,20 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
 
 
 
-            <TabPanel index={ 0 } value={ value } className='bg-slate-600 h-full'>
+            <TabPanel index={ 0 } value={ current } className='bg-orange-900 h-full'>
                 {/* <Suspense fallback={ <Loading /> }> */ }
                 {
-                    qf.status === 'pending' ? <Loading text='обновление данных' /> :
-                        qf.isSuccess &&
-                        <StpDataTable
-                            items={ qf.data }
-                            selectedItems={ filters.ids }
+                    // qf.status === 'pending' ? <Loading text='обновление данных' /> :
+                    qf.isSuccess &&
+                    <StpDataTable
+                        items={ qf.data }
+                        selectedItems={ filters.ids }
 
-                        />
+                    />
                 }
                 {/* </Suspense> */ }
             </TabPanel>
-            <TabPanel index={ 1 } value={ value }                >
+            <TabPanel index={ 1 } value={ current }                >
                 <Suspense fallback={ <Loading /> }>
 
                     <ComparePage />

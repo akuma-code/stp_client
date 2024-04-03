@@ -48,7 +48,7 @@ export const FilterDrawer = observer(() => {
                     open={ show }
                     onClose={ () => control.off() }
                 >
-                    <SideForm />
+                    <SideForm onClose={ control.off } />
                 </Drawer>
             </React.Fragment>
 

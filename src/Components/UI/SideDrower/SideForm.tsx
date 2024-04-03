@@ -61,7 +61,7 @@ const tagsAvatarGroup = (selected: StpTag[]) => {
 }
 
 
-const SideForm = observer(() => {
+const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
     const { filters } = useFilterContext()
     const fetcher = useFetcher()
     const handleChange: FiltrationChangeHandler = (selector) => (e, child) => {
@@ -92,6 +92,7 @@ const SideForm = observer(() => {
 
         fd.set('filters', JSON.stringify({ cams, tags, depth }))
         await fetcher.submit(fd,)
+        onClose && onClose()
 
 
 
@@ -124,7 +125,7 @@ const SideForm = observer(() => {
                             cams={ filters.cams }
                             handleChange={ handleChange }
                         />
-                        <CamsSpeedDial />
+                        {/* <CamsSpeedDial /> */ }
                     </>
                     <>
                         <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
@@ -140,6 +141,15 @@ const SideForm = observer(() => {
                             handleChange={ handleChange }
                         />
                     </>
+                    <Button
+                        color='success'
+                        variant='contained'
+                        fullWidth
+                        onClick={ () => filters.clearFilter() }
+                        startIcon={ <TbFilterCheck /> }
+                    >
+                        Сбросить
+                    </Button>
                     <Button
                         color='warning'
                         variant='contained'
@@ -196,7 +206,7 @@ function SelectDepth({ depths, handleChange }: { depths: FilterStore['depth'], h
         value={ depths }
         onChange={ handleChange('depth') }
         input={ <OutlinedInput sx={ { fontSize: 12 } } /> }
-        renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || '' }
+        renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || 'Ничего не выбрано' }
     >
 
         { depthArray.map((depth) => (
