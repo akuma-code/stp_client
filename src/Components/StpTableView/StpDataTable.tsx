@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Button, Stack, alpha } from '@mui/material';
 import { useAppContext } from '../../Hooks/useStoresContext';
@@ -151,6 +151,18 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
     // );
 
     // console.log('%cRender', 'color: red; background-color: beige; font-size: 1.5em')
+    const RowsList = useMemo(() => {
+        const list = sorted.map((row, index) =>
+            <StpTableRow
+                key={ row.name }
+                row_number={ index }
+                row_data={ row as unknown as StpData }
+            // handleClick={ handleClick }
+            // isSelected={ isSelected(+row.id) }
+            />
+        )
+        return () => list
+    }, [sorted])
     return (
 
         <Box sx={ { width: '100%', height: '100%' } }>
@@ -189,17 +201,18 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
 
 
                         <TableBody>
-
+                            <RowsList />
                             {
-                                sorted.map((row, index) =>
-                                    <StpTableRow
-                                        key={ row.name }
-                                        row_number={ index }
-                                        row_data={ row as unknown as StpData }
-                                    // handleClick={ handleClick }
-                                    // isSelected={ isSelected(+row.id) }
-                                    />
-                                ) }
+                                // sorted.map((row, index) =>
+                                //     <StpTableRow
+                                //         key={ row.name }
+                                //         row_number={ index }
+                                //         row_data={ row as unknown as StpData }
+                                //     // handleClick={ handleClick }
+                                //     // isSelected={ isSelected(+row.id) }
+                                //     />
+                                // ) 
+                            }
 
                         </TableBody>
                     </Table>

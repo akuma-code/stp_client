@@ -3,21 +3,17 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import React, { PropsWithChildren, Suspense, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
+import React, { PropsWithChildren, Suspense } from 'react';
 import { GrTable } from 'react-icons/gr';
 import { MdCompare } from 'react-icons/md';
 import { StpDataTable } from '../../../Components/StpTableView/StpDataTable';
 import { FilterDrawer } from '../../../Components/UI/SideDrower/DrawerFilter';
 import { Loading } from '../../../Components/UI/SuspenseLoad';
-import { useStpFilter } from '../../../Hooks/useCompare';
+import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
 import { useFilterContext } from '../../../Hooks/useFilterContext';
-import { useIdSelector } from '../../../Hooks/useIdSelector';
-import { useLoadAllData } from "../../../Hooks/useLoadAllData";
 import { useAppContext } from '../../../Hooks/useStoresContext';
 import { ComparePage } from '../ComparePage';
-import { _log } from '../../../Helpers/helpersFns';
-import { observer } from 'mobx-react-lite';
-import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
 type TabPageProps = PropsWithChildren & {
 
 }
