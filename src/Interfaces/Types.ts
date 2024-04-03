@@ -8,7 +8,8 @@ export type AnyObj = Record<string, any>
 export type FiltersParams = {
     tags: StpTag[],
     depth: number[],
-    cams: number[]
+    cams: number[],
+    id: number[]
 }
 
 export type CursorRespone<T, C = number> = {

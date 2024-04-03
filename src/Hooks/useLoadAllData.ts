@@ -23,7 +23,7 @@ export const useLoadDataQuery = (querySearch: string) => {
 
     return context;
 }
-async function getAllTableData() {
+export async function getAllTableData() {
     const stps = await stpBackup_128.map(i => dataExtractor<FetchedData>(i))
         .map((item, idx) => ({ ...item, id: idx + 1 })) as StpData[];
     return stps;

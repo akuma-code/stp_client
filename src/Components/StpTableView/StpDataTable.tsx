@@ -22,6 +22,9 @@ import { useCompare } from '../../Hooks/useCompare';
 import { SelectorActions } from '../../Hooks/useIdSelector';
 import { StpTableRow } from './StpTableRow';
 import { SuspenseLoad } from '../UI/SuspenseLoad';
+import { _TimerExec } from '../../Helpers/ExecTimer';
+import { useFilterContext } from '../../Hooks/useFilterContext';
+import { observer } from 'mobx-react-lite';
 
 
 
@@ -44,11 +47,13 @@ export type StpViewOptions = {
 type StpTableProps = {
     items: StpData[]
     selectedItems: number[]
-    selectorActions: SelectorActions
+    selectorActions?: SelectorActions
 }
-export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, selectorActions }) => {
-    const { filterParams, select: s } = useAppContext()
-    const { clear, isSelected, remove, select } = selectorActions
+
+export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selectedItems, }) => {
+    // const { filterParams, select: s } = useAppContext()
+    const { filters } = useFilterContext();
+
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof StpData>('depth');
     const sorted = useCompare(items, order, orderBy)
@@ -69,35 +74,48 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
     }, [order, orderBy]);
 
     const handleSelectAllClick = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        if (selectedItems.length >= 1) {
-            clear()
+        if (filters.ids.length >= 1) {
+            filters.clearFilter('id')
+            // clear()
             return
         }
         if (event.target.checked) {
             const newSelectedAll = sorted.map((n) => +n.id);
-
-            select(newSelectedAll)
+            filters.selectId(newSelectedAll)
+            // select(newSelectedAll)
             return;
         }
-        clear()
+        filters.clearFilter('id')
+        // clear()
 
-    }, [clear, select, selectedItems.length, sorted]);
+    }, [filters, sorted]);
+
 
     const handleClick = useCallback((event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
+        // if (filters.ids.length >= 5) return
+        filters.selectId(id)
 
-        const selectedIdx = selectedItems.indexOf(id);
 
-        if (selectedIdx === -1) select(id)
-        else if (selectedIdx >= 0 && selectedItems.length <= 5) remove(id)
-        if (selectedItems.length >= 5) remove(id)
 
-    }, [remove, select, selectedItems]);
+    }, [filters]);
+    //     const handleClick = useCallback((event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
+    // if(filters.ids.length>=5) return
+    // filters.selectId(id)
 
-    useEffect(() => {
-        s(selectedItems)
-    }, [s, selectedItems])
 
-    const isFiltersOn = filterParams.depth?.length !== 0 || filterParams.tags?.length !== 0
+    //         const selectedIdx = selectedItems.indexOf(id);
+
+    //         if (selectedIdx === -1) select(id)
+    //         else if (selectedIdx >= 0 && selectedItems.length <= 5) remove(id)
+    //         if (selectedItems.length >= 5) remove(id)
+    //     }, [remove, select, selectedItems]);
+
+
+    // useEffect(() => {
+    //     s(selectedItems)
+
+    // }, [s, selectedItems])
+    const isFiltersOn = filters.depth?.length !== 0 || filters.tags?.length !== 0
     // const handleChangePage = (event: unknown, newPage: number) => {
     //     setPage(newPage);
     // };
@@ -132,21 +150,19 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
     //     [RPP, items, page]
     // );
 
-
-    // console.count("RENDER!")
-    // console.timeEnd("renderTime:")
+    // console.log('%cRender', 'color: red; background-color: beige; font-size: 1.5em')
     return (
 
         <Box sx={ { width: '100%', height: '100%' } }>
-            <Paper sx={ { mb: 1 } } elevation={ 2 }>
-                <SuspenseLoad>
+            <Paper sx={ { m: 1 } } elevation={ 2 }>
+                {/* <SuspenseLoad>
 
                     <StpTableToolbar numFiltered={ sorted.length } />
-                </SuspenseLoad>
+                </SuspenseLoad> */}
 
                 <TableContainer sx={ {
                     overflowY: 'auto',
-                    maxHeight: '70vh',
+                    maxHeight: '85vh',
                     position: 'relative'
 
 
@@ -162,7 +178,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                         } }
                     >
                         <StpTableHeader
-                            numSelected={ selectedItems.length }
+                            numSelected={ filters.ids.length }
                             rowCount={ sorted.length }
                             order={ order }
                             orderBy={ orderBy }
@@ -180,8 +196,8 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
                                         key={ row.name }
                                         row_number={ index }
                                         row_data={ row as unknown as StpData }
-                                        handleClick={ handleClick }
-                                        isSelected={ isSelected(+row.id) }
+                                    // handleClick={ handleClick }
+                                    // isSelected={ isSelected(+row.id) }
                                     />
                                 ) }
 
@@ -192,7 +208,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
 
                 <StpTableFooter
                     dense={ true }
-                    NumSelected={ selectedItems.length }
+                    NumSelected={ filters.ids.length }
                     NumFiltered={ sorted.length }
                     isFiltersOn={ isFiltersOn }
                 />
@@ -201,7 +217,7 @@ export const StpDataTable: React.FC<StpTableProps> = ({ items, selectedItems, se
         </Box>
 
     );
-}
+})
 
 StpDataTable.displayName = '____StpTable'
 export const MemoStpTable = memo((props: StpTableProps) => StpDataTable(props))

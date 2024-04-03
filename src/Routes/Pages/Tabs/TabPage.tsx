@@ -17,6 +17,7 @@ import { useAppContext } from '../../../Hooks/useStoresContext';
 import { ComparePage } from '../ComparePage';
 import { _log } from '../../../Helpers/helpersFns';
 import { observer } from 'mobx-react-lite';
+import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
 type TabPageProps = PropsWithChildren & {
 
 }
@@ -26,12 +27,13 @@ const CompIcon = React.memo(() => <SvgIcon sx={ { fontSize: 20 } }><MdCompare />
 CompIcon.displayName = '*CompareIcon'
 //__TABPAGE____
 export const TabPage: React.FC<TabPageProps> = observer(() => {
-    const queryAll = useLoadAllData()
-    const { query, filterParams } = useAppContext()
+    // const queryAll = useLoadAllData()
+    const { query } = useAppContext()
     const { filters } = useFilterContext()
-    const [selected, action] = useIdSelector()
+    // const [selected, action] = useIdSelector()
     const [value, setValue] = React.useState<number>(0);
-    const filtered = useStpFilter(queryAll.data, query, filterParams)
+    // const filtered = useStpFilter(queryAll.data, query, filterParams)
+    const qf = useQueryFiltersLoader(filters, query)
     const handleChange = (event: React.SyntheticEvent, new_index: number) => {
         setValue(new_index);
     };
@@ -42,7 +44,7 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
     // }, [filters.cams, filters.depth, filters.tags, queryAll.data])
 
     return (
-        <Box sx={ { bgcolor: 'background.paper' } }>
+        <Box sx={ { h: '100%' } }>
             <AppBar position="static" color='info' >
 
                 <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'baseline' } spacing={ 8 }>
@@ -70,11 +72,11 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
 
 
                         <Tab
-                            label="Сравнить"
+                            label={ `Сравнить (${filters.ids.length})` }
                             value={ 1 }
                             icon={ <CompIcon /> }
                             iconPosition='start'
-                            disabled={ selected.length === 0 }
+                            disabled={ filters.ids.length === 0 }
                         />
 
 
@@ -86,16 +88,18 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
 
 
 
-            <TabPanel index={ 0 } value={ value }>
-                <Suspense fallback={ <Loading /> }>
-                    { queryAll.isSuccess &&
+            <TabPanel index={ 0 } value={ value } className='bg-slate-600 h-full'>
+                {/* <Suspense fallback={ <Loading /> }> */ }
+                {
+                    qf.status === 'pending' ? <Loading text='обновление данных' /> :
+                        qf.isSuccess &&
                         <StpDataTable
-                            items={ filtered }
-                            selectedItems={ selected }
-                            selectorActions={ action }
+                            items={ qf.data }
+                            selectedItems={ filters.ids }
+
                         />
-                    }
-                </Suspense>
+                }
+                {/* </Suspense> */ }
             </TabPanel>
             <TabPanel index={ 1 } value={ value }                >
                 <Suspense fallback={ <Loading /> }>
@@ -141,6 +145,7 @@ interface TabPanelProps {
     value: number;
     path?: string
     pathtoCompare?: string
+    className?: string
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -155,7 +160,7 @@ function TabPanel(props: TabPanelProps) {
             { ...other }
         >
             { value === index && (
-                <Box sx={ { p: 1 } }>
+                <Box sx={ { p: 1, } }>
                     { children }
                 </Box>
             ) }

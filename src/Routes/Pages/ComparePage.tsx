@@ -1,11 +1,12 @@
 import { Button, Icon, Stack } from '@mui/material'
-import { useRef } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useMemo, useRef } from 'react'
 import { LuPrinter } from 'react-icons/lu'
 import { TfiControlBackward } from "react-icons/tfi"
 import { Link } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'
-import { useAppContext } from '../../Hooks/useStoresContext'
-import { routePaths } from '../routePath'
+import { useFilterContext } from '../../Hooks/useFilterContext'
+import { useLoadAllData } from '../../Hooks/useLoadAllData'
 import { ItemsToPrint } from './PrintPage'
 // export type ICompareCtx = {
 //     selectedItem: null | string
@@ -13,16 +14,16 @@ import { ItemsToPrint } from './PrintPage'
 // }
 // export const CompareContext = React.createContext<ICompareCtx | null>(null)
 
-export const ComparePage = () => {
-    const { selectedItems, StpStore } = useAppContext()
-
+export const ComparePage = observer(() => {
+    const { filters } = useFilterContext();
+    const query = useLoadAllData()
 
     const printRef = useRef(null)
     const handlePrint = useReactToPrint({
         content: () => printRef.current,
     })
 
-    const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
+    const filtered = useMemo(() => { return query.isSuccess ? query.data.filter(i => filters.ids.includes(i.id)) : [] }, [filters.ids, query.data, query.isSuccess])
 
     return (
 
@@ -51,7 +52,7 @@ export const ComparePage = () => {
             :
             <NothingToCompare />
     )
-}
+})
 
 
 

@@ -19,11 +19,16 @@ type FilterTags = {
     key: 'tags'
     value: FiltersParams['tags']
 }
-type FilterRecord = | FilterTags | FilterCams | FilterDepth
+type FilterIds = {
+    key: 'id'
+    value: FiltersParams['id']
+}
+type FilterRecord = | FilterTags | FilterCams | FilterDepth | FilterIds
 export class FilterStore {
     cams: number[] = []
     tags: StpTag[] = []
     depth: number[] = []
+    ids: number[] = []
     // setCams: (cams: number[]) => void
     constructor() {
         this.cams = []
@@ -42,11 +47,19 @@ export class FilterStore {
             case "cams": { this.cams = value; break }
             case "tags": { this.tags = value; break }
             case "depth": { this.depth = value; break }
+            case "id": { this.ids = value; break }
         }
 
     }
 
-    public clearFilter(key: FilterRecord['key']) {
+    public clearFilter(key?: FilterRecord['key']) {
+        if (!key) {
+            this.cams = []
+            this.tags = []
+            this.depth = []
+            this.ids = []
+            return
+        }
         this.setFilter({ key, value: [] })
     }
     private compareTag() {
@@ -59,8 +72,6 @@ export class FilterStore {
             solarproof: /solarproof/g,
             soundproof: /soundproof/g,
         }
-
-
     }
     setCams(value: number | number[]) {
         if (_isArr(value)) { this.cams = value }
@@ -82,6 +93,18 @@ export class FilterStore {
             return items
         }
     }
+
+    selectId(value: number | number[]) {
+        if (_isArr(value)) this.ids = value
+        else {
+
+
+            if (!this.ids.includes(value)) this.ids = [...this.ids, value]
+            else this.ids = this.ids.filter(i => i !== value)
+
+        }
+    }
+
 
 }
 

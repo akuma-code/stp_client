@@ -8,22 +8,22 @@ export const AcSearch = React.memo(() => {
     // console.time('search_selected')
     const [value, setValue] = useState<string | null>(null);
     const { query, setQuery } = useAppContext();
-    const defQuery = useDeferredValue(query)
-    const qdata = useLoadDataQuery(defQuery)
-    const isPending = query !== defQuery
+    // const defQuery = useDeferredValue(query)
+    const qdata = useLoadDataQuery(query)
+    // const isPending = query !== defQuery
     const handleQueryInput = useCallback((e: any, value: string) => setQuery(value), [setQuery])
     const handleInput = useCallback((e: any, value: string | null) => {
 
         setValue(value)
     }, [setValue])
     const selectedOptions = useMemo(() => {
-        const data = qdata.isSuccess ? qdata.data : []
+        // const data = qdata.isSuccess ? qdata.data : []
         const names = qdata.isSuccess ? qdata.data.map(stp => stp.name) : []
 
 
-        const selectedOpts = names.filter(o => o.toLowerCase().includes(defQuery.toLowerCase()));
+        const selectedOpts = names.filter(o => o.toLowerCase().includes(query.toLowerCase()));
         return selectedOpts;
-    }, [qdata.data, qdata.isSuccess, defQuery]);
+    }, [qdata.data, qdata.isSuccess, query]);
 
     // console.timeEnd('search_selected')
     return (
@@ -40,7 +40,7 @@ export const AcSearch = React.memo(() => {
                 onChange={ handleInput }
                 sx={ {
                     mx: 2, textAlign: 'center',
-                    [`& .MuiTextField-root`]: { opacity: isPending ? .5 : 1 }
+                    // [`& .MuiTextField-root`]: { opacity: isPending ? .5 : 1 }
 
                 } }
 

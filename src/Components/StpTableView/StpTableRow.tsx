@@ -11,6 +11,8 @@ import { FormulaTTButton } from '../UI/FormulaTooltip';
 import { StpData, } from './StpDataTable';
 import { SuspenseLoad } from '../UI/SuspenseLoad';
 import { _ID } from '../../Helpers/helpersFns';
+import { useFilterContext } from '../../Hooks/useFilterContext';
+import { observer } from 'mobx-react-lite';
 
 export const stpFields: (keyof StpData)[] = [
     'depth',
@@ -31,8 +33,8 @@ export type StpRowProps = {
     row_data: StpData;
     row_number: number;
     // isSelected: (id: number) => boolean;
-    handleClick: (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => void;
-    isSelected: boolean
+    handleClick?: (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => void;
+    isSelected?: boolean
 };
 
 
@@ -45,15 +47,20 @@ function NameCell(props: { name: string }) {
 }
 
 
-export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, row_data, isSelected = false }) => {
+export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_data, }) => {
 
+    const { filters } = useFilterContext();
 
     const endSign = useCallback((key: keyof StpData) => key === 'weight' ? ' кг/кв.м' : key === 'depth' ? ' мм' : "", [])
     const numericData = useCallback((key: keyof StpData) => row_data[key], [row_data])
     // const selectedRow = isSelected(row_data.id)
-    const clickCell = useCallback((e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) =>
-        handleClick(e, row_data.id), [handleClick, row_data.id])
+    const clickCell = useCallback((e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
+        // handleClick(e, row_data.id)
+        filters.selectId(row_data.id)
 
+    }, [filters, row_data.id])
+    const isRowSelect = useCallback((id: number) => filters.ids.includes(id), [filters.ids])
+    const isSelected = isRowSelect(row_data.id)
     return (
 
 
@@ -69,7 +76,7 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
 
             <TableCell
                 padding="checkbox"
-                onClick={ clickCell }
+                onClick={ () => filters.selectId(row_data.id) }
                 sx={ { cursor: 'pointer', } }>
                 <Box component={ Stack }
                     direction={ 'row' }
@@ -146,7 +153,7 @@ export const StpTableRow: React.FC<StpRowProps> = ({ handleClick, row_number, ro
 
         </TableRow>
     )
-}
+})
 
 const MemedCells = React.memo(({ cell }: { cell: StpData }) => {
 
