@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { FetchedData, stpBackup_128 } from "../Components/StpTable/Data/data_spreadsheet";
 import { StpData } from "../Components/StpTableView/StpDataTable";
-import { dataExtractor } from "./useQueryFetch";
+import { dataExtractor } from "../Helpers/dataExtractor";
 
 export const useLoadAllData = () => {
     const context = useQuery({

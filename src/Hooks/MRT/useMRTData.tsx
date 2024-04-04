@@ -5,6 +5,7 @@ import { Box, TableCell } from "@mui/material"
 import { useStpQuery } from "../QueryHooks/useStpQuery"
 import { useLoadAllData } from "../useLoadAllData"
 import { StpTag } from "../../Components/StpTable/TableObjects"
+import { DataCell } from "../../Components/StpTableView/StpTableRow"
 type ColumnsData = MRT_ColumnDef<StpData>
 export const useMRTData = () => {
     const query = useLoadAllData()
@@ -13,7 +14,7 @@ export const useMRTData = () => {
             {
                 header: 'Formula',
                 accessorKey: 'name',
-                Cell: ({ cell }) => <TableCell>{ cell.getValue<string>() }</TableCell>
+                // Cell: ({ cell }) => <DataCell primary={ cell.getValue<string>() } />
 
             },
             {
@@ -21,28 +22,28 @@ export const useMRTData = () => {
                 id: 'depth',
                 header: 'depth',
                 Header: <div>{ `Depth` }</div>,
-                Cell: ({ cell }) => <TableCell>{ cell.getValue<number>().toLocaleString() }</TableCell>
+                // Cell: ({ cell }) => <DataCell primary={ cell.getValue<number>() } />
             },
             {
                 accessorFn: (row) => row.cams,
                 id: 'cams',
                 header: 'cams',
                 Header: <div>{ `cams` }</div>,
-                Cell: ({ cell }) => <TableCell>{ cell.getValue<number>().toLocaleString() }</TableCell>
+                // Cell: ({ cell }) => <DataCell primary={ cell.getValue<number>() } />
             },
             {
                 accessorFn: (row) => row.tags,
                 id: 'tags',
                 header: 'tags',
                 Header: <div>{ `tags` }</div>,
-                Cell: ({ cell }) => <TableCell>{ cell.getValue<StpTag[]>() }</TableCell>
+                // Cell: ({ cell }) => <DataCell primary={ cell.getValue<StpTag>() } />
             },
             {
                 accessorFn: (row) => row.weight,
                 id: 'weight',
                 header: 'weight',
                 Header: <div>{ `weight` }</div>,
-                Cell: ({ cell }) => <TableCell>{ cell.getValue<number>().toLocaleString() }</TableCell>
+                // Cell: ({ cell }) => <TableCell>{ cell.getValue<number>().toLocaleString() }</TableCell>
             },
 
         ] as const

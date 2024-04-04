@@ -1,10 +1,10 @@
 
 import { QueryMeta, UseQueryOptions, UseQueryResult, useQuery } from "@tanstack/react-query";
-import { STP } from "../Components/StpTable/StpFactory/StpFactory";
 import { StpItem } from "../Components/StpTable/TableObjects";
 import { api } from "../HTTP/mainApi";
 import { _isArr } from "../Helpers/helpersFns";
 import { apiRoute, proxyRoute } from "../Routes/routePath";
+import { dataExtractor } from "../Helpers/dataExtractor";
 
 
 export type SSResponse = {
@@ -86,17 +86,5 @@ export const isValidFetchedData = <T extends TStpData>(data: unknown): data is T
         console.error(data)
         return false
     }
-}
-export const dataExtractor = <T extends TStpData>(fetched_data: T) => {
-
-    const [name, ...restProps] = fetched_data
-    const [Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight] = restProps
-    const stp = new STP(name)
-    // console.log('stp', name)
-
-
-    stp.initParams(Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight)
-    return stp.stpItem
-
 }
 

@@ -132,7 +132,3 @@ export const stpBackup_128: FetchedData[] = [
 ]
 
 
-const stpMap = new Map()
-// const addToMap = ([key, ...values]: [key: string, ...values: number[]]) => stpMap.set(key, values)
-// stpBackup.map(addToMap)
-export default stpMap

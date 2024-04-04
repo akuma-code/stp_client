@@ -1,5 +1,6 @@
 import {
     MaterialReactTable,
+    useMRT_RowVirtualizer,
     useMaterialReactTable,
 } from 'material-react-table';
 
@@ -16,10 +17,12 @@ const MrtBase = ({ stp_data }: { stp_data: StpData[] }) => {
         columns,
         data: stp_data,
         enableRowSelection: true,
-        enableDensityToggle: false,
-
+        enableDensityToggle: true,
+        initialState: {
+            density: 'compact'
+        }
     })
-
+    const rowVirtualizer = useMRT_RowVirtualizer(table);
 
     return (
         <MaterialReactTable table={ table } />

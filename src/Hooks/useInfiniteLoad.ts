@@ -1,7 +1,8 @@
 
 import { FetchedData, stpBackup_128 } from "../Components/StpTable/Data/data_spreadsheet";
 import { StpData } from "../Components/StpTableView/StpDataTable";
-import { QueryKeyT, dataExtractor } from "./useQueryFetch";
+import { QueryKeyT } from "./useQueryFetch";
+import { dataExtractor } from "../Helpers/dataExtractor";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { queryClient } from "..";

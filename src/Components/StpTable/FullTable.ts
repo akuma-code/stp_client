@@ -6,7 +6,8 @@ import { table_data_BrGr } from "./Data/data_Fenix";
 import { table_data_32mm } from "./Data/data_32mm";
 import { apiRoute, proxyRoute } from "../../Routes/routePath";
 
-import { GetInfiniteRowsInterface, dataExtractor } from "../../Hooks/useQueryFetch";
+import { GetInfiniteRowsInterface } from "../../Hooks/useQueryFetch";
+import { dataExtractor } from "../../Helpers/dataExtractor";
 import { FetchedData, stpBackup_128 } from "./Data/data_spreadsheet";
 import { StpData } from "../StpTableView/StpDataTable";
 import { StpApiFetch } from "./StpFactory/StpApi";

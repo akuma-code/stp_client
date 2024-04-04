@@ -176,7 +176,7 @@ type DataCellProps = {
     cellProps?: TableCellProps
 }
 
-const DataCell: React.FC<DataCellProps> = ({ primary, secondary, action, cellProps }) => {
+export const DataCell: React.FC<DataCellProps> = ({ primary, secondary, action, cellProps }) => {
 
     const handleClick = () => {
         action && action()
