@@ -143,7 +143,9 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
                 <TableDataContainer />
             </TabPanel>
             <TabPanel index={ 3 } value={ current } className='bg-blue-400'>
-                <MrtBase />
+                { qf.status === 'success' &&
+                    <MrtBase stp_data={ qf.data } />
+                }
             </TabPanel>
 
             <ToastContainer key={ "toaster" }
