@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Box, Button, Checkbox, Divider, FormControl, FormControlLabel, InputLabel, ListItemText, MenuItem, OutlinedInput, Paper, Select, SelectChangeEvent, Stack, Typography } from '@mui/material'
+import { Avatar, AvatarGroup, Box, Button, Divider, FormControl, FormControlLabel, InputLabel, Paper, SelectChangeEvent, Stack, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useFilterContext } from '../../../Hooks/useFilterContext'
 import { useEffect } from 'react'
@@ -8,19 +8,21 @@ import { StpTag, isTag } from '../../StpTable/TableObjects'
 import { AvatarS2, AvatarS3, CamAvatar } from '../CamsAvatars'
 import { Form, useFetcher } from 'react-router-dom'
 import { TbFilterCheck } from 'react-icons/tb'
-import { _pathToUrl } from '../../../Helpers/urlpath'
 import { URL } from 'url'
 import { routePaths } from '../../../Routes/routePath'
-import { FilterStore } from '../../../Context/Stores/FiltrationStore'
 import { TagAvatarIcon } from '../TagAvatars'
 import { Stp_Tags } from '../../../Interfaces/Enums'
 import { toJS } from 'mobx'
 import { CamsSpeedDial } from './QuickFilters'
 import { AcSearch } from '../../StpTableView/AcSearch'
-const depthArray = [
-    24, 28, 32, 36, 40, 52
+import Toaster from '../Toaster/Toaster'
+import { SelectTags } from './SelectTags'
+import { SelectDepth } from './SelectDepth'
+import { SelectCams } from './SelectCams'
+export const depthArray = [
+    24, 28, 32, 36, 38, 40, 52
 ] as const
-const camsArray = [1, 2] as const
+export const camsArray = [1, 2] as const
 export const tagsArray: (keyof typeof Stp_Tags)[] = [
     'standart',
     'simple',
@@ -30,11 +32,11 @@ export const tagsArray: (keyof typeof Stp_Tags)[] = [
     'solarproof',
     'soundproof',
 ] as const;
-type FiltrationChangeHandler = (filter_type: keyof FiltersParams) => (event: SelectChangeEvent<FiltersParams[typeof filter_type]>, child: React.ReactNode) => void
+export type FiltrationChangeHandler = (filter_type: keyof FiltersParams) => (event: SelectChangeEvent<FiltersParams[typeof filter_type]>, child: React.ReactNode) => void
 const isNumb = (item: string | number) => typeof item === 'string' ? false : typeof item === 'number' ? true : false
 
 
-const camsAvatarGroup = (selected: number[]) => {
+export const camsAvatarGroup = (selected: number[]) => {
 
     return (
         <AvatarGroup spacing={ 1 } sx={ { justifyContent: 'space-between', h: '2em' } }>
@@ -47,7 +49,7 @@ const camsAvatarGroup = (selected: number[]) => {
 
 }
 
-const tagsAvatarGroup = (selected: StpTag[]) => {
+export const tagsAvatarGroup = (selected: StpTag[]) => {
     return (
         <Box display={ 'flex' } flexDirection={ 'row' } gap={ 1 } flexWrap={ 'nowrap' } margin={ 0 }>
             {
@@ -91,9 +93,9 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
         const fd = new FormData()
 
         fd.set('filters', JSON.stringify({ cams, tags, depth }))
-        await fetcher.submit(fd,)
-        onClose && onClose()
 
+        await fetcher.submit(fd)
+        onClose && onClose()
 
 
     }
@@ -123,7 +125,7 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                         <InputLabel id='cams-label'>Кол-во стекол</InputLabel>
                         <SelectCams
                             cams={ filters.cams }
-                            handleChange={ handleChange }
+                            handleChange={ handleChange('cams') }
                         />
                         {/* <CamsSpeedDial /> */ }
                     </>
@@ -131,14 +133,14 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                         <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
                         <SelectDepth
                             depths={ filters.depth }
-                            handleChange={ handleChange }
+                            handleChange={ handleChange('depth') }
                         />
                     </>
                     <>
                         <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
                         <SelectTags
                             tags={ filters.tags }
-                            handleChange={ handleChange }
+                            handleChange={ handleChange('tags') }
                         />
                     </>
                     <Button
@@ -156,6 +158,7 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                         fullWidth
                         type='submit'
                         startIcon={ <TbFilterCheck /> }
+
                     >
                         Применить
                     </Button>
@@ -170,94 +173,5 @@ export default SideForm
 
 
 
-
-function SelectTags({ tags, handleChange }: { tags: FilterStore['tags'], handleChange: FiltrationChangeHandler }) {
-    return <Select
-
-        variant='filled'
-        multiple
-        labelId="multitag-label"
-        id="multitag"
-        name='tags'
-        value={ tags }
-        onChange={ handleChange('tags') }
-        input={ <OutlinedInput sx={ { fontSize: 12 } } /> }
-        renderValue={ tagsAvatarGroup }
-    >
-
-        { tagsArray.map((tag) => (
-            <MenuItem key={ tag } value={ tag } divider dense>
-                <Checkbox checked={ tags?.includes(tag) } name={ tag + '_check' } />
-                <ListItemText primary={ Stp_Tags[tag] } />
-                <Avatar sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
-                    { TagAvatarIcon[tag as StpTag] }
-                </Avatar>
-            </MenuItem>
-        )) }
-    </Select>
-}
-
-function SelectDepth({ depths, handleChange }: { depths: FilterStore['depth'], handleChange: FiltrationChangeHandler }) {
-    return <Select
-
-        multiple
-        labelId="depth-label"
-        name='depth'
-        value={ depths }
-        onChange={ handleChange('depth') }
-        input={ <OutlinedInput sx={ { fontSize: 12 } } /> }
-        renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || 'Ничего не выбрано' }
-    >
-
-        { depthArray.map((depth) => (
-            <MenuItem key={ depth } value={ depth } divider dense>
-                <Checkbox checked={ depths.includes(depth) } name={ depth + '_checkDepth' } />
-                <ListItemText primary={ `${depth} мм` } />
-            </MenuItem>
-
-        )) }
-
-    </Select>
-}
-
-function SelectCams({ cams, handleChange }: { cams: number[], handleChange: FiltrationChangeHandler }) {
-
-    return <Select
-        title='Камеры'
-        multiple
-        fullWidth
-        labelId="cams-label"
-
-        name='cams'
-        value={ cams }
-        onChange={ handleChange('cams') }
-        input={ <OutlinedInput id='multitag2' sx={ { fontSize: 12 } } /> }
-        MenuProps={ {
-            PaperProps: {
-                style: {
-                    height: 130,
-                    width: 130,
-                },
-                variant: 'outlined',
-                elevation: 0,
-            },
-        } }
-        SelectDisplayProps={ {
-            style: { display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }
-        } }
-        renderValue={ camsAvatarGroup }
-    >
-
-        { camsArray.map((cam) => (
-            <MenuItem key={ cam } value={ cam } divider dense>
-                <Checkbox checked={ cams.includes(cam) } name={ _pathToUrl('cams_' + cam) } />
-                <ListItemText primary={ `${cam + 1} стекла` } />
-                <CamAvatar cam_count={ cam } wh={ '1.3em' } />
-            </MenuItem>
-
-        )) }
-
-    </Select>
-}
 
 

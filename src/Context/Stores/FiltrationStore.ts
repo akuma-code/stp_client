@@ -24,23 +24,32 @@ type FilterIds = {
     value: FiltersParams['id']
 }
 type FilterRecord = | FilterTags | FilterCams | FilterDepth | FilterIds
+type FilterStoreOptions = {
+    selectMax: number
+}
 export class FilterStore {
     cams: number[] = []
     tags: StpTag[] = []
     depth: number[] = []
     ids: number[] = []
+    options: FilterStoreOptions
     // setCams: (cams: number[]) => void
-    constructor() {
+    constructor(options?: FilterStoreOptions) {
         this.cams = []
         this.tags = []
         this.depth = []
-        // this.setCams = (value: number[]) => this.cams = value
+        this.options = {
+            selectMax: 5
+        }
+        if (options) this.initOptions(options)
         makeAutoObservable(
             this,
             {},
             { name: 'FilterContext' })
     }
-
+    initOptions(options: FilterStoreOptions) {
+        this.options = { ...this.options, ...options }
+    }
     public setFilter({ key, value }: FilterRecord) {
 
         switch (key) {
@@ -99,7 +108,11 @@ export class FilterStore {
         else {
 
 
-            if (!this.ids.includes(value)) this.ids = [...this.ids, value]
+            if (!this.ids.includes(value) && this.ids.length <= this.options.selectMax) {
+
+                this.ids = [...this.ids, value]
+
+            }
             else this.ids = this.ids.filter(i => i !== value)
 
         }

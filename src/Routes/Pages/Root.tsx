@@ -7,11 +7,6 @@ import { MuiLink } from "./MuiLink"
 type RootProps = PropsWithChildren
 
 
-function FooterText() {
-    return (<strong className="text-center my-auto">Sticky footer</strong>);
-}
-
-
 export const Root: React.FC<RootProps> = () => {
     const nav = useNavigate()
     // const { data, isLoadingError, error, isError, isSuccess } = useQuery('saved_stp_data', LazyStpData)
@@ -35,7 +30,7 @@ export const Root: React.FC<RootProps> = () => {
     useEffect(() => {
         nav(routePaths.tabs, { replace: true })
 
-    }, [])
+    }, [nav])
     return (
 
 
@@ -51,21 +46,8 @@ export const Root: React.FC<RootProps> = () => {
                 </Toolbar>
             </AppBar>
             <Toolbar /> */}
-            <ToastContainer
-                position="top-left"
-                autoClose={ 1000 }
-                hideProgressBar={ false }
-                newestOnTop
-                closeOnClick
-                rtl={ false }
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                transition={ Bounce } />
+
         </>
     )
 }
 
-//TODO: переделать маршрутизацию на табы
-//TODO: настроить инфинит квери

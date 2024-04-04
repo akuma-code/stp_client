@@ -46,11 +46,11 @@ export type StpViewOptions = {
 
 type StpTableProps = {
     items: StpData[]
-    selectedItems: number[]
+    selectedItems?: number[]
     selectorActions?: SelectorActions
 }
 
-export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selectedItems, }) => {
+export const StpDataTable: React.FC<StpTableProps> = observer(({ items, }) => {
     // const { filterParams, select: s } = useAppContext()
     const { filters } = useFilterContext();
 
@@ -91,7 +91,7 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
     }, [filters, sorted]);
 
 
-    const handleClick = useCallback((event: React.MouseEvent<HTMLTableCellElement, MouseEvent>, id: number) => {
+    const handleClick = useCallback((id: number) => {
         // if (filters.ids.length >= 5) return
         filters.selectId(id)
 
@@ -152,7 +152,8 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
 
     // console.log('%cRender', 'color: red; background-color: beige; font-size: 1.5em')
     const RowsList = useMemo(() => {
-        const list = sorted.map((row, index) =>
+        const handleClick = (id: number) => filters.selectId(id)
+        const list = () => sorted.map((row, index) =>
             <StpTableRow
                 key={ row.name }
                 row_number={ index }
@@ -161,8 +162,8 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
             // isSelected={ isSelected(+row.id) }
             />
         )
-        return () => list
-    }, [sorted])
+        return list
+    }, [filters, sorted])
     return (
 
         <Box sx={ { width: '100%', height: '100%' } }>

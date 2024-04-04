@@ -7,6 +7,8 @@ import { observer } from 'mobx-react-lite';
 import React, { PropsWithChildren, Suspense } from 'react';
 import { GrTable } from 'react-icons/gr';
 import { MdCompare } from 'react-icons/md';
+import { ToastContainer, toast } from 'react-toastify';
+import TableDataContainer from '../../../Components/StpTable/v2/TableDataContainer';
 import { StpDataTable } from '../../../Components/StpTableView/StpDataTable';
 import { FilterDrawer } from '../../../Components/UI/SideDrower/DrawerFilter';
 import { Loading } from '../../../Components/UI/SuspenseLoad';
@@ -14,6 +16,7 @@ import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFilters
 import { useFilterContext } from '../../../Hooks/useFilterContext';
 import { useAppContext } from '../../../Hooks/useStoresContext';
 import { ComparePage } from '../ComparePage';
+import MrtBase from '../../../Components/StpTable/MRT/MrtBase';
 type TabPageProps = PropsWithChildren & {
 
 }
@@ -22,6 +25,12 @@ TabIcon.displayName = '*TabIcon'
 const CompIcon = React.memo(() => <SvgIcon sx={ { fontSize: 20 } }><MdCompare /> </SvgIcon>)
 CompIcon.displayName = '*CompareIcon'
 //__TABPAGE____
+
+const toaster = () => toast.success(`Данные загружены успешно`, {
+    position: "bottom-center",
+
+})
+
 export const TabPage: React.FC<TabPageProps> = observer(() => {
     // const queryAll = useLoadAllData()
     const { query } = useAppContext()
@@ -30,6 +39,9 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
     const [current, setCurrent] = React.useState<number>(0);
     // const filtered = useStpFilter(queryAll.data, query, filterParams)
     const qf = useQueryFiltersLoader(filters, query)
+
+
+
     const handleChange = (event: React.SyntheticEvent, new_index: number) => {
         setCurrent(new_index);
     };
@@ -38,13 +50,18 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
     //     const filtered = filters.filterItems(queryAll.data ?? [])
     //     _log("ctx_filtered: ", filtered.length)
     // }, [filters.cams, filters.depth, filters.tags, queryAll.data])
+    // useEffect(() => {
 
+    //     _log("toast")
+    //     ErrorToast()
+
+    // }, [qf.isSuccess])
     return (
         <Box sx={ { h: '100%' } }>
             <AppBar position="static" color='info' >
 
                 <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'baseline' } spacing={ 8 }>
-                    <FilterDrawer />
+
                     <Tabs
                         value={ current }
                         onChange={ handleChange }
@@ -64,6 +81,10 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
                             icon={ <TabIcon /> }
                             iconPosition='start'
                             sx={ { pl: 4 } }
+                            onClick={ () => toast(`Данные загружены успешно`, {
+                                position: "bottom-center",
+
+                            }) }
                         />
 
 
@@ -74,24 +95,38 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
                             iconPosition='start'
                             disabled={ filters.ids.length === 0 }
                         />
+                        <Tab
+                            label={ `Table v2` }
+                            value={ 2 }
+                            icon={ <TabIcon /> }
+                            iconPosition='start'
+
+                        />
+                        <Tab
+                            label={ `MRT_Table` }
+                            value={ 3 }
+                            icon={ <TabIcon /> }
+                            iconPosition='end'
+
+                        />
 
 
                     </Tabs>
 
-
+                    <FilterDrawer />
                 </Stack>
             </AppBar >
 
 
 
-            <TabPanel index={ 0 } value={ current } className='bg-orange-900 h-full'>
+            <TabPanel index={ 0 } value={ current } >
                 {/* <Suspense fallback={ <Loading /> }> */ }
                 {
                     // qf.status === 'pending' ? <Loading text='обновление данных' /> :
                     qf.isSuccess &&
                     <StpDataTable
                         items={ qf.data }
-                        selectedItems={ filters.ids }
+
 
                     />
                 }
@@ -104,36 +139,30 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
 
                 </Suspense>
             </TabPanel>
-            {/* <React.Fragment>
+            <TabPanel index={ 2 } value={ current } className='bg-blue-400'>
+                <TableDataContainer />
+            </TabPanel>
+            <TabPanel index={ 3 } value={ current } className='bg-blue-400'>
+                <MrtBase />
+            </TabPanel>
 
-                    <TabPanel value={ value } index={ 0 } >
-                        {
-
-                            // queryAll.isFetching ? <CircularProgress /> :
-                            queryAll.status === 'success' ?
-
-
-                                <MemoStpTable
-                                    key={ _ID() }
-                                    items={ filtered }
-                                    selectedItems={ selected }
-                                    selectorActions={ action }
-                                />
-                                :
-                                <Loading text={ 'статус загрузки: ' + queryAll.status } />
-
-                        }
-                    </TabPanel>
-                    
-                    <TabPanel value={ value } index={ 2 } >
-
-                    </TabPanel>
-                </React.Fragment> */}
-
+            <ToastContainer key={ "toaster" }
+                containerId={ 'toast-container' }
+                position="top-left"
+                autoClose={ 1000 }
+                hideProgressBar={ false }
+                newestOnTop
+                closeOnClick
+                rtl={ false }
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </Box>
     )
 })
 TabPage.displayName = '__TabPage'
+
 interface TabPanelProps {
     children?: React.ReactNode;
 
@@ -156,7 +185,7 @@ function TabPanel(props: TabPanelProps) {
             { ...other }
         >
             { value === index && (
-                <Box sx={ { p: 1, } }>
+                <Box sx={ { p: 0, } }>
                     { children }
                 </Box>
             ) }

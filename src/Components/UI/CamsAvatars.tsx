@@ -1,4 +1,4 @@
-import { Avatar, CircularProgress, SvgIcon, Tooltip } from '@mui/material'
+import { Avatar, CircularProgress, SvgIcon, SvgIconProps, SvgIconTypeMap, Tooltip } from '@mui/material'
 import { Suspense, lazy, memo } from 'react'
 const Cam1 = lazy(() => import('../UI/Svg/AvaS2'))
 const Cam2 = lazy(() => import('../UI/Svg/AvaS3'))
@@ -37,25 +37,29 @@ export const AvatarS3 = ({ wh }: { wh?: number }) => {
     )
 }
 
-export const CamOneIcon = memo(() => {
+export const CamOneIcon = memo(({ wh }: { wh?: string | number }) => {
+    const w = wh ? wh : '1.5em'
+    const h = wh ? wh : '1.5em'
     return (
         <Suspense fallback={
             <CircularProgress variant='indeterminate' color='info' />
         }>
 
-            <SvgIcon >
+            <SvgIcon sx={ { width: w, height: h } }>
                 <Cam1 />
             </SvgIcon>
         </Suspense>
     )
 })
-export const CamTwoIcon = memo(() => {
+export const CamTwoIcon = memo(({ wh }: { wh?: string | number }) => {
+    const w = wh ? wh : '1.5em'
+    const h = wh ? wh : '1.5em'
     return (
         <Suspense fallback={
             <CircularProgress variant='indeterminate' color='info' />
         }>
 
-            <SvgIcon >
+            <SvgIcon sx={ { width: w, height: h } }>
                 <Cam2 />
             </SvgIcon>
         </Suspense>
@@ -93,3 +97,13 @@ export const CamAvatar: React.FC<CamAvatarProps> = ({ wh, cam_count }) => {
         </Suspense>
     )
 }
+
+export const SvgCam = ({ type }: { type: 's1' | 's2' }) => {
+    const icons = {
+        s1: ({ props }: { props: SvgIconProps }) => <SvgIcon { ...props }><Cam1 /></SvgIcon>,
+        s2: ({ props }: { props: SvgIconProps }) => <SvgIcon { ...props }><Cam2 /></SvgIcon>
+    }
+
+    return icons[type]
+}
+

@@ -1,9 +1,8 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
-import { CamAvatar, CamOneIcon, CamTwoIcon } from '../CamsAvatars';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import { CamOneIcon, CamTwoIcon } from '../CamsAvatars';
 
 
 const actions = [
@@ -15,15 +14,17 @@ const actions = [
 export function CamsSpeedDial() {
     return (
         <Box sx={ {
-            transform: 'translateZ(0px)',
-            flexGrow: 1,
-
+            transform: 'translateY(-22px)',
+            flexGrow: 0,
+            // overflowY: 'visible',
+            position: 'relative'
         } }>
             <SpeedDial
                 ariaLabel="Cams filter"
-                // sx={ { position: 'absolute', bottom: 16, right: 16 } }
+                sx={ { position: 'absolute', top: 0 } }
                 icon={ <SpeedDialIcon /> }
-                direction='right'
+                direction='down'
+                FabProps={ { variant: 'circular' } }
             >
                 { actions.map((action) => (
                     <SpeedDialAction
