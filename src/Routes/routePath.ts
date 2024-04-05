@@ -2,6 +2,8 @@ export const proxyRoute = (route: string) => `https://thingproxy.freeboard.io/fe
 export const routePaths = {
     root: '/' as const,
     tabs: 'tabs' as const,
+    v2: '/v2' as const,
+    api: '/api' as const,
     table: 'table' as const,
     stp_data: '/data' as const,
     stp_info: '/data/info' as const,

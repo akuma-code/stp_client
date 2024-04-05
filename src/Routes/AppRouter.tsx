@@ -12,6 +12,8 @@ import { TabPage } from "./Pages/Tabs/TabPage";
 import TabContainer from "./Pages/Tabs/TabContainer";
 import { _log } from "../Helpers/helpersFns";
 import { StpTag } from "../Components/StpTable/TableObjects";
+import MRT_Container from "../Components/StpTable/MRT/MRT_Container";
+import MRTDataPage from "./Pages/Tabs/MRT_DataPage";
 
 
 
@@ -57,13 +59,9 @@ export const appRoutes: RouteObject[] = [
     },
     {
         path: routePaths.tabs,
-        element: <TabPage />,
+        element: <TabPage initTab={ 0 } />,
         loader: async ({ request, params }) => {
             const url = new URL(request.url)
-            const c = url.searchParams.getAll('cams')
-            const d = url.searchParams.getAll('depth')
-            const t = url.searchParams.getAll('tags')
-            // _log("search: ", c, d, t)
 
 
             const lazy_data = await LazyStpData()
@@ -96,6 +94,22 @@ export const appRoutes: RouteObject[] = [
 
 
     },
+    {
+        path: routePaths.v2,
+        element: <TabPage initTab={ 3 } />,
+        children: [
+            {
+                path: routePaths.table,
+                element: <MRTDataPage />,
+
+            },
+            {
+                path: routePaths.compare,
+                element: <ComparePage />
+            },
+        ]
+
+    }
 
 ]
 

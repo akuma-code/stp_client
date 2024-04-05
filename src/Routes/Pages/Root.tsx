@@ -12,7 +12,7 @@ export const Root: React.FC<RootProps> = () => {
     // const { data, isLoadingError, error, isError, isSuccess } = useQuery('saved_stp_data', LazyStpData)
     // const [tab, save] = useLs<{ version: string }>('tab_vers')
     useEffect(() => {
-        const notify = () => toast.success<string>(`Данные загружены успешно`, {
+        const notify = () => toast.success<string>(`Redirect to /v2`, {
             // position: "bottom-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -24,11 +24,11 @@ export const Root: React.FC<RootProps> = () => {
             transition: Bounce,
         });
         //     if (isSuccess) notify()
-        // 
+        notify()
     }, []
     )
     useEffect(() => {
-        nav(routePaths.tabs, { replace: true })
+        nav(routePaths.v2, { replace: true })
 
     }, [nav])
     return (

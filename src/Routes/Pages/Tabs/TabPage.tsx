@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import { Stack, SvgIcon } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,9 +17,9 @@ import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFilters
 import { useFilterContext } from '../../../Hooks/useFilterContext';
 import { useAppContext } from '../../../Hooks/useStoresContext';
 import { ComparePage } from '../ComparePage';
-import MrtBase from '../../../Components/StpTable/MRT/MrtBase';
+import MRT_Container from '../../../Components/StpTable/MRT/MRT_Container';
 type TabPageProps = PropsWithChildren & {
-
+    initTab?: number
 }
 const TabIcon = React.memo(() => <SvgIcon sx={ { fontSize: 20 } }><GrTable /> </SvgIcon>)
 TabIcon.displayName = '*TabIcon'
@@ -30,13 +31,13 @@ const toaster = () => toast.success(`Данные загружены успеш�
     position: "bottom-center",
 
 })
-
-export const TabPage: React.FC<TabPageProps> = observer(() => {
+const initFn = (tab = 3) => tab
+export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
     // const queryAll = useLoadAllData()
     const { query } = useAppContext()
     const { filters } = useFilterContext()
     // const [selected, action] = useIdSelector()
-    const [current, setCurrent] = React.useState<number>(0);
+    const [current, setCurrent] = React.useState<number>(() => initFn(initTab));
     // const filtered = useStpFilter(queryAll.data, query, filterParams)
     const qf = useQueryFiltersLoader(filters, query)
 
@@ -144,7 +145,7 @@ export const TabPage: React.FC<TabPageProps> = observer(() => {
             </TabPanel>
             <TabPanel index={ 3 } value={ current } className='bg-blue-400'>
                 { qf.status === 'success' &&
-                    <MrtBase stp_data={ qf.data } />
+                    <MRT_Container stp_data={ qf.data } />
                 }
             </TabPanel>
 
