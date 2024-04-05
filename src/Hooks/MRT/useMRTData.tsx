@@ -20,7 +20,7 @@ export const useMRTData = () => {
         enablePagination: false,
         enableRowSelection: true,
         enableDensityToggle: true,
-        layoutMode: 'grid',
+        layoutMode: 'semantic',
         enableRowNumbers: false,
         enableColumnOrdering: false,
         enableColumnResizing: true,
