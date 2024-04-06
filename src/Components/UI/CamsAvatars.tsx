@@ -84,7 +84,7 @@ export const CamAvatar: React.FC<CamAvatarProps> = ({ wh, cam_count }) => {
                 <Avatar sx={ {
                     width: wh || '1em',
                     height: wh || '1em',
-                    bgcolor: '#4382cf',
+                    bgcolor: cam_count === 1 ? '#4382cf' : '#0c2e58',
                     '&:hover': { transform: 'scale(1.5)' },
                 } }
                     variant='rounded'

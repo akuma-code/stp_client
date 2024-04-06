@@ -58,97 +58,101 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
 
     // }, [qf.isSuccess])
     return (
-        <Box sx={ { h: '100%' } }>
-            <AppBar position="static" color='info' >
+        <>
 
-                <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'baseline' } spacing={ 8 }>
+            <Box sx={ { h: '100%' } }>
+                <AppBar position="static" color='info' >
 
-                    <Tabs
-                        value={ current }
-                        onChange={ handleChange }
-                        indicatorColor="primary"
-                        textColor="inherit"
-                        variant="standard"
+                    <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'baseline' } spacing={ 8 }>
 
-                        sx={ {
-                            pl: 10,
-                            [`& .MuiTab-root`]: { fontWeight: 'bolder' }
-                        } }
+                        <Tabs
+                            value={ current }
+                            onChange={ handleChange }
+                            indicatorColor="primary"
+                            textColor="inherit"
+                            variant="standard"
 
-                    >
-                        <Tab
-                            label="Таблица"
-                            value={ 0 }
-                            icon={ <TabIcon /> }
-                            iconPosition='start'
-                            sx={ { pl: 4 } }
-                            onClick={ () => toast(`Данные загружены успешно`, {
-                                position: "bottom-center",
+                            sx={ {
+                                pl: 10,
+                                [`& .MuiTab-root`]: { fontWeight: 'bolder' }
+                            } }
 
-                            }) }
+                        >
+                            <Tab
+                                label="Таблица"
+                                value={ 0 }
+                                icon={ <TabIcon /> }
+                                iconPosition='start'
+                                sx={ { pl: 4 } }
+                                onClick={ () => toast(`Данные загружены успешно`, {
+                                    position: "bottom-center",
+
+                                }) }
+                            />
+
+
+                            <Tab
+                                label={ `Сравнить (${filters.ids.length})` }
+                                value={ 1 }
+                                icon={ <CompIcon /> }
+                                iconPosition='start'
+                                disabled={ filters.ids.length === 0 }
+                            />
+                            <Tab
+                                label={ `Table v2` }
+                                value={ 2 }
+                                icon={ <TabIcon /> }
+                                iconPosition='start'
+
+                            />
+                            <Tab
+                                label={ `MRT_Table` }
+                                value={ 3 }
+                                icon={ <TabIcon /> }
+                                iconPosition='end'
+
+                            />
+
+
+                        </Tabs>
+
+                        <FilterDrawer />
+                    </Stack>
+                </AppBar >
+
+
+
+                <TabPanel index={ 0 } value={ current } >
+                    {/* <Suspense fallback={ <Loading /> }> */ }
+                    {
+                        // qf.status === 'pending' ? <Loading text='обновление данных' /> :
+                        qf.isSuccess &&
+                        <StpDataTable
+                            items={ qf.data }
+
+
                         />
+                    }
+                    {/* </Suspense> */ }
+                </TabPanel>
+                <TabPanel index={ 1 } value={ current }                >
+                    <Suspense fallback={ <Loading /> }>
 
+                        <ComparePage />
 
-                        <Tab
-                            label={ `Сравнить (${filters.ids.length})` }
-                            value={ 1 }
-                            icon={ <CompIcon /> }
-                            iconPosition='start'
-                            disabled={ filters.ids.length === 0 }
-                        />
-                        <Tab
-                            label={ `Table v2` }
-                            value={ 2 }
-                            icon={ <TabIcon /> }
-                            iconPosition='start'
+                    </Suspense>
+                </TabPanel>
+                <TabPanel index={ 2 } value={ current } className='bg-blue-400'>
+                    <TableDataContainer />
+                </TabPanel>
+                <TabPanel index={ 3 } value={ current } >
+                    {
+                        // qf.status === 'success' &&
+                        <MRT_Container />
+                    }
+                </TabPanel>
 
-                        />
-                        <Tab
-                            label={ `MRT_Table` }
-                            value={ 3 }
-                            icon={ <TabIcon /> }
-                            iconPosition='end'
-
-                        />
-
-
-                    </Tabs>
-
-                    <FilterDrawer />
-                </Stack>
-            </AppBar >
-
-
-
-            <TabPanel index={ 0 } value={ current } >
-                {/* <Suspense fallback={ <Loading /> }> */ }
-                {
-                    // qf.status === 'pending' ? <Loading text='обновление данных' /> :
-                    qf.isSuccess &&
-                    <StpDataTable
-                        items={ qf.data }
-
-
-                    />
-                }
-                {/* </Suspense> */ }
-            </TabPanel>
-            <TabPanel index={ 1 } value={ current }                >
-                <Suspense fallback={ <Loading /> }>
-
-                    <ComparePage />
-
-                </Suspense>
-            </TabPanel>
-            <TabPanel index={ 2 } value={ current } className='bg-blue-400'>
-                <TableDataContainer />
-            </TabPanel>
-            <TabPanel index={ 3 } value={ current } className='bg-blue-400'>
-                { qf.status === 'success' &&
-                    <MRT_Container stp_data={ qf.data } />
-                }
-            </TabPanel>
-
+            </Box>
             <ToastContainer key={ "toaster" }
                 containerId={ 'toast-container' }
                 position="top-left"
@@ -161,7 +165,7 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
                 draggable
                 pauseOnHover
             />
-        </Box>
+        </>
     )
 })
 TabPage.displayName = '__TabPage'

@@ -1,120 +1,116 @@
-import { MRT_ColumnDef, useMaterialReactTable } from "material-react-table"
+import { alpha } from "@mui/material"
+import { MRT_ColumnOrderState, MRT_DefinedTableOptions, useMRT_TableOptions, type MRT_ColumnDef } from "material-react-table"
+import { MRT_Localization_RU } from 'material-react-table/locales/ru'
 import { useMemo } from "react"
-import { StpData } from "../../Components/StpTableView/StpDataTable"
-import { Box, TableCell, alpha } from "@mui/material"
-import { useStpQuery } from "../QueryHooks/useStpQuery"
-import { useLoadAllData } from "../useLoadAllData"
 import { StpTag } from "../../Components/StpTable/TableObjects"
-import { DataCell } from "../../Components/StpTableView/StpTableRow"
-import { MRT_Localization_RU } from 'material-react-table/locales/ru';
-import { TagsAvatarGroup } from "../../Components/UI/TagAvatars"
-type ColumnsData = MRT_ColumnDef<StpData>
-export const useMRTData = () => {
-    const query = useLoadAllData()
-    const columns = useMemo<ColumnsData[]>(() => cols, [])
+import { StpData } from "../../Components/StpTableView/StpDataTable"
+import { useLoadAllData } from "../useLoadAllData"
 
-    const table = useMaterialReactTable({
+import { TagsAvatarGroup } from "../../Components/UI/TagAvatars"
+import { CamAvatar } from "../../Components/UI/CamsAvatars"
+export type ColumnsData = MRT_ColumnDef<StpData>
+export const useMRTData = () => {
+
+    const columnOrder: MRT_ColumnOrderState = ["mrt-row-numbers", "mrt-row-select", "name", "depth", "tags", "cams", "weight", "Ro", "Rw", "Det", "Ea", "Er", "Lr", "Lt", "Ra", "S", "Sf", "secure"] as const
+
+    const columns = useMemo<ColumnsData[]>(() => cols, [])
+    const options: MRT_DefinedTableOptions<StpData> = useMRT_TableOptions({
+        data: [],
         localization: MRT_Localization_RU,
         columns,
-        data: query.isSuccess ? query.data : [],
+        meta: {
+            totalRowCount: 128
+        },
         enablePagination: false,
         enableRowSelection: true,
         enableDensityToggle: true,
-        layoutMode: 'semantic',
-        enableRowNumbers: false,
+        layoutMode: 'grid',
+        enableRowNumbers: true,
         enableColumnOrdering: false,
-        enableColumnResizing: true,
+        enableColumnResizing: false,
         rowNumberDisplayMode: 'static',
         enableStickyHeader: true,
+
         enableRowVirtualization: false,
+
         rowVirtualizerOptions: {
-            overscan: 5,
-            // estimateSize: (index) => index * 10
+            overscan: 2,
+            estimateSize: () => 128,
         },
-        muiTableFooterProps: {
-            sx: { bgcolor: 'blue' }
-        },
-        muiTableContainerProps: {
-            sx: { maxHeight: '75vh', maxWidth: '100vw' }
-        },
-        muiTableBodyRowProps: ({ row }) => row.index % 2 === 0
-            ? { sx: { bgcolor: (theme) => alpha(theme.palette.primary.main, .3) } }
-            : { sx: { bgcolor: (theme) => alpha(theme.palette.secondary.main, .3) } },
         initialState: {
             density: 'compact',
-            showProgressBars: true,
-            isLoading: query.isLoading,
         },
-        // muiLinearProgressProps: ({ isTopToolbar }) => ({
-        //     color: 'warning',
-        //     sx: { display: isTopToolbar ? 'block' : 'none' }, //only show top toolbar progress bar
-
-        // }),
         state: {
-            isLoading: query.isLoading,
-            showProgressBars: query.isRefetching,
-            showSkeletons: query.isLoading,
-
+            // showSkeletons: query.isLoading,
+            columnOrder
         },
         defaultColumn: {
-
-            maxSize: 200, //allow columns to get larger than default
+            minSize: 10,
+            maxSize: 150, //allow columns to get larger than default
             size: 80, //make columns wider by default
-            grow: 0,
+
+            // grow: 0,
             sortDescFirst: false,
-            enableColumnActions: false,
-            enableResizing: false,
+            enableColumnActions: true,
+            enableResizing: true,
             muiTableBodyCellProps: {
                 align: 'center',
             },
             muiTableHeadCellProps: {
-                align: 'center'
+                sx: {
+                    borderWidth: '1px',
+                    borderCollapse: 'collapse',
+                    borderColor: "black",
+                },
             }
-
         },
         defaultDisplayColumn: {
-            size: 200,
-
+            size: 25,
         },
         displayColumnDefOptions: {
-
-
             'mrt-row-numbers': {
                 enableColumnOrdering: true,
-                size: 10,
-                // Cell: ({ row }) => `${row.index + 1})`
+                size: 25,
+                enableHiding: true,
+                enableFilterMatchHighlighting: true,
             },
             'mrt-row-select': {
-                enableColumnActions: false,
+                enableColumnActions: true,
                 enableHiding: true,
                 size: 60,
-
             },
-        }
+        },
+
+        muiTableContainerProps: {
+            sx: { maxHeight: '740px', }
+        },
+        muiTableBodyRowProps: ({ row }) => row.index % 2 === 0
+            ? { sx: { bgcolor: (theme) => alpha(theme.palette.primary.main, .1) } }
+            : { sx: { bgcolor: (theme) => alpha(theme.palette.secondary.main, .1) } },
+        muiLinearProgressProps: ({ isTopToolbar }) => ({
+            color: 'error',
+            sx: { display: isTopToolbar ? 'none' : 'block' }, //only show top toolbar progress bar
+        }),
 
     })
-    return { table }
+
+
+
+
+    return { options, columnOrder, columns }
 }
 
-const cols: ColumnsData[] = [
+export const cols: ColumnsData[] = [
+
     {
-        id: 'number',
-        header: 'number',
-        Header: '#',
-        columnDefType: 'display',
-        enableSorting: true,
-        Cell: ({ row }) => <b>{ row.index + 1 }.</b>,
-        size: 25
-    },
-    {
+        // *** наименование/формула
         header: 'формула',
         Header: `Формула`,
         accessorKey: 'name',
         size: 100,
+        maxSize: 150,
         grow: 1,
-        muiTableHeadCellProps: {
-            align: 'left'
-        },
+
         muiTableBodyCellProps: {
             align: 'left',
             sx: { fontWeight: 'bold' }
@@ -122,6 +118,7 @@ const cols: ColumnsData[] = [
 
     },
     {
+        // *** тэги \ свойства
         accessorKey: 'tags',
         id: 'tags',
         header: 'tags',
@@ -129,22 +126,38 @@ const cols: ColumnsData[] = [
         size: 60,
         grow: 1,
         enableSorting: false,
-        muiTableHeadCellProps: {
-            align: 'left'
-        },
         muiTableBodyCellProps: {
-            align: 'left',
-
+            align: "center",
+        },
+        muiTableHeadCellProps: {
+            align: 'center',
+            sx: {
+                borderWidth: '1px',
+                borderCollapse: 'collapse',
+                borderColor: "black",
+            }
         },
         Cell: ({ cell }) => <TagsAvatarGroup tags={ cell.getValue<StpTag[]>() } />
     },
     {
+        // *** толщина
         accessorKey: 'depth',
         id: 'depth',
         header: 'depth',
         Header: <div>Толщина</div>,
         size: 70,
-        grow: 0,
+        grow: 1,
+        muiTableBodyCellProps: {
+            align: 'center',
+        },
+        muiTableHeadCellProps: {
+            align: 'center',
+            sx: {
+                borderWidth: '1px',
+                borderCollapse: 'collapse',
+                borderColor: "black",
+            }
+        },
         Cell: ({ cell }) => <div> { cell.getValue<number>() } <em>мм</em> </div>
     },
     {
@@ -152,37 +165,64 @@ const cols: ColumnsData[] = [
         id: 'cams',
         header: 'cams',
         Header: "Кол-во камер",
-        size: 60,
+        size: 80,
         grow: 1,
+        muiTableBodyCellProps: {
+            align: 'center',
+        },
         muiTableHeadCellProps: {
             align: 'center',
-            sx: { flexWrap: 'wrap' }
-        }
-        // Cell: ({ cell }) => <DataCell primary={ cell.getValue<number>() } />
+            sx: {
+                borderWidth: '1px',
+                borderCollapse: 'collapse',
+                borderColor: "black",
+            }
+        },
+        Cell: ({ cell }) => <CamAvatar cam_count={ cell.getValue<1 | 2>() } wh={ '1.5em' } />
+
     },
     {
         accessorKey: 'weight',
         id: 'weight',
         header: 'weight',
-        Header: <div>Вес</div>,
-        minSize: 50,
+        Header: `Вес`,
+        minSize: 130,
         grow: 0,
+        muiTableHeadCellProps: {
+            align: 'center',
+            sx: {
+                borderWidth: '1px',
+                borderCollapse: 'collapse',
+                borderColor: "black",
+            }
+        },
+        muiTableBodyCellProps: {
+            align: 'center',
+        },
         Cell: ({ cell }) => <div> { cell.getValue<number>() } <em>кг/кв.м</em> </div>
     },
     {
         accessorKey: 'Ro',
         header: 'Ro',
         id: 'Ro',
-        size: 30,
-        grow: 0,
+        size: 35,
+        grow: 1,
+        muiTableBodyCellProps: {
+            sx: { fontWeight: 'bold' },
+            align: "center",
+        }
 
     },
     {
         accessorKey: 'Rw',
         header: 'Rw',
         id: 'Rw',
-        size: 30,
-        grow: 0,
+        size: 35,
+        grow: 1,
+        muiTableBodyCellProps: {
+            sx: { fontWeight: 'bold' },
+            align: "center",
+        }
 
     },
     {
@@ -190,7 +230,7 @@ const cols: ColumnsData[] = [
         header: 'Det',
         id: 'Det',
         size: 30,
-        grow: 0,
+        grow: 1,
 
     },
     {
@@ -198,7 +238,7 @@ const cols: ColumnsData[] = [
         header: 'Ea',
         id: 'Ea',
         size: 30,
-        grow: 0,
+        grow: 1,
 
     },
     {
@@ -206,7 +246,7 @@ const cols: ColumnsData[] = [
         header: 'Er',
         id: 'Er',
         size: 30,
-        grow: 0,
+        grow: 1,
 
     },
     {
@@ -214,7 +254,7 @@ const cols: ColumnsData[] = [
         header: 'Lr',
         id: 'Lr',
         size: 30,
-        grow: 0,
+        grow: 1,
 
     },
     {
@@ -222,7 +262,7 @@ const cols: ColumnsData[] = [
         header: 'Lt',
         id: 'Lt',
         size: 30,
-        grow: 0,
+        grow: 1,
 
     },
     {
@@ -230,7 +270,7 @@ const cols: ColumnsData[] = [
         header: 'Ra',
         id: 'Ra',
         size: 30,
-        grow: 0,
+        grow: 1,
 
     },
     {
@@ -238,7 +278,7 @@ const cols: ColumnsData[] = [
         header: 'S',
         id: 'S',
         size: 30,
-        grow: 0,
+        grow: 1,
 
     },
     {
@@ -246,16 +286,16 @@ const cols: ColumnsData[] = [
         header: 'Sf',
         id: 'Sf',
         size: 30,
-        grow: 0,
+        grow: 1,
 
     },
     {
         accessorKey: 'secure',
         header: 'secure',
         minSize: 30,
-        grow: 0,
+        grow: 1,
         size: 30,
         Header: 'Secure'
     },
 
-] as const
+] 
