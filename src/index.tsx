@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: false,
+      retry: true,
       refetchOnWindowFocus: true,
 
 

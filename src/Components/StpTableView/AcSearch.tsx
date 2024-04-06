@@ -3,27 +3,34 @@ import React, { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { SuspenseLoad } from '../UI/SuspenseLoad';
 import { useLoadDataQuery } from '../../Hooks/useLoadAllData';
+import { useFilterContext } from '../../Hooks/useFilterContext';
+import { observer } from 'mobx-react-lite';
+import { _log } from '../../Helpers/helpersFns';
 
-export const AcSearch = React.memo(() => {
+export const AcSearch = observer(() => {
     // console.time('search_selected')
-    const [value, setValue] = useState<string | null>(null);
-    const { query, setQuery } = useAppContext();
+    // const { query, setQuery } = useAppContext();
     // const defQuery = useDeferredValue(query)
-    const qdata = useLoadDataQuery(query)
     // const isPending = query !== defQuery
-    const handleQueryInput = useCallback((e: any, value: string) => setQuery(value), [setQuery])
+    const [value, setValue] = useState<string | null>(null);
+    const { search } = useFilterContext()
+    const qdata = useLoadDataQuery(search.query)
+    const handleQueryInput = useCallback((e: any, value: string) => {
+
+        search.setQuerySearch(value)
+    }, [search])
     const handleInput = useCallback((e: any, value: string | null) => {
 
         setValue(value)
-    }, [setValue])
+    }, [])
     const selectedOptions = useMemo(() => {
         // const data = qdata.isSuccess ? qdata.data : []
         const names = qdata.isSuccess ? qdata.data.map(stp => stp.name) : []
 
 
-        const selectedOpts = names.filter(o => o.toLowerCase().includes(query.toLowerCase()));
+        const selectedOpts = names.filter(o => o.toLowerCase().includes(search.query.toLowerCase()));
         return selectedOpts;
-    }, [qdata.data, qdata.isSuccess, query]);
+    }, [qdata.data, qdata.isSuccess, search.query]);
 
     // console.timeEnd('search_selected')
     return (
@@ -44,7 +51,7 @@ export const AcSearch = React.memo(() => {
 
                 } }
 
-                inputValue={ query }
+                inputValue={ search.query }
                 onInputChange={ handleQueryInput }
                 renderInput={ (params) => <TextField { ...params }
                     name='search_query'

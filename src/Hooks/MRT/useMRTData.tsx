@@ -110,7 +110,7 @@ export const cols: ColumnsData[] = [
         size: 100,
         maxSize: 150,
         grow: 1,
-
+        filterVariant: 'autocomplete',
         muiTableBodyCellProps: {
             align: 'left',
             sx: { fontWeight: 'bold' }
@@ -126,6 +126,9 @@ export const cols: ColumnsData[] = [
         size: 60,
         grow: 1,
         enableSorting: false,
+
+        filterVariant: 'checkbox',
+
         muiTableBodyCellProps: {
             align: "center",
         },
@@ -147,6 +150,8 @@ export const cols: ColumnsData[] = [
         Header: <div>Толщина</div>,
         size: 70,
         grow: 1,
+        filterVariant: 'multi-select',
+        columnFilterModeOptions: ['equals'],
         muiTableBodyCellProps: {
             align: 'center',
         },
@@ -170,6 +175,8 @@ export const cols: ColumnsData[] = [
         muiTableBodyCellProps: {
             align: 'center',
         },
+        filterVariant: 'select',
+        filterSelectOptions: [`1`, `2`],
         muiTableHeadCellProps: {
             align: 'center',
             sx: {
@@ -207,6 +214,7 @@ export const cols: ColumnsData[] = [
         id: 'Ro',
         size: 35,
         grow: 1,
+        enableColumnActions: false,
         muiTableBodyCellProps: {
             sx: { fontWeight: 'bold' },
             align: "center",
@@ -216,6 +224,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'Rw',
         header: 'Rw',
+        enableColumnActions: false,
         id: 'Rw',
         size: 35,
         grow: 1,
@@ -228,6 +237,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'Det',
         header: 'Det',
+        enableColumnActions: false,
         id: 'Det',
         size: 30,
         grow: 1,
@@ -236,6 +246,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'Ea',
         header: 'Ea',
+        enableColumnActions: false,
         id: 'Ea',
         size: 30,
         grow: 1,
@@ -244,6 +255,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'Er',
         header: 'Er',
+        enableColumnActions: false,
         id: 'Er',
         size: 30,
         grow: 1,
@@ -252,6 +264,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'Lr',
         header: 'Lr',
+        enableColumnActions: false,
         id: 'Lr',
         size: 30,
         grow: 1,
@@ -260,6 +273,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'Lt',
         header: 'Lt',
+        enableColumnActions: false,
         id: 'Lt',
         size: 30,
         grow: 1,
@@ -268,6 +282,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'Ra',
         header: 'Ra',
+        enableColumnActions: false,
         id: 'Ra',
         size: 30,
         grow: 1,
@@ -276,6 +291,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'S',
         header: 'S',
+        enableColumnActions: false,
         id: 'S',
         size: 30,
         grow: 1,
@@ -284,6 +300,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'Sf',
         header: 'Sf',
+        enableColumnActions: false,
         id: 'Sf',
         size: 30,
         grow: 1,
@@ -292,6 +309,7 @@ export const cols: ColumnsData[] = [
     {
         accessorKey: 'secure',
         header: 'secure',
+        enableColumnActions: false,
         minSize: 30,
         grow: 1,
         size: 30,

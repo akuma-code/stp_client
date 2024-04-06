@@ -1,10 +1,11 @@
 import { createContext, useContext } from "react";
 import { FilterStore } from "../Context/Stores/FiltrationStore";
+import { SearchQueryStore } from "../Context/Stores/SearchQueryStore";
 
 
 export type FilterContextProps = {
     filters: FilterStore
-
+    search: SearchQueryStore
 }
 export const FilterContext = createContext<FilterContextProps | null>(null);
 export const useFilterContext = () => {

@@ -14,6 +14,7 @@ import { _log } from "../Helpers/helpersFns";
 import { StpTag } from "../Components/StpTable/TableObjects";
 import MRT_Container from "../Components/StpTable/MRT/MRT_Container";
 import MRTDataPage from "./Pages/Tabs/MRT_DataPage";
+import Example from "../Hooks/MRT/Example";
 
 
 
@@ -97,6 +98,7 @@ export const appRoutes: RouteObject[] = [
     {
         path: routePaths.v2,
         element: <TabPage initTab={ 3 } />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: routePaths.table,
@@ -109,8 +111,12 @@ export const appRoutes: RouteObject[] = [
             },
         ]
 
-    }
+    },
 
+    {
+        path: 'ex',
+        element: <Example />
+    }
 ]
 
 

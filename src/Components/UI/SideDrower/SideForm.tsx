@@ -1,24 +1,19 @@
-import { Avatar, AvatarGroup, Box, Button, Divider, FormControl, FormControlLabel, InputLabel, Paper, SelectChangeEvent, Stack, Typography } from '@mui/material'
+import { Avatar, AvatarGroup, Box, Button, Divider, InputLabel, Paper, SelectChangeEvent, Stack, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useFilterContext } from '../../../Hooks/useFilterContext'
-import { useEffect } from 'react'
-import { _log } from '../../../Helpers/helpersFns'
-import { FiltersParams } from '../../../Interfaces/Types'
-import { StpTag, isTag } from '../../StpTable/TableObjects'
-import { AvatarS2, AvatarS3, CamAvatar } from '../CamsAvatars'
-import { Form, useFetcher } from 'react-router-dom'
 import { TbFilterCheck } from 'react-icons/tb'
-import { URL } from 'url'
-import { routePaths } from '../../../Routes/routePath'
-import { TagAvatarIcon } from '../TagAvatars'
+import { Form, useFetcher, useSubmit } from 'react-router-dom'
+import { _log } from '../../../Helpers/helpersFns'
+import { useFilterContext } from '../../../Hooks/useFilterContext'
 import { Stp_Tags } from '../../../Interfaces/Enums'
-import { toJS } from 'mobx'
-import { CamsSpeedDial } from './QuickFilters'
+import { FiltersParams } from '../../../Interfaces/Types'
+import { StpTag } from '../../StpTable/TableObjects'
 import { AcSearch } from '../../StpTableView/AcSearch'
-import Toaster from '../Toaster/Toaster'
-import { SelectTags } from './SelectTags'
-import { SelectDepth } from './SelectDepth'
+import { CamAvatar } from '../CamsAvatars'
+import { TagAvatarIcon } from '../TagAvatars'
 import { SelectCams } from './SelectCams'
+import { SelectDepth } from './SelectDepth'
+import { SelectTags } from './SelectTags'
+import { useState } from 'react'
 export const depthArray = [
     24, 28, 32, 36, 38, 40, 52
 ] as const
@@ -65,36 +60,44 @@ export const tagsAvatarGroup = (selected: StpTag[]) => {
 
 const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
     const { filters } = useFilterContext()
-    const fetcher = useFetcher()
+    const [defFilters, setFilters] = useState({ cams: filters.cams, depth: filters.depth, tags: filters.tags })
+    const submit = useSubmit()
+
     const handleChange: FiltrationChangeHandler = (selector) => (e, child) => {
         const { value } = e.target
         if (typeof value === 'string') return _log(value)
         switch (selector) {
             case 'tags': {
                 const tags = e.target.value as StpTag[]
-                filters.setTags(tags)
+                // filters.setTags(tags)
+                setFilters(prev => ({ ...prev, tags: tags }))
                 break
             }
             case 'depth': {
                 const { value } = e.target
-                filters.setDepth(value as number[])
+                // filters.setDepth(value as number[])
+                setFilters(prev => ({ ...prev, depth: value as number[] }))
                 break
             }
             case 'cams': {
                 const { value } = e.target
-                filters.setCams(value as number[])
+                // filters.setCams(value as number[])
+                setFilters(prev => ({ ...prev, cams: value as number[] }))
                 break
             }
         }
 
     }
     const handleSubmit = async () => {
-        const { cams, tags, depth } = filters
+        // const { cams, tags, depth } = filters
+        filters.setCams(defFilters.cams)
+        filters.setDepth(defFilters.depth)
+        filters.setTags(defFilters.tags)
         const fd = new FormData()
 
-        fd.set('filters', JSON.stringify({ cams, tags, depth }))
+        fd.set('filters', JSON.stringify(defFilters))
 
-        await fetcher.submit(fd)
+        submit(fd)
         onClose && onClose()
 
 
@@ -102,7 +105,10 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
 
 
 
-
+    const clearFilters = () => {
+        filters.clearFilter()
+        setFilters(prev => ({ cams: [], depth: [], tags: [] }))
+    }
 
 
     return (
@@ -110,7 +116,7 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
             <Typography variant='h5' fontSize={ 19 } textAlign={ 'center' } py={ 1 }>Отфильтровать данные</Typography>
             <Divider flexItem sx={ { my: 1 } } />
             <AcSearch />
-            <fetcher.Form
+            <Form
                 id='ff'
                 name='ff'
 
@@ -124,7 +130,7 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                     <>
                         <InputLabel id='cams-label'>Кол-во стекол</InputLabel>
                         <SelectCams
-                            cams={ filters.cams }
+                            cams={ defFilters.cams }
                             handleChange={ handleChange('cams') }
                         />
                         {/* <CamsSpeedDial /> */ }
@@ -132,14 +138,14 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                     <>
                         <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
                         <SelectDepth
-                            depths={ filters.depth }
+                            depths={ defFilters.depth }
                             handleChange={ handleChange('depth') }
                         />
                     </>
                     <>
                         <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
                         <SelectTags
-                            tags={ filters.tags }
+                            tags={ defFilters.tags }
                             handleChange={ handleChange('tags') }
                         />
                     </>
@@ -147,7 +153,7 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                         color='success'
                         variant='contained'
                         fullWidth
-                        onClick={ () => filters.clearFilter() }
+                        onClick={ clearFilters }
                         startIcon={ <TbFilterCheck /> }
                     >
                         Сбросить
@@ -164,7 +170,7 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                     </Button>
                 </Stack>
                 <Divider />
-            </fetcher.Form>
+            </Form>
         </Paper>
     )
 })

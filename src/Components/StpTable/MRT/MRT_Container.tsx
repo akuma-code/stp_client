@@ -1,19 +1,19 @@
 import {
     MRT_RowVirtualizer,
-    MRT_SortingState,
     MaterialReactTable,
     useMaterialReactTable
 } from 'material-react-table';
 
 import { Box, alpha } from '@mui/material';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useMRTData, ColumnsData } from '../../../Hooks/MRT/useMRTData';
-import { StpData } from '../../StpTableView/StpDataTable';
-import { useLoadAllData } from '../../../Hooks/useLoadAllData';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
+import { useRef } from 'react';
+import { useMRTData } from '../../../Hooks/MRT/useMRTData';
+import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
+import { StpData } from '../../StpTableView/StpDataTable';
 
 const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
-    const query = useLoadAllData()
+    const query = useQueryFiltersLoader()
+
     const { columnOrder, columns } = useMRTData()
     const rowVirtualizerInstanceRef = useRef<MRT_RowVirtualizer>(null);
 
@@ -21,11 +21,12 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
 
     const table = useMaterialReactTable({
         data: query.isSuccess ? query.data : [],
-        localization: MRT_Localization_RU,
         columns,
+        localization: MRT_Localization_RU,
         meta: {
-            totalRowCount: 128
+            totalRowCount: query.data?.length
         },
+        rowCount: query.data?.length,
         enablePagination: false,
         enableRowSelection: true,
         enableDensityToggle: true,
@@ -34,25 +35,30 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
         enableColumnOrdering: false,
         enableColumnResizing: false,
         rowNumberDisplayMode: 'static',
+        globalFilterFn: 'contains',
         enableStickyHeader: true,
-
         enableRowVirtualization: false,
-
+        enableFacetedValues: true,
         rowVirtualizerOptions: {
             overscan: 2,
             estimateSize: () => 128,
         },
         initialState: {
             density: 'compact',
+            showColumnFilters: true,
         },
         state: {
-            // showSkeletons: query.isLoading,
+            showSkeletons: query.isLoading,
+            showProgressBars: query.isPending,
             columnOrder
         },
+        columnFilterDisplayMode: 'popover',
+
         defaultColumn: {
             minSize: 10,
             maxSize: 150, //allow columns to get larger than default
             size: 80, //make columns wider by default
+
 
             // grow: 0,
             sortDescFirst: false,
@@ -84,7 +90,7 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
         },
         displayColumnDefOptions: {
             'mrt-row-numbers': {
-                enableColumnOrdering: true,
+                enableColumnOrdering: false,
                 size: 40,
                 enableHiding: true,
                 enableFilterMatchHighlighting: true,
@@ -92,14 +98,18 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
 
             },
             'mrt-row-select': {
-                enableColumnActions: true,
+                enableColumnActions: false,
                 enableHiding: true,
                 size: 40,
             },
         },
-
+        renderBottomToolbar: ({ table }) => {
+            return <Box textAlign={ 'center' } width={ '100%' }>
+                Total rows:  { table.getRowCount() }
+            </Box>
+        },
         muiTableContainerProps: {
-            sx: { maxHeight: '740px', }
+            sx: { maxHeight: '700px', }
         },
         muiTableBodyRowProps: ({ row }) => row.index % 2 === 0
             ? { sx: { bgcolor: (theme) => alpha(theme.palette.primary.main, .1) } }
@@ -120,8 +130,11 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
     // }, [sorting]);
     return (
         <Box sx={ { width: '100%', height: '100%', m: 1 } }>
+            {
+                // query.status === 'pending' ? <Loading text='обновление данных' /> :
+                <MaterialReactTable table={ table }
 
-            <MaterialReactTable table={ table } />
+                /> }
         </Box>
     )
 }

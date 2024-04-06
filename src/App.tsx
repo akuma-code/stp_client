@@ -13,6 +13,7 @@ import { AppToolbarHeader } from "./Routes/Pages/AppBar";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { FilterStore } from "./Context/Stores/FiltrationStore";
 import { configure } from "mobx";
+import { SearchQueryStore } from "./Context/Stores/SearchQueryStore";
 
 
 configure({
@@ -58,7 +59,7 @@ function App() {
     } }
     >
 
-      <FilterContext.Provider value={ { filters: new FilterStore() } }>
+      <FilterContext.Provider value={ { filters: new FilterStore(), search: new SearchQueryStore() } }>
 
         <RouterProvider
           router={ router }

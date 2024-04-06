@@ -13,11 +13,12 @@ import TableDataContainer from '../../../Components/StpTable/v2/TableDataContain
 import { StpDataTable } from '../../../Components/StpTableView/StpDataTable';
 import { FilterDrawer } from '../../../Components/UI/SideDrower/DrawerFilter';
 import { Loading } from '../../../Components/UI/SuspenseLoad';
-import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
+import { useQueryFiltersLoader, useQuerySeparateFilterLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
 import { useFilterContext } from '../../../Hooks/useFilterContext';
 import { useAppContext } from '../../../Hooks/useStoresContext';
 import { ComparePage } from '../ComparePage';
 import MRT_Container from '../../../Components/StpTable/MRT/MRT_Container';
+import { _log } from '../../../Helpers/helpersFns';
 type TabPageProps = PropsWithChildren & {
     initTab?: number
 }
@@ -34,12 +35,13 @@ const toaster = () => toast.success(`Данные загружены успеш�
 const initFn = (tab = 3) => tab
 export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
     // const queryAll = useLoadAllData()
-    const { query } = useAppContext()
-    const { filters } = useFilterContext()
+    // const { query } = useAppContext()
+    const { filters, search } = useFilterContext()
     // const [selected, action] = useIdSelector()
     const [current, setCurrent] = React.useState<number>(() => initFn(initTab));
     // const filtered = useStpFilter(queryAll.data, query, filterParams)
-    const qf = useQueryFiltersLoader(filters, query)
+    const qf = useQueryFiltersLoader(search.query)
+
 
 
 
@@ -109,8 +111,8 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
                                 label={ `MRT_Table` }
                                 value={ 3 }
                                 icon={ <TabIcon /> }
-                                iconPosition='end'
-
+                                iconPosition='start'
+                                onClick={ () => toast.error("mrt loaded!") }
                             />
 
 
@@ -148,6 +150,7 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
                 <TabPanel index={ 3 } value={ current } >
                     {
                         // qf.status === 'success' &&
+
                         <MRT_Container />
                     }
                 </TabPanel>

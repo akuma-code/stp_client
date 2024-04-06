@@ -23,6 +23,10 @@ type FilterIds = {
     key: 'id'
     value: FiltersParams['id']
 }
+type FilterQueryString = {
+    key: 'query'
+    value: string
+}
 type FilterRecord = | FilterTags | FilterCams | FilterDepth | FilterIds
 type FilterStoreOptions = {
     selectMax: number
@@ -32,6 +36,7 @@ export class FilterStore {
     tags: StpTag[] = []
     depth: number[] = []
     ids: number[] = []
+
     options: FilterStoreOptions
     // setCams: (cams: number[]) => void
     constructor(options?: FilterStoreOptions) {
@@ -57,6 +62,7 @@ export class FilterStore {
             case "tags": { this.tags = value; break }
             case "depth": { this.depth = value; break }
             case "id": { this.ids = value; break }
+
         }
 
     }
@@ -67,6 +73,7 @@ export class FilterStore {
             this.tags = []
             this.depth = []
             this.ids = []
+
             return
         }
         this.setFilter({ key, value: [] })

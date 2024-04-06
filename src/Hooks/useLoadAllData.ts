@@ -7,7 +7,8 @@ export const useLoadAllData = () => {
     const context = useQuery({
         queryKey: ['load_stp_all'] as const,
         queryFn: () => getAllTableData(),
-        select: data => data.map((s, i) => s.id ? s : ({ ...s, id: i + 1 })) as StpData[]
+        // select: data => data.map((s, i) => s.id ? s : ({ ...s, id: i + 1 })) as StpData[]
+        placeholderData: (prev, current) => prev
     });
     return context;
 };
