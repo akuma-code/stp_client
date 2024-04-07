@@ -23,10 +23,11 @@ export function useQueryFiltersLoader(querySearch?: string) {
             deffered
         ],
         queryFn: () => getAllTableData(),
-        select: (data) => filters.applyFilters(queryfilter(data, deffered)),
+        select: (data) => filters.applyFilters(querySearchFilter(data, deffered)),
         // select: (data) => deffered ? queryfilter(filters.applyFilters(data), deffered) : filters.applyFilters(data),
         gcTime: 2000,
         placeholderData: keepPreviousData,
+        notifyOnChangeProps: ['data', 'refetch', 'status']
 
     },
         queryClient)
@@ -60,7 +61,7 @@ export function useQuerySeparateFilterLoader() {
             {
                 queryKey: ['stp', { query }],
                 queryFn: () => getAllTableData(),
-                select: (data) => queryfilter(data as StpData[], query),
+                select: (data) => querySearchFilter(data as StpData[], query),
                 gcTime: 2000,
             },
         ],
@@ -69,7 +70,7 @@ export function useQuerySeparateFilterLoader() {
     return context
 
 }
-function queryfilter<T extends { name: string }>(items: T[], query?: string) {
+function querySearchFilter<T extends { name: string }>(items: T[], query?: string) {
     if (!query || query === "") return items
     return items.filter(i => i.name.toLowerCase().includes(query.toLowerCase()))
 }

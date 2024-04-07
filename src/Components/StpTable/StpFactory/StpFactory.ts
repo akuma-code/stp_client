@@ -1,4 +1,4 @@
-import { _log } from "../../../Helpers/helpersFns"
+import { _isArr, _log } from "../../../Helpers/helpersFns"
 import { parseStpName, triplexRegExp } from "../FormulaParser"
 import { TStandartNames, TagsTypeList } from "../StpTagsMaker"
 import { StpItem, StpTag } from "../TableObjects"
@@ -37,22 +37,28 @@ export type TParams = readonly [
     S: number,
     weight: number,
 ]
-
+export type StpResponeArray = [
+    name: string,
+    ...TParams
+]
 
 export class STP implements StpExemplar {
-    name: string
-    cams: number
-    depth: number
+    name!: string
+    cams!: number
+    depth!: number
     tags: StpTag[] = []
-    secure: "P2A" | "нет" | "CM2" | "CM3"
+    secure!: "P2A" | "нет" | "CM2" | "CM3"
     params?: StpParams
-    constructor(formula: string) {
-        this.name = formula
-        this.depth = computeDepth(formula)
-        this.tags = initTags(formula)
-        this.cams = computeCams(formula)
-        this.secure = computeSecure(formula)
-
+    constructor(initData: string | StpResponeArray) {
+        if (_isArr(initData)) {
+            this.initFetchedData(initData)
+        } else {
+            this.name = initData
+            this.depth = computeDepth(initData)
+            this.tags = initTags(initData)
+            this.cams = computeCams(initData)
+            this.secure = computeSecure(initData)
+        }
     }
 
     public initParams(...init: TParams) {
@@ -66,6 +72,22 @@ export class STP implements StpExemplar {
         const { cams, depth, name, tags, secure } = this
         const stp_item: StpItem = { cams, depth, name, tags, secure, ...this.params }
         return stp_item
+    }
+
+    public initFetchedData(array: StpResponeArray) {
+        const [name, ...params] = array
+        const [depth, tags, cams] = [
+            computeDepth(name),
+            initTags(name),
+            computeCams(name),
+
+        ]
+        this.depth = depth
+        this.tags = tags
+        this.cams = cams
+        this.secure = computeSecure(name)
+        this.initParams(...params)
+
     }
 
 }

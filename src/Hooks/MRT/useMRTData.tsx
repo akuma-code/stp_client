@@ -11,7 +11,9 @@ import { CamAvatar } from "../../Components/UI/CamsAvatars"
 export type ColumnsData = MRT_ColumnDef<StpData>
 export const useMRTData = () => {
 
-    const columnOrder: MRT_ColumnOrderState = ["mrt-row-numbers", "mrt-row-select", "name", "depth", "tags", "cams", "weight", "Ro", "Rw", "Det", "Ea", "Er", "Lr", "Lt", "Ra", "S", "Sf", "secure"] as const
+    const columnOrder: MRT_ColumnOrderState = [
+        "mrt-row-numbers", "mrt-row-select", "name", "depth", "tags", "cams", "weight", "Ro", "Rw", "Det", "Ea", "Er", "Lr", "Lt", "Ra", "S", "Sf", "secure"
+    ] as const
 
     const columns = useMemo<ColumnsData[]>(() => cols, [])
     const options: MRT_DefinedTableOptions<StpData> = useMRT_TableOptions({
@@ -127,7 +129,7 @@ export const cols: ColumnsData[] = [
         grow: 1,
         enableSorting: false,
 
-        filterVariant: 'checkbox',
+        // filterVariant: 'checkbox',
 
         muiTableBodyCellProps: {
             align: "center",
@@ -150,8 +152,9 @@ export const cols: ColumnsData[] = [
         Header: <div>Толщина</div>,
         size: 70,
         grow: 1,
-        filterVariant: 'multi-select',
-        columnFilterModeOptions: ['equals'],
+        // filterVariant: 'select',
+        // filterFn: 'fuzzy',
+        // enableMultiSort: true,
         muiTableBodyCellProps: {
             align: 'center',
         },
@@ -163,7 +166,7 @@ export const cols: ColumnsData[] = [
                 borderColor: "black",
             }
         },
-        Cell: ({ cell }) => <div> { cell.getValue<number>() } <em>мм</em> </div>
+        Cell: ({ cell, column }) => <> { cell.getValue<number>() }<em>мм</em> </>
     },
     {
         accessorKey: 'cams',

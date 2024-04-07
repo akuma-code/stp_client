@@ -35,13 +35,15 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
         enableColumnOrdering: false,
         enableColumnResizing: false,
         rowNumberDisplayMode: 'static',
-        globalFilterFn: 'contains',
+        // globalFilterFn: 'contains',
         enableStickyHeader: true,
         enableRowVirtualization: false,
         enableFacetedValues: true,
+        enableColumnFilterModes: false,
         rowVirtualizerOptions: {
             overscan: 2,
-            estimateSize: () => 128,
+            estimateSize: (index) => index + 5,
+
         },
         initialState: {
             density: 'compact',
@@ -52,8 +54,8 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
             showProgressBars: query.isPending,
             columnOrder
         },
-        columnFilterDisplayMode: 'popover',
-
+        columnFilterDisplayMode: 'subheader',
+        enableFilterMatchHighlighting: true,
         defaultColumn: {
             minSize: 10,
             maxSize: 150, //allow columns to get larger than default
@@ -79,6 +81,7 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
             size: 40,
             maxSize: 40,
             grow: 1,
+            filterVariant: 'autocomplete',
             muiTableHeadCellProps: {
                 align: 'center',
                 sx: {
