@@ -10,9 +10,12 @@ import { useRef } from 'react';
 import { useMRTData } from '../../../Hooks/MRT/useMRTData';
 import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
 import { StpData } from '../../StpTableView/StpDataTable';
+import { observer } from 'mobx-react-lite';
+import { useFilterContext } from '../../../Hooks/useFilterContext';
 
-const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
+const MRT_Container = observer(() => {
     const query = useQueryFiltersLoader()
+    const { filters } = useFilterContext();
 
     const { columnOrder, columns } = useMRTData()
     const rowVirtualizerInstanceRef = useRef<MRT_RowVirtualizer>(null);
@@ -47,11 +50,11 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
         },
         initialState: {
             density: 'compact',
-            showColumnFilters: true,
+            showColumnFilters: false,
         },
         state: {
             showSkeletons: query.isLoading,
-            showProgressBars: query.isPending,
+            showProgressBars: query.isRefetching,
             columnOrder
         },
         columnFilterDisplayMode: 'subheader',
@@ -104,12 +107,15 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
                 enableColumnActions: false,
                 enableHiding: true,
                 size: 40,
+
             },
         },
         renderBottomToolbar: ({ table }) => {
-            return <Box textAlign={ 'center' } width={ '100%' }>
-                Total rows:  { table.getRowCount() }
-            </Box>
+            return (
+                <Box textAlign={ 'center' } width={ '100%' }>
+                    Total rows:  { table.getRowCount() }
+                </Box>
+            )
         },
         muiTableContainerProps: {
             sx: { maxHeight: '700px', }
@@ -132,7 +138,7 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
     //     }
     // }, [sorting]);
     return (
-        <Box sx={ { width: '100%', height: '100%', m: 1 } }>
+        <Box sx={ { width: '98%', height: '100%', m: 1, mx: 'auto' } }>
             {
                 // query.status === 'pending' ? <Loading text='обновление данных' /> :
                 <MaterialReactTable table={ table }
@@ -140,6 +146,6 @@ const MRT_Container = ({ stp_data }: { stp_data?: StpData[] }) => {
                 /> }
         </Box>
     )
-}
+})
 
 export default MRT_Container

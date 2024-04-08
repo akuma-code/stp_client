@@ -13,7 +13,7 @@ import TableDataContainer from '../../../Components/StpTable/v2/TableDataContain
 import { StpDataTable } from '../../../Components/StpTableView/StpDataTable';
 import { FilterDrawer } from '../../../Components/UI/SideDrower/DrawerFilter';
 import { Loading } from '../../../Components/UI/SuspenseLoad';
-import { useQueryFiltersLoader, useQuerySeparateFilterLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
+import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
 import { useFilterContext } from '../../../Hooks/useFilterContext';
 import { useAppContext } from '../../../Hooks/useStoresContext';
 import { ComparePage } from '../ComparePage';
@@ -28,19 +28,16 @@ const CompIcon = React.memo(() => <SvgIcon sx={ { fontSize: 20 } }><MdCompare />
 CompIcon.displayName = '*CompareIcon'
 //__TABPAGE____
 
-const toaster = () => toast.success(`Данные загружены успешно`, {
-    position: "bottom-center",
 
-})
 const initFn = (tab = 3) => tab
 export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
     // const queryAll = useLoadAllData()
     // const { query } = useAppContext()
-    const { filters, search } = useFilterContext()
+    const { filters } = useFilterContext()
     // const [selected, action] = useIdSelector()
     const [current, setCurrent] = React.useState<number>(() => initFn(initTab));
     // const filtered = useStpFilter(queryAll.data, query, filterParams)
-    const qf = useQueryFiltersLoader(search.query)
+    const qf = useQueryFiltersLoader()
 
 
 
@@ -156,7 +153,7 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
                 </TabPanel>
 
             </Box>
-            <ToastContainer key={ "toaster" }
+            {/* <ToastContainer key={ "toaster" }
                 containerId={ 'toast-container' }
                 position="top-left"
                 autoClose={ 1000 }
@@ -167,7 +164,7 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-            />
+            /> */}
         </>
     )
 })

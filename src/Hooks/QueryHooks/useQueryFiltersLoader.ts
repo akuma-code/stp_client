@@ -1,16 +1,19 @@
-import { useQueries, useQuery, keepPreviousData } from "@tanstack/react-query";
-import { FilterStore } from "../../Context/Stores/FiltrationStore";
-import { getAllTableData } from "../useLoadAllData";
-import { useDeferredValue, useMemo } from "react";
+import { keepPreviousData, useQueries, useQuery } from "@tanstack/react-query";
+import { useCallback, useDeferredValue } from "react";
 import { queryClient } from "../..";
-import { useFilterContext } from "../useFilterContext";
 import { StpData } from "../../Components/StpTableView/StpDataTable";
+import { useFilterContext } from "../useFilterContext";
+import { getAllTableData } from "../useLoadAllData";
 
-export function useQueryFiltersLoader(querySearch?: string) {
+export function useQueryFiltersLoader() {
     const { filters, search } = useFilterContext()
     const { cams, depth, tags } = filters;
-
     const deffered = useDeferredValue(search.query)
+    // const cachedData = useCallback((data: StpData[]) => querySearchFilter(data, deffered), [deffered])
+    const selectFn = useCallback((data: StpData[]) => {
+        const items = querySearchFilter(data, deffered)
+        return filters.applyFilters(items)
+    }, [deffered, filters])
     // const placeholder = useMemo(()=>{
 
     // })
@@ -22,12 +25,12 @@ export function useQueryFiltersLoader(querySearch?: string) {
             tags,
             deffered
         ],
-        queryFn: () => getAllTableData(),
-        select: (data) => filters.applyFilters(querySearchFilter(data, deffered)),
+        queryFn: getAllTableData,
+        select: selectFn,
         // select: (data) => deffered ? queryfilter(filters.applyFilters(data), deffered) : filters.applyFilters(data),
         gcTime: 2000,
         placeholderData: keepPreviousData,
-        notifyOnChangeProps: ['data', 'refetch', 'status']
+        notifyOnChangeProps: []
 
     },
         queryClient)

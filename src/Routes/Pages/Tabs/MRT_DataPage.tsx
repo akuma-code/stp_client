@@ -9,9 +9,9 @@ const MRTDataPage: React.FC<{}> = () => {
 
     return (
         <>
-            { isSuccess &&
-                <MRT_Container stp_data={ data } />
-            }
+
+            <MRT_Container />
+
         </>
     )
 }

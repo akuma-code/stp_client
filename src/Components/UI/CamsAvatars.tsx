@@ -1,6 +1,8 @@
 import { Avatar, CircularProgress, SvgIcon, SvgIconProps, SvgIconTypeMap, Tooltip } from '@mui/material'
 import { Suspense, lazy, memo } from 'react'
-const Cam1 = lazy(() => import('../UI/Svg/AvaS2'))
+import MemoAvaS2 from './Svg/AvaS2'
+import MemoAvaS3 from '../UI/Svg/AvaS3'
+// const Cam1 = lazy(() => import('../UI/Svg/AvaS2'))
 const Cam2 = lazy(() => import('../UI/Svg/AvaS3'))
 
 
@@ -13,7 +15,7 @@ export const AvatarS2 = ({ wh }: { wh?: number }) => {
             <Tooltip title='1 камера (2 стекла)'>
                 <Avatar sx={ { width: wh || '1em', height: wh || '1em', bgcolor: '#8fbef8', '&:hover': { transform: 'scale(1.5)' } } } variant='rounded' alt='1 cam'>
                     <SvgIcon >
-                        <Cam1 />
+                        <MemoAvaS2 />
                     </SvgIcon>
                 </Avatar>
             </Tooltip>
@@ -29,7 +31,7 @@ export const AvatarS3 = ({ wh }: { wh?: number }) => {
             <Tooltip title='2 камеры (3 стекла)'>
                 <Avatar sx={ { width: wh || '1em', height: wh || '1em', bgcolor: '#4382cf', '&:hover': { transform: 'scale(1.5)' } } } variant='rounded' alt='2 cam'>
                     <SvgIcon>
-                        <Cam2 />
+                        <MemoAvaS3 />
                     </SvgIcon>
                 </Avatar>
             </Tooltip>
@@ -46,7 +48,7 @@ export const CamOneIcon = memo(({ wh }: { wh?: string | number }) => {
         }>
 
             <SvgIcon sx={ { width: w, height: h } }>
-                <Cam1 />
+                <MemoAvaS2 />
             </SvgIcon>
         </Suspense>
     )
@@ -60,7 +62,7 @@ export const CamTwoIcon = memo(({ wh }: { wh?: string | number }) => {
         }>
 
             <SvgIcon sx={ { width: w, height: h } }>
-                <Cam2 />
+                <MemoAvaS3 />
             </SvgIcon>
         </Suspense>
     )
@@ -73,7 +75,7 @@ type CamAvatarProps = {
 }
 export const CamAvatar: React.FC<CamAvatarProps> = ({ wh, cam_count }) => {
 
-    const icon = cam_count === 1 ? <Cam1 /> : cam_count === 2 ? <Cam2 /> : null
+    const icon = cam_count === 1 ? <MemoAvaS2 /> : cam_count === 2 ? <MemoAvaS3 /> : null
 
     return (
         <Suspense fallback={
@@ -100,8 +102,8 @@ export const CamAvatar: React.FC<CamAvatarProps> = ({ wh, cam_count }) => {
 
 export const SvgCam = ({ type }: { type: 's1' | 's2' }) => {
     const icons = {
-        s1: ({ props }: { props: SvgIconProps }) => <SvgIcon { ...props }><Cam1 /></SvgIcon>,
-        s2: ({ props }: { props: SvgIconProps }) => <SvgIcon { ...props }><Cam2 /></SvgIcon>
+        s1: ({ props }: { props: SvgIconProps }) => <SvgIcon { ...props }><MemoAvaS2 /></SvgIcon>,
+        s2: ({ props }: { props: SvgIconProps }) => <SvgIcon { ...props }><MemoAvaS3 /></SvgIcon>
     }
 
     return icons[type]

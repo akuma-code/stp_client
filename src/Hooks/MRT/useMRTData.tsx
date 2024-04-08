@@ -149,7 +149,7 @@ export const cols: ColumnsData[] = [
         accessorKey: 'depth',
         id: 'depth',
         header: 'depth',
-        Header: <div>Толщина</div>,
+        Header: 'Толщина',
         size: 70,
         grow: 1,
         // filterVariant: 'select',

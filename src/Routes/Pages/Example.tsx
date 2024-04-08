@@ -7,9 +7,9 @@ import {
     type MRT_RowVirtualizer,
 } from 'material-react-table';
 
-import { useLoadAllData } from '../useLoadAllData';
+import { useLoadAllData } from '../../Hooks/useLoadAllData';
 import { StpData } from '../../Components/StpTableView/StpDataTable';
-import { useMRTData } from './useMRTData';
+import { useMRTData } from '../../Hooks/MRT/useMRTData';
 
 const Example = () => {
     const query = useLoadAllData()
