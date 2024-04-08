@@ -68,4 +68,3 @@ export const AuthService = {
     },
 }
 
-export default new AuthStore();
