@@ -25,6 +25,7 @@ import { AppBar, Avatar, Button, Dialog, DialogActions, DialogContent, DialogTit
 import { useToggle } from '../../../Hooks/useToggle';
 import { VoidFn } from '../../../Interfaces/Types';
 import { AvatarButtonTooltip } from '../../../Components/UI/AvatarButtonTooltip';
+import { useFilterContext } from '../../../Hooks/useFilterContext';
 
 interface ListItemLinkProps extends ListItemProps {
     to: string;
@@ -149,7 +150,7 @@ type LoginDialogProps = {
 }
 export const LoginDialog = (props: LoginDialogProps) => {
     const [open, modal] = useToggle(false)
-
+    const { auth } = useFilterContext()
     return (
         <>
             <AvatarButtonTooltip
@@ -167,6 +168,7 @@ export const LoginDialog = (props: LoginDialogProps) => {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries((formData as any).entries());
+                        auth.login(formJson.login, formJson.pass)
                         console.log(formJson);
                         modal.off()
                     }

@@ -7,7 +7,7 @@ import { OverView } from "./Pages/OverView";
 import { PrintPage } from "./Pages/PrintPage";
 import { Root } from "./Pages/Root";
 import { StpInfoPage } from "./Pages/StpInfoPage";
-import { routePaths } from "./routePath";
+import { apiRoute, routePaths } from "./routePath";
 import { TabPage } from "./Pages/Tabs/TabPage";
 import TabContainer from "./Pages/Tabs/TabContainer";
 import { _log } from "../Helpers/helpersFns";
@@ -115,11 +115,25 @@ export const appRoutes: RouteObject[] = [
 
                 element: <StpInfoPage />
 
-            }
+            },
+            {
+                path: apiRoute.api,
+                children: [
+                    {
+                        path: apiRoute.auth
+                    },
+                    {
+                        path: apiRoute.login
+                    },
+                    {
+                        path: apiRoute.register
+                    }
+
+                ]
+            },
         ]
 
     },
-
     {
         path: 'ex',
         element: <Example />

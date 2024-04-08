@@ -14,13 +14,14 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { FilterStore } from "./Context/Stores/FiltrationStore";
 import { configure } from "mobx";
 import { SearchQueryStore } from "./Context/Stores/SearchQueryStore";
+import { AuthStore } from "./Context/Stores/AuthStore";
 
 
 configure({
   useProxies: "always",
   enforceActions: 'observed'
 });
-const stores = { StpStore: new StpStore(table_data_base), FilterStore: new FilterStore() }
+const stores = { StpStore: new StpStore(table_data_base) }
 // export const queryClient = new QueryClient({
 //   defaultOptions: {
 //     queries: {
@@ -59,7 +60,7 @@ function App() {
     } }
     >
 
-      <FilterContext.Provider value={ { filters: new FilterStore(), search: new SearchQueryStore() } }>
+      <FilterContext.Provider value={ { filters: new FilterStore(), search: new SearchQueryStore(), auth: new AuthStore() } }>
 
         <RouterProvider
           router={ router }
