@@ -5,7 +5,7 @@ import { useLoadAllData } from '../../../Hooks/useLoadAllData'
 
 const MRTDataPage: React.FC<{}> = () => {
 
-    const { data, isSuccess } = useLoadAllData()
+
 
     return (
         <>

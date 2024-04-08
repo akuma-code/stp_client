@@ -18,14 +18,14 @@ const $axios = axios.create({
 
 })
 $axios.defaults.headers.common['Access-Control-Allow-Origin'] = host
-$axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET, OPTIONS, POST'
+$axios.defaults.headers.common['Access-Control-Allow-Methods'] = '*'
 $axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept'
 
 
 const headerInterceptor = (config: { headers: AxiosHeaders }) => {
     config.headers.set('Access-Control-Allow-Origin', host)
     // config.headers.set('Access-Control-Content-Type', 'application/json, text/plain, */*')
-    config.headers.Authorization = `Bearer ${Cookies.get('token') || ""}`
+    // config.headers.Authorization = `Bearer ${Cookies.get('token') || ""}`
     // config.headers.set('Origin', host)
     // config.headers.set('Origin', )
 
@@ -38,33 +38,33 @@ const authInterceptor = (config: { headers: AxiosHeaders }) => {
     return config
 }
 
-$axios.interceptors.request.use(headerInterceptor, (e) => _log("error: ", e))
-$axios.interceptors.request.use(authInterceptor, async (error) => {
-    // предотвращаем зацикленный запрос, добавляя свойство _isRetry 
-    const originalRequest = { ...error.config };
-    originalRequest._isRetry = true;
-    if (
-        // проверим, что ошибка именно из-за невалидного accessToken
-        error.response.status === 401 &&
-        // проверим, что запрос не повторный
-        error.config &&
-        !error.config._isRetry
-    ) {
-        try {
-            // запрос на обновление токенов
-            const resp = await api.get<{ accessToken: string }>(apiRoute.auth);
-            // сохраняем новый accessToken в localStorage
-            localStorage.setItem("token", resp.data.accessToken);
-            // переотправляем запрос с обновленным accessToken
-            return $axios.request(originalRequest);
-        } catch (error) {
-            console.log("AUTH ERROR");
-        }
-    }
-    // на случай, если возникла другая ошибка (не связанная с авторизацией)
-    // пробросим эту ошибку 
-    throw error;
-})
+// $axios.interceptors.request.use(headerInterceptor, (e) => _log("error: ", e))
+// $axios.interceptors.request.use(authInterceptor, async (error) => {
+//     // предотвращаем зацикленный запрос, добавляя свойство _isRetry 
+//     const originalRequest = { ...error.config };
+//     originalRequest._isRetry = true;
+//     if (
+//         // проверим, что ошибка именно из-за невалидного accessToken
+//         error.response.status === 401 &&
+//         // проверим, что запрос не повторный
+//         error.config &&
+//         !error.config._isRetry
+//     ) {
+//         try {
+//             // запрос на обновление токенов
+//             const resp = await api.get<{ accessToken: string }>(apiRoute.auth);
+//             // сохраняем новый accessToken в localStorage
+//             localStorage.setItem("token", resp.data.accessToken);
+//             // переотправляем запрос с обновленным accessToken
+//             return $axios.request(originalRequest);
+//         } catch (error) {
+//             console.log("AUTH ERROR");
+//         }
+//     }
+//     // на случай, если возникла другая ошибка (не связанная с авторизацией)
+//     // пробросим эту ошибку 
+//     throw error;
+// })
 
 export const api = {
     get: async <T>(url: string, params?: object) =>
@@ -72,7 +72,7 @@ export const api = {
             headers: {
                 // token: Cookies.get('token'),
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, OPTIONS, POST'
+                'Access-Control-Allow-Methods': '*'
 
 
 
