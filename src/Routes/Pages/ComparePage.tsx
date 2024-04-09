@@ -17,7 +17,7 @@ import { useQueryFiltersLoader, useQuerySelectedIdsLoader } from '../../Hooks/Qu
 
 export const ComparePage = observer(() => {
     const { filters: { ids } } = useFilterContext();
-    const { data, isSuccess } = useQuerySelectedIdsLoader(ids)
+    const { data, isSuccess } = useQuerySelectedIdsLoader({ selectedIds: ids })
 
 
     const printRef = useRef(null)

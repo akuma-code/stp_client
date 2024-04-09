@@ -18,6 +18,7 @@ export const routePaths = {
 
 export const apiRoute = {
     stp_db: `https://script.google.com/macros/s/AKfycbz2FrlUXh0JNFIqc9VT2OBSLUvUdGhRq-6RZ775asudiBdT8DGfS8q5hZ8QIlZCeyfVnA/exec` as const,
+    stpApi: "https://sheet.best/api/sheets/87617c37-5c27-4b6e-936d-637a83f7c08e" as const,
     api: 'api' as const,
     auth: 'auth' as const,
     register: 'register' as const,

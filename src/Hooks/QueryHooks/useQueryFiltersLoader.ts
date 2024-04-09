@@ -30,13 +30,13 @@ export function useQueryFiltersLoader() {
 
         gcTime: 2000,
         placeholderData: keepPreviousData,
-        enabled: !!cams || !!depth || !!tags || !!deffered
+        // enabled: !!cams || !!depth || !!tags || !!deffered
 
     },
         queryClient)
     return context
 }
-export function useQuerySelectedIdsLoader(selectedIds: number[]) {
+export function useQuerySelectedIdsLoader({ selectedIds }: { selectedIds: number[] }) {
 
 
     const selectFn = useCallback((data: StpData[]) => data.filter(d => selectedIds.includes(d.id)), [selectedIds])
@@ -50,6 +50,7 @@ export function useQuerySelectedIdsLoader(selectedIds: number[]) {
 
         gcTime: 2000,
         placeholderData: keepPreviousData,
+        enabled: !!selectedIds
 
 
     },

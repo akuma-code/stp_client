@@ -1,4 +1,4 @@
-import { Outlet, RouteObject, createBrowserRouter, json, redirect } from "react-router-dom";
+import { Outlet, RouteObject, createBrowserRouter, json, redirect, type LoaderFunctionArgs } from "react-router-dom";
 import { LazyStpData } from "../Components/StpTable/FullTable";
 import { StpData, StpDataTable } from "../Components/StpTableView/StpDataTable";
 import { ComparePage } from "./Pages/ComparePage";
@@ -68,7 +68,7 @@ export const appRoutes: RouteObject[] = [
     {
         path: routePaths.tabs,
         element: <TabPage initTab={ 0 } />,
-        loader: async ({ request, params }) => {
+        loader: async ({ request, params }: LoaderFunctionArgs) => {
             const url = new URL(request.url)
 
 
