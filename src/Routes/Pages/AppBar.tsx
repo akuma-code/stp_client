@@ -1,4 +1,4 @@
-import { Button, Stack, Toolbar } from '@mui/material';
+import { Breadcrumbs, Button, Stack, Toolbar } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -11,21 +11,7 @@ import { routePaths } from '../routePath';
 import { MuiLink } from './MuiLink';
 export function AppHeaderBreadcrump() {
 
-    // const nav = useMatch(routePaths.export)
-    // const paths = useMatches()
-    // const [currentPath] = paths.map(p => p.pathname).slice(1)
-    // const host = process.env.REACT_APP_HOST_URL
-    // const notify = () => toast.success(host, {
-    //     position: "top-center",
-    //     autoClose: 5000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     theme: "light",
-    //     transition: Bounce,
-    // });
+
     return (
         <Box displayPrint={ 'none' } >
             <AppBar position="fixed" color={ `warning` } sx={ {
@@ -37,7 +23,7 @@ export function AppHeaderBreadcrump() {
                     justifyContent: 'space-between',
 
                 } } >
-                    <Box component={ Stack } direction={ 'row' } my={ 0 } gap={ 4 }>
+                    <Breadcrumbs component={ Stack } direction={ 'row' } my={ 0 } gap={ 4 } separator={ '//' } >
 
                         <IconButton
                             edge={ 'start' }
@@ -45,13 +31,11 @@ export function AppHeaderBreadcrump() {
 
                         >
                             <GrTable />
-                            <RrdLink to={ routePaths.root }> <strong>
-                                {/* { currentPath !== routePaths.root
-                                    ? "На главную"
-                                    : "Таблица"
-                                } */}
-                                "На главную"
-                            </strong></RrdLink>
+                            <RrdLink to={ routePaths.v1 }>
+                                <strong>
+                                    На главную
+                                </strong>
+                            </RrdLink>
                         </IconButton>
                         {/* { currentPath === routePaths.compare
                             ?
@@ -66,7 +50,7 @@ export function AppHeaderBreadcrump() {
                                 <RrdLink to={ routePaths.compare }> <strong>Сравнить</strong></RrdLink>
                             </IconButton>
                         } */}
-                        <Button
+                        {/* <Button
                             variant='text'
                             color='error'
                             startIcon={ <GrInfo /> }
@@ -76,8 +60,25 @@ export function AppHeaderBreadcrump() {
 
                                 Дополнительно
                             </Box>
-                        </Button>
-                    </Box>
+                        </Button> */}
+                        <IconButton
+                            edge={ 'start' }
+                            sx={ { mx: 2, display: 'flex', gap: 2, color: 'beige' } }
+                        >
+                            <GrInfo />
+                            <RrdLink to={ routePaths.stp_info }>
+                                Дополнительно
+                            </RrdLink>
+                        </IconButton>
+                        <IconButton
+                            edge={ 'start' }
+                            sx={ { mx: 2, display: 'flex', gap: 2, color: 'beige' } }
+                        >
+                            <RrdLink to={ routePaths.v2 }>
+                                вариант 2
+                            </RrdLink>
+                        </IconButton>
+                    </Breadcrumbs>
                     {/* <small onClick={ notify }> { host === 'http://localhost:3000' && host } </small> */ }
                     <strong className='text-md text-wrap'>
 

@@ -27,49 +27,33 @@ export function useQueryFiltersLoader() {
         ],
         queryFn: getAllTableData,
         select: selectFn,
-        // select: (data) => deffered ? queryfilter(filters.applyFilters(data), deffered) : filters.applyFilters(data),
+
         gcTime: 2000,
         placeholderData: keepPreviousData,
-        notifyOnChangeProps: []
+        enabled: !!cams || !!depth || !!tags || !!deffered
 
     },
         queryClient)
     return context
 }
-export function useQuerySeparateFilterLoader() {
-    const { filters, search } = useFilterContext()
-    const { cams, depth, tags } = filters;
-    const { query } = search
+export function useQuerySelectedIdsLoader(selectedIds: number[]) {
 
-    const context = useQueries({
-        queries: [
-            {
-                queryKey: ['stp', { cams }],
-                queryFn: () => getAllTableData(),
-                select: (data) => filters.applyFilters(data as unknown as StpData[]),
-                gcTime: 2000,
-            },
-            {
-                queryKey: ['stp', { depth }],
-                queryFn: () => getAllTableData(),
-                select: (data) => filters.applyFilters(data as unknown as StpData[]),
-                gcTime: 2000,
-            },
-            {
-                queryKey: ['stp', { tags }],
-                queryFn: () => getAllTableData(),
-                select: (data) => filters.applyFilters(data as unknown as StpData[]),
-                gcTime: 2000,
-            },
-            {
-                queryKey: ['stp', { query }],
-                queryFn: () => getAllTableData(),
-                select: (data) => querySearchFilter(data as StpData[], query),
-                gcTime: 2000,
-            },
+
+    const selectFn = useCallback((data: StpData[]) => data.filter(d => selectedIds.includes(d.id)), [selectedIds])
+    const context = useQuery({
+        queryKey: [
+            'stp_table_data_selected',
+            selectedIds
         ],
+        queryFn: getAllTableData,
+        select: selectFn,
 
-    }, queryClient)
+        gcTime: 2000,
+        placeholderData: keepPreviousData,
+
+
+    },
+        queryClient)
     return context
 
 }

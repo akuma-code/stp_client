@@ -19,6 +19,9 @@ import { useAppContext } from '../../../Hooks/useStoresContext';
 import { ComparePage } from '../ComparePage';
 import MRT_Container from '../../../Components/StpTable/MRT/MRT_Container';
 import { _log } from '../../../Helpers/helpersFns';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { routePaths } from '../../routePath';
+import { MuiLink } from '../MuiLink';
 type TabPageProps = PropsWithChildren & {
     initTab?: number
 }
@@ -31,19 +34,26 @@ CompIcon.displayName = '*CompareIcon'
 
 const initFn = (tab = 3) => tab
 export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
+    const nav = useNavigate()
     // const queryAll = useLoadAllData()
     // const { query } = useAppContext()
+    const qf = useQueryFiltersLoader()
     const { filters } = useFilterContext()
     // const [selected, action] = useIdSelector()
-    const [current, setCurrent] = React.useState<number>(() => initFn(initTab));
+    const [current, setCurrent] = React.useState<number>(initTab || 0);
     // const filtered = useStpFilter(queryAll.data, query, filterParams)
-    const qf = useQueryFiltersLoader()
 
 
 
-
+    const selectedText = filters.ids.length > 0 ? `Сравнить выбранные (${filters.ids.length})` : `Выберите стеклопакеты для сравнения`
     const handleChange = (event: React.SyntheticEvent, new_index: number) => {
+        const path = {
+            'table': '/v1',
+            'compare': routePaths.compare
+        }
+        const paths = [path.table, path.compare] as const
         setCurrent(new_index);
+        new_index <= 1 && nav(paths[new_index])
     };
 
     // useEffect(() => {
@@ -60,9 +70,9 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
         <>
 
             <Box sx={ { h: '100%' } }>
-                <AppBar position="static" color='info' >
+                <AppBar position="static" color='info' sx={ { maxHeight: '4em' } } >
 
-                    <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'baseline' } spacing={ 8 }>
+                    <Stack direction={ 'row' } justifyContent={ 'start' } alignItems={ 'center' } spacing={ 8 }>
 
                         <Tabs
                             value={ current }
@@ -83,21 +93,20 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
                                 icon={ <TabIcon /> }
                                 iconPosition='start'
                                 sx={ { pl: 4 } }
-                                onClick={ () => toast(`Данные загружены успешно`, {
-                                    position: "bottom-center",
-
-                                }) }
+                                onClick={ () => filters.clearFilter('id') }
+                                LinkComponent={ MuiLink }
                             />
 
 
                             <Tab
-                                label={ `Сравнить (${filters.ids.length})` }
+                                label={ selectedText }
                                 value={ 1 }
                                 icon={ <CompIcon /> }
                                 iconPosition='start'
-                                disabled={ filters.ids.length === 0 }
+                                LinkComponent={ MuiLink }
+                            // disabled={ filters.ids.length === 0 }
                             />
-                            <Tab
+                            {/* <Tab
                                 label={ `Table v2` }
                                 value={ 2 }
                                 icon={ <TabIcon /> }
@@ -110,7 +119,7 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
                                 icon={ <TabIcon /> }
                                 iconPosition='start'
                                 onClick={ () => toast.error("mrt loaded!") }
-                            />
+                            /> */}
 
 
                         </Tabs>
@@ -122,26 +131,27 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
 
 
                 <TabPanel index={ 0 } value={ current } >
-                    {/* <Suspense fallback={ <Loading /> }> */ }
                     {
-                        // qf.status === 'pending' ? <Loading text='обновление данных' /> :
+
                         qf.isSuccess &&
-                        <StpDataTable
-                            items={ qf.data }
+                        <Suspense fallback={ <Loading /> }>
+                            <StpDataTable
+                                items={ qf.data }
+                                selectedItems={ filters.ids }
 
+                            />
+                        </Suspense>
 
-                        />
                     }
-                    {/* </Suspense> */ }
                 </TabPanel>
-                <TabPanel index={ 1 } value={ current }                >
+                <TabPanel index={ 1 } value={ current }>
                     <Suspense fallback={ <Loading /> }>
 
-                        <ComparePage />
-
+                        {/* <ComparePage /> */ }
+                        <Outlet context={ filters.ids } />
                     </Suspense>
                 </TabPanel>
-                <TabPanel index={ 2 } value={ current } className='bg-blue-400'>
+                {/* <TabPanel index={ 2 } value={ current } className='bg-blue-400'>
                     <TableDataContainer />
                 </TabPanel>
                 <TabPanel index={ 3 } value={ current } >
@@ -150,21 +160,10 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
 
                         <MRT_Container />
                     }
-                </TabPanel>
+                </TabPanel> */}
 
             </Box>
-            {/* <ToastContainer key={ "toaster" }
-                containerId={ 'toast-container' }
-                position="top-left"
-                autoClose={ 1000 }
-                hideProgressBar={ false }
-                newestOnTop
-                closeOnClick
-                rtl={ false }
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            /> */}
+
         </>
     )
 })

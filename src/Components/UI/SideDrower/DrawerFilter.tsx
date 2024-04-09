@@ -40,6 +40,7 @@ export const FilterDrawer = observer(() => {
                     variant='outlined'
                     color={ 'secondary' }
                     startIcon={ <BsFillFilterSquareFill /> }
+                    size='small'
                 >
                     Включить фильтры
                 </Button>

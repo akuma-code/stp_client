@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { Bounce, ToastContainer, toast } from "react-toastify"
 import { routePaths } from "../routePath"
 import { MuiLink } from "./MuiLink"
+import { AppToolbarHeader } from "./AppBar"
 
 type RootProps = PropsWithChildren
 
@@ -27,19 +28,20 @@ export const Root: React.FC<RootProps> = () => {
     //     notify()
     // }, []
     // )
-    // useEffect(() => {
-    //     nav(routePaths.v2, { replace: true, })
+    useEffect(() => {
+        // nav(routePaths.v2,)
 
-    // }, [])
+    }, [])
     return (
 
 
         <>
-            {/* <AppToolbarHeader /> */ }
-            <MuiLink to={ routePaths.tabs }>Table</MuiLink>
+            <AppToolbarHeader />
+
 
 
             <Outlet />
+            {/* <MuiLink to={ routePaths.v2 } >go to { routePaths.v2 }</MuiLink> */ }
             {/* <AppBar position="fixed" sx={ { bottom: 10, top: 'auto', height: 40 } } >
                 <Toolbar>
                     <FooterText />

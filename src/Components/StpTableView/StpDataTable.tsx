@@ -50,7 +50,7 @@ type StpTableProps = {
     selectorActions?: SelectorActions
 }
 
-export const StpDataTable: React.FC<StpTableProps> = observer(({ items, }) => {
+export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selectedItems }) => {
     // const { filterParams, select: s } = useAppContext()
     const { filters } = useFilterContext();
 
@@ -74,12 +74,12 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, }) => {
     }, [order, orderBy]);
 
     const handleSelectAllClick = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        if (filters.ids.length >= 1) {
+        if (event.target.checked && filters.ids.length >= 5) {
             filters.clearFilter('id')
             // clear()
             return
         }
-        if (event.target.checked) {
+        if (!event.target.checked) {
             const newSelectedAll = sorted.map((n) => +n.id);
             filters.selectId(newSelectedAll)
             // select(newSelectedAll)
@@ -152,13 +152,16 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, }) => {
 
     // console.log('%cRender', 'color: red; background-color: beige; font-size: 1.5em')
     const RowsList = useMemo(() => {
-        const handleClick = (id: number) => filters.selectId(id)
+        const handleClick = (id: number) => {
+            if (filters.ids.length >= 5) { return }
+            filters.selectId(id)
+        }
         const list = () => sorted.map((row, index) =>
             <StpTableRow
                 key={ row.name }
                 row_number={ index }
                 row_data={ row as unknown as StpData }
-            // handleClick={ handleClick }
+                handleClick={ handleClick }
             // isSelected={ isSelected(+row.id) }
             />
         )
@@ -168,14 +171,14 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, }) => {
 
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { m: 1 } } elevation={ 2 }>
-                {/* <SuspenseLoad>
+                <SuspenseLoad>
 
                     <StpTableToolbar numFiltered={ sorted.length } />
-                </SuspenseLoad> */}
+                </SuspenseLoad>
 
                 <TableContainer sx={ {
                     overflowY: 'auto',
-                    maxHeight: '85vh',
+                    maxHeight: '70vh',
                     position: 'relative'
 
 

@@ -50,20 +50,20 @@ function NameCell(props: { name: string }) {
 const endSign = (key: keyof StpData) => key === 'weight' ? ' кг/кв.м' : key === 'depth' ? ' мм' : ""
 
 export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_data, handleClick }) => {
-    const [_selected, { on, toggle, off }] = useToggle(false);
+    const [_selected, { toggle }] = useToggle(false);
 
-    const { filters } = useFilterContext();
+    // const { filters } = useFilterContext();
 
     const numericData = useCallback((key: keyof StpData) => row_data[key], [row_data])
     // const selectedRow = isSelected(row_data.id)
     const clickCell = useCallback((e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
-        // handleClick && handleClick(row_data.id)
-        // filters.selectId(row_data.id)
+        handleClick && handleClick(row_data.id)
+
         toggle()
 
-    }, [filters, row_data.id, toggle])
+    }, [handleClick, row_data.id, toggle])
     // const isRowSelect = useCallback((id: number) => filters.ids.includes(id), [filters.ids])
-    // const isSelected = isRowSelect(row_data.id)
+    // const isSelected = useMemo(() => isRowSelect(row_data.id), [isRowSelect, row_data.id])
     return (
 
 
@@ -135,9 +135,7 @@ export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_da
 
                 {
                     stpFields.map(cell =>
-                        // <TableCell align="center" key={ cell }>
-                        //     { numericData(cell) }{ endSign(cell) }
-                        // </TableCell>
+
 
                         <DataCell key={ cell }
                             primary={ numericData(cell) }
@@ -146,27 +144,14 @@ export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_da
                         />
                     ) }
             </React.Fragment>
-            {/* <NumericCells /> */ }
-            {
-                // stpFields.map(cell =>
-                //     <TableCell align="center" component={ 'td' } key={ cell }>{ row_data[cell] }{ endSign(cell) }</TableCell>
 
-                // )
-            }
 
 
         </TableRow>
     )
 })
 
-const MemedCells = React.memo(({ cell }: { cell: StpData }) => {
 
-    return (
-        <React.Fragment>
-            { stpFields.map(field => <TableCell align="right" key={ field }>{ cell[field] }</TableCell>) }
-        </React.Fragment>
-    )
-})
 
 StpTableRow.displayName = '__Row_StpData'
 type DataCellProps = {

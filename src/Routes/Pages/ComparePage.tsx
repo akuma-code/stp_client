@@ -1,6 +1,6 @@
 import { Button, Icon, Stack } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { LuPrinter } from 'react-icons/lu'
 import { TfiControlBackward } from "react-icons/tfi"
 import { Link } from 'react-router-dom'
@@ -8,6 +8,7 @@ import { useReactToPrint } from 'react-to-print'
 import { useFilterContext } from '../../Hooks/useFilterContext'
 import { useLoadAllData } from '../../Hooks/useLoadAllData'
 import { ItemsToPrint } from './PrintPage'
+import { useQueryFiltersLoader, useQuerySelectedIdsLoader } from '../../Hooks/QueryHooks/useQueryFiltersLoader'
 // export type ICompareCtx = {
 //     selectedItem: null | string
 //     selectItem: React.Dispatch<React.SetStateAction<string | null>>
@@ -15,21 +16,22 @@ import { ItemsToPrint } from './PrintPage'
 // export const CompareContext = React.createContext<ICompareCtx | null>(null)
 
 export const ComparePage = observer(() => {
-    const { filters } = useFilterContext();
-    const query = useLoadAllData()
+    const { filters: { ids } } = useFilterContext();
+    const { data, isSuccess } = useQuerySelectedIdsLoader(ids)
+
 
     const printRef = useRef(null)
     const handlePrint = useReactToPrint({
         content: () => printRef.current,
     })
 
-    const filtered = useMemo(() => { return query.isSuccess ? query.data.filter(i => filters.ids.includes(i.id)) : [] }, [filters.ids, query.data, query.isSuccess])
-
+    // const filtered = useMemo(() => isSuccess ? data.filter(i => ids.includes(i.id)) : [], [ids, isSuccess])
+    // useEffect(() => { return () => filters.clearFilter('id') }, [])
     return (
 
 
 
-        filtered.length > 0 ?
+        isSuccess ?
             <Stack direction={ 'column' }
                 sx={ { maxHeight: '70vh' } }
 
@@ -45,7 +47,7 @@ export const ComparePage = observer(() => {
                     Распечатать сравнительную таблицу
                 </Button>
                 <ItemsToPrint
-                    items={ filtered }
+                    items={ data }
                     ref={ printRef }
                 />
             </Stack>
@@ -61,7 +63,7 @@ const NothingToCompare = () => {
         <div className='text-center text-2xl text-bold flex flex-col'>
             <strong>Вы ничего не выбрали для сравнения. А теперь выйдите и зайдите нормально! </strong>
             <div className='text-center flex gap-2 flex-row m-auto align-middle'>
-                <Link to={ '/' }>
+                <Link to={ '/v1' }>
                     <Icon >
 
                         <TfiControlBackward />

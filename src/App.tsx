@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider, useQuery, } from "@tanstack/react-que
 import { AppContext } from "./Hooks/useStoresContext";
 import { FilterContext } from "./Hooks/useFilterContext";
 import { FiltersParams, } from "./Interfaces/Types";
-import { router } from "./Routes/AppRouter";
+import { router, v2_router } from "./Routes/AppRouter";
 import { apiRoute, proxyRoute, routePaths } from "./Routes/routePath";
 import { AppToolbarHeader } from "./Routes/Pages/AppBar";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -34,7 +34,11 @@ const stores = { StpStore: new StpStore(table_data_base) }
 //   },
 
 // })
-
+const filterStores = {
+  filters: new FilterStore(),
+  search: new SearchQueryStore(),
+  auth: new AuthStore()
+}
 function App() {
   const [selected, setSelected] = useState<number[]>([])
   const [fcount, setFc] = useState<number>(0)
@@ -60,10 +64,10 @@ function App() {
     } }
     >
 
-      <FilterContext.Provider value={ { filters: new FilterStore(), search: new SearchQueryStore(), auth: new AuthStore() } }>
+      <FilterContext.Provider value={ { ...filterStores } }>
 
         <RouterProvider
-          router={ router }
+          router={ v2_router }
           fallbackElement={
             <div className="text-4xl text-center mt-6">
               <strong>App loading.... Be patient</strong>

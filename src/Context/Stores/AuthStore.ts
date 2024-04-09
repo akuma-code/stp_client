@@ -14,11 +14,12 @@ export class AuthStore {
         this.isAuthInProgress = true;
         try {
             const resp = await AuthService.login(email, password);
+            console.log('resp: ', resp)
             localStorage.setItem("token", resp.data.accessToken);
             this.isAuth = true;
 
         } catch (err) {
-            console.log("login error");
+            console.log("login error", err);
         } finally {
             this.isAuthInProgress = false;
         }
@@ -32,7 +33,7 @@ export class AuthStore {
             this.isAuth = true;
 
         } catch (err) {
-            console.log("login error");
+            console.log("login error", err);
         } finally {
             this.isAuthInProgress = false;
         }
@@ -56,11 +57,11 @@ export class AuthStore {
 export const AuthService = {
 
     login(email: string, password: string) {
-        return api.post<{ accessToken: string }>('v2/api/' + apiRoute.login, { email, password })
+        return api.post<{ accessToken: string }>('/api/' + apiRoute.login, { email, password })
     },
 
     refreshToken() {
-        return api.get<{ accessToken: string }>('v2/api/' + apiRoute.auth);
+        return api.get<{ accessToken: string }>('/api/' + apiRoute.auth);
     },
 
     logout() {
