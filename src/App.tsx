@@ -32,7 +32,7 @@ const stores = { StpStore: new StpStore(table_data_base) }
 //   },
 // })
 const filterStores = {
-  filters: new FilterStore({ selectMax: 7 }),
+  filters: new FilterStore({ selectMax: 6 }),
   search: new SearchQueryStore(),
   auth: new AuthStore()
 }
