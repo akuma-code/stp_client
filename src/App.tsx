@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import { table_data_base } from "./Components/StpTable/Data/data_base";
 import { StpStore } from "./Context/StpStore";
 
@@ -14,7 +14,7 @@ import { FiltersParams, } from "./Interfaces/Types";
 // import { v2_router } from "./Routes/AppRouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from ".";
-import { appRoutes_v2, v2_router } from "./Routes/AppRouter";
+import { v2_router } from "./Routes/AppRouter";
 
 
 
