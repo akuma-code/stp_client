@@ -16,7 +16,7 @@ import { useSS_Data } from '../../../Hooks/QueryHooks/getSpreadSheetData';
 
 const MRT_Container = observer(() => {
     const query = useQueryFiltersLoader()
-    const ss = useSS_Data()
+    
     const { filters } = useFilterContext();
 
     const { columnOrder, columns } = useMRTData()

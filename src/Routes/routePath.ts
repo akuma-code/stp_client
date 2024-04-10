@@ -4,8 +4,6 @@ export const routePaths = {
     tabs: 'tabs' as const,
     v2: '/v2' as const,
     v1: 'v1' as const,
-    // api: 'api' as const,
-    // auth: 'auth' as const,
     table: 'table' as const,
     info: 'info' as const,
     stp_data: '/data' as const,
@@ -14,6 +12,7 @@ export const routePaths = {
     stp_id: 'table/:id' as const,
     compare: 'compare' as const,
     export: '/export' as const,
+    old: 'old' as const,
 }
 
 export const apiRoute = {

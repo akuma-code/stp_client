@@ -153,7 +153,7 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
     // console.log('%cRender', 'color: red; background-color: beige; font-size: 1.5em')
     const RowsList = useMemo(() => {
         const handleClick = (id: number) => {
-            if (filters.ids.length >= 5) { return }
+            if (filters.ids.length >= filters.options.selectMax) { return }
             filters.selectId(id)
         }
         const list = () => sorted.map((row, index) =>
@@ -162,7 +162,7 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
                 row_number={ index }
                 row_data={ row as unknown as StpData }
                 handleClick={ handleClick }
-            // isSelected={ isSelected(+row.id) }
+                isSelected={ filters.ids.includes(+row.id) }
             />
         )
         return list
@@ -171,10 +171,9 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
 
         <Box sx={ { width: '100%', height: '100%' } }>
             <Paper sx={ { m: 1 } } elevation={ 2 }>
-                <SuspenseLoad>
 
-                    <StpTableToolbar numFiltered={ sorted.length } />
-                </SuspenseLoad>
+
+                <StpTableToolbar numFiltered={ sorted.length } />
 
                 <TableContainer sx={ {
                     overflowY: 'auto',

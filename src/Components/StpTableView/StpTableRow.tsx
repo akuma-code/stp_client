@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell, { TableCellProps } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Stack } from '@mui/material';
 import { StpItem, StpTag } from '../StpTable/TableObjects';
 import { TagsAvatarGroup } from '../UI/TagAvatars';
@@ -49,8 +49,8 @@ function NameCell(props: { name: string }) {
 
 const endSign = (key: keyof StpData) => key === 'weight' ? ' кг/кв.м' : key === 'depth' ? ' мм' : ""
 
-export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_data, handleClick }) => {
-    const [_selected, { toggle }] = useToggle(false);
+export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_data, handleClick, isSelected }) => {
+    const [_selected, { toggle, off }] = useToggle(isSelected || false);
 
     // const { filters } = useFilterContext();
 
@@ -64,6 +64,9 @@ export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_da
     }, [handleClick, row_data.id, toggle])
     // const isRowSelect = useCallback((id: number) => filters.ids.includes(id), [filters.ids])
     // const isSelected = useMemo(() => isRowSelect(row_data.id), [isRowSelect, row_data.id])
+    useEffect(() => {
+        isSelected === false && off()
+    }, [isSelected])
     return (
 
 
@@ -71,7 +74,7 @@ export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_da
             hover
             key={ row_data.id }
             role="checkbox"
-            aria-checked={ _selected }
+            // aria-checked={ _selected }
             tabIndex={ -1 }
             selected={ _selected }
 

@@ -1,27 +1,36 @@
-import { Outlet, RouteObject, createBrowserRouter, json, redirect, type LoaderFunctionArgs } from "react-router-dom";
+import { RouteObject, createBrowserRouter, type LoaderFunctionArgs } from "react-router-dom";
+
 import { LazyStpData } from "../Components/StpTable/FullTable";
-import { StpData, StpDataTable } from "../Components/StpTableView/StpDataTable";
 import { ComparePage } from "./Pages/ComparePage";
 import { ErrorPage } from "./Pages/ErrorPage";
-import { OverView } from "./Pages/OverView";
-import { PrintPage } from "./Pages/PrintPage";
+import Example from "./Pages/Example";
 import { Root } from "./Pages/Root";
 import { StpInfoPage } from "./Pages/StpInfoPage";
-import { apiRoute, routePaths } from "./routePath";
-import { TabPage } from "./Pages/Tabs/TabPage";
-import TabContainer from "./Pages/Tabs/TabContainer";
-import { _log } from "../Helpers/helpersFns";
-import { StpTag } from "../Components/StpTable/TableObjects";
-import MRT_Container from "../Components/StpTable/MRT/MRT_Container";
 import MRTDataPage from "./Pages/Tabs/MRT_DataPage";
-import Example from "./Pages/Example";
+import TabContainer from "./Pages/Tabs/TabContainer";
+import { TabPage } from "./Pages/Tabs/TabPage";
+import GoogleApiPage, { loader as ss_loader } from "./Pages/v2/GoogleApiPage";
 import { RootV2 } from "./Pages/v2/RootV2";
+import { apiRoute, routePaths } from "./routePath";
+
+import ErrorPageV2 from "./Pages/v2/ErrorPage.v2";
+import TableDataContainer, { loader as tableLoader } from "../Components/StpTable/v2/TableDataContainer";
+
+import { QueryClient } from "@tanstack/react-query";
 
 
 
 
 
 
+export const qClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: false,
+            refetchOnWindowFocus: false,
+        },
+    },
+})
 
 
 
@@ -148,16 +157,17 @@ export const appRoutes: RouteObject[] = [
 
 
 
-const appRoutes_v2: RouteObject[] = [
+export const appRoutes_v2: RouteObject[] = [
     {
         path: routePaths.root,
         element: <Root />,
         id: 'root',
-        errorElement: <ErrorPage />,
+        errorElement: <ErrorPageV2 />,
         children: [
             {
                 path: routePaths.v1,
                 element: <TabPage initTab={ 0 } />,
+                errorElement: <ErrorPage />,
                 children: [
                     {
                         path: routePaths.compare,
@@ -176,12 +186,17 @@ const appRoutes_v2: RouteObject[] = [
     {
         path: routePaths.v2,
         element: <RootV2 />,
-        errorElement: <ErrorPage />,
+        errorElement: <ErrorPageV2 />,
         children: [
             {
                 path: routePaths.table,
                 element: <MRTDataPage />,
-
+                errorElement: <ErrorPageV2 />,
+            },
+            {
+                path: routePaths.old,
+                element: <TableDataContainer />,
+                loader: tableLoader(qClient)
             },
             {
                 path: routePaths.compare,
@@ -198,7 +213,7 @@ const appRoutes_v2: RouteObject[] = [
     },
     {
         path: apiRoute.api,
-        errorElement: <ErrorPage />,
+        errorElement: <ErrorPageV2 />,
         children: [
             {
                 path: apiRoute.auth
@@ -214,6 +229,11 @@ const appRoutes_v2: RouteObject[] = [
             },
             {
                 path: apiRoute.register
+            },
+            {
+                path: 'ss' as const,
+                loader: ss_loader(qClient),
+                element: <GoogleApiPage />
             }
 
         ]

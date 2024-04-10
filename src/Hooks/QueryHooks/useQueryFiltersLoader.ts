@@ -1,10 +1,13 @@
 import { keepPreviousData, useQueries, useQuery } from "@tanstack/react-query";
 import { useCallback, useDeferredValue } from "react";
-import { queryClient } from "../..";
+// import { queryClient } from "../..";
 import { StpData } from "../../Components/StpTableView/StpDataTable";
 import { useFilterContext } from "../useFilterContext";
 import { getAllTableData } from "../useLoadAllData";
-
+import { queryClient } from "../..";
+// import { queryClient } from "../../Routes/AppRouter";
+// import { queryClient } from "../../App";
+export type SelectFn = <T>(args: T[]) => T[]
 export function useQueryFiltersLoader() {
     const { filters, search } = useFilterContext()
     const { cams, depth, tags } = filters;
@@ -36,7 +39,7 @@ export function useQueryFiltersLoader() {
         queryClient)
     return context
 }
-export function useQuerySelectedIdsLoader({ selectedIds }: { selectedIds: number[] }) {
+export function useQuerySelectedIdsLoader({ selectedIds, filterFn }: { selectedIds: number[], filterFn?: SelectFn }) {
 
 
     const selectFn = useCallback((data: StpData[]) => data.filter(d => selectedIds.includes(d.id)), [selectedIds])
@@ -46,7 +49,7 @@ export function useQuerySelectedIdsLoader({ selectedIds }: { selectedIds: number
             selectedIds
         ],
         queryFn: getAllTableData,
-        select: selectFn,
+        select: filterFn ? filterFn : selectFn,
 
         gcTime: 2000,
         placeholderData: keepPreviousData,

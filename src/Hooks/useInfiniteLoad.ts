@@ -5,7 +5,7 @@ import { QueryKeyT } from "./useQueryFetch";
 import { dataExtractor } from "../Helpers/dataExtractor";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { queryClient } from "..";
+import { queryClient } from "../index";
 import { CursorRespone } from "../Interfaces/Types";
 
 

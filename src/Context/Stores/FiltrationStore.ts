@@ -44,7 +44,7 @@ export class FilterStore {
         this.tags = []
         this.depth = []
         this.options = {
-            selectMax: 5
+            selectMax: 6
         }
         if (options) this.initOptions(options)
         makeAutoObservable(
@@ -109,9 +109,14 @@ export class FilterStore {
             return items
         }
     }
-
+    removeId(id: number) {
+        this.ids = [...this.ids].filter(index => index !== id)
+    }
     selectId(value: number | number[]) {
-        if (_isArr(value)) this.ids = value
+        if (_isArr(value)) {
+
+            this.ids = value
+        }
         else {
 
 

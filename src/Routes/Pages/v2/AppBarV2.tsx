@@ -1,65 +1,18 @@
-import * as React from 'react';
+import { AppBar, Button, Paper } from '@mui/material';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import Link, { LinkProps } from '@mui/material/Link';
-import { ListItemProps } from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import Collapse from '@mui/material/Collapse';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { AiOutlineMenuFold } from "react-icons/ai";
+import Link, { LinkProps } from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import {
     Link as RouterLink,
-    Route,
-    Routes,
-    MemoryRouter,
-    useLocation,
-    Form,
-    redirect,
+    useLocation
 } from 'react-router-dom';
 import MemoAvaS3 from '../../../Components/UI/Svg/AvaS3';
 import { routePaths } from '../../routePath';
-import { AppBar, Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputLabel, Menu, MenuItem, MenuList, Modal, Paper, Stack, TextField } from '@mui/material';
-import { useToggle } from '../../../Hooks/useToggle';
-import { VoidFn } from '../../../Interfaces/Types';
-import { AvatarButtonTooltip } from '../../../Components/UI/AvatarButtonTooltip';
-import { useFilterContext } from '../../../Hooks/useFilterContext';
+import { LoginDialog } from './LoginDialog';
 
-interface ListItemLinkProps extends ListItemProps {
-    to: string;
-    open?: boolean;
-    item_icon?: React.ReactNode
-}
 
-const breadcrumbNameMap: { [key: string]: string } = {
-    '/inbox': 'Inbox',
-    '/inbox/important': 'Important',
-    '/trash': 'Trash',
-    '/spam': 'Spam',
-    '/drafts': 'Drafts',
-};
-
-function ListItemLink(props: ListItemLinkProps) {
-    const { to, open, ...other } = props;
-    const primary = breadcrumbNameMap[to];
-
-    let icon = null;
-    if (open != null) {
-        icon = open ? <ExpandLess /> : <ExpandMore />;
-    }
-
-    return (
-        <li>
-            <ListItemButton component={ RouterLink as any } to={ to } { ...other }>
-                <ListItemText primary={ primary } />
-                { props.item_icon ? props.item_icon : icon }
-            </ListItemButton>
-        </li>
-    );
-}
 
 interface LinkRouterProps extends LinkProps {
     to: string;
@@ -67,31 +20,14 @@ interface LinkRouterProps extends LinkProps {
     children?: React.ReactNode
 }
 
-function LinkRouter(props: LinkRouterProps) {
+export function LinkRouter(props: LinkRouterProps) {
     return <Link { ...props } component={ RouterLink as any }  >{ props.children }</Link>;
 }
 
 export function AppbarV2() {
-    const location = useLocation();
-    const pathnames = location.pathname.split('/').filter((x) => x);
-    const [show, modal] = useToggle(false)
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLButtonElement>(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const { search } = useLocation();
 
-    const onOpenModal = () => {
-        modal.on()
-        handleClose()
-    }
-    const onCloseModal = () => {
-        modal.off()
-    }
-    const menuRef = React.useRef<HTMLButtonElement | null>(null)
+
 
     return (
         <Paper elevation={ 1 }>
@@ -126,25 +62,18 @@ export function AppbarV2() {
                             <Button variant='text' size='large' color='inherit'>
 
 
-                                <Typography variant='button' fontWeight={ 'bold' } color={ 'whitesmoke' }>версия 1</Typography>
+                                <Typography variant='button' color={ 'whitesmoke' }>версия 1</Typography>
+                            </Button>
+                        </LinkRouter>
+                        <LinkRouter to={ routePaths.old } underline='hover'>
+                            <Button variant='text' size='large' color='inherit'>
+
+
+                                <Typography variant='button' fontWeight={ 'bold' } color={ 'whitesmoke' }>Старая версия</Typography>
                             </Button>
                         </LinkRouter>
                     </Breadcrumbs>
-                    <>
-                        {/* <IconButton edge={ 'end' } sx={ { mr: 4 } } onClick={ handleClick }>
-                            <Avatar variant='rounded' > <AiOutlineMenuFold color={ '#000000' } /></Avatar>
-                        </IconButton>
-                        <Menu open={ open } onClose={ handleClose }
-                            anchorEl={ anchorEl }
-                            anchorOrigin={ { horizontal: 'left', vertical: 'bottom' } }
-                        // anchorPosition={ { left: 100, top: 100 } }
-                        >
-                            <MenuList >
 
-                                <MenuItem onClick={ onOpenModal }>Login</MenuItem>
-                            </MenuList>
-                        </Menu> */}
-                    </>
                     <LoginDialog />
                 </Box>
             </AppBar>
@@ -153,100 +82,4 @@ export function AppbarV2() {
     );
 }
 
-type LoginDialogProps = {
 
-}
-export const LoginDialog = (props: LoginDialogProps) => {
-    const [open, modal] = useToggle(false)
-    const { auth } = useFilterContext()
-    return (
-        <>
-            <AvatarButtonTooltip
-                icon={ <AiOutlineMenuFold color={ '#000000' } /> }
-                tooltip_title='Login'
-                action={ modal.toggle }
-            />
-            <Dialog
-                open={ open }
-                onClose={ modal.off }
-                keepMounted
-            // PaperProps={ {
-            //     component: Form,
-            //     onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-            //         event.preventDefault();
-            //         const formData = new FormData(event.currentTarget);
-            //         const formJson = Object.fromEntries((formData as any).entries());
-            //         auth.login(formJson.login, formJson.pass)
-            //         console.log(formJson);
-            //         modal.off()
-            //     }
-            // } }
-            >
-                <DialogTitle>Autorization</DialogTitle>
-                <DialogContent>
-                    <Form onSubmit={ (event: React.FormEvent<HTMLFormElement>) => {
-                        // event.preventDefault()
-                        const formData = new FormData(event.currentTarget);
-                        const formJson = Object.fromEntries((formData as any).entries());
-                        // auth.login(formJson.login, formJson.pass)
-                        console.log(formJson);
-                        modal.off()
-
-                    } }
-
-                        id='authform'
-                    >
-
-                        <InputLabel id='name-input-label' htmlFor='name-input'>Login</InputLabel>
-                        <TextField variant='filled' name='login' id='name-input' />
-
-                        <InputLabel id='pass-input-label' htmlFor='pass-input'>Password</InputLabel>
-                        <TextField variant='filled' name='pass' id='pass-input' />
-                    </Form>
-                </DialogContent>
-                <DialogActions>
-                    <Button type='submit' form='authform'>Submit</Button>
-                    <Button type='reset'>Reset</Button>
-                    <Button onClick={ modal.off }>Close</Button>
-                </DialogActions>
-            </Dialog>
-        </>
-    )
-}
-
-export function MemoryRouterPage() {
-    const [open, setOpen] = React.useState(true);
-
-    const handleClick = () => {
-        setOpen((prevOpen) => !prevOpen);
-    };
-
-    return (
-        <MemoryRouter initialEntries={ ['/inbox'] } initialIndex={ 0 }>
-            <Box sx={ { display: 'flex', flexDirection: 'column', width: 360 } }>
-                <Routes>
-                    <Route path="*" element={ <AppbarV2 /> } />
-                </Routes>
-                <Box
-                    sx={ {
-                        bgcolor: 'background.paper',
-                        mt: 1,
-                    } }
-                    component="nav"
-                    aria-label="mailbox folders"
-                >
-                    <List>
-                        <ListItemLink to="/inbox" open={ open } onClick={ handleClick } />
-                        <Collapse component="li" in={ open } timeout="auto" unmountOnExit>
-                            <List disablePadding>
-                                <ListItemLink sx={ { pl: 4 } } to="/inbox/important" />
-                            </List>
-                        </Collapse>
-                        <ListItemLink to="/trash" />
-                        <ListItemLink to="/spam" />
-                    </List>
-                </Box>
-            </Box>
-        </MemoryRouter>
-    );
-}

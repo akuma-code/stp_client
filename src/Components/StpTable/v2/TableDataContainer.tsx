@@ -5,20 +5,36 @@ import { CamOneIcon, CamTwoIcon } from '../../UI/CamsAvatars'
 import { SelectDepth } from '../../UI/SideDrower/SelectDepth'
 import { SelectTags } from '../../UI/SideDrower/SelectTags'
 import { StpTag } from '../TableObjects'
+import { LoaderFunctionArgs, useLoaderData } from 'react-router-dom'
+import { QueryClient } from '@tanstack/react-query'
+import { getAllTableData } from '../../../Hooks/useLoadAllData'
+import { StpDataTable } from '../../StpTableView/StpDataTable'
+
+
+export const loader = (qc: QueryClient) => async () => {
+    const context = await qc.ensureQueryData({
+        queryKey: ['stp_data_old'],
+        queryFn: getAllTableData,
+        staleTime: 10 * 1000,
+        gcTime: 10000
+    })
+    return context
+}
+
 
 const TableDataContainer = () => {
 
+    const ld = useLoaderData() as Awaited<ReturnType<ReturnType<typeof loader>>>
 
 
 
 
 
 
-
-    // if (query.isError) return (<div>{ query.error.message }</div>)
     return (
         <div>
-            <FilterPanel />
+            { ld &&
+                <StpDataTable items={ ld } /> }
         </div>
     )
 }

@@ -120,7 +120,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             // py={ 1 }
             justifyContent={ 'space-around' }
             useFlexGap
-            spacing={ 4 }
+            spacing={ 2 }
         // columnGap={ 2.5 }
         >
             {/* <SuspenseLoad> */ }

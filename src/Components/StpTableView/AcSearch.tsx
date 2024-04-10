@@ -46,7 +46,7 @@ export const AcSearch = observer(() => {
                 value={ value }
                 onChange={ handleInput }
                 sx={ {
-                    mx: 2, textAlign: 'center',
+                    mr: 2, textAlign: 'center',
                     // [`& .MuiTextField-root`]: { opacity: isPending ? .5 : 1 }
 
                 } }
@@ -61,7 +61,7 @@ export const AcSearch = observer(() => {
                     inputMode='search'
                     margin='dense'
                     label="Формула стеклопакета"
-                    sx={ {} }
+
                 />
                 }
             />

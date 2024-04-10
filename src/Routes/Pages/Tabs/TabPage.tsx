@@ -8,18 +8,12 @@ import { observer } from 'mobx-react-lite';
 import React, { PropsWithChildren, Suspense } from 'react';
 import { GrTable } from 'react-icons/gr';
 import { MdCompare } from 'react-icons/md';
-import { ToastContainer, toast } from 'react-toastify';
-import TableDataContainer from '../../../Components/StpTable/v2/TableDataContainer';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { StpDataTable } from '../../../Components/StpTableView/StpDataTable';
 import { FilterDrawer } from '../../../Components/UI/SideDrower/DrawerFilter';
 import { Loading } from '../../../Components/UI/SuspenseLoad';
 import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
 import { useFilterContext } from '../../../Hooks/useFilterContext';
-import { useAppContext } from '../../../Hooks/useStoresContext';
-import { ComparePage } from '../ComparePage';
-import MRT_Container from '../../../Components/StpTable/MRT/MRT_Container';
-import { _log } from '../../../Helpers/helpersFns';
-import { Outlet, useNavigate } from 'react-router-dom';
 import { routePaths } from '../../routePath';
 import { MuiLink } from '../MuiLink';
 type TabPageProps = PropsWithChildren & {
@@ -93,7 +87,7 @@ export const TabPage: React.FC<TabPageProps> = observer(({ initTab }) => {
                                 icon={ <TabIcon /> }
                                 iconPosition='start'
                                 sx={ { pl: 4 } }
-                                onClick={ () => filters.clearFilter('id') }
+
                                 LinkComponent={ MuiLink }
                             />
 
