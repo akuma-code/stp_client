@@ -1,9 +1,8 @@
-import { Box, Chip, IconButton, List, ListItem, ListItemText, Stack, alpha } from '@mui/material';
+import { Box, IconButton, List, ListItem, ListItemText, alpha } from '@mui/material';
 import { useQuerySelectedIdsLoader } from '../../Hooks/QueryHooks/useQueryFiltersLoader';
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useFilterContext } from '../../Hooks/useFilterContext';
-import React, { FC } from 'react'
-import { CamAvatar } from '../UI/CamsAvatars';
+import React from 'react'
 
 type SelectedRowsListProps = {
     selected: number[];
@@ -68,52 +67,4 @@ export const SelectedRowsList: React.FC<SelectedRowsListProps> = ({ selected }) 
 };
 
 
-interface ItemChipListProps {
-    selected?: number[]
-}
 
-export const ItemChipList: FC<ItemChipListProps> = ({ selected }) => {
-    const { filters } = useFilterContext();
-
-    const { data, isSuccess } = useQuerySelectedIdsLoader({ selectedIds: filters.ids });
-    return (
-        <Stack
-            direction={ 'column' }
-            flexWrap={ 'wrap' }
-            maxWidth={ 600 }
-            height={ 110 }
-            gap={ .5 }
-            flexGrow={ 1 }
-        // justifyContent={ 'space-between' }
-
-        >
-
-            { isSuccess &&
-                data.map(item =>
-
-                    <Chip key={ item.id }
-                        label={ item.name }
-                        color='secondary'
-                        onDelete={ () => filters.selectId(item.id) }
-                        deleteIcon={ <IoMdCloseCircleOutline color='red' /> }
-                        icon={ <CamAvatar cam_count={ item.cams as 1 | 2 } variant='circular' show_tooltip='' /> }
-                        variant='filled'
-                        sx={ {
-                            // color: (theme) => alpha(theme.palette.info.main, 1),
-                            justifyContent: 'space-between',
-                            pl: 1,
-                            flexGrow: 0,
-                            maxWidth: '45%'
-
-                        } }
-
-                    />
-
-                )
-            }
-        </Stack>
-
-    );
-}
-
-export default ItemChipList;
