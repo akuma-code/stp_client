@@ -1,16 +1,19 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import theme from "./Theme";
 import "./index.css";
 import { QueryClient } from '@tanstack/react-query';
+import { SuspenseLoad } from './Components/UI/SuspenseLoad';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
+      staleTime: 10000,
+      gcTime: 1000 * 60
     },
   },
 })
@@ -23,8 +26,10 @@ root.render(
 
     <ThemeProvider theme={ theme }>
 
+
       <CssBaseline enableColorScheme />
       <App />
+
 
     </ThemeProvider>
 

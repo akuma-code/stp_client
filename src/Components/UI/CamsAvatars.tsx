@@ -1,9 +1,8 @@
-import { Avatar, CircularProgress, SvgIcon, SvgIconProps, SvgIconTypeMap, Tooltip } from '@mui/material'
-import { Suspense, lazy, memo } from 'react'
-import MemoAvaS2 from './Svg/AvaS2'
+import { Avatar, CircularProgress, SvgIcon, SvgIconProps, Tooltip } from '@mui/material'
+import { Suspense, memo } from 'react'
 import MemoAvaS3 from '../UI/Svg/AvaS3'
-// const Cam1 = lazy(() => import('../UI/Svg/AvaS2'))
-const Cam2 = lazy(() => import('../UI/Svg/AvaS3'))
+import MemoAvaS2 from './Svg/AvaS2'
+
 
 
 export const AvatarS2 = ({ wh }: { wh?: number }) => {
@@ -71,25 +70,26 @@ export const CamTwoIcon = memo(({ wh }: { wh?: string | number }) => {
 type CamAvatarProps = {
     wh?: string | number
     cam_count: 1 | 2
-
+    variant?: "rounded" | "circular" | "square"
+    show_tooltip?: string
 }
-export const CamAvatar: React.FC<CamAvatarProps> = ({ wh, cam_count }) => {
+export const CamAvatar: React.FC<CamAvatarProps> = ({ wh, cam_count, variant, show_tooltip }) => {
 
     const icon = cam_count === 1 ? <MemoAvaS2 /> : cam_count === 2 ? <MemoAvaS3 /> : null
-
+    const title = cam_count === 1 ? '1 камера (2 стекла)' : '2 камеры (3 стекла)'
     return (
         <Suspense fallback={
             <CircularProgress variant='indeterminate' color='info' />
         }>
 
-            <Tooltip title='2 камеры (3 стекла)'>
+            <Tooltip title={ show_tooltip ?? title }>
                 <Avatar sx={ {
                     width: wh || '1em',
                     height: wh || '1em',
-                    bgcolor: cam_count === 1 ? '#4382cf' : '#0c2e58',
+                    bgcolor: cam_count === 1 ? '#4382cf' : '#093264',
                     '&:hover': { transform: 'scale(1.5)' },
                 } }
-                    variant='rounded'
+                    variant={ variant || 'rounded' }
                     alt='2 cam'>
                     <SvgIcon>
                         { icon }

@@ -34,7 +34,7 @@ const isNumb = (item: string | number) => typeof item === 'string' ? false : typ
 export const camsAvatarGroup = (selected: number[]) => {
 
     return (
-        <AvatarGroup spacing={ 1 } sx={ { justifyContent: 'space-between', h: '2em' } }>
+        <AvatarGroup spacing={ 1 } sx={ { justifyContent: 'space-between', h: '2em' } } variant='circular'>
             { selected.map(s => {
                 if (s !== 1 && s !== 2) return null
                 return <CamAvatar cam_count={ s } key={ s } wh={ '1.5em' } />

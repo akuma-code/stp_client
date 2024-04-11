@@ -1,9 +1,9 @@
-import { Box, Button, Paper, Stack } from '@mui/material'
-import { PropsWithChildren, forwardRef, useRef } from 'react'
+import { Button, Stack } from '@mui/material'
+import { PropsWithChildren, useRef } from 'react'
 import { LuPrinter } from 'react-icons/lu'
 import { useReactToPrint } from 'react-to-print'
 import { useAppContext } from '../../Hooks/useStoresContext'
-import { FilteredItemsProps, StpCompareItems } from './StpCompareItems'
+import { ItemsToPrint } from './ItemsToPrint'
 
 type PrintPageProps = PropsWithChildren
 
@@ -37,13 +37,3 @@ export const PrintPage = (props: PrintPageProps) => {
     )
 }
 
-export const ItemsToPrint = forwardRef<HTMLDivElement, FilteredItemsProps>((props, ref) => {
-
-    return (
-        <Box ref={ ref } component={ Paper } elevation={ 0 } displayPrint={ 'block' } bgcolor={ 'whitesmoke' }>
-
-
-            <StpCompareItems items={ props.items } />
-        </Box>
-    )
-})

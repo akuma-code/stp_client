@@ -189,19 +189,21 @@ export const appRoutes_v2: RouteObject[] = [
         errorElement: <ErrorPageV2 />,
         children: [
             {
-                path: routePaths.table,
+                // path: routePaths.table,
+                index: true,
                 element: <MRTDataPage />,
                 errorElement: <ErrorPageV2 />,
             },
             {
                 path: routePaths.old,
                 element: <TableDataContainer />,
-                loader: tableLoader(qClient)
+                loader: tableLoader(qClient),
+
             },
-            {
-                path: routePaths.compare,
-                element: <ComparePage />
-            },
+            // {
+            //     path: routePaths.compare,
+            //     element: <ComparePage />
+            // },
             {
                 path: routePaths.info,
 

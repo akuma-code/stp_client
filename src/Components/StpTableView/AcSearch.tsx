@@ -1,17 +1,14 @@
 import { Autocomplete, TextField } from '@mui/material';
-import React, { useCallback, useDeferredValue, useMemo, useState } from 'react';
-import { useAppContext } from '../../Hooks/useStoresContext';
-import { SuspenseLoad } from '../UI/SuspenseLoad';
-import { useLoadDataQuery } from '../../Hooks/useLoadAllData';
-import { useFilterContext } from '../../Hooks/useFilterContext';
 import { observer } from 'mobx-react-lite';
-import { _log } from '../../Helpers/helpersFns';
+import { useCallback, useMemo, useState } from 'react';
+import { useFilterContext } from '../../Hooks/useFilterContext';
+import { useLoadDataQuery } from '../../Hooks/useLoadAllData';
+import { SuspenseLoad } from '../UI/SuspenseLoad';
+import { useSearchParams } from 'react-router-dom';
 
 export const AcSearch = observer(() => {
-    // console.time('search_selected')
-    // const { query, setQuery } = useAppContext();
-    // const defQuery = useDeferredValue(query)
-    // const isPending = query !== defQuery
+
+
     const [value, setValue] = useState<string | null>(null);
     const { search } = useFilterContext()
     const qdata = useLoadDataQuery(search.query)
@@ -24,7 +21,7 @@ export const AcSearch = observer(() => {
         setValue(value)
     }, [])
     const selectedOptions = useMemo(() => {
-        // const data = qdata.isSuccess ? qdata.data : []
+
         const names = qdata.isSuccess ? qdata.data.map(stp => stp.name) : []
 
 
@@ -34,7 +31,7 @@ export const AcSearch = observer(() => {
 
     // console.timeEnd('search_selected')
     return (
-        <SuspenseLoad>
+        <SuspenseLoad loadText='asearch'>
 
             <Autocomplete
                 clearOnEscape

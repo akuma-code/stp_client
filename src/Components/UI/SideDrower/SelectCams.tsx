@@ -3,23 +3,27 @@ import { CamAvatar } from '../CamsAvatars';
 import { _pathToUrl } from '../../../Helpers/urlpath';
 import { camsAvatarGroup, camsArray } from './SideForm';
 
-export function SelectCams({ cams, handleChange }: { cams: number[]; handleChange: (event: SelectChangeEvent<number[]>, child: React.ReactNode) => void; }) {
+interface SelectorCamsProps {
+    cams: number[];
+    handleChange: (event: SelectChangeEvent<number[]>, child: React.ReactNode) => void;
+}
+
+export function SelectCams({ cams, handleChange }: SelectorCamsProps) {
 
     return <Select
         title='Камеры'
         multiple
         fullWidth
         labelId="cams-label"
-
         name='cams'
         value={ cams }
         onChange={ handleChange }
-        input={ <OutlinedInput id='multitag2' sx={ { fontSize: 12 } } /> }
+        input={ <OutlinedInput id='cams' /> }
         MenuProps={ {
             PaperProps: {
                 style: {
                     height: 130,
-                    width: 130,
+                    width: 170,
                 },
                 variant: 'outlined',
                 elevation: 0,

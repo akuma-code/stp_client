@@ -40,7 +40,7 @@ export class FilterStore {
     options: FilterStoreOptions
     // setCams: (cams: number[]) => void
     constructor(options?: FilterStoreOptions) {
-        this.cams = []
+        this.cams = [1, 2]
         this.tags = []
         this.depth = []
         this.options = {

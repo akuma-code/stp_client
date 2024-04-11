@@ -1,4 +1,4 @@
-import { AppBar, Button, Paper } from '@mui/material';
+import { AppBar, Button, CircularProgress, Paper, SvgIcon } from '@mui/material';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link, { LinkProps } from '@mui/material/Link';
@@ -12,6 +12,7 @@ import MemoAvaS3 from '../../../Components/UI/Svg/AvaS3';
 import { routePaths } from '../../routePath';
 import { LoginDialog } from './LoginDialog';
 
+const AttikLogo = React.lazy(() => import('../../../Components/UI/Svg/Attik'))
 
 
 interface LinkRouterProps extends LinkProps {
@@ -33,19 +34,20 @@ export function AppbarV2() {
         <Paper elevation={ 1 }>
 
 
-            <AppBar position='static' color='warning'>
+            <AppBar position='static' color='warning' sx={ { overflow: 'clip' } }>
 
                 <Box
-                    m={ 1 }
-                    px={ 2 }
+                    // m={ 1 }
+                    pl={ 2 }
                     display={ 'flex' }
                     displayPrint={ 'none' }
                     flexDirection={ 'row' }
                     justifyContent={ 'space-between' }
+                    alignItems={ 'center' }
 
                 >
                     <Breadcrumbs aria-label="breadcrumb" separator={ '/' } color='whitesmoke' sx={ { flexGrow: 1 } }>
-                        <LinkRouter to={ routePaths.table } underline='hover'>
+                        <LinkRouter to={ routePaths.v2 } underline='hover'>
                             <Button variant='text' endIcon={ <MemoAvaS3 /> } size='large' color='inherit'>
                                 <Typography variant='button' fontWeight={ 'bold' } color={ 'whitesmoke' }>На главную</Typography>
                             </Button>
@@ -73,8 +75,32 @@ export function AppbarV2() {
                             </Button>
                         </LinkRouter>
                     </Breadcrumbs>
+                    <React.Suspense fallback={ <CircularProgress variant='indeterminate' thickness={ 5 } color='error' /> }>
+                        <Box height={ 50 } width={ 200 }
+                            overflow={ 'clip' }
+                            position={ 'relative' }
+                        >
 
-                    <LoginDialog />
+
+                            <Box
+                                bgcolor={ 'white' }
+                                width={ 180 }
+                                height={ 200 }
+                                position={ 'absolute' }
+                                right={ -50 }
+                                top={ -40 }
+                                borderRadius={ '50%' }
+                                pr={ 20 }
+                                pt={ 3 }
+
+                            >
+                                <Box sx={ { transform: 'scale(.7)' } }>
+                                    <AttikLogo />
+                                </Box>
+                            </Box>
+                            {/* <LoginDialog /> */ }
+                        </Box>
+                    </React.Suspense>
                 </Box>
             </AppBar>
 

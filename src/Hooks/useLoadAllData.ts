@@ -29,3 +29,11 @@ export async function getAllTableData() {
         .map((item, idx) => ({ ...item, id: idx + 1 })) as StpData[];
     return stps;
 }
+
+export async function getTableDataWithQuerySearch(q?: string) {
+    const data = await getAllTableData()
+    if (q) {
+        const qq = data.filter(d => d.name.includes(q))
+        return qq
+    } else return data
+}

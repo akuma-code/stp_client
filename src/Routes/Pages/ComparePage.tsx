@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'
 import { useFilterContext } from '../../Hooks/useFilterContext'
 import { useLoadAllData } from '../../Hooks/useLoadAllData'
-import { ItemsToPrint } from './PrintPage'
+import { ItemsToPrint } from './ItemsToPrint'
 import { useQueryFiltersLoader, useQuerySelectedIdsLoader } from '../../Hooks/QueryHooks/useQueryFiltersLoader'
 // export type ICompareCtx = {
 //     selectedItem: null | string

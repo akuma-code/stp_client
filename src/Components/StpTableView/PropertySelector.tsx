@@ -16,6 +16,10 @@ import { StpTag } from '../StpTable/TableObjects';
 import { useTheme } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { TagAvatarIcon } from '../UI/TagAvatars';
+import { useFilterContext } from '../../Hooks/useFilterContext';
+import { _isArr } from '../../Helpers/helpersFns';
+import { SelectCams } from '../UI/SideDrower/SelectCams';
+import { observer } from 'mobx-react-lite';
 const Cam1 = lazy(() => import('../UI/Svg/AvaS2'))
 const Cam2 = lazy(() => import('../UI/Svg/AvaS3'))
 
@@ -35,7 +39,7 @@ export const TagsMenuProps = {
 const DepthMenuProps = {
     PaperProps: {
         style: {
-            height: ITEM_HEIGHT * 7 + 7,
+            height: ITEM_HEIGHT * 8 + 12,
             width: 140,
         },
     },
@@ -49,10 +53,10 @@ const CamsMenuProps = {
     },
 };
 const depthArray = [
-    24, 28, 32, 36, 40, 52
+    24, 28, 32, 36, 38, 40, 52
 ];
 const camsArray = [1, 2];
-export const tagsArray: (keyof typeof Stp_Tags)[] = [
+export const tagsArray: StpTag[] = [
     'standart',
     'simple',
     'energy',
@@ -72,47 +76,51 @@ export type SelectorProps = {
     tags: StpTag[];
     cams: number[];
     depth: number[];
-    order?: (keyof SelectorProps)[]
+
 };
 
-export function PropertySelector({ filteredCount }: { filteredCount: number; }) {
-    const { filterFn, filterParams } = useAppContext();
-    const [selectors, setSelector] = useState<Partial<SelectorProps>>({ ...filterParams, cams: [1, 2] });
+
+type HandleSelectProps = <T extends keyof SelectorProps>(selector: T) => (e: SelectChangeEvent<SelectorProps[T]>) => void
+type FilterHandleFn = <K extends keyof SelectorProps, V extends SelectorProps[K]>(args: { prop: K, value: V }) => void
+export const PropertySelector = observer(({ filteredCount }: { filteredCount: number; }) => {
+
+    const { filters } = useFilterContext();
+
+
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.up('md'));
 
-    const handleSelectorChange = useCallback((selectorType: keyof SelectorProps) => (event: SelectChangeEvent<SelectorProps[keyof SelectorProps]>) => {
+    const handleSelectorChange: HandleSelectProps =
+        (selectorType) =>
+            (event) => {
 
-        switch (selectorType) {
-            case 'tags': {
-                const { value } = event.target;
-                setSelector(prev => ({ ...prev, tags: value as StpTag[] }))
-                filterFn(prev => ({ ...prev, tags: value as StpTag[] }))
-                break
+                switch (selectorType) {
+                    case 'tags': {
+                        const { value } = event.target;
+                        filters.setTags(value as StpTag[])
+                        break
+                    }
+                    case 'cams': {
+                        const { value } = event.target;
+                        filters.setCams(value as number[])
+                        break
+                    }
+                    case 'depth': {
+                        const { target: { value } } = event;
+                        filters.setDepth(value as number[])
+                        break
+                    }
+                }
             }
-            case 'cams': {
-                const { value } = event.target;
-
-                setSelector(prev => ({ ...prev, cams: value as number[] }))
-                filterFn(prev => ({ ...prev, cams: value as number[] }))
-                break
-            }
-            case 'depth': {
-                const { value } = event.target;
-                setSelector(prev => ({ ...prev, depth: value as number[] }))
-                filterFn(prev => ({ ...prev, depth: value as number[] }))
-                break
-            }
-        }
-    }, [filterFn]);
 
     const camTxt = (num: number) => num === 1 ? `1 камера` : num === 2 ? `2 камеры` : '';
     const handleReset = () => {
-        filterFn(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
-        setSelector(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
+        // filterFn(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
+        // setSelector(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
+        filters.clearFilter()
 
     }
-    const isFilterOff = selectors.cams?.length === 0 && selectors.depth?.length === 0 && selectors.tags?.length === 0
+    const isFilterOff = filters.cams?.length !== 1 && filters.depth?.length === 0 && filters.tags?.length === 0
     return (
         <Stack
             direction={ 'row' }
@@ -128,24 +136,26 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                 //*Depths
             }
             <FormControl sx={ { width: 180 } }>
+
                 <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
                 <Select
 
                     multiple
                     labelId="depth-label"
                     name='depth-selector'
-                    value={ selectors.depth }
-                    onChange={ handleSelectorChange('depth') }
+                    value={ filters.depth }
+                    // onChange={ (e, v) => setDepth([+e.target.value]) }
+                    onChange={ handleSelectorChange('depth' as const) }
                     input={ <OutlinedInput label="Толщина ст-та____" id='multitag2' sx={ { fontSize: 12 } } /> }
                     renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || '' }
                     MenuProps={ DepthMenuProps }
 
                 >
 
-                    { depthArray.map((depth) => (
-                        <MenuItem key={ depth } value={ depth } divider dense>
-                            <Checkbox checked={ selectors.depth?.includes(depth) } name={ depth + '_checkDepth' } />
-                            <ListItemText primary={ `${depth} мм` } />
+                    { depthArray.map((d) => (
+                        <MenuItem key={ d } value={ d } divider dense>
+                            <Checkbox checked={ filters.depth.includes(d) } name={ d + '_checkDepth' } />
+                            <ListItemText primary={ `${d} мм` } />
                         </MenuItem>
 
                     )) }
@@ -157,48 +167,14 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
             {
                 //__Cams
             }
-            <FormControl sx={ { width: 130 } }>
-
-                <InputLabel id="cams-label">Кол-во камер</InputLabel>
-                <Select
-                    multiple
-                    labelId="cams-label"
-                    name="cams-selector"
-                    value={ selectors.cams }
-                    onChange={ handleSelectorChange('cams') }
-                    input={ <OutlinedInput label="Кол-во камер____" sx={ { fontSize: 12, } } /> }
-
-                    renderValue={ (selected) => {
-                        return (
-                            <Box display={ 'flex' } flexDirection={ 'row' } gap={ 1 } flexWrap={ 'nowrap' } justifyContent={ 'center' }>
-                                {
-                                    selected?.map(s =>
-
-                                        <Avatar key={ s } sx={ { height: 30, width: 30, bgcolor: '#3d9fe0' } } variant='rounded'>
-                                            { s === 1 && <Cam1 /> }
-                                            { s === 2 && <Cam2 /> }
-                                            {/* { CamsIcon[s.toString() as keyof typeof CamsIcon] } */ }
-                                        </Avatar>
-
-                                    ) }
+            <FormControl>
+                <SelectCams
+                    cams={ filters.cams }
+                    handleChange={ handleSelectorChange('cams') }
+                />
 
 
-                            </Box>
-                        )
-                    } }
-                    MenuProps={ CamsMenuProps }
-
-                >
-
-                    { camsArray.map((cam) => (
-                        <MenuItem key={ cam } value={ cam } divider dense >
-                            <Checkbox checked={ selectors?.cams?.includes(cam) } name={ cam + '_checkCam' } />
-                            <ListItemText primary={ camTxt(cam) } />
-                        </MenuItem>
-                    )) }
-                </Select>
-
-                { fullscreen && <FormHelperText>Сколько камер?</FormHelperText> }
+                { fullscreen && <FormHelperText>Сколько стекол?</FormHelperText> }
 
             </FormControl>
 
@@ -211,7 +187,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
                     labelId="multitag-label"
                     id="multitag"
                     name='tags-select'
-                    value={ selectors.tags }
+                    value={ filters.tags }
                     onChange={ handleSelectorChange('tags') }
 
                     input={ <OutlinedInput label="Свойства ст-та_____" sx={ { fontSize: 12 } } /> }
@@ -235,7 +211,7 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
 
                     { tagsArray.map((tag) => (
                         <MenuItem key={ tag } value={ tag } divider dense>
-                            <Checkbox checked={ selectors?.tags?.includes(tag) } name={ tag + '_check' } />
+                            <Checkbox checked={ filters.tags?.includes(tag) } name={ tag + '_check' } />
                             <ListItemText primary={ Stp_Tags[tag] } />
                             <Avatar sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
                                 { TagAvatarIcon[tag as StpTag] }
@@ -261,3 +237,35 @@ export function PropertySelector({ filteredCount }: { filteredCount: number; }) 
         </Stack>
     );
 }
+)
+
+// const t =<InputLabel id="cams-label">Кол-во камер</InputLabel>
+//                 <Select
+//                     multiple
+//                     labelId="cams-label"
+//                     name="cams-selector"
+//                     value={ filters.cams }
+//                     onChange={ handleSelectorChange('cams') }
+//                     input={ <OutlinedInput label="Кол-во камер____" sx={ { fontSize: 12, } } /> }
+//                     renderValue={ (selected) => {
+//                         return (
+//                             <Box display={ 'flex' } flexDirection={ 'row' } gap={ 1 } flexWrap={ 'nowrap' } justifyContent={ 'center' }>
+//                                 {                                    selected?.map(s =>
+//                                         <Avatar key={ s } sx={ { height: 30, width: 30, bgcolor: '#3d9fe0' } } variant='rounded'>
+//                                             { s === 1 && <Cam1 /> }
+//                                             { s === 2 && <Cam2 /> }
+//                                             {/* { CamsIcon[s.toString() as keyof typeof CamsIcon] } */ }
+//                                         </Avatar>
+//                                     )                                }
+//                             </Box>
+//                         )
+//                     } }
+//                     MenuProps={ CamsMenuProps }
+//                 >
+//                     {                        camsArray.map((cam) => (
+//                             <MenuItem key={ cam } value={ cam } divider dense >
+//                                 <Checkbox checked={ filters.cams.includes(cam) } name={ cam + '_checkCam' } />
+//                                 <ListItemText primary={ camTxt(cam) } />
+//                             </MenuItem>
+//                         ))                    }
+//                 </Select>

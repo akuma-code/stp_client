@@ -13,7 +13,7 @@ export const RootV2: React.FC<RootProps> = () => {
     const nav = useNavigate()
 
     useEffect(() => {
-        nav(routePaths.table, { replace: true, })
+        // nav(routePaths.table, { replace: true, })
 
     }, [])
     return (
