@@ -63,7 +63,7 @@ const FadingChip = ({ stp, handleClose }: { stp: StpData, handleClose: VoidFn })
 
     const chipref = useRef(null);
     return (
-        <Fade in={ !!stp } timeout={ 1000 }>
+        <Fade in={ !!stp } timeout={ { enter: 1000, exit: 2000, appear: 500 } }>
 
             <Chip key={ stp.id }
                 label={ stp.name }
@@ -71,7 +71,7 @@ const FadingChip = ({ stp, handleClose }: { stp: StpData, handleClose: VoidFn })
                 // color='inherit'
 
                 onDelete={ handleClose }
-                deleteIcon={ <IoMdCloseCircleOutline color='red' /> }
+                deleteIcon={ <IoMdCloseCircleOutline color='red' title='убрать' /> }
                 icon={ <CamAvatar cam_count={ stp.cams as 1 | 2 } variant='circular' show_tooltip='' /> }
                 variant='filled'
 

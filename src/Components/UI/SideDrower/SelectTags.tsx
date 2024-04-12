@@ -3,7 +3,8 @@ import { StpTag } from '../../StpTable/TableObjects';
 import { FilterStore } from '../../../Context/Stores/FiltrationStore';
 import { TagAvatarIcon } from '../TagAvatars';
 import { Stp_Tags } from '../../../Interfaces/Enums';
-import { tagsAvatarGroup, tagsArray } from './SideForm';
+import { tagsArray } from './SideForm';
+import { tagsAvatarGroup } from './AvatarGroups';
 import FadingResetButton from './FadingResetButton';
 import { VoidFn } from '../../../Interfaces/Types';
 
@@ -11,7 +12,7 @@ type FilterHandler = (event: SelectChangeEvent<StpTag[]>, child: React.ReactNode
 export function SelectTags({ tags, handleChange, handleReset }: { tags: FilterStore['tags']; handleChange: FilterHandler, handleReset: VoidFn },) {
     return <Select
         fullWidth
-        variant='filled'
+
         multiple
         labelId="multitag-label"
         id="multitag"

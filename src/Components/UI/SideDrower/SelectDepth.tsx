@@ -21,16 +21,18 @@ export const SelectDepth = observer(({ depths, handleChange, handleReset }: Dept
                 multiple
                 labelId="depth-label"
                 name='depth'
+                id='depth-selector'
                 value={ depths }
                 onChange={ handleChange }
-                input={ <OutlinedInput label='_____________' startAdornment={
+                input={ <OutlinedInput id={ 'depth' } label='_____________' endAdornment={
                     <FadingResetButton
                         open={ depths.length !== 0 }
                         action={ handleReset }
+
                     />
                 } /> }
                 inputProps={ { sx: { fontSize: 12 }, } }
-                renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') || 'Ничего не выбрано' }
+                renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') }
 
             >
 

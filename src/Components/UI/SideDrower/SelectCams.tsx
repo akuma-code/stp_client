@@ -1,7 +1,8 @@
 import { Checkbox, ListItemText, MenuItem, OutlinedInput, Select, SelectChangeEvent } from '@mui/material';
 import { CamAvatar } from '../CamsAvatars';
 import { _pathToUrl } from '../../../Helpers/urlpath';
-import { camsAvatarGroup, camsArray } from './SideForm';
+import { camsArray } from './SideForm';
+import { camsAvatarGroup } from './AvatarGroups';
 
 interface SelectorCamsProps {
     cams: number[];
@@ -22,7 +23,7 @@ export const SelectCams = ({ cams, handleChange }: SelectorCamsProps) => {
         MenuProps={ {
             PaperProps: {
                 style: {
-                    height: 130,
+                    // height: 130,
                     width: 170,
                 },
                 variant: 'outlined',

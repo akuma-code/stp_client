@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Box, Button, Divider, InputLabel, Paper, SelectChangeEvent, Stack, Typography } from '@mui/material'
+import { Button, Divider, InputLabel, Paper, SelectChangeEvent, Stack, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { TbFilterCheck } from 'react-icons/tb'
 import { Form, useFetcher, useSubmit } from 'react-router-dom'
@@ -8,8 +8,6 @@ import { Stp_Tags } from '../../../Interfaces/Enums'
 import { FiltersParams } from '../../../Interfaces/Types'
 import { StpTag } from '../../StpTable/TableObjects'
 import { AcSearch } from '../../StpTableView/AcSearch'
-import { CamAvatar } from '../CamsAvatars'
-import { TagAvatarIcon } from '../TagAvatars'
 import { SelectCams } from './SelectCams'
 import { SelectDepth } from './SelectDepth'
 import { SelectTags } from './SelectTags'
@@ -29,33 +27,6 @@ export const tagsArray: (keyof typeof Stp_Tags)[] = [
 ] as const;
 export type FiltrationChangeHandler = (filter_type: keyof FiltersParams) => (event: SelectChangeEvent<FiltersParams[typeof filter_type]>, child: React.ReactNode) => void
 const isNumb = (item: string | number) => typeof item === 'string' ? false : typeof item === 'number' ? true : false
-
-
-export const camsAvatarGroup = (selected: number[]) => {
-
-    return (
-        <AvatarGroup spacing={ 1 } sx={ { justifyContent: 'space-between', h: '2em' } } variant='circular'>
-            { selected.map(s => {
-                if (s !== 1 && s !== 2) return null
-                return <CamAvatar cam_count={ s } key={ s } wh={ '1.5em' } />
-            }
-            ) }
-        </AvatarGroup>)
-
-}
-
-export const tagsAvatarGroup = (selected: StpTag[]) => {
-    return (
-        <Box display={ 'flex' } flexDirection={ 'row' } gap={ 1 } flexWrap={ 'nowrap' } margin={ 0 }>
-            {
-                selected?.map(s =>
-                    <Avatar key={ s } sx={ { height: 24, width: 24, fontSize: 15, bgcolor: '#3d9fe0' } } variant='rounded'>
-                        { TagAvatarIcon[s as StpTag] }
-                    </Avatar>
-                ) }
-        </Box>
-    )
-}
 
 
 const SideForm = observer(({ onClose }: { onClose?: () => void }) => {

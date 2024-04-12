@@ -38,7 +38,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
             <Toolbar
                 component={ Stack }
                 direction={ 'row' }
-                pt={ 2 }
+
                 columnGap={ 6 }
                 sx={ {
                     height: { md: 100, lg: 120, sm: 70 },
@@ -51,13 +51,20 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 { filters.ids.length > 0 ?
 
 
-                    <Stack direction={ 'row' } flexGrow={ 1 } columnGap={ 2 }
+                    <Stack
+                        direction={ 'row' }
+                        flexGrow={ 1 }
+                        columnGap={ 2 }
                         justifyContent={ 'space-between' }
                         alignItems={ 'center' }
                         component={ Paper }
+                        elevation={ 2 }
                     >
 
-                        <ButtonGroup orientation='vertical' size='large' variant='contained'>
+                        <ButtonGroup
+                            orientation='vertical'
+                            size='large'
+                            variant='contained'>
                             <Button
                                 onClick={ on }
                                 sx={ { maxWidth: 150, fontSize: 12 } }
@@ -79,7 +86,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 
                     </Stack>
                     :
-                    <Box px={ 3 } component={ Paper } elevation={ 2 } height={ '100%' } py={ 'auto' }>
+                    <Box px={ 3 } component={ Paper } elevation={ 2 } height={ '100%' } py={ 2 }>
                         <Typography variant='button' fontWeight={ 'bold' }>
                             Данные таблицы получены из калькулятора, предоставленного компанией РСК
                         </Typography>
@@ -101,9 +108,9 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                         ml={ 0 }
                         pl={ 0 }
                     >
-                        <AcSearch />
+                        {/* <AcSearch /> */ }
 
-                        <PropertySelector filteredCount={ numFiltered } />
+                        <PropertySelector />
                     </Box>
                 </Suspense>
             </Toolbar>
