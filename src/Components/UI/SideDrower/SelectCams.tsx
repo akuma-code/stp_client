@@ -8,7 +8,7 @@ interface SelectorCamsProps {
     handleChange: (event: SelectChangeEvent<number[]>, child: React.ReactNode) => void;
 }
 
-export function SelectCams({ cams, handleChange }: SelectorCamsProps) {
+export const SelectCams = ({ cams, handleChange }: SelectorCamsProps) => {
 
     return <Select
         title='Камеры'

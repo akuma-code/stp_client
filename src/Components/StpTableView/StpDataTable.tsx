@@ -69,7 +69,7 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
 
     const handleSelectAllClick = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked && filters.ids.length >= 5) {
-            filters.clearFilter('id')
+            filters.clearFilter('ids')
             // clear()
             return
         }
@@ -79,7 +79,7 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
             // select(newSelectedAll)
             return;
         }
-        filters.clearFilter('id')
+        filters.clearFilter('ids')
         // clear()
 
     }, [filters, sorted]);
@@ -147,9 +147,11 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
     // console.log('%cRender', 'color: red; background-color: beige; font-size: 1.5em')
     const RowsList = useMemo(() => {
         const handleClick = (id: number) => {
-            if (filters.ids.length >= filters.options.selectMax) { return }
+            if (filters.ids.length === filters.options.selectMax) { return false }
             filters.selectId(id)
+            return filters.ids.includes(+id)
         }
+
         const list = () => sorted.map((row, index) =>
             <StpTableRow
                 key={ row.name }
@@ -157,6 +159,7 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
                 row_data={ row as unknown as StpData }
                 handleClick={ handleClick }
                 isSelected={ filters.ids.includes(+row.id) }
+
             />
         )
         return list
@@ -199,17 +202,7 @@ export const StpDataTable: React.FC<StpTableProps> = observer(({ items, selected
 
                         <TableBody>
                             <RowsList />
-                            {
-                                // sorted.map((row, index) =>
-                                //     <StpTableRow
-                                //         key={ row.name }
-                                //         row_number={ index }
-                                //         row_data={ row as unknown as StpData }
-                                //     // handleClick={ handleClick }
-                                //     // isSelected={ isSelected(+row.id) }
-                                //     />
-                                // ) 
-                            }
+
 
                         </TableBody>
                     </Table>

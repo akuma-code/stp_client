@@ -1,4 +1,4 @@
-import { Avatar, Box, FormHelperText, IconButton, Stack, } from '@mui/material';
+import { Avatar, Box, Fab, FormHelperText, IconButton, Stack, } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,8 +11,6 @@ import { MdFilterListOff } from "react-icons/md";
 import { useAppContext } from '../../Hooks/useStoresContext';
 import { Stp_Tags } from '../../Interfaces/Enums';
 import { StpTag } from '../StpTable/TableObjects';
-// import MemoAvaS2 from '../UI/Svg/AvaS2';
-// import MemoAvaS3  from '../UI/Svg/AvaS3';
 import { useTheme } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { TagAvatarIcon } from '../UI/TagAvatars';
@@ -20,6 +18,9 @@ import { useFilterContext } from '../../Hooks/useFilterContext';
 import { _isArr } from '../../Helpers/helpersFns';
 import { SelectCams } from '../UI/SideDrower/SelectCams';
 import { observer } from 'mobx-react-lite';
+import { SelectDepth } from '../UI/SideDrower/SelectDepth';
+import { CloseOutlined } from '@mui/icons-material';
+import { SelectTags } from '../UI/SideDrower/SelectTags';
 const Cam1 = lazy(() => import('../UI/Svg/AvaS2'))
 const Cam2 = lazy(() => import('../UI/Svg/AvaS3'))
 
@@ -113,12 +114,15 @@ export const PropertySelector = observer(({ filteredCount }: { filteredCount: nu
                 }
             }
 
-    const camTxt = (num: number) => num === 1 ? `1 камера` : num === 2 ? `2 камеры` : '';
+
     const handleReset = () => {
         // filterFn(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
         // setSelector(prev => ({ ...prev, cams: [], depth: [], tags: [] }))
         filters.clearFilter()
 
+    }
+    const resetDepth = () => {
+        filters.clearFilter('depth')
     }
     const isFilterOff = filters.cams?.length !== 1 && filters.depth?.length === 0 && filters.tags?.length === 0
     return (
@@ -126,19 +130,25 @@ export const PropertySelector = observer(({ filteredCount }: { filteredCount: nu
             direction={ 'row' }
             alignContent={ 'center' }
             // py={ 1 }
-            justifyContent={ 'space-around' }
-            useFlexGap
-            spacing={ 2 }
-        // columnGap={ 2.5 }
+            // justifyContent={ 'space-around' }
+            // useFlexGap
+            // spacing={ 2 }
+            columnGap={ 5 }
         >
             {/* <SuspenseLoad> */ }
             {
                 //*Depths
             }
-            <FormControl sx={ { width: 180 } }>
+            <FormControl sx={ { width: 180, position: 'relative' } }>
 
                 <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
-                <Select
+                <SelectDepth
+                    handleChange={ handleSelectorChange('depth') }
+                    handleReset={ resetDepth }
+                    depths={ filters.depth }
+                />
+
+                {/* <Select
 
                     multiple
                     labelId="depth-label"
@@ -160,7 +170,7 @@ export const PropertySelector = observer(({ filteredCount }: { filteredCount: nu
 
                     )) }
 
-                </Select>
+                </Select> */}
                 { fullscreen && <FormHelperText>Выберете толщину</FormHelperText> }
             </FormControl>
 
@@ -182,7 +192,14 @@ export const PropertySelector = observer(({ filteredCount }: { filteredCount: nu
                 {                //__Tags
                 }
                 <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
-                <Select variant='outlined'
+                <SelectTags
+                    tags={ filters.tags }
+                    handleChange={ handleSelectorChange('tags') }
+                    handleReset={ () => filters.clearFilter('tags') }
+
+
+                />
+                {/* <Select variant='outlined'
                     multiple
                     labelId="multitag-label"
                     id="multitag"
@@ -218,7 +235,7 @@ export const PropertySelector = observer(({ filteredCount }: { filteredCount: nu
                             </Avatar>
                         </MenuItem>
                     )) }
-                </Select>
+                </Select> */}
                 { fullscreen && <FormHelperText>Выберете нужные свойства</FormHelperText> }
             </FormControl>
 
@@ -235,9 +252,11 @@ export const PropertySelector = observer(({ filteredCount }: { filteredCount: nu
             </IconButton>
             {/* </SuspenseLoad> */ }
         </Stack>
-    );
+    )
 }
 )
+
+PropertySelector.displayName = '__Property Selector'
 
 // const t =<InputLabel id="cams-label">Кол-во камер</InputLabel>
 //                 <Select

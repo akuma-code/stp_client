@@ -34,7 +34,7 @@ const stores = { StpStore: new StpStore(table_data_base) }
 const filterStores = {
   filters: new FilterStore({ selectMax: 6 }),
   search: new SearchQueryStore(),
-  auth: new AuthStore()
+  auth: new AuthStore(['root'])
 }
 
 // const v2_router = createBrowserRouter(appRoutes_v2)

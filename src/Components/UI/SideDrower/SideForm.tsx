@@ -140,6 +140,7 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                         <SelectDepth
                             depths={ defFilters.depth }
                             handleChange={ handleChange('depth') }
+                            handleReset={ () => filters.clearFilter('depth') }
                         />
                     </>
                     <>
@@ -147,6 +148,7 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                         <SelectTags
                             tags={ defFilters.tags }
                             handleChange={ handleChange('tags') }
+                            handleReset={ () => filters.clearFilter('tags') }
                         />
                     </>
                     <Button

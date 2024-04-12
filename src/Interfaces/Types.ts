@@ -9,7 +9,7 @@ export type FiltersParams = {
     tags: StpTag[],
     depth: number[],
     cams: number[],
-    id: number[]
+    ids: number[]
 }
 
 export type CursorRespone<T, C = number> = {

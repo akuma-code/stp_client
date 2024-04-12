@@ -20,8 +20,8 @@ type FilterTags = {
     value: FiltersParams['tags']
 }
 type FilterIds = {
-    key: 'id'
-    value: FiltersParams['id']
+    key: 'ids'
+    value: FiltersParams['ids']
 }
 type FilterQueryString = {
     key: 'query'
@@ -61,7 +61,7 @@ export class FilterStore {
             case "cams": { this.cams = value; break }
             case "tags": { this.tags = value; break }
             case "depth": { this.depth = value; break }
-            case "id": { this.ids = value; break }
+            case "ids": { this.ids = value; break }
 
         }
 
@@ -77,6 +77,7 @@ export class FilterStore {
             return
         }
         this.setFilter({ key, value: [] })
+        // this[key].length = 0
     }
     private compareTag() {
         const tagRegExp: Record<StpTag, RegExp> = {

@@ -4,7 +4,7 @@ import { LoaderFunctionArgs, useLoaderData } from 'react-router-dom'
 import { useFilterContext } from '../../../Hooks/useFilterContext'
 import { getTableDataWithQuerySearch, useLoadDataQuery } from '../../../Hooks/useLoadAllData'
 import { StpDataTable } from '../../StpTableView/StpDataTable'
-import { Loading, SuspenseLoad } from '../../UI/SuspenseLoad'
+import { Loading, LoadingProgres, SuspenseLoad } from '../../UI/SuspenseLoad'
 import { useDeferredValue } from 'react'
 import { CircularProgress } from '@mui/material'
 import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader'
@@ -36,13 +36,18 @@ const TableDataContainer = observer(() => {
 
 
 
-
-
+    if (query.isLoading) return <LoadingProgres text='Данные загружаются ... ' />
     return (
         <>
+
             {
-                query.isSuccess ?
-                    <StpDataTable items={ query.data } /> : <CircularProgress variant='indeterminate' />
+                // query.isLoading ?
+                //     <LoadingProgres text='Данные загружаются ... ' />
+                //     :
+                query.isSuccess &&
+
+                <StpDataTable items={ query.data } />
+
             }
         </>
 

@@ -31,38 +31,38 @@ export const AcSearch = observer(() => {
 
     // console.timeEnd('search_selected')
     return (
-        <SuspenseLoad loadText='asearch'>
+        // <SuspenseLoad loadText='asearch'>
 
-            <Autocomplete
-                clearOnEscape
-                autoHighlight
-                handleHomeEndKeys
-                freeSolo
-                options={ selectedOptions }
-                noOptionsText='Ничего не найдено!'
-                value={ value }
-                onChange={ handleInput }
-                sx={ {
-                    mr: 2, textAlign: 'center',
-                    // [`& .MuiTextField-root`]: { opacity: isPending ? .5 : 1 }
+        <Autocomplete
+            clearOnEscape
+            autoHighlight
+            handleHomeEndKeys
+            freeSolo
+            options={ selectedOptions }
+            noOptionsText='Ничего не найдено!'
+            value={ value }
+            onChange={ handleInput }
+            sx={ {
+                pr: 5, textAlign: 'center', maxWidth: 400
+                // [`& .MuiTextField-root`]: { opacity: isPending ? .5 : 1 }
 
-                } }
+            } }
 
-                inputValue={ search.query }
-                onInputChange={ handleQueryInput }
-                renderInput={ (params) => <TextField { ...params }
-                    name='search_query'
-                    helperText={ 'Начните вводить формулу или выберите стеклопакет для сравнения из таблицы' }
-                    size='medium'
-                    variant='outlined'
-                    inputMode='search'
-                    margin='dense'
-                    label="Формула стеклопакета"
+            inputValue={ search.query }
+            onInputChange={ handleQueryInput }
+            renderInput={ (params) => <TextField { ...params }
+                name='search_query'
+                helperText={ 'Начните вводить формулу для поиска по таблице' }
+                size='medium'
+                variant='outlined'
+                inputMode='search'
+                margin='dense'
+                label="Формула стеклопакета"
 
-                />
-                }
             />
-        </SuspenseLoad>
+            }
+        />
+        // </SuspenseLoad>
     );
 })
 

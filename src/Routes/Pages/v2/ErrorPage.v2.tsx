@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { MuiLink } from '../MuiLink'
 
@@ -10,11 +10,13 @@ const ErrorPageV2: React.FC<{}> = () => {
 
 
     return (
-        <Box maxWidth={ 500 } mx='auto'>
+        <Box maxWidth={ 500 } mx='auto' pt={ 5 }>
 
-            <MuiLink to={ '/v2' }>
-                <Button variant='text' fullWidth={ false } size='small'>
-                    Назад к v2
+            <MuiLink to={ '/' }>
+                <Button variant='outlined' fullWidth={ false } size='small'>
+                    <Typography variant='button' px={ 4 }>
+                        Назад на главную
+                    </Typography>
                     <RiArrowGoBackFill />
                 </Button>
             </MuiLink>

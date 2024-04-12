@@ -158,52 +158,49 @@ export const appRoutes: RouteObject[] = [
 
 
 export const appRoutes_v2: RouteObject[] = [
+    // {
+    //     path: routePaths.root,
+    //     element: <Root />,
+    //     id: 'root',
+    //     errorElement: <ErrorPageV2 />,
+    //     children: [
+    //         {
+    //             path: routePaths.v1,
+    //             element: <TabPage initTab={ 0 } />,
+    //             errorElement: <ErrorPage />,
+    //             children: [
+    //                 {
+    //                     path: routePaths.compare,
+    //                     element: <ComparePage />,
+
+    //                 },
+    //             ],
+    //         },
+    //         {
+    //             path: routePaths.stp_info,
+    //             element: <StpInfoPage />
+
+    //         },
+    //     ],
+    // },
     {
         path: routePaths.root,
-        element: <Root />,
-        id: 'root',
-        errorElement: <ErrorPageV2 />,
-        children: [
-            {
-                path: routePaths.v1,
-                element: <TabPage initTab={ 0 } />,
-                errorElement: <ErrorPage />,
-                children: [
-                    {
-                        path: routePaths.compare,
-                        element: <ComparePage />,
-
-                    },
-                ],
-            },
-            {
-                path: routePaths.stp_info,
-                element: <StpInfoPage />
-
-            },
-        ],
-    },
-    {
-        path: routePaths.v2,
         element: <RootV2 />,
         errorElement: <ErrorPageV2 />,
         children: [
             {
-                // path: routePaths.table,
+                // path: routePaths.old,
                 index: true,
-                element: <MRTDataPage />,
-                errorElement: <ErrorPageV2 />,
-            },
-            {
-                path: routePaths.old,
                 element: <TableDataContainer />,
                 loader: tableLoader(qClient),
 
             },
-            // {
-            //     path: routePaths.compare,
-            //     element: <ComparePage />
-            // },
+            {
+
+                path: routePaths.table,
+                element: <MRTDataPage />,
+                errorElement: <ErrorPageV2 />,
+            },
             {
                 path: routePaths.info,
 
@@ -217,21 +214,21 @@ export const appRoutes_v2: RouteObject[] = [
         path: apiRoute.api,
         errorElement: <ErrorPageV2 />,
         children: [
-            {
-                path: apiRoute.auth
-            },
-            {
-                path: apiRoute.login,
-                action: async ({ request }) => {
-                    const form = await request.formData()
-                    const res = Object.fromEntries(form)
-                    console.log('%cresponse: ', 'color: red; background-color: beige; font-size: 1.5em', res)
-                    return res
-                },
-            },
-            {
-                path: apiRoute.register
-            },
+            // {
+            //     path: apiRoute.auth
+            // },
+            // {
+            //     path: apiRoute.login,
+            //     action: async ({ request }) => {
+            //         const form = await request.formData()
+            //         const res = Object.fromEntries(form)
+            //         console.log('%cresponse: ', 'color: red; background-color: beige; font-size: 1.5em', res)
+            //         return res
+            //     },
+            // },
+            // {
+            //     path: apiRoute.register
+            // },
             {
                 path: 'ss' as const,
                 loader: ss_loader(qClient),

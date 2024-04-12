@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link, { LinkProps } from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Link as RouterLink,
     useLocation
@@ -11,6 +11,8 @@ import {
 import MemoAvaS3 from '../../../Components/UI/Svg/AvaS3';
 import { routePaths } from '../../routePath';
 import { LoginDialog } from './LoginDialog';
+import { useFilterContext } from '../../../Hooks/useFilterContext';
+import { observer } from 'mobx-react-lite';
 
 const AttikLogo = React.lazy(() => import('../../../Components/UI/Svg/Attik'))
 
@@ -25,11 +27,16 @@ export function LinkRouter(props: LinkRouterProps) {
     return <Link { ...props } component={ RouterLink as any }  >{ props.children }</Link>;
 }
 
-export function AppbarV2() {
+export const AppbarV2 = observer(() => {
     const { search } = useLocation();
+    const { auth } = useFilterContext()
+    const [role, setRole] = useState<'user' | 'admin'>('user')
+    useEffect(() => {
+        auth.checkAuth()
+        if (auth.isAuth) setRole('admin')
+        else setRole('user')
 
-
-
+    }, [auth.isAuth])
     return (
         <Paper elevation={ 1 }>
 
@@ -60,30 +67,34 @@ export function AppbarV2() {
                                 <Typography variant='button' fontWeight={ 'bold' } color={ 'whitesmoke' }>Дополнительная информация</Typography>
                             </Button>
                         </LinkRouter>
-                        <LinkRouter to={ '/' + routePaths.v1 } underline='hover'>
-                            <Button variant='text' size='large' color='inherit'>
+                        {
+                            role === 'admin' &&
+                            <LinkRouter to={ routePaths.table } underline='hover'>
+                                <Button variant='text' size='large' color='inherit'>
+                                    <Typography variant='button' fontWeight={ 'bold' } color={ 'whitesmoke' }>Новая версия таблицы</Typography>
+                                </Button>
+                            </LinkRouter>
 
+                        }
+                        { role === 'admin' &&
 
-                                <Typography variant='button' color={ 'whitesmoke' }>версия 1</Typography>
-                            </Button>
-                        </LinkRouter>
-                        <LinkRouter to={ routePaths.old } underline='hover'>
-                            <Button variant='text' size='large' color='inherit'>
-
-
-                                <Typography variant='button' fontWeight={ 'bold' } color={ 'whitesmoke' }>Старая версия</Typography>
-                            </Button>
-                        </LinkRouter>
+                            <LinkRouter to={ '/' + routePaths.v1 } underline='hover'>
+                                <Button variant='text' size='large' color='inherit'>
+                                    <Typography variant='caption' color={ 'whitesmoke' }>Предыдущая версия шапки</Typography>
+                                </Button>
+                            </LinkRouter>
+                        }
                     </Breadcrumbs>
-                    <React.Suspense fallback={ <CircularProgress variant='indeterminate' thickness={ 5 } color='error' /> }>
-                        <Box height={ 50 } width={ 200 }
-                            overflow={ 'clip' }
-                            position={ 'relative' }
-                        >
+                    <LoginDialog />
+                    <Box height={ 50 } width={ 200 }
+                        overflow={ 'clip' }
+                        position={ 'relative' }
+                    >
+                        <React.Suspense fallback={ <CircularProgress variant='indeterminate' thickness={ 5 } color='error' /> }>
 
 
                             <Box
-                                bgcolor={ 'white' }
+                                bgcolor={ 'whitesmoke' }
                                 width={ 180 }
                                 height={ 200 }
                                 position={ 'absolute' }
@@ -98,14 +109,14 @@ export function AppbarV2() {
                                     <AttikLogo />
                                 </Box>
                             </Box>
-                            {/* <LoginDialog /> */ }
-                        </Box>
-                    </React.Suspense>
+                        </React.Suspense>
+                    </Box>
                 </Box>
             </AppBar>
 
         </Paper>
     );
-}
+})
 
 
+AppbarV2.displayName = '__AppBar V2'

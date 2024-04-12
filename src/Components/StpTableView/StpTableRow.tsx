@@ -33,8 +33,7 @@ export const stpFields: (keyof StpData)[] = [
 export type StpRowProps = {
     row_data: StpData;
     row_number: number;
-    // isSelected: (id: number) => boolean;
-    handleClick?: (id: number) => void;
+    handleClick?: (id: number) => boolean;
     isSelected?: boolean
 };
 
@@ -50,20 +49,17 @@ function NameCell(props: { name: string }) {
 const endSign = (key: keyof StpData) => key === 'weight' ? ' кг/кв.м' : key === 'depth' ? ' мм' : ""
 
 export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_data, handleClick, isSelected }) => {
-    const [_selected, { toggle, off }] = useToggle(isSelected || false);
+    const [_selected, { off, on }] = useToggle(isSelected || false);
 
-    // const { filters } = useFilterContext();
+
 
     const numericData = useCallback((key: keyof StpData) => row_data[key], [row_data])
-    // const selectedRow = isSelected(row_data.id)
     const clickCell = useCallback((e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
-        handleClick && handleClick(row_data.id)
+        if (handleClick) {
+            handleClick(row_data.id) ? on() : off()
+        }
 
-        toggle()
-
-    }, [handleClick, row_data.id, toggle])
-    // const isRowSelect = useCallback((id: number) => filters.ids.includes(id), [filters.ids])
-    // const isSelected = useMemo(() => isRowSelect(row_data.id), [isRowSelect, row_data.id])
+    }, [off, on, row_data.id, handleClick])
     useEffect(() => {
         isSelected === false && off()
     }, [isSelected])

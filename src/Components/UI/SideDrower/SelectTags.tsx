@@ -4,9 +4,11 @@ import { FilterStore } from '../../../Context/Stores/FiltrationStore';
 import { TagAvatarIcon } from '../TagAvatars';
 import { Stp_Tags } from '../../../Interfaces/Enums';
 import { tagsAvatarGroup, tagsArray } from './SideForm';
+import FadingResetButton from './FadingResetButton';
+import { VoidFn } from '../../../Interfaces/Types';
 
 type FilterHandler = (event: SelectChangeEvent<StpTag[]>, child: React.ReactNode) => void
-export function SelectTags({ tags, handleChange }: { tags: FilterStore['tags']; handleChange: FilterHandler }) {
+export function SelectTags({ tags, handleChange, handleReset }: { tags: FilterStore['tags']; handleChange: FilterHandler, handleReset: VoidFn },) {
     return <Select
         fullWidth
         variant='filled'
@@ -16,7 +18,15 @@ export function SelectTags({ tags, handleChange }: { tags: FilterStore['tags']; 
         name='tags'
         value={ tags }
         onChange={ handleChange }
-        input={ <OutlinedInput sx={ { fontSize: 12 } } /> }
+        input={ <OutlinedInput sx={ { fontSize: 12 } } label='_________________'
+            endAdornment={
+                <FadingResetButton
+                    action={ handleReset }
+                    open={ tags.length !== 0 }
+
+                />
+            }
+        /> }
         renderValue={ tagsAvatarGroup }
     >
 
