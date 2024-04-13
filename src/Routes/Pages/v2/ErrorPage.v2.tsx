@@ -4,6 +4,7 @@ import { MuiLink } from '../MuiLink'
 
 import { RiArrowGoBackFill } from 'react-icons/ri'
 import { useRouteError } from 'react-router-dom'
+import { routePaths } from '../../routePath'
 
 const ErrorPageV2: React.FC<{}> = () => {
     const error = useRouteError() as { statusText?: string, message?: string, data?: string, status?: number }
@@ -12,8 +13,8 @@ const ErrorPageV2: React.FC<{}> = () => {
     return (
         <Box maxWidth={ 500 } mx='auto' pt={ 5 }>
 
-            <MuiLink to={ '/' }>
-                <Button variant='outlined' fullWidth={ false } size='small'>
+            <MuiLink to={ routePaths.root } >
+                <Button variant='outlined' fullWidth={ false } size='large'>
                     <Typography variant='button' px={ 4 }>
                         Назад на главную
                     </Typography>

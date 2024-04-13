@@ -8,10 +8,10 @@ import { AcSearch } from './AcSearch';
 import { ItemChipList } from './ItemChipList';
 import { PropertySelector } from './PropertySelector';
 import SelectedItemsDialog from './SelectedItemsDialog';
-import { Suspense } from 'react';
+import { Suspense, memo } from 'react';
 interface TableToolbarProps {
     numSelected?: number;
-    numFiltered: number
+    numFiltered?: number
 }
 
 
@@ -38,7 +38,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
             <Toolbar
                 component={ Stack }
                 direction={ 'row' }
-
+                bgcolor={ 'beige' }
                 columnGap={ 6 }
                 sx={ {
                     height: { md: 100, lg: 120, sm: 70 },
@@ -48,70 +48,52 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                 } }
             >
 
-                { filters.ids.length > 0 ?
 
 
-                    <Stack
-                        direction={ 'row' }
-                        flexGrow={ 1 }
-                        columnGap={ 2 }
-                        justifyContent={ 'space-between' }
-                        alignItems={ 'center' }
-                        component={ Paper }
-                        elevation={ 2 }
-                    >
+                <Stack
+                    direction={ 'row' }
+                    flexGrow={ 1 }
+                    columnGap={ 2 }
+                    justifyContent={ 'space-between' }
+                    alignItems={ 'center' }
+                    component={ Paper }
+                    elevation={ 2 }
+                >
 
-                        <ButtonGroup
-                            orientation='vertical'
-                            size='large'
-                            variant='contained'>
-                            <Button
-                                onClick={ on }
-                                sx={ { maxWidth: 150, fontSize: 12 } }
-                                color='info'
-                            >
-                                Сравнить выбранные
-                            </Button>
-                            <Button
-                                onClick={ handleClose }
-                                sx={ { maxWidth: 150, fontSize: 11 } }
-                                color='error'
-                            >
-                                Очистить
-                            </Button>
-                        </ButtonGroup>
+                    { filters.ids.length > 0 ?
+                        <>
+                            <ButtonGroup
+                                orientation='vertical'
+                                size='large'
+                                variant='contained'>
+                                <Button
+                                    onClick={ on }
+                                    sx={ { maxWidth: 150, fontSize: 12 } }
+                                    color='info'
+                                >
+                                    Сравнить выбранные
+                                </Button>
+                                <Button
+                                    onClick={ handleClose }
+                                    sx={ { maxWidth: 150, fontSize: 11 } }
+                                    color='error'
+                                >
+                                    Очистить
+                                </Button>
+                            </ButtonGroup>
 
 
-                        <ItemChipList />
+                            <ItemChipList />
 
-                    </Stack>
-                    :
-                    <Box px={ 3 } component={ Paper } elevation={ 2 } height={ '100%' } py={ 2 }>
-                        <Typography variant='button' fontWeight={ 'bold' }>
-                            Данные таблицы получены из калькулятора, предоставленного компанией РСК
-                        </Typography>
-                        <br />
-                        <Typography variant='body1' >
-                            Для сравнения или печати стеклопакетов выберите нужные (максимум 6)
+                        </>
+                        :
+                        <InfoText />
+                    }
+                </Stack>
 
-                        </Typography>
-                    </Box>
-                }
                 <Suspense fallback={ <Loading /> }>
-                    <Box
-                        component={ Stack }
-                        direction={ 'row' }
-                        flexGrow={ 1 }
 
-                        alignItems={ 'center' }
-                        pr={ 1 }
-                        ml={ 0 }
-                        pl={ 0 }
-                    >
-                        {/* <AcSearch /> */ }
-
-                        <PropertySelector />
-                    </Box>
+                    <PropertySelector />
                 </Suspense>
             </Toolbar>
             <SelectedItemsDialog selected={ filters.ids } open={ open } onClose={ off } onOpen={ on } />
@@ -120,3 +102,20 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
 }
 
 
+const InfoText = () => {
+    return (
+        <Box
+            m={ 2 }
+        >
+            <Typography variant='button' fontWeight={ 'bold' }>
+                Данные таблицы получены из калькулятора, предоставленного компанией РСК
+            </Typography>
+            <br />
+            <Typography variant='body1' >
+                Для сравнения или печати стеклопакетов выберите нужные (максимум 6)
+
+            </Typography>
+        </Box>
+    )
+}
+InfoText.displayName = 'InfoText'

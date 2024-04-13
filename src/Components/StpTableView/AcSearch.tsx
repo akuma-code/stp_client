@@ -56,7 +56,7 @@ export const AcSearch = observer(() => {
                 size='medium'
                 variant='outlined'
                 inputMode='search'
-                margin='dense'
+                margin='none'
                 label="Формула стеклопакета"
 
             />

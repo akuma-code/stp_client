@@ -54,7 +54,7 @@ export const AppbarV2 = observer(() => {
 
                 >
                     <Breadcrumbs aria-label="breadcrumb" separator={ '/' } color='whitesmoke' sx={ { flexGrow: 1 } }>
-                        <LinkRouter to={ routePaths.v2 } underline='hover'>
+                        <LinkRouter to={ routePaths.root } underline='hover'>
                             <Button variant='text' endIcon={ <MemoAvaS3 /> } size='large' color='inherit'>
                                 <Typography variant='button' fontWeight={ 'bold' } color={ 'whitesmoke' }>На главную</Typography>
                             </Button>
@@ -76,13 +76,14 @@ export const AppbarV2 = observer(() => {
                             </LinkRouter>
 
                         }
-                        { role === 'admin' &&
+                        {
+                            // role === 'admin' &&
 
-                            <LinkRouter to={ '/' + routePaths.v1 } underline='hover'>
-                                <Button variant='text' size='large' color='inherit'>
-                                    <Typography variant='caption' color={ 'whitesmoke' }>Предыдущая версия шапки</Typography>
-                                </Button>
-                            </LinkRouter>
+                            //     <LinkRouter to={ '/' + routePaths.v1 } underline='hover'>
+                            //         <Button variant='text' size='large' color='inherit'>
+                            //             <Typography variant='caption' color={ 'whitesmoke' }>Предыдущая версия шапки</Typography>
+                            //         </Button>
+                            //     </LinkRouter>
                         }
                     </Breadcrumbs>
                     <LoginDialog />
