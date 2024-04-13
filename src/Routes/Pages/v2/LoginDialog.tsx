@@ -43,7 +43,7 @@ export const LoginDialog = observer((props: LoginDialogProps) => {
                         <TextField variant='filled' name='login' id='name-input' /> */}
 
                         <InputLabel id='pass-input-label' htmlFor='pass-input' >Введите пароль</InputLabel>
-                        <TextField variant='filled' name='pass' id='pass-input' type='password' size='small' />
+                        <TextField variant='filled' name='pass' id='pass-input' type='password' size='small' autoComplete='on' />
                     </Form>
                 </DialogContent>
                 <DialogActions>

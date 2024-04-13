@@ -11,24 +11,18 @@ import { FilterContext } from "./Hooks/useFilterContext";
 import { AppContext } from "./Hooks/useStoresContext";
 
 import { QueryClientProvider } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { queryClient } from ".";
 import { v2_router } from "./Routes/AppRouter";
 
 
-
+//  --max_old_space_size=4096
 configure({
   useProxies: "always",
   enforceActions: 'observed'
 });
 const stores = { StpStore: new StpStore(table_data_base) }
-// export const queryClient = new QueryClient({
-//   defaultOptions: {
-//     queries: {
-//       retry: false,
-//       refetchOnWindowFocus: false,
-//     },
-//   },
-// })
+
 const filterStores = {
   filters: new FilterStore({ selectMax: 6 }),
   search: new SearchQueryStore(),
@@ -37,7 +31,16 @@ const filterStores = {
 
 // const v2_router = createBrowserRouter(appRoutes_v2)
 function App() {
-
+  const memedStores = useMemo(() => {
+    const { auth, filters, search } = {
+      filters: new FilterStore({ selectMax: 6 }),
+      search: new SearchQueryStore(),
+      auth: new AuthStore(['root'])
+    }
+    return {
+      auth, filters, search
+    }
+  }, [])
 
 
   return (
@@ -47,11 +50,11 @@ function App() {
 
       <AppContext.Provider value={ {
         ...stores,
-
       } }
       >
 
-        <FilterContext.Provider value={ { ...filterStores } }>
+        <FilterContext.Provider value={ { ...memedStores } }>
+          {/* <MobxProvider stores={ { ...filterStores } }> */ }
 
           <RouterProvider
             router={ v2_router }
@@ -64,6 +67,7 @@ function App() {
           />
 
           <ReactQueryDevtools initialIsOpen={ false } position="bottom" />
+          {/* </MobxProvider> */ }
         </FilterContext.Provider>
       </AppContext.Provider>
     </QueryClientProvider>

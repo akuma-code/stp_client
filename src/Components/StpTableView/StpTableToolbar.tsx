@@ -56,8 +56,7 @@ export function StpTableToolbar({ numSelected, numFiltered }: TableToolbarProps)
                     columnGap={ 2 }
                     justifyContent={ 'space-between' }
                     alignItems={ 'center' }
-                    component={ Paper }
-                    elevation={ 2 }
+
                 >
 
                     { filters.ids.length > 0 ?

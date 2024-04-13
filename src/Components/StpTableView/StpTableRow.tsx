@@ -1,19 +1,16 @@
+import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell, { TableCellProps } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { Stack } from '@mui/material';
-import { StpItem, StpTag } from '../StpTable/TableObjects';
-import { TagsAvatarGroup } from '../UI/TagAvatars';
+import { observer } from 'mobx-react-lite';
+import React, { useCallback, useEffect } from 'react';
+import { useToggle } from '../../Hooks/useToggle';
+import { StpTag } from '../StpTable/TableObjects';
 import { AvatarS2, AvatarS3 } from '../UI/CamsAvatars';
 import { FormulaTTButton } from '../UI/FormulaTooltip';
+import { TagsAvatarGroup } from '../UI/TagAvatars';
 import { StpData, } from './StpDataTable';
-import { SuspenseLoad } from '../UI/SuspenseLoad';
-import { _ID } from '../../Helpers/helpersFns';
-import { useFilterContext } from '../../Hooks/useFilterContext';
-import { observer } from 'mobx-react-lite';
-import { useToggle } from '../../Hooks/useToggle';
 
 export const stpFields: (keyof StpData)[] = [
     'depth',
@@ -151,8 +148,8 @@ export const StpTableRow: React.FC<StpRowProps> = observer(({ row_number, row_da
 })
 
 
-
 StpTableRow.displayName = '__Row_StpData'
+
 type DataCellProps = {
     primary: React.ReactNode
     secondary?: React.ReactNode
@@ -174,3 +171,5 @@ export const DataCell: React.FC<DataCellProps> = ({ primary, secondary, action, 
             </Stack>
         </TableCell>)
 }
+
+export default React.memo(StpTableRow)

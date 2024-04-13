@@ -29,9 +29,9 @@ export const ItemChipList: FC<ItemChipListProps> = () => {
             height={ 110 }
             gap={ 0.5 }
             flexGrow={ 1 }
-            px={ .5 }
+
             sx={ {
-                borderWidth: 1,
+
                 '& .MuiChip-deletable': { width: '50%', transform: 'scale(.9)' },
 
             } }

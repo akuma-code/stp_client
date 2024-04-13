@@ -1,12 +1,10 @@
-import React from 'react'
-import { LoaderFunctionArgs, useLoaderData } from 'react-router-dom'
-import { TStpData } from '../../../Hooks/useQueryFetch'
-import { _ID } from '../../../Helpers/helpersFns'
-import { QueryClient } from '@tanstack/react-query'
-import { api } from '../../../HTTP/mainApi'
-import { apiRoute, proxyRoute, routePaths } from '../../routePath'
 import { Button } from '@mui/material'
-import { MuiLink } from '../MuiLink'
+import { QueryClient } from '@tanstack/react-query'
+import { LoaderFunctionArgs, useLoaderData, useNavigate } from 'react-router-dom'
+import { api } from '../../../HTTP/mainApi'
+import { _ID } from '../../../Helpers/helpersFns'
+import { TStpData } from '../../../Hooks/useQueryFetch'
+import { apiRoute, proxyRoute } from '../../routePath'
 
 
 
@@ -21,11 +19,14 @@ export const loader = (queryClient: QueryClient) => async ({ request }: LoaderFu
 
 export default function GoogleApiPage() {
     const { data } = useLoaderData() as Awaited<ReturnType<ReturnType<typeof loader>>>
-
+    const navigate = useNavigate()
 
     return (
         <div>
-            <Button variant='text' ><MuiLink to={ routePaths.v2 }>Back to v2</MuiLink></Button>
+            <Button variant='text' onClick={ () => navigate(-1) }>
+                Вернуться назад
+                {/* <MuiLink to={ routePaths.v2 }>Back to v2</MuiLink> */ }
+            </Button>
             <p className='p-2'>
 
                 Data:

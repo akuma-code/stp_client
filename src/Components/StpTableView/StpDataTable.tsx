@@ -18,7 +18,7 @@ import { observer } from 'mobx-react-lite';
 import { useCompare } from '../../Hooks/useCompare';
 import { useFilterContext } from '../../Hooks/useFilterContext';
 import { SelectorActions } from '../../Hooks/useIdSelector';
-import { StpTableRow } from './StpTableRow';
+import StpTableRow from './StpTableRow';
 
 
 

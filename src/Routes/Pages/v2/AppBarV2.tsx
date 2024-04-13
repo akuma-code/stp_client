@@ -1,20 +1,19 @@
-import { AppBar, Button, CircularProgress, Paper, SvgIcon } from '@mui/material';
+import { AppBar, Button, Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link, { LinkProps } from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import React, { useState, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect, useState } from 'react';
 import {
     Link as RouterLink,
-    useLocation
 } from 'react-router-dom';
 import MemoAvaS3 from '../../../Components/UI/Svg/AvaS3';
+import { useFilterContext } from '../../../Hooks/useFilterContext';
 import { routePaths } from '../../routePath';
 import { LoginDialog } from './LoginDialog';
-import { useFilterContext } from '../../../Hooks/useFilterContext';
-import { observer } from 'mobx-react-lite';
 
-const AttikLogo = React.lazy(() => import('../../../Components/UI/Svg/Attik'))
+// const AttikLogo = React.lazy(() => import('../../../Components/UI/Svg/Attik'))
 
 
 interface LinkRouterProps extends LinkProps {
@@ -28,7 +27,7 @@ export function LinkRouter(props: LinkRouterProps) {
 }
 
 export const AppbarV2 = observer(() => {
-    const { search } = useLocation();
+
     const { auth } = useFilterContext()
     const [role, setRole] = useState<'user' | 'admin'>('user')
     useEffect(() => {
@@ -36,7 +35,7 @@ export const AppbarV2 = observer(() => {
         if (auth.isAuth) setRole('admin')
         else setRole('user')
 
-    }, [auth.isAuth])
+    }, [auth])
     return (
         <Paper elevation={ 1 }>
 
@@ -87,11 +86,11 @@ export const AppbarV2 = observer(() => {
                         }
                     </Breadcrumbs>
                     <LoginDialog />
-                    <Box height={ 50 } width={ 200 }
+                    {/* <Box height={ 50 } width={ 200 }
                         overflow={ 'clip' }
                         position={ 'relative' }
-                    >
-                        <React.Suspense fallback={ <CircularProgress variant='indeterminate' thickness={ 5 } color='error' /> }>
+                    > */}
+                    {/* <React.Suspense fallback={ <CircularProgress variant='indeterminate' thickness={ 5 } color='error' /> }>
 
 
                             <Box
@@ -110,8 +109,8 @@ export const AppbarV2 = observer(() => {
                                     <AttikLogo />
                                 </Box>
                             </Box>
-                        </React.Suspense>
-                    </Box>
+                        </React.Suspense> */}
+                    {/* </Box> */ }
                 </Box>
             </AppBar>
 

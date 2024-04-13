@@ -40,7 +40,7 @@ export const appRoutes_v2: RouteObject[] = [
                 index: true,
                 element: <TableDataContainer />,
                 loader: tableLoader(qClient),
-
+                errorElement: <ErrorPageV2 />
             },
             {
 
