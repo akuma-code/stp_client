@@ -20,10 +20,10 @@ const qkey = (search?: string) => queryOptions({
 export const loader = (qc: QueryClient) => async ({ request }: LoaderFunctionArgs) => {
     const url = new URL(request.url)
     const s = url.searchParams.get('s') ?? ''
+    await qc.prefetchQuery(qkey())
     await qc.ensureQueryData(qkey(s))
 
-
-    return { s }
+    return qc
 }
 
 

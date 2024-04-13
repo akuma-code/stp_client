@@ -1,11 +1,10 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import React, { Suspense } from "react";
+import { QueryClient } from '@tanstack/react-query';
+import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import theme from "./Theme";
 import "./index.css";
-import { QueryClient } from '@tanstack/react-query';
-import { SuspenseLoad } from './Components/UI/SuspenseLoad';
 
 export const queryClient = new QueryClient({
   defaultOptions: {

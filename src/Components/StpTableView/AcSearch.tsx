@@ -43,7 +43,7 @@ export const AcSearch = observer(() => {
             value={ value }
             onChange={ handleInput }
             sx={ {
-                pr: 5, textAlign: 'center', maxWidth: 400
+                textAlign: 'center', maxWidth: 400
                 // [`& .MuiTextField-root`]: { opacity: isPending ? .5 : 1 }
 
             } }

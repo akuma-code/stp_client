@@ -2,22 +2,29 @@ import { ExtendButtonBase, Fab, FabOwnProps, FabTypeMap, Fade, SxProps } from '@
 import { CloseOutlined } from '@mui/icons-material';
 import { VoidFn } from '../../../Interfaces/Types';
 import React from 'react'
+import { FiCheckCircle } from "react-icons/fi";
+export type ResetButtonProps = {
+    open: boolean,
+    action: VoidFn,
+    text?: string,
 
-export type ResetButtonProps = { open: boolean, action: VoidFn, text?: string, FabProps?: ExtendButtonBase<FabTypeMap<{}, "button">> }
+}
 const FadingResetButton = (props: ResetButtonProps) => {
     return (
         <Fade in={ props.open }>
 
             <Fab
-                sx={ { position: 'absolute', left: 0, top: -50, zIndex: 'auto', } }
+                sx={ { position: 'absolute', right: -45, bottom: 5, zIndex: 'auto', } }
                 size='small'
-                variant='extended'
+                variant='circular'
                 onClick={ props.action }
-                { ...props.FabProps }
+                title='Сбросить'
+                color='secondary'
             >
                 <CloseOutlined />
-                { props.text ? props.text : `Сбросить` }
+                {/* { props.text ? props.text : `Сбросить` } */ }
             </Fab>
+
         </Fade>
     );
 };

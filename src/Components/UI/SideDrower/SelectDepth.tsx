@@ -7,13 +7,22 @@ import { observer } from 'mobx-react-lite';
 import { useToggle } from '../../../Hooks/useToggle';
 import { CloseOutlined } from '@mui/icons-material';
 import FadingResetButton from './FadingResetButton';
+import FadingCheckFab from './FadingCheckFab';
 type DeptSelectionProps = {
     depths: FilterStore['depth'];
     handleChange: (event: SelectChangeEvent<number[]>, child: React.ReactNode) => void;
     handleReset: VoidFn
+    handleApply: VoidFn
 }
-export const SelectDepth = observer(({ depths, handleChange, handleReset }: DeptSelectionProps) => {
-
+export const SelectDepth = observer(({ depths, handleChange, handleReset, handleApply }: DeptSelectionProps) => {
+    const [o, { on, off }] = useToggle()
+    const handleClose = () => {
+        handleApply()
+        off()
+    }
+    const handleOpen = () => {
+        on()
+    }
     return (
         <>
             <Select
@@ -24,13 +33,21 @@ export const SelectDepth = observer(({ depths, handleChange, handleReset }: Dept
                 id='depth-selector'
                 value={ depths }
                 onChange={ handleChange }
-                input={ <OutlinedInput id={ 'depth' } label='_____________' endAdornment={
-                    <FadingResetButton
-                        open={ depths.length !== 0 }
-                        action={ handleReset }
-
-                    />
-                } /> }
+                onClose={ handleClose }
+                onOpen={ handleOpen }
+                open={ o }
+                input={ <OutlinedInput id={ 'depth' } label='_____________'
+                    endAdornment={
+                        <FadingResetButton
+                            open={ depths.length !== 0 }
+                            action={ handleReset }
+                        />
+                    }
+                // startAdornment={
+                //     <FadingCheckFab open={ depths.length !== 0 && o }
+                //         action={ handleClose } />
+                // }
+                /> }
                 inputProps={ { sx: { fontSize: 12 }, } }
                 renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') }
 

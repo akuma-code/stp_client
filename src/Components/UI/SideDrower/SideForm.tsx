@@ -108,19 +108,19 @@ const SideForm = observer(({ onClose }: { onClose?: () => void }) => {
                     </>
                     <>
                         <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
-                        <SelectDepth
+                        {/* <SelectDepth
                             depths={ defFilters.depth }
                             handleChange={ handleChange('depth') }
                             handleReset={ () => filters.clearFilter('depth') }
-                        />
+                        /> */}
                     </>
                     <>
                         <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
-                        <SelectTags
+                        {/* <SelectTags
                             tags={ defFilters.tags }
                             handleChange={ handleChange('tags') }
                             handleReset={ () => filters.clearFilter('tags') }
-                        />
+                        /> */}
                     </>
                     <Button
                         color='success'

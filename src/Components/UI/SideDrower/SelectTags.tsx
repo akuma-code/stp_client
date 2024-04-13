@@ -7,9 +7,26 @@ import { tagsArray } from './SideForm';
 import { tagsAvatarGroup } from './AvatarGroups';
 import FadingResetButton from './FadingResetButton';
 import { VoidFn } from '../../../Interfaces/Types';
+import FadingCheckFab from './FadingCheckFab';
+import { useToggle } from '../../../Hooks/useToggle';
 
 type FilterHandler = (event: SelectChangeEvent<StpTag[]>, child: React.ReactNode) => void
-export function SelectTags({ tags, handleChange, handleReset }: { tags: FilterStore['tags']; handleChange: FilterHandler, handleReset: VoidFn },) {
+interface TagSelectorProps {
+    tags: FilterStore['tags'];
+    handleChange: FilterHandler;
+    handleReset: VoidFn;
+    handleApply: VoidFn;
+}
+
+export function SelectTags({ tags, handleChange, handleReset, handleApply }: TagSelectorProps) {
+    const [o, { on, off }] = useToggle()
+    const handleClose = () => {
+        handleApply()
+        off()
+    }
+    const handleOpen = () => {
+        on()
+    }
     return <Select
         fullWidth
 
@@ -18,16 +35,25 @@ export function SelectTags({ tags, handleChange, handleReset }: { tags: FilterSt
         id="multitag"
         name='tags'
         value={ tags }
+        open={ o }
         onChange={ handleChange }
+        onOpen={ handleOpen }
+        onClose={ handleClose }
         input={ <OutlinedInput sx={ { fontSize: 12 } } label='_________________'
             endAdornment={
                 <FadingResetButton
-                    action={ handleReset }
                     open={ tags.length !== 0 }
+                    action={ handleReset }
+
 
                 />
             }
+        // startAdornment={ <FadingCheckFab
+        //     open={ tags.length !== 0 && o }
+        //     action={ handleClose }
+        // /> }
         /> }
+
         renderValue={ tagsAvatarGroup }
     >
 

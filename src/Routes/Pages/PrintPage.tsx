@@ -10,7 +10,7 @@ type PrintPageProps = PropsWithChildren
 export const PrintPage = (props: PrintPageProps) => {
     const { selectedItems, StpStore } = useAppContext()
 
-    const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
+    // const filtered = StpStore.table.filter(i => selectedItems.includes(i.id))
     const printRef = useRef(null)
     const handlePrint = useReactToPrint({
         content: () => printRef.current,
@@ -30,7 +30,7 @@ export const PrintPage = (props: PrintPageProps) => {
             >
                 Распечатать
             </Button>
-            <ItemsToPrint items={ filtered } ref={ printRef } />
+            {/* <ItemsToPrint items={ filtered } ref={ printRef } /> */ }
 
         </Stack>
 

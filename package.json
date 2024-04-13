@@ -36,7 +36,7 @@
   "scripts": {
     "start": "react-scripts start",
     "serveOnly": "npx serve -s build  -p 3001 --cors",
-    "build": "react-scripts build",
+    "build": "react-scripts --max_old_space_size=4096  build",
     "eject": "react-scripts eject",
     "installdeps": "npm install --legacy-peer-deps",
     "buildAndServe": "npm run build & npx serve -s build  -p 3001 --cors"
@@ -60,7 +60,6 @@
     ]
   },
   "devDependencies": {
-    "@types/react-query": "^1.2.9",
     "@types/uuid": "^9.0.8",
     "serve": "^14.2.1",
     "tailwindcss": "^3.4.1",

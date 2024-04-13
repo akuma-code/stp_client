@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { table_data_base } from "./Components/StpTable/Data/data_base";
 import { StpStore } from "./Context/StpStore";
@@ -10,8 +9,7 @@ import { FilterStore } from "./Context/Stores/FiltrationStore";
 import { SearchQueryStore } from "./Context/Stores/SearchQueryStore";
 import { FilterContext } from "./Hooks/useFilterContext";
 import { AppContext } from "./Hooks/useStoresContext";
-import { FiltersParams, } from "./Interfaces/Types";
-// import { v2_router } from "./Routes/AppRouter";
+
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from ".";
 import { v2_router } from "./Routes/AppRouter";
@@ -39,11 +37,7 @@ const filterStores = {
 
 // const v2_router = createBrowserRouter(appRoutes_v2)
 function App() {
-  const [selected, setSelected] = useState<number[]>([])
-  const [fcount, setFc] = useState<number>(0)
-  const [tags, setTags] = useState<string[]>([])
-  const [querySearch, setQuery] = useState("")
-  const [filters, setFilters] = useState<Partial<FiltersParams>>({ cams: [1, 2], depth: [], tags: [] })
+
 
 
   return (
@@ -53,15 +47,7 @@ function App() {
 
       <AppContext.Provider value={ {
         ...stores,
-        selectedItems: selected,
-        select: setSelected,
-        filteredItemsCount: fcount,
-        setFcount: setFc,
-        query: querySearch,
-        setQuery: setQuery,
-        selectedTags: tags, setTags,
-        filterParams: filters,
-        filterFn: setFilters
+
       } }
       >
 

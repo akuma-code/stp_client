@@ -19,7 +19,7 @@ export const SelectCams = ({ cams, handleChange }: SelectorCamsProps) => {
         name='cams'
         value={ cams }
         onChange={ handleChange }
-        input={ <OutlinedInput id='cams' /> }
+        input={ <OutlinedInput id='cams' label='_______' /> }
         MenuProps={ {
             PaperProps: {
                 style: {
