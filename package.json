@@ -38,7 +38,7 @@
     "serveOnly": "npx serve -s build  -p 3001 --cors",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "installdeps": "npm install",
+    "installdeps": "npm install --legacy-peer-deps",
     "buildAndServe": "npm run build & npx serve -s build  -p 3001 --cors"
   },
   "eslintConfig": {

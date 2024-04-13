@@ -13,8 +13,8 @@ import GoogleApiPage, { loader as ss_loader } from "./Pages/v2/GoogleApiPage";
 import { RootV2 } from "./Pages/v2/RootV2";
 import { apiRoute, routePaths } from "./routePath";
 
-import ErrorPageV2 from "./Pages/v2/ErrorPage.v2";
 import TableDataContainer, { loader as tableLoader } from "../Components/StpTable/v2/TableDataContainer";
+import ErrorPageV2 from "./Pages/v2/ErrorPage.v2";
 
 import { QueryClient } from "@tanstack/react-query";
 
@@ -239,5 +239,5 @@ export const appRoutes_v2: RouteObject[] = [
     },
 ]
 
-export const router = createBrowserRouter(appRoutes)
+// export const router = createBrowserRouter(appRoutes)
 export const v2_router = createBrowserRouter(appRoutes_v2)
