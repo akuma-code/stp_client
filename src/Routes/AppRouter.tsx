@@ -58,7 +58,7 @@ export const appRoutes_v2: RouteObject[] = [
         ]
     },
     {
-        path: apiRoute.api,
+        path: '/' + apiRoute.api,
         errorElement: <ErrorPageV2 />,
         children: [
 

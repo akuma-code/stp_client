@@ -89,7 +89,7 @@ export const PropertySelector = observer(() => {
             }
 
 
-    const handleReset = useCallback((key: 'depth' | 'tags') => () => {
+    const handleReset = useCallback((key: 'depth' | 'tags' | 'cams') => () => {
         setTemp(prev => ({ ...prev, [key]: [] }))
         filters.clearFilter(key)
 
@@ -137,8 +137,10 @@ export const PropertySelector = observer(() => {
             <FormControl>
                 <InputLabel>Камеры</InputLabel>
                 <SelectCams
-                    cams={ filters.cams }
+                    cams={ tempFilter.cams }
                     handleChange={ handleSelectorChange('cams') }
+                    handleReset={ handleReset('cams') }
+                    handleApply={ apply }
                 />
 
 

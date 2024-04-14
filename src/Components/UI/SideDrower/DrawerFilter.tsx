@@ -9,7 +9,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useToggle } from '../../../Hooks/useToggle';
-import SideForm from './SideForm';
+// import SideForm from './SideForm';
 import { observer } from 'mobx-react-lite';
 import { useFilterContext } from '../../../Hooks/useFilterContext';
 import { BsFillFilterSquareFill } from 'react-icons/bs';
@@ -49,7 +49,7 @@ export const FilterDrawer = observer(() => {
                     open={ show }
                     onClose={ () => control.off() }
                 >
-                    <SideForm onClose={ control.off } />
+                    {/* <SideForm onClose={ control.off } /> */ }
                 </Drawer>
             </React.Fragment>
 

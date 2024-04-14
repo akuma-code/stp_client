@@ -5,6 +5,7 @@ import { StpData } from "../../Components/StpTableView/StpDataTable";
 import { useFilterContext } from "../useFilterContext";
 import { getAllTableData } from "../useLoadAllData";
 import { queryClient } from "../..";
+import { qClient } from "../../Routes/AppRouter";
 // import { queryClient } from "../../Routes/AppRouter";
 // import { queryClient } from "../../App";
 export type SelectFn = <T>(args: T[]) => T[]
@@ -36,7 +37,7 @@ export function useQueryFiltersLoader() {
         // enabled: !!cams || !!depth || !!tags || !!deffered
 
     },
-        queryClient)
+        qClient)
     return context
 }
 export function useQuerySelectedIdsLoader({ selectedIds, filterFn }: { selectedIds: number[], filterFn?: SelectFn }) {
