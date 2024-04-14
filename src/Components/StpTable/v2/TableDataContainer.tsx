@@ -8,6 +8,7 @@ import { Loading, LoadingProgres, SuspenseLoad } from '../../UI/SuspenseLoad'
 import { useDeferredValue } from 'react'
 import { CircularProgress } from '@mui/material'
 import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader'
+import { _log } from '../../../Helpers/helpersFns'
 
 
 const qkey = (search?: string) => queryOptions({
@@ -33,7 +34,7 @@ const TableDataContainer = observer(() => {
     // const { filters, search } = useFilterContext();
     // const def = useDeferredValue(search.query)
     const query = useQueryFiltersLoader()
-
+    _log(ld)
 
 
     if (query.isLoading) return <LoadingProgres text='Данные загружаются ... ' />
