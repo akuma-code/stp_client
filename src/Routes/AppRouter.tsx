@@ -1,4 +1,4 @@
-import { RouteObject, createBrowserRouter } from "react-router-dom";
+import { Outlet, RouteObject, createBrowserRouter } from "react-router-dom";
 
 import { StpInfoPage } from "./Pages/StpInfoPage";
 import MRTDataPage from "./Pages/Tabs/MRT_DataPage";
@@ -60,6 +60,8 @@ export const appRoutes_v2: RouteObject[] = [
     {
         path: '/' + apiRoute.api,
         errorElement: <ErrorPageV2 />,
+        element: <GoogleApiPage />,
+        loader: ss_loader(qClient),
         children: [
 
             {

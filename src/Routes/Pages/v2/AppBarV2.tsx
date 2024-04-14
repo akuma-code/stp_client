@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import MemoAvaS3 from '../../../Components/UI/Svg/AvaS3';
 import { useFilterContext } from '../../../Hooks/useFilterContext';
-import { routePaths } from '../../routePath';
+import { apiRoute, routePaths } from '../../routePath';
 import { LoginDialog } from './LoginDialog';
 
 // const AttikLogo = React.lazy(() => import('../../../Components/UI/Svg/Attik'))
@@ -76,13 +76,13 @@ export const AppbarV2 = observer(() => {
 
                         }
                         {
-                            // role === 'admin' &&
+                            role === 'admin' &&
 
-                            //     <LinkRouter to={ '/' + routePaths.v1 } underline='hover'>
-                            //         <Button variant='text' size='large' color='inherit'>
-                            //             <Typography variant='caption' color={ 'whitesmoke' }>Предыдущая версия шапки</Typography>
-                            //         </Button>
-                            //     </LinkRouter>
+                            <LinkRouter to={ '/' + apiRoute.api } underline='hover'>
+                                <Button variant='text' size='large' color='inherit'>
+                                    <Typography variant='caption' color={ 'whitesmoke' }>GoogleApi</Typography>
+                                </Button>
+                            </LinkRouter>
                         }
                     </Breadcrumbs>
                     <LoginDialog />
