@@ -20,7 +20,7 @@ import { createRef } from "react";
 export const qClient = new QueryClient({
     defaultOptions: {
         queries: {
-            retry: false,
+            retry: 3,
             refetchOnWindowFocus: true,
             staleTime: 10000,
             gcTime: 1000 * 60 * 5,

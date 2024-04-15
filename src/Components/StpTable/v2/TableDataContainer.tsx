@@ -1,14 +1,10 @@
-import { QueryClient, queryOptions, useSuspenseQuery } from '@tanstack/react-query'
+import { QueryClient, queryOptions } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { LoaderFunctionArgs, useLoaderData } from 'react-router-dom'
-import { useFilterContext } from '../../../Hooks/useFilterContext'
-import { getAllTableData, getTableDataWithQuerySearch, useLoadDataQuery } from '../../../Hooks/useLoadAllData'
-import { StpDataTable } from '../../StpTableView/StpDataTable'
-import { Loading, LoadingProgres, SuspenseLoad } from '../../UI/SuspenseLoad'
-import { useDeferredValue } from 'react'
-import { CircularProgress } from '@mui/material'
 import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader'
-import { _log } from '../../../Helpers/helpersFns'
+import { getAllTableData, getTableDataWithQuerySearch } from '../../../Hooks/useLoadAllData'
+import { StpDataTable } from '../../StpTableView/StpDataTable'
+import { Loading } from '../../UI/SuspenseLoad'
 
 
 const qkey = (search?: string) => queryOptions({
@@ -30,7 +26,8 @@ export const loader = (qc: QueryClient) => async ({ request }: LoaderFunctionArg
         queryKey: ['stp_data', 'prefetch'],
         queryFn: getAllTableData,
     })
-    return qc.getQueryData(['stp_data', 'prefetch'])
+    const data = qc.getQueryData(['stp_data', 'prefetch'])
+    return data
 }
 
 
@@ -43,15 +40,12 @@ const TableDataContainer = observer(() => {
 
 
 
-    // if (query.isPending) return <LoadingProgres text='Данные пендятся ... ' />
-    if (query.isLoading) return <Loading text='Данные загружаются ... ' />
+    if (query.isPending) return <Loading text='Данные загружаются ... ' />
     return (
         <>
 
             {
-                // query.isLoading ?
-                //     <LoadingProgres text='Данные загружаются ... ' />
-                //     :
+
                 query.isSuccess ?
 
                     <StpDataTable items={ query.data } />

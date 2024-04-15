@@ -1,4 +1,4 @@
-import { FormHelperText, Stack, useTheme } from '@mui/material';
+import { Alert, Fade, FormHelperText, Snackbar, Stack, useTheme } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -11,6 +11,9 @@ import { SelectDepth } from '../UI/SideDrower/SelectDepth';
 import { SelectTags } from '../UI/SideDrower/SelectTags';
 import { AcSearch } from './AcSearch';
 import { useCallback, useState } from 'react';
+import { VoidFn } from '../../Interfaces/Types';
+import { useToggle } from '../../Hooks/useToggle';
+import { useSearchParams } from 'react-router-dom';
 
 
 
@@ -50,15 +53,18 @@ export type SelectorProps = {
 type HandleSelectProps = <T extends keyof SelectorProps>(selector: T) => (e: SelectChangeEvent<SelectorProps[T]>) => void
 
 export const PropertySelector = observer(() => {
-
+    const [openAlert, show] = useToggle(false)
     const { filters } = useFilterContext();
     const [tempFilter, setTemp] = useState({ cams: filters.cams, depth: filters.depth, tags: filters.tags });
-
+    const [search, setSearch] = useSearchParams()
     const apply = useCallback(() => {
         filters.setTags(tempFilter.tags)
         filters.setCams(tempFilter.cams)
         filters.setDepth(tempFilter.depth)
-    }, [filters, tempFilter.cams, tempFilter.depth, tempFilter.tags])
+        show.on()
+        const { cams, depth, tags } = filters
+
+    }, [filters, show, tempFilter])
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -92,8 +98,9 @@ export const PropertySelector = observer(() => {
     const handleReset = useCallback((key: 'depth' | 'tags' | 'cams') => () => {
         setTemp(prev => ({ ...prev, [key]: [] }))
         filters.clearFilter(key)
-
-    }, [filters])
+        show.toggle()
+        setSearch("")
+    }, [filters, show])
 
 
     return (
@@ -147,11 +154,39 @@ export const PropertySelector = observer(() => {
                 { fullscreen && <FormHelperText>Сколько стекол?</FormHelperText> }
 
             </FormControl>
-
+            <AlertToast
+                open={ openAlert }
+                onClose={ show.off }
+                text='Фильтры успешно применены'
+            />
         </Stack>
     )
 }
 )
+
+const AlertToast = ({ open, onClose, text }: { open: boolean, onClose: VoidFn, text?: string }) => {
+
+    return (
+        <Snackbar
+            open={ open }
+            autoHideDuration={ 4000 }
+            onClose={ onClose }
+            anchorOrigin={ { vertical: 'bottom', horizontal: 'center' } }
+            TransitionComponent={ Fade }
+        >
+            <Alert
+                onClose={ onClose }
+                severity="success"
+                variant="outlined"
+                sx={ { width: '100%' } }
+
+            >
+                { text || "No Text" }
+            </Alert>
+        </Snackbar>
+    )
+}
+
 
 PropertySelector.displayName = '__Property Selector'
 
