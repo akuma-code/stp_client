@@ -1,29 +1,27 @@
-import { keepPreviousData, useQueries, useQuery } from "@tanstack/react-query";
+import { QueryClient, keepPreviousData, useQueries, useQuery } from "@tanstack/react-query";
 import { useCallback, useDeferredValue } from "react";
 // import { queryClient } from "../..";
 import { StpData } from "../../Components/StpTableView/StpDataTable";
 import { useFilterContext } from "../useFilterContext";
 import { getAllTableData } from "../useLoadAllData";
-import { queryClient } from "../..";
-import { qClient } from "../../Routes/AppRouter";
-// import { queryClient } from "../../Routes/AppRouter";
-// import { queryClient } from "../../App";
+import { indexQueryClient } from "../..";
+
 export type SelectFn = <T>(args: T[]) => T[]
-export function useQueryFiltersLoader() {
+export function useQueryFiltersLoader(qc?: QueryClient) {
     const { filters, search } = useFilterContext()
     const { cams, depth, tags } = filters;
     const deffered = useDeferredValue(search.query)
-    // const cachedData = useCallback((data: StpData[]) => querySearchFilter(data, deffered), [deffered])
+    const client = qc ? qc : indexQueryClient
+
     const selectFn = useCallback((data: StpData[]) => {
         const items = querySearchFilter(data, deffered)
         return filters.applyFilters(items)
     }, [deffered, filters])
-    // const placeholder = useMemo(()=>{
 
-    // })
     const context = useQuery({
         queryKey: [
-            'stp_table_data',
+            'stp_data',
+            'filters',
             cams,
             depth,
             tags,
@@ -31,13 +29,9 @@ export function useQueryFiltersLoader() {
         ],
         queryFn: getAllTableData,
         select: selectFn,
-
-        gcTime: 2000,
         placeholderData: keepPreviousData,
-        // enabled: !!cams || !!depth || !!tags || !!deffered
-
     },
-        qClient)
+        client)
     return context
 }
 export function useQuerySelectedIdsLoader({ selectedIds, filterFn }: { selectedIds: number[], filterFn?: SelectFn }) {
@@ -46,7 +40,8 @@ export function useQuerySelectedIdsLoader({ selectedIds, filterFn }: { selectedI
     const selectFn = useCallback((data: StpData[]) => data.filter(d => selectedIds.includes(d.id)), [selectedIds])
     const context = useQuery({
         queryKey: [
-            'stp_table_data_selected',
+            'stp_data',
+            'selected',
             selectedIds
         ],
         queryFn: getAllTableData,
@@ -58,7 +53,7 @@ export function useQuerySelectedIdsLoader({ selectedIds, filterFn }: { selectedI
 
 
     },
-        queryClient)
+        indexQueryClient)
     return context
 
 }

@@ -5,7 +5,7 @@ import { QueryKeyT } from "./useQueryFetch";
 import { dataExtractor } from "../Helpers/dataExtractor";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { queryClient } from "../index";
+import { indexQueryClient } from "../index";
 import { CursorRespone } from "../Interfaces/Types";
 
 
@@ -20,7 +20,7 @@ export const useInfiniteLoad = (queryKey: QueryKeyT) => {
                 initialPageParam: 0,
                 getNextPageParam: (last) => last.nextCursor ?? -1,
                 getPreviousPageParam: (prev) => prev.prevCursor ?? 0,
-            }, queryClient
+            }, indexQueryClient
 
         );
     return context;
@@ -36,7 +36,7 @@ export const useLoadMore = (rpp = 50) => {
             getPreviousPageParam: (prev) => prev.prevCursor ?? false,
 
         },
-        queryClient
+        indexQueryClient
 
     );
 

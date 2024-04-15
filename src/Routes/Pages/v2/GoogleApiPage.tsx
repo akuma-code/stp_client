@@ -2,7 +2,7 @@ import { Button } from '@mui/material'
 import { QueryClient } from '@tanstack/react-query'
 import { LoaderFunctionArgs, useLoaderData, useNavigate } from 'react-router-dom'
 import { api } from '../../../HTTP/mainApi'
-import { _ID } from '../../../Helpers/helpersFns'
+import { _ID, _log } from '../../../Helpers/helpersFns'
 import { TStpData } from '../../../Hooks/useQueryFetch'
 import { apiRoute, proxyRoute } from '../../routePath'
 
@@ -18,9 +18,9 @@ export const loader = (queryClient: QueryClient) => async ({ request }: LoaderFu
 }
 
 export default function GoogleApiPage() {
-    const { data } = useLoaderData() as Awaited<ReturnType<ReturnType<typeof loader>>>
+    const { data, ...rest } = useLoaderData() as Awaited<ReturnType<ReturnType<typeof loader>>>
     const navigate = useNavigate()
-
+    _log(rest)
     return (
         <div>
             <Button variant='text' onClick={ () => navigate(-1) }>
@@ -30,9 +30,13 @@ export default function GoogleApiPage() {
             <p className='p-2'>
 
                 Data:
-                { data?.stps?.map(s =>
-                    <li key={ _ID() }>{ s.join("-") }</li>
-                ) }
+                { rest.status === 200 ?
+                    data?.stps?.map(s =>
+                        <li key={ _ID() }>{ s.join("-") }</li>
+                    )
+                    :
+                    <div>Error!</div>
+                }
             </p>
         </div>
     )

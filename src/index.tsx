@@ -7,13 +7,13 @@ import theme from "./Theme";
 import "./index.css";
 import reportWebVitals from './reportWebVitals';
 
-export const queryClient = new QueryClient({
+export const indexQueryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
       staleTime: 10000,
-      gcTime: 1000 * 60
+      gcTime: 1000 * 60 * 5
     },
   },
 })

@@ -2,7 +2,7 @@ import { QueryClient, queryOptions, useSuspenseQuery } from '@tanstack/react-que
 import { observer } from 'mobx-react-lite'
 import { LoaderFunctionArgs, useLoaderData } from 'react-router-dom'
 import { useFilterContext } from '../../../Hooks/useFilterContext'
-import { getTableDataWithQuerySearch, useLoadDataQuery } from '../../../Hooks/useLoadAllData'
+import { getAllTableData, getTableDataWithQuerySearch, useLoadDataQuery } from '../../../Hooks/useLoadAllData'
 import { StpDataTable } from '../../StpTableView/StpDataTable'
 import { Loading, LoadingProgres, SuspenseLoad } from '../../UI/SuspenseLoad'
 import { useDeferredValue } from 'react'
@@ -12,7 +12,7 @@ import { _log } from '../../../Helpers/helpersFns'
 
 
 const qkey = (search?: string) => queryOptions({
-    queryKey: ['stp_data_old', 'container', search ?? 'all'],
+    queryKey: ['stp_data', 'prefetch', search ?? 'all'],
     queryFn: () => getTableDataWithQuerySearch(search),
     staleTime: 10 * 1000,
     gcTime: 10000,
@@ -21,10 +21,16 @@ const qkey = (search?: string) => queryOptions({
 export const loader = (qc: QueryClient) => async ({ request }: LoaderFunctionArgs) => {
     const url = new URL(request.url)
     const s = url.searchParams.get('s') ?? ''
-    await qc.prefetchQuery(qkey())
-    await qc.ensureQueryData(qkey(s))
+    await qc.prefetchQuery({
+        queryKey: ['stp_data', 'prefetch'],
+        queryFn: getAllTableData,
+    })
 
-    return qc
+    await qc.ensureQueryData({
+        queryKey: ['stp_data', 'prefetch'],
+        queryFn: getAllTableData,
+    })
+    return qc.getQueryData(['stp_data', 'prefetch'])
 }
 
 
@@ -34,10 +40,11 @@ const TableDataContainer = observer(() => {
     // const { filters, search } = useFilterContext();
     // const def = useDeferredValue(search.query)
     const query = useQueryFiltersLoader()
-    _log(ld)
 
 
-    if (query.isLoading) return <LoadingProgres text='Данные загружаются ... ' />
+
+    // if (query.isPending) return <LoadingProgres text='Данные пендятся ... ' />
+    if (query.isLoading) return <Loading text='Данные загружаются ... ' />
     return (
         <>
 
@@ -45,10 +52,11 @@ const TableDataContainer = observer(() => {
                 // query.isLoading ?
                 //     <LoadingProgres text='Данные загружаются ... ' />
                 //     :
-                query.isSuccess &&
+                query.isSuccess ?
 
-                <StpDataTable items={ query.data } />
-
+                    <StpDataTable items={ query.data } />
+                    :
+                    <Loading text='Данные загружаются ... ' />
             }
         </>
 

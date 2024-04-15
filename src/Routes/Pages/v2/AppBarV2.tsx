@@ -1,4 +1,4 @@
-import { AppBar, Button, Paper } from '@mui/material';
+import { AppBar, Button, CircularProgress, Paper, Toolbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link, { LinkProps } from '@mui/material/Link';
@@ -12,6 +12,7 @@ import MemoAvaS3 from '../../../Components/UI/Svg/AvaS3';
 import { useFilterContext } from '../../../Hooks/useFilterContext';
 import { apiRoute, routePaths } from '../../routePath';
 import { LoginDialog } from './LoginDialog';
+import { useIsFetching } from '@tanstack/react-query';
 
 // const AttikLogo = React.lazy(() => import('../../../Components/UI/Svg/Attik'))
 
@@ -29,6 +30,7 @@ export function LinkRouter(props: LinkRouterProps) {
 export const AppbarV2 = observer(() => {
 
     const { auth } = useFilterContext()
+    const global = useIsFetching()
     const [role, setRole] = useState<'user' | 'admin'>('user')
     useEffect(() => {
         auth.checkAuth()
@@ -43,7 +45,7 @@ export const AppbarV2 = observer(() => {
             <AppBar position='static' color='warning' sx={ { overflow: 'clip' } }>
 
                 <Box
-                    // m={ 1 }
+
                     pl={ 2 }
                     display={ 'flex' }
                     displayPrint={ 'none' }
@@ -84,6 +86,7 @@ export const AppbarV2 = observer(() => {
                                 </Button>
                             </LinkRouter>
                         }
+
                     </Breadcrumbs>
                     <LoginDialog />
                     {/* <Box height={ 50 } width={ 200 }

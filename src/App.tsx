@@ -12,7 +12,7 @@ import { AppContext } from "./Hooks/useStoresContext";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { queryClient } from ".";
+import { indexQueryClient } from ".";
 import { v2_router } from "./Routes/AppRouter";
 
 
@@ -32,24 +32,25 @@ const filterStores = {
 // const v2_router = createBrowserRouter(appRoutes_v2)
 function App() {
   const memedStores = useMemo(() => {
-    const { auth, filters, search } = {
+    const { auth, filters, search, stp_store } = {
       filters: new FilterStore({ selectMax: 6 }),
       search: new SearchQueryStore(),
-      auth: new AuthStore(['root'])
+      auth: new AuthStore(['root']),
+      stp_store: new StpStore(table_data_base)
     }
     return {
-      auth, filters, search
+      auth, filters, search, stp_store
     }
   }, [])
 
 
   return (
 
-    <QueryClientProvider client={ queryClient }>
+    <QueryClientProvider client={ indexQueryClient }>
 
 
       <AppContext.Provider value={ {
-        ...stores,
+        StpStore: memedStores.stp_store
       } }
       >
 
