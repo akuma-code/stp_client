@@ -9,11 +9,13 @@ import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import { observer } from 'mobx-react-lite';
 import { useRef } from 'react';
 import { useMRTData } from '../../../Hooks/MRT/useMRTData';
-import { useQueryFiltersLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
+import { useQueryFiltersLoader, useQuerySelectedIdsLoader } from '../../../Hooks/QueryHooks/useQueryFiltersLoader';
+import { useFilterContext } from '../../../Hooks/useFilterContext';
 
 const MRT_Container = observer(() => {
     const query = useQueryFiltersLoader()
-
+    const { filters: { ids } } = useFilterContext()
+    const sq = useQuerySelectedIdsLoader({ selectedIds: ids })
 
 
     const { columnOrder, columns } = useMRTData()
@@ -22,13 +24,13 @@ const MRT_Container = observer(() => {
     // const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
     const table = useMaterialReactTable({
-        data: query.isSuccess ? query.data : [],
+        data: sq.isSuccess ? sq.data : [],
         columns,
         localization: MRT_Localization_RU,
         meta: {
-            totalRowCount: query.data?.length
+            totalRowCount: sq.data?.length
         },
-        rowCount: query.data?.length,
+        rowCount: sq.data?.length,
         enablePagination: false,
         enableRowSelection: true,
         enableDensityToggle: true,
