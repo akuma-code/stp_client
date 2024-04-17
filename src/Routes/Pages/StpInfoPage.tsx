@@ -1,13 +1,14 @@
 import { Container, ImageListItemBar } from '@mui/material'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
-import React, { lazy } from 'react'
+import React from 'react'
 import { LiaExpandArrowsAltSolid } from "react-icons/lia"
 import { ModalImg } from '../../Components/UI/ModalImg'
 import path_decibel from './../../Components/StpTable/StpPreset/images/decibels.jpg'
 import path_energy from './../../Components/StpTable/StpPreset/images/energyCoeefs.jpg'
 import path_light from './../../Components/StpTable/StpPreset/images/lightCoeff.jpg'
 import path_triplex from './../../Components/StpTable/StpPreset/images/triplex.jpg'
+
 type InfoPageProps = {}
 
 export const StpInfoPage: React.FC<InfoPageProps> = () => {
@@ -25,6 +26,8 @@ export const StpInfoPage: React.FC<InfoPageProps> = () => {
                 colNumber={ 4 }
 
             />
+
+
         </Container>
     )
 }

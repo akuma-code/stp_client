@@ -39,22 +39,21 @@ export const SelectDepth = observer(({ depths, handleChange, handleReset, handle
                 input={ <OutlinedInput id={ 'depth' } label='_____________'
                     endAdornment={
                         <FadingResetButton
-                            open={ depths.length !== 0 }
+                            open={ depths.length !== 0 && !o }
                             action={ handleReset }
                         />
                     }
-                // startAdornment={
-                //     <FadingCheckFab open={ depths.length !== 0 && o }
-                //         action={ handleClose } />
-                // }
+
                 /> }
-                inputProps={ { sx: { fontSize: 12 }, } }
+                inputProps={ { sx: { fontSize: 12 } } }
                 renderValue={ (selected) => selected?.map(s => `${s} мм`).join(', ') }
 
             >
 
                 { depthArray.map((depth) => (
-                    <MenuItem key={ depth } value={ depth } divider dense>
+                    <MenuItem key={ depth } value={ depth } divider dense
+                    // sx={ { justifyContent: 'space-between', display: 'flex' } }
+                    >
                         <Checkbox checked={ depths.includes(depth) } name={ depth + '_checkDepth' } />
                         <ListItemText primary={ `${depth} мм` } />
                     </MenuItem>
@@ -70,4 +69,4 @@ export const SelectDepth = observer(({ depths, handleChange, handleReset, handle
 
 
 
-
+SelectDepth.displayName = 'Selector Depth'

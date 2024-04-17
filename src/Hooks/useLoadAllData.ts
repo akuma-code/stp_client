@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { FetchedData, stpBackup_128 } from "../Components/StpTable/Data/data_spreadsheet";
+import { FetchedData, stpBackup_128, stp_json } from "../Components/StpTable/Data/data_spreadsheet";
 import { StpData } from "../Components/StpTableView/StpDataTable";
 import { dataExtractor } from "../Helpers/dataExtractor";
 
@@ -36,4 +36,18 @@ export async function getTableDataWithQuerySearch(q?: string) {
         const qq = data.filter(d => d.name.includes(q))
         return qq
     } else return data
+}
+
+export async function getJsonStpData() {
+
+    try {
+        const jsondata = JSON.parse(stp_json) as FetchedData[]
+
+        const stps = jsondata.map(i => dataExtractor<FetchedData>(i))
+            .map((item, idx) => ({ ...item, id: idx + 1 })) as StpData[];
+        return stps
+    } catch (error) {
+        console.error(error)
+        throw new Error("json error")
+    }
 }

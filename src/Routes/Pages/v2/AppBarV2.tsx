@@ -1,8 +1,9 @@
-import { AppBar, Button, CircularProgress, Paper, Toolbar } from '@mui/material';
+import { AppBar, Button, Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link, { LinkProps } from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import { useIsFetching } from '@tanstack/react-query';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import {
@@ -12,8 +13,6 @@ import MemoAvaS3 from '../../../Components/UI/Svg/AvaS3';
 import { useFilterContext } from '../../../Hooks/useFilterContext';
 import { apiRoute, routePaths } from '../../routePath';
 import { LoginDialog } from './LoginDialog';
-import { useIsFetching } from '@tanstack/react-query';
-
 // const AttikLogo = React.lazy(() => import('../../../Components/UI/Svg/Attik'))
 
 
@@ -89,6 +88,7 @@ export const AppbarV2 = observer(() => {
 
                     </Breadcrumbs>
                     <LoginDialog />
+                    {/* <AttikSvgLogo /> */ }
                     {/* <Box height={ 50 } width={ 200 }
                         overflow={ 'clip' }
                         position={ 'relative' }

@@ -132,3 +132,4 @@ export const stpBackup_128: FetchedData[] = [
 ]
 
 
+export const stp_json = JSON.stringify(stpBackup_128)

@@ -10,10 +10,14 @@ import { SelectCams } from '../UI/SideDrower/SelectCams';
 import { SelectDepth } from '../UI/SideDrower/SelectDepth';
 import { SelectTags } from '../UI/SideDrower/SelectTags';
 import { AcSearch } from './AcSearch';
-import { useCallback, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import { VoidFn } from '../../Interfaces/Types';
 import { useToggle } from '../../Hooks/useToggle';
-import { useSearchParams } from 'react-router-dom';
+import { Form, useSearchParams, useSubmit } from 'react-router-dom';
+import { _pathToUrl } from '../../Helpers/urlpath';
+import { routePaths } from '../../Routes/routePath';
+import { _log } from '../../Helpers/helpersFns';
+import { URLSearchParams } from 'url';
 
 
 
@@ -57,14 +61,16 @@ export const PropertySelector = observer(() => {
     const { filters } = useFilterContext();
     const [tempFilter, setTemp] = useState({ cams: filters.cams, depth: filters.depth, tags: filters.tags });
     const [search, setSearch] = useSearchParams()
+    const submit = useSubmit()
     const apply = useCallback(() => {
         filters.setTags(tempFilter.tags)
         filters.setCams(tempFilter.cams)
         filters.setDepth(tempFilter.depth)
         show.on()
-        const { cams, depth, tags } = filters
 
-    }, [filters, show, tempFilter])
+
+
+    }, [filters, show, tempFilter, submit])
     const theme = useTheme();
     const fullscreen = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -101,65 +107,84 @@ export const PropertySelector = observer(() => {
         show.toggle()
         setSearch("")
     }, [filters, show])
+    const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+        const { cams, depth, tags } = filters
+        const formdata = new FormData(e.currentTarget)
+        // const sp = new URLSearchParams()
+        // sp.set('cams', JSON.stringify(cams))
+        // sp.set('depth', JSON.stringify(depth))
+        // sp.set('tags', JSON.stringify(tags))
+
+        submit([
+            ['cams', JSON.stringify(cams)],
+            ['depth', JSON.stringify(depth)],
+            ['tags', JSON.stringify(tags)]
+        ])
+    }
 
 
     return (
-        <Stack
-            direction={ 'row' }
-            alignContent={ 'center' }
-            columnGap={ 6 }
+        <Form
+            onSubmit={ submitHandler }
         >
-            <AcSearch />
-            <FormControl sx={ { width: 180 } }>
+            <Stack
+                direction={ 'row' }
+                alignContent={ 'center' }
+                columnGap={ 6 }
+            >
 
-                <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
-                <SelectDepth
-                    handleChange={ handleSelectorChange('depth') }
-                    handleReset={ handleReset('depth') }
-                    handleApply={ apply }
-                    depths={ tempFilter.depth }
-                />
-                { fullscreen && <FormHelperText>Выберете толщину</FormHelperText> }
-            </FormControl>
+                <AcSearch />
+                <FormControl sx={ { width: 180 } }>
 
-            {
-                //__Cams
-            }
+                    <InputLabel id="depth-label" >Толщина ст-та</InputLabel>
+                    <SelectDepth
+                        handleChange={ handleSelectorChange('depth') }
+                        handleReset={ handleReset('depth') }
+                        handleApply={ apply }
+                        depths={ tempFilter.depth }
+                    />
+                    { fullscreen && <FormHelperText>Выберете толщину</FormHelperText> }
+                </FormControl>
 
-
-            <FormControl sx={ { minWidth: 200, position: 'relative' } }>
                 {
-                    //__Tags
+                    //__Cams
                 }
-                <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
-                <SelectTags
-                    tags={ tempFilter.tags }
-                    handleChange={ handleSelectorChange('tags') }
-                    handleApply={ apply }
-                    handleReset={ handleReset('tags') }
+
+
+                <FormControl sx={ { minWidth: 200, position: 'relative' } }>
+                    {
+                        //__Tags
+                    }
+                    <InputLabel id="multitag-label">Свойства ст-та</InputLabel>
+                    <SelectTags
+                        tags={ tempFilter.tags }
+                        handleChange={ handleSelectorChange('tags') }
+                        handleApply={ apply }
+                        handleReset={ handleReset('tags') }
+                    />
+
+                    { fullscreen && <FormHelperText>Выберете нужные свойства</FormHelperText> }
+                </FormControl>
+                <FormControl>
+                    <InputLabel>Камеры</InputLabel>
+                    <SelectCams
+                        cams={ tempFilter.cams }
+                        handleChange={ handleSelectorChange('cams') }
+                        handleReset={ handleReset('cams') }
+                        handleApply={ apply }
+                    />
+
+
+                    { fullscreen && <FormHelperText>Сколько стекол?</FormHelperText> }
+
+                </FormControl>
+                <AlertToast
+                    open={ openAlert }
+                    onClose={ show.off }
+                    text='Фильтры успешно применены'
                 />
-
-                { fullscreen && <FormHelperText>Выберете нужные свойства</FormHelperText> }
-            </FormControl>
-            <FormControl>
-                <InputLabel>Камеры</InputLabel>
-                <SelectCams
-                    cams={ tempFilter.cams }
-                    handleChange={ handleSelectorChange('cams') }
-                    handleReset={ handleReset('cams') }
-                    handleApply={ apply }
-                />
-
-
-                { fullscreen && <FormHelperText>Сколько стекол?</FormHelperText> }
-
-            </FormControl>
-            <AlertToast
-                open={ openAlert }
-                onClose={ show.off }
-                text='Фильтры успешно применены'
-            />
-        </Stack>
+            </Stack>
+        </Form>
     )
 }
 )
@@ -187,6 +212,8 @@ const AlertToast = ({ open, onClose, text }: { open: boolean, onClose: VoidFn, t
     )
 }
 
+function toSearch() {
 
+}
 PropertySelector.displayName = '__Property Selector'
 

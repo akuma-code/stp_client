@@ -3,7 +3,7 @@ import { useCallback, useDeferredValue } from "react";
 // import { queryClient } from "../..";
 import { StpData } from "../../Components/StpTableView/StpDataTable";
 import { useFilterContext } from "../useFilterContext";
-import { getAllTableData } from "../useLoadAllData";
+import { getAllTableData, getJsonStpData } from "../useLoadAllData";
 import { indexQueryClient } from "../..";
 
 export type SelectFn = <T>(args: T[]) => T[]
@@ -27,7 +27,7 @@ export function useQueryFiltersLoader(qc?: QueryClient) {
             tags,
             deffered
         ],
-        queryFn: getAllTableData,
+        queryFn: getJsonStpData,
         select: selectFn,
         placeholderData: keepPreviousData,
     },

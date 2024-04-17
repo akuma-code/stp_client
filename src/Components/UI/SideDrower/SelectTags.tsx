@@ -1,14 +1,14 @@
 import { Avatar, Checkbox, ListItemText, MenuItem, OutlinedInput, Select, SelectChangeEvent } from '@mui/material';
-import { StpTag } from '../../StpTable/TableObjects';
+import { observer } from 'mobx-react-lite';
 import { FilterStore } from '../../../Context/Stores/FiltrationStore';
-import { TagAvatarIcon } from '../TagAvatars';
+import { useToggle } from '../../../Hooks/useToggle';
 import { Stp_Tags } from '../../../Interfaces/Enums';
-import { tagsArray } from './SideForm';
+import { VoidFn } from '../../../Interfaces/Types';
+import { StpTag } from '../../StpTable/TableObjects';
+import { TagAvatarIcon } from '../TagAvatars';
 import { tagsAvatarGroup } from './AvatarGroups';
 import FadingResetButton from './FadingResetButton';
-import { VoidFn } from '../../../Interfaces/Types';
-import FadingCheckFab from './FadingCheckFab';
-import { useToggle } from '../../../Hooks/useToggle';
+import { tagsArray } from './SideForm';
 
 type FilterHandler = (event: SelectChangeEvent<StpTag[]>, child: React.ReactNode) => void
 interface TagSelectorProps {
@@ -18,7 +18,7 @@ interface TagSelectorProps {
     handleApply: VoidFn;
 }
 
-export function SelectTags({ tags, handleChange, handleReset, handleApply }: TagSelectorProps) {
+export const SelectTags = observer(({ tags, handleChange, handleReset, handleApply }: TagSelectorProps) => {
     const [o, { on, off }] = useToggle()
     const handleClose = () => {
         handleApply()
@@ -39,20 +39,16 @@ export function SelectTags({ tags, handleChange, handleReset, handleApply }: Tag
         onChange={ handleChange }
         onOpen={ handleOpen }
         onClose={ handleClose }
-        input={ <OutlinedInput sx={ { fontSize: 12 } } label='_________________'
-            endAdornment={
-                <FadingResetButton
-                    open={ tags.length !== 0 }
-                    action={ handleReset }
-
-
-                />
-            }
-        // startAdornment={ <FadingCheckFab
-        //     open={ tags.length !== 0 && o }
-        //     action={ handleClose }
-        // /> }
-        /> }
+        input={
+            <OutlinedInput sx={ { fontSize: 12 } } label='_________________'
+                endAdornment={
+                    <FadingResetButton
+                        open={ tags.length !== 0 && !o }
+                        action={ handleReset }
+                    />
+                }
+            />
+        }
 
         renderValue={ tagsAvatarGroup }
     >
@@ -67,4 +63,6 @@ export function SelectTags({ tags, handleChange, handleReset, handleApply }: Tag
             </MenuItem>
         )) }
     </Select>;
-}
+})
+
+SelectTags.displayName = 'Selector Tags'
