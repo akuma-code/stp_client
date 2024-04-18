@@ -1,5 +1,5 @@
-import { _isArr, _log } from "../../../Helpers/helpersFns"
-import { parseStpName, triplexRegExp } from "../FormulaParser"
+import { _isArr } from "../../../Helpers/helpersFns"
+import { parseStpName } from "../FormulaParser"
 import { TStandartNames, TagsTypeList } from "../StpTagsMaker"
 import { StpItem, StpTag } from "../TableObjects"
 export const NumbersWoOne = /\d+(?<!\.1)/g
