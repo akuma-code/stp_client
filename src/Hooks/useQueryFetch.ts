@@ -37,7 +37,11 @@ export const useFetch: FetchFnType = <T>(
     config?: UseQueryOptions<T, Error, T, QueryKeyT>
 ) => {
 
+
     const query = useQuery<T, Error, T, QueryKeyT>(
+=======
+  
+
         {
             queryKey: [url!, params],
             queryFn: ({ queryKey, meta }) => fetcher<T>({ queryKey, meta }),
