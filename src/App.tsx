@@ -1,66 +1,77 @@
-import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { table_data_base } from "./Components/StpTable/Data/data_base";
 import { StpStore } from "./Context/StpStore";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { configure } from "mobx";
+import { AuthStore } from "./Context/Stores/AuthStore";
+import { FilterStore } from "./Context/Stores/FiltrationStore";
+import { SearchQueryStore } from "./Context/Stores/SearchQueryStore";
+import { FilterContext } from "./Hooks/useFilterContext";
 import { AppContext } from "./Hooks/useStoresContext";
-import { FiltersParams, } from "./Interfaces/Types";
-import { router } from "./Routes/AppRouter";
-import { QueryClient, QueryClientProvider } from "react-query";
+
+import { QueryClientProvider } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { indexQueryClient } from ".";
+import { v2_router } from "./Routes/AppRouter";
 
 
+//  --max_old_space_size=4096
+configure({
+  useProxies: "always",
+  enforceActions: 'observed'
+});
 const stores = { StpStore: new StpStore(table_data_base) }
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      refetchOnWindowFocus: false,
-      keepPreviousData: true,
 
-      cacheTime: 1000 * 60 * 60 * 12,
+const filterStores = {
+  filters: new FilterStore({ selectMax: 6 }),
+  search: new SearchQueryStore(),
+  auth: new AuthStore(['root'])
+}
 
-    }
-  }
-})
-
+// const v2_router = createBrowserRouter(appRoutes_v2)
 function App() {
-  const [selected, setSelected] = useState<number[]>([])
-  const [fcount, setFc] = useState<number>(0)
-  const [tags, setTags] = useState<string[]>([])
+  const memedStores = useMemo(() => {
+    const { auth, filters, search, stp_store } = {
+      filters: new FilterStore({ selectMax: 6 }),
+      search: new SearchQueryStore(),
+      auth: new AuthStore(['root']),
+      stp_store: new StpStore(table_data_base)
+    }
+    return {
+      auth, filters, search, stp_store
+    }
+  }, [])
 
-  const [querySearch, setQuery] = useState("")
 
-  const [filters, setFilters] = useState<Partial<FiltersParams>>({ cams: [], depth: [], tags: [] })
   return (
 
-
-    <AppContext.Provider value={ {
-      ...stores,
-      selectedItems: selected,
-      select: setSelected,
-      filteredItemsCount: fcount,
-      setFcount: setFc,
-      query: querySearch,
-      setQuery: setQuery,
-      selectedTags: tags, setTags,
-      filterParams: filters, filterFn: setFilters
-    } }
-    >
-      <QueryClientProvider client={ queryClient }>
-
-        <RouterProvider
-          router={ router }
-          fallbackElement={
-            <div className="text-4xl text-center mt-6">
-              <strong>App loading.... Be patient</strong>
-            </div>
-          }
-
-        />
+    <QueryClientProvider client={ indexQueryClient }>
 
 
-      </QueryClientProvider>
-    </AppContext.Provider>
+      <AppContext.Provider value={ {
+        StpStore: memedStores.stp_store
+      } }
+      >
+
+        <FilterContext.Provider value={ { ...memedStores } }>
+          {/* <MobxProvider stores={ { ...filterStores } }> */ }
+
+          <RouterProvider
+            router={ v2_router }
+            fallbackElement={
+              <div className="text-4xl text-center mt-6">
+                <strong>App loading.... Be patient</strong>
+              </div>
+            }
+
+          />
+
+          <ReactQueryDevtools initialIsOpen={ false } position="bottom" />
+          {/* </MobxProvider> */ }
+        </FilterContext.Provider>
+      </AppContext.Provider>
+    </QueryClientProvider>
   );
 }
 

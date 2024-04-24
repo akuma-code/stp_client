@@ -1,21 +1,29 @@
-import { QueryMeta, UseQueryOptions, UseQueryResult, useQuery } from 'react-query';
-import { STP } from "../Components/StpTable/StpFactory/StpFactory";
+
+import { QueryMeta, UseQueryOptions, UseQueryResult, useQuery } from "@tanstack/react-query";
 import { StpItem } from "../Components/StpTable/TableObjects";
 import { api } from "../HTTP/mainApi";
+import { _isArr } from "../Helpers/helpersFns";
 import { apiRoute, proxyRoute } from "../Routes/routePath";
-// _log(stpMap.size)
+import { dataExtractor } from "../Helpers/dataExtractor";
+
 
 export type SSResponse = {
     stps: [string, ...number[]][]
     fields: string[]
 }
-type QueryKeyT = [string, object | undefined];
+export type QueryKeyT = [string, object | undefined];
 type IFetcherParams = {
     queryKey: QueryKeyT
     pageParam?: object,
     meta?: QueryMeta
 }
-export const fetcher = <T>({ queryKey, pageParam }: IFetcherParams): Promise<T> => {
+export interface GetInfiniteRowsInterface<T> {
+    nextCursor?: number;
+    prevCursor?: number;
+    data: T;
+
+}
+export const fetcher = <T>({ queryKey, pageParam }: IFetcherParams) => {
     const [url, params] = queryKey;
     return api
         .get<T>(url, { params: { ...params, pageParam } })
@@ -29,9 +37,14 @@ export const useFetch: FetchFnType = <T>(
     config?: UseQueryOptions<T, Error, T, QueryKeyT>
 ) => {
 
-    const query = useQuery([url!, params] as const,
-        ({ queryKey }) => fetcher<T>({ queryKey }),
+
+    const query = useQuery<T, Error, T, QueryKeyT>(
+=======
+  
+
         {
+            queryKey: [url!, params],
+            queryFn: ({ queryKey, meta }) => fetcher<T>({ queryKey, meta }),
             enabled: !!url,
             ...config,
         }
@@ -43,28 +56,39 @@ type QueryFetchOptions = {
     forbid_fetch?: boolean
 
 }
-export function useQueryFetch(url: string | null = proxyRoute(apiRoute.stp_db)) {
+export function useQueryGoogleFetch(url: string | null = proxyRoute(apiRoute.stp_db)) {
     const { data, error, isError, isLoading } = useFetch<SSResponse>(url)
 
 
     if (isError) console.log('error while fetching', error)
     let stp: StpItem[] = []
     if (data) {
-        stp = data.stps.map(dataExtractor)
+        if (data.stps.length !== 12) return []
+        stp = data.stps.map(s => dataExtractor(s as TStpData)!)
         // console.log('query stp', stp)
     }
 
     return { stp, error, isError, isLoading }
 
 }
-type FetchedDataItem = readonly [string, ...Array<number>]
-export const dataExtractor = (fetched_data: FetchedDataItem) => {
-    const [name, ...restProps] = fetched_data
-    const stp = new STP(name)
-    // console.log('stp', name)
 
-    const [Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight] = restProps
+export type TStpData = [name: string, Ro: number, Rw: number, Lt: number, Lr: number, Ra: number, Det: number, Er: number, Ea: number, Sf: number, S: number, weight: number]
 
-    stp.initParams(Ro, Rw, Lt, Lr, Ra, Det, Er, Ea, Sf, S, weight)
-    return stp.stpItem
+
+
+
+
+export const isValidFetchedData = <T extends TStpData>(data: unknown): data is T => {
+    const check_result: boolean[] = []
+    if (_isArr(data) && data.length === 12) {
+        const [name, ...props] = data
+        check_result.push(typeof name === 'string' ? true : false)
+        check_result.push(props.length === 11 ? true : false)
+        check_result.push(props.every(p => typeof p === 'number') ? true : false)
+        return !check_result.includes(false)
+    } else {
+        console.error(data)
+        return false
+    }
 }
+

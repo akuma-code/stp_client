@@ -58,8 +58,8 @@ export const _FilterFns = {
     tags: hasTags
 }
 
-export function useCompare<T extends AnyObj>(array: T[], order: Order, sort_field: any) {
-    //___useCompare
+export function useCompare<T extends AnyObj>(array: T[], order: Order, sort_field: any) {  //___useCompare
+
     // console.time("filter")
     const sorted = useMemo(() => stableSort(array, getComparator(order, sort_field)), [array, order, sort_field])
     // console.timeEnd('filter')
@@ -78,15 +78,18 @@ const getFilters = (restFilters: Partial<FiltersParams>) => Object.entries(restF
 
 
 
+function propInclude<T>(prop: keyof T, cond: any[]) {
+    return (item: T, idx?: number, arr?: T[]) => cond.includes(item[prop])
+}
+export function useStpFilter<T extends AnyObj>(array: T[] | undefined, query: string, restFilters: Partial<FiltersParams>) {
 
-export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFilters: Partial<FiltersParams>) {
 
 
     const { cams, depth, tags } = restFilters
-    const init_items = array.slice() as unknown as StpData[]
 
 
     const filtered = useMemo(() => {
+        const init_items = array ? array.slice() as unknown as StpData[] : []
         const filterOrder = getFilters({ cams, depth, tags })
         let result_items = [] as StpData[]
 
@@ -110,74 +113,13 @@ export function useStpFilter<T extends AnyObj>(array: T[], query: string, restFi
         const filtered_items = [...result_items].filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
         return filtered_items
 
-    }, [cams, query, depth, init_items, tags])
+    }, [array, cams, depth, tags, query])
     // _log([cams, depth, init_items, query, tags])
     return filtered
 }
 
 
 
-// export function useSortAndFilter<T extends AnyObj>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
 
-//     const init_items = array.slice() as unknown as StpData[]
 
-//     const filtered = useMemo(() => {
-//         const filterOrder = getFilters(restFilters)
-//         let result_items = [] as StpData[]
-
-//         const fnOrder = filterOrder.reduce((acc, curr) => {
-//             const [_, fn] = getKeyValue(curr)
-//             acc.push(fn)
-//             return acc
-//         }, [] as FilterFnOrder[keyof FilterFnOrder][])
-
-//         if (fnOrder.length > 0) {
-//             const orderFiltered = fnOrder.reduce((res, fn, idx) => {
-//                 if (idx === 0) {
-//                     const firstresult = init_items.filter(fn!)
-//                     res.push(...firstresult)
-//                     return res
-//                 }
-//                 return res.filter(fn!)
-//             }, [] as StpData[])
-//             result_items = orderFiltered
-//         }
-//         else result_items = init_items as unknown as StpData[]
-
-//         const filtered_items = [...result_items].filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
-//         return filtered_items
-
-//     }, [init_items, query, restFilters])
-
-//     const sorted = useCompare(filtered as StpData[], order, sort_field)
-//     return sorted
-// }
-// export function useLazyDataLoad<T extends StpData>(array: T[], order: Order, sort_field: any, query: string, restFilters: Partial<FiltersParams>) {
-//     const [isLoading, setIsLoading] = useState(false)
-//     const data = useSortAndFilter(array, order, sort_field, query, restFilters)
-//     const [loadData, setLoadData] = useState<StpData[]>(data as unknown as StpData[])
-//     function load(data: { [x: string]: string | number }[]) {
-
-//         const p = new Promise<StpData[]>(() => data)
-//         return p
-
-//     }
-
-//     useEffect(() => {
-//         setIsLoading(true)
-//         load(data).then(d => setLoadData(d))
-
-//     }, [data])
-//     return [loadData, isLoading] as const
-// }
-
-// export function useFilterTags<T extends AnyObj>(array: T[], order: Order, sort_field: any, tags: StpTags[], query: string) {
-
-//     const sorted = useSortAndFilter(array, order, sort_field, query, {})
-
-//     const tagged = useMemo(() => tags.length > 0 ? [...sorted].filter(i => hasTags(tags)(i as unknown as StpData)) : [...sorted],
-//         [tags, sorted])
-
-//     return tagged
-// }
 

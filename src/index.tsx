@@ -1,19 +1,38 @@
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { QueryClient } from '@tanstack/react-query';
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from "./Theme";
+import "./index.css";
+import reportWebVitals from './reportWebVitals';
+
+export const indexQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: true,
+      staleTime: 10000,
+      gcTime: 1000 * 60 * 5
+    },
+  },
+})
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
+
     <ThemeProvider theme={ theme }>
+
+
       <CssBaseline enableColorScheme />
       <App />
+
+
     </ThemeProvider>
+
   </React.StrictMode>
 );
 

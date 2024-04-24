@@ -35,6 +35,7 @@ export const FormulaTTButton: React.FC<Props> = ({ stp_name }) => {
                 icon={ <FcInfo /> }
                 tooltip_title={ 'посмотреть расшифровку' }
                 action={ () => setOpen(true) }
+                disableRipple
             />
 
 

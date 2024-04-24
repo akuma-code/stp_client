@@ -5,7 +5,7 @@ import { Stp_Key, _EnFieldsStp } from '../../Interfaces/Enums';
 
 import { _TerminsDesc } from '../../Components/StpTable/TerminsDesc';
 import { _ID } from '../../Helpers/helpersFns';
-import { CompareContext } from './ComparePage';
+
 import { StpRegExp, Tformula, } from '../../Components/StpTable/FormulaParser';
 
 export type FilteredItemsProps = {
@@ -20,14 +20,14 @@ const listOrder: Stp_Key[] = [
     'depth',
     'weight',
     'cams',
+    'Ro',
+    'Rw',
     'Det',
     'Ea',
     'Er',
     'Lr',
     'Lt',
     'Ra',
-    'Ro',
-    'Rw',
     'S',
     'Sf',
     'secure',
@@ -38,10 +38,10 @@ export const StpCompareItems = ({ items, ref }: FilteredItemsProps) => {
     const get_items = (stp_item: StpData) => listOrder.map(prop => stp_item[prop])
 
 
-    const ctx = useContext(CompareContext)
+
 
     const clickHandler = (item: string) => (_e: React.MouseEvent<HTMLDivElement>) => {
-        ctx && ctx.selectItem(item)
+
         // console.log('clicked', item)
     }
     return <Stack

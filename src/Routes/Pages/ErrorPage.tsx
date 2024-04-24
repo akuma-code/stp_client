@@ -1,10 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useRouteError } from 'react-router-dom'
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 
 export const ErrorPage = () => {
+    const error = useRouteError() as { statusText?: string, message?: string, data?: string, status?: number }
+    const navigate = useNavigate()
+
+    console.error('router error: ', error)
     return (
         <div className='text-2xl text-center flex flex-col justify-center p-4 max-w-fit m-auto'>
             <strong>Something gone wrong...</strong>
@@ -15,8 +19,21 @@ export const ErrorPage = () => {
                 color={ '#e61818' }
                 bgcolor={ '#382303' }
             >
-                <Link to={ '/' } className='flex gap-2'>        <strong> Back </strong> <RiArrowGoBackFill /> </Link>
+                <Link to={ '/v1' } className='flex gap-2'>        <strong> Back </strong> <RiArrowGoBackFill /> </Link>
+
+
             </Stack>
+            <Box>
+                <p>
+                    <i>
+                        { error.data }
+                        <br />
+                        Статус ошибки:{ error.status } { error.statusText }
+                        <br />
+                        { error.message }
+                    </i>
+                </p>
+            </Box>
         </div>
     )
 }

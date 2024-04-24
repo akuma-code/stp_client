@@ -1,84 +1,107 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-import { LazyStpData } from "../Components/StpTable/FullTable";
-import { StpData } from "../Components/StpTableView/StpDataTable";
-import { ComparePage } from "./Pages/ComparePage";
-import { ErrorPage } from "./Pages/ErrorPage";
-import { OverView } from "./Pages/OverView";
-import { PrintPage } from "./Pages/PrintPage";
-import { Root } from "./Pages/Root";
-import { StpIdPage } from "./Pages/StpIdPage";
+
 import { StpInfoPage } from "./Pages/StpInfoPage";
-import { routePaths } from "./routePath";
+import MRTDataPage from "./Pages/Tabs/MRT_DataPage";
+import GoogleApiPage, { loader as ss_loader } from "./Pages/v2/GoogleApiPage";
+import { RootV2 } from "./Pages/v2/RootV2";
+import { apiRoute, routePaths } from "./routePath";
+
+import TableDataContainer, { loader as tableLoader } from "../Components/StpTable/v2/TableDataContainer";
+import ErrorPageV2 from "./Pages/v2/ErrorPage.v2";
+
+import { QueryClient } from "@tanstack/react-query";
+import { createRef } from "react";
 
 
 
 
-export type StpDataLoad = Omit<StpData, 'id'>
 
 
+export const qClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: 3,
+            refetchOnWindowFocus: true,
+            staleTime: 10000,
+            gcTime: 1000 * 60 * 5,
+        },
+    },
+})
 
-export const appRoutes: RouteObject[] = [
+type RefRoute = RouteObject & { nodeRef: React.RefObject<HTMLDivElement> }
+export const childrenRoutes: RefRoute[] = [
+    {
+        // path: routePaths.old,
+        index: true,
+        element: <TableDataContainer />,
+        loader: tableLoader(qClient),
+        errorElement: <ErrorPageV2 />,
+        nodeRef: createRef<HTMLDivElement>(),
+    },
+    {
+
+        path: routePaths.table,
+        element: <MRTDataPage />,
+        errorElement: <ErrorPageV2 />,
+        nodeRef: createRef<HTMLDivElement>(),
+    },
+    {
+        path: routePaths.info,
+        element: <StpInfoPage />,
+        nodeRef: createRef<HTMLDivElement>(),
+    },
+]
+export const appRoutes_v2: RouteObject[] = [
+
     {
         path: routePaths.root,
-        element: <Root />,
-        id: 'root',
-        errorElement: <ErrorPage />,
+        element: <RootV2 />,
+        errorElement: <ErrorPageV2 />,
+        children: childrenRoutes.map(route => ({
+            index: route.index || route.path === '/',
+            path: route.path,
+            element: route.element
+        }))
+        //  [
+        //     {
+        //         // path: routePaths.old,
+        //         index: true,
+        //         element: <TableDataContainer />,
+        //         loader: tableLoader(qClient),
+        //         errorElement: <ErrorPageV2 />,
 
+        //     },
+        //     {
+
+        //         path: routePaths.table,
+        //         element: <MRTDataPage />,
+        //         errorElement: <ErrorPageV2 />,
+        //     },
+        //     {
+        //         path: routePaths.info,
+
+        //         element: <StpInfoPage />
+
+        //     },
+
+        // ]
+    },
+    {
+        path: '/' + apiRoute.api,
+        errorElement: <ErrorPageV2 />,
+        element: <GoogleApiPage />,
+        loader: ss_loader(qClient),
         children: [
-            {
-                index: true,
-                element: <OverView />,
-                loader: async ({ request, params }) => {
-                    // const fetch_data = GetStpData()
-                    // const l2 = PromisedStpData()
-                    // l2.then(data => data.map((item, idx) => ({ ...item, id: idx + 1 })))
-
-
-
-                    const lazy_data = await LazyStpData()
-                    const data = lazy_data.map((item, idx) => ({ ...item, id: idx + 1 }))
-
-
-                    console.count("Data load: ")
-                    console.log(data.length)
-                    return JSON.stringify(data)
-                },
-                // action: async ({ request }) => {
-                //     const data = await request.formData()
-                //     _log(data)
-                //     return data
-                // },
-                errorElement: <ErrorPage />,
-
-
-            },
 
             {
-                path: routePaths.compare,
-                element: <ComparePage />,
-                // action: async ({ request }) => {
-                //     const data = await request.formData()
-                //     _log(request)
-                //     return data
-                // },
-                // loader: ({ request }) => {
-                //     const data = request.body
-                //     _log("loaderdata: ", data)
-                //     return data
-                // },
-            },
-            {
-                path: routePaths.export,
-                element: <PrintPage />
-            },
-            {
-                path: routePaths.stp_info,
-                element: <StpInfoPage />
-
+                path: 'ss' as const,
+                loader: ss_loader(qClient),
+                element: <GoogleApiPage />
             }
+
         ]
-    }
+    },
 ]
 
 
-export const router = createBrowserRouter(appRoutes)
+export const v2_router = createBrowserRouter(appRoutes_v2)

@@ -5,6 +5,7 @@ import { AnyObj } from "../Interfaces/Types"
 export const _ID = () => v4().slice(0, 4)
 export const _unique_id = () => v4()
 export const _log = console.log
+
 export const _toJSON = (o: AnyObj) => JSON.parse(JSON.stringify(o, null, 2))
 export const _isJson = (i: any) => JSON.parse(i) ? true : false
 export const _styleSet = (...args: string[]): string => {

@@ -6,13 +6,35 @@ import { table_data_BrGr } from "./Data/data_Fenix";
 import { table_data_32mm } from "./Data/data_32mm";
 import { apiRoute, proxyRoute } from "../../Routes/routePath";
 
-import { dataExtractor } from "../../Hooks/useQueryFetch";
-import { stpBackup } from "./Data/data_spreadsheet";
+import { GetInfiniteRowsInterface } from "../../Hooks/useQueryFetch";
+import { dataExtractor } from "../../Helpers/dataExtractor";
+import { FetchedData, stpBackup_128 } from "./Data/data_spreadsheet";
+import { StpData } from "../StpTableView/StpDataTable";
+import { StpApiFetch } from "./StpFactory/StpApi";
+import { AxiosRequestConfig } from "axios";
 
-export function GetStpData(): StpItem[] {
-    const data = table_data_base.concat(table_data_BrGr)
+export async function GetStpDataPromise() {
+    const stps = stpBackup_128.map(i => dataExtractor<FetchedData>(i))
+    const stpdata: StpData[] = stps.map((item, idx) => ({ ...item, id: idx + 1 }))
 
-    return data
+
+    return stpdata
+}
+export async function GetPartialStpDataPromise({ itemsCount = 30 }) {
+    let cursor = 0
+    let nextCursor = itemsCount
+    const stps = stpBackup_128.map(i => dataExtractor<FetchedData>(i))
+    const stpdata: StpData[] = stps.map((item, idx) => ({ ...item, id: idx + 1 }))
+    const s_data = (s: number, e: number) => {
+        const sliced = stpdata.slice(s, e)
+        cursor = e
+        nextCursor = cursor + e
+        const result = { data: sliced, prevCursor: e, nextCursor: s + e, count: Math.abs(s - e) }
+        return result
+    }
+    return s_data(cursor, nextCursor)
+    // const sliced = stpdata.slice(cursor, nextCursor)
+    // return { data: sliced, nextCursor }
 }
 
 export async function LazyStpData() {
@@ -33,13 +55,8 @@ export async function LazyStpData() {
         table_data_32mm,
     )
 
-    const last = stpBackup.map(dataExtractor)
+    const last = stpBackup_128.map(i => dataExtractor<FetchedData>(i))
     return last
 }
 
 
-export const getDataFromSpreadsheet = async () => {
-
-    const ss_url = proxyRoute(apiRoute.stp_db)
-
-}
