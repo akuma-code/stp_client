@@ -40,6 +40,7 @@ export const TStandartNames = [
     "4TopN-14Ar-4-14-4",
     "4TopN-12Ar-4-14-4",
     "4TopN-12TgiAr-4-14Tgi-4",
+    "4TopN-24Ar-4"
 ]
 
 
