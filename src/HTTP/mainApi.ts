@@ -70,21 +70,23 @@ export const api = {
     get: async <T>(url: string, params?: object) =>
         await $axios.get<T>(url, {
             headers: {
-                // token: Cookies.get('token'),
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': '*'
-
-
-
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                token: Cookies.get('token'),
             },
-            withCredentials: false,
+            // withCredentials: false,
             ...params,
         }),
     post: async <T>(url: string, data: any) => {
         return await $axios.post<T>(url, data, {
             headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
                 token: Cookies.get('token'),
-
             },
             withCredentials: true
         });
