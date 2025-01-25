@@ -13,7 +13,7 @@ const TEnergy: TagType = {
 }
 const TSolarProof: TagType = {
     tag: 'solarproof',
-    g_prop: ['FhCl', 'FhBr', 'FhGr', 'Эл', 'Сбр', "CBr", "SGr", "CEI", "LHSBr"]
+    g_prop: ['FhCl', 'FhBr', 'FhGr', 'Эл', 'Сбр', "CBR", "SGR", "CEI", "LHSBR"]
 }
 const THitProof: TagType = {
     tag: 'hitproof',

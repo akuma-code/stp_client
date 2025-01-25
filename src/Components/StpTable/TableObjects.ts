@@ -41,6 +41,12 @@ export type StpNameProperties =
     | 'зак'
     | 'ч'
     | 'с'
+    | 'MFN'
+    | "CBR"
+    | "SGR"
+    | "CEI"
+    | "LHSBR"
+    | "пр"
 
 export function isTag<T = unknown>(item: T): item is T {
     const tags = ["multi", "simple", "energy", "soundproof", "hitproof", "solarproof", "standart"]
