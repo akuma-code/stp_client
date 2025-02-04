@@ -2,7 +2,7 @@ import { _isArr } from "../../../Helpers/helpersFns"
 import { parseStpName } from "../FormulaParser"
 import { TStandartNames, TagsTypeList } from "../StpTagsMaker"
 import { StpItem, StpTag } from "../TableObjects"
-export const NumbersWoOne = /\d+(?<!\.1)/g
+export const NumbersWoOne = /\b\d+(?<!\.1)/g
 export interface StpExemplar {
     name: string
     cams: number
