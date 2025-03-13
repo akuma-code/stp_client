@@ -46,7 +46,7 @@ export type StpNameProperties =
     | "sgr"
     | "cei"
     | "lhsbr"
-    | "пр"
+
 
 
 export function isTag<T = unknown>(item: T): item is T {
