@@ -40,7 +40,7 @@ export const StpNamePropertyDescription: Record<StpNameProperties, string> = {
     cei: "зеркальное",
     lhsbr: "мультифункциональное, бронзовое",
     sgr: "зеркальное, серебряное",
-    пр: "прозрачное"
+
 
 }
 
