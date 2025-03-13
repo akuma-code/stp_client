@@ -9,11 +9,11 @@ type TagType = {
 
 const TEnergy: TagType = {
     tag: 'energy',
-    g_prop: ['TopN']
+    g_prop: ['TopN', "CEI", "LHSBR"]
 }
 const TSolarProof: TagType = {
     tag: 'solarproof',
-    g_prop: ['FhCl', 'FhBr', 'FhGr', 'Эл', 'Сбр', "CBR", "SGR", "CEI", "LHSBR"]
+    g_prop: ['FhCl', 'FhBr', 'FhGr', 'Эл', 'Сбр', "CBR", "SGR", "CEI", "LHSBR", "CSGR"]
 }
 const THitProof: TagType = {
     tag: 'hitproof',
