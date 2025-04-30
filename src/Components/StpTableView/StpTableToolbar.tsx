@@ -106,8 +106,8 @@ const InfoText = () => {
         <Box
             m={ 2 }
         >
-            <Typography variant='button' fontWeight={ 'bold' }>
-                Данные таблицы получены из калькулятора, предоставленного компанией РСК
+            <Typography variant='button' fontWeight={ 800 } fontSize={ 14 }>
+                Расчетные данные таблицы получены из калькулятора РСК (НЕ ФАКТИЧЕСКИЕ!)
             </Typography>
             <br />
             <Typography variant='body1' >
