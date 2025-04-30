@@ -82,8 +82,8 @@ export function AppHeaderBreadcrump() {
                     {/* <small onClick={ notify }> { host === 'http://localhost:3000' && host } </small> */ }
                     <strong className='text-md text-wrap'>
 
-                        * В таблице указаны расчетные данные.<br />
-                        Получены в калькуляторе компании РСК.
+                        * Расчетные данные получены из<br />
+                        калькулятора компании РСК (Не фактические!)
                     </strong>
 
                 </Toolbar>
